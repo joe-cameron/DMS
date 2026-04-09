@@ -1,0 +1,418 @@
+{
+  "drift": [
+    {
+      "column": "dcfg_customer_id",
+      "target": "Webapi/dcfg_document_template/fields",
+      "currentFields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,_dcfg_customer_id_value,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
+      "env": "Test",
+      "kind": "missing-bind"
+    },
+    {
+      "column": "dcfg_customer_id",
+      "target": "Webapi/dcfg_blanket_workorder/fields",
+      "currentFields": "dcfg_blanket_workorderid,dcfg_name,dcfg_dollar_threshold,dcfg_job_number,dcfg_effective_year,dcfg_active_flag,_dcfg_customer_id_value",
+      "env": "Test",
+      "kind": "missing-bind"
+    },
+    {
+      "column": "dcfg_customer_id",
+      "target": "Webapi/dcfg_customer_ap_mapping/fields",
+      "currentFields": "dcfg_customer_ap_mappingid,dcfg_name,dcfg_ap_code,dcfg_active_flag,_dcfg_customer_id_value,_dcfg_cost_code_id_value",
+      "env": "Test",
+      "kind": "missing-bind"
+    },
+    {
+      "column": "dcfg_cost_code_id",
+      "target": "Webapi/dcfg_customer_ap_mapping/fields",
+      "currentFields": "dcfg_customer_ap_mappingid,dcfg_name,dcfg_ap_code,dcfg_active_flag,_dcfg_customer_id_value,_dcfg_cost_code_id_value",
+      "env": "Test",
+      "kind": "missing-bind"
+    },
+    {
+      "target": "dcfg_sp_templates_library",
+      "current": "DCFG_Templates_Test",
+      "env": "Test",
+      "expected": "DCFG_Templates",
+      "kind": "config-drift"
+    },
+    {
+      "column": "dcfg_customer_id",
+      "target": "Webapi/dcfg_document_template/fields",
+      "currentFields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
+      "env": "Stage",
+      "kind": "missing-bind"
+    },
+    {
+      "target": "dcfg_sp_templates_library",
+      "reason": "key-not-found",
+      "env": "Stage",
+      "expected": "DCFG_Templates",
+      "kind": "config-missing"
+    }
+  ],
+  "envs": {
+    "Prod": {
+      "config": {
+        "modifiedon": "2026-04-09T18:26:21Z",
+        "value": "DCFG_Templates",
+        "id": "82fee7dd-052a-f111-8341-000d3a35c168",
+        "present": true
+      },
+      "webapi": {
+        "Webapi/dcfg_document_template/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "_dcfg_customer_id_value",
+            "createdon",
+            "dcfg_activated_date",
+            "dcfg_contract_family",
+            "dcfg_contract_familyname",
+            "dcfg_customer_idname",
+            "dcfg_deactivated_date",
+            "dcfg_document_templateid",
+            "dcfg_document_type",
+            "dcfg_document_typename",
+            "dcfg_exhibit_type",
+            "dcfg_exhibit_typename",
+            "dcfg_field_count",
+            "dcfg_is_active",
+            "dcfg_is_activename",
+            "dcfg_mapped_count",
+            "dcfg_name",
+            "dcfg_notes",
+            "dcfg_sharepoint_url",
+            "dcfg_source_file_name",
+            "dcfg_source_file_url",
+            "dcfg_template_type",
+            "dcfg_template_typename",
+            "dcfg_threshold_type",
+            "dcfg_threshold_typename",
+            "dcfg_uploaded_at",
+            "dcfg_uploaded_by",
+            "dcfg_validation_status",
+            "dcfg_validation_statusname",
+            "dcfg_version",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "dcfg_template_file",
+            "dcfg_template_file_name",
+            "dcfg_customer_id"
+          ],
+          "componentId": "7f89f92f-2d34-f111-88b3-000d3a308009",
+          "fields": "_dcfg_customer_id_value,createdon,dcfg_activated_date,dcfg_contract_family,dcfg_contract_familyname,dcfg_customer_idname,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_document_typename,dcfg_exhibit_type,dcfg_exhibit_typename,dcfg_field_count,dcfg_is_active,dcfg_is_activename,dcfg_mapped_count,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_source_file_name,dcfg_source_file_url,dcfg_template_type,dcfg_template_typename,dcfg_threshold_type,dcfg_threshold_typename,dcfg_uploaded_at,dcfg_uploaded_by,dcfg_validation_status,dcfg_validation_statusname,dcfg_version,modifiedon,statecode,statuscode,dcfg_template_file,dcfg_template_file_name,dcfg_customer_id",
+          "present": true
+        },
+        "Webapi/dcfg_blanket_workorder/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "dcfg_blanket_workorderid",
+            "dcfg_name",
+            "dcfg_dollar_threshold",
+            "dcfg_job_number",
+            "dcfg_effective_year",
+            "dcfg_active_flag",
+            "_dcfg_customer_id_value",
+            "dcfg_customer_id"
+          ],
+          "componentId": "da544a98-622c-f111-88b3-6045bd02d765",
+          "fields": "dcfg_blanket_workorderid,dcfg_name,dcfg_dollar_threshold,dcfg_job_number,dcfg_effective_year,dcfg_active_flag,_dcfg_customer_id_value,dcfg_customer_id",
+          "present": true
+        },
+        "Webapi/dcfg_customer_ap_mapping/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "dcfg_customer_ap_mappingid",
+            "dcfg_name",
+            "dcfg_ap_code",
+            "dcfg_active_flag",
+            "_dcfg_customer_id_value",
+            "_dcfg_cost_code_id_value",
+            "dcfg_customer_id",
+            "dcfg_cost_code_id"
+          ],
+          "componentId": "e0544a98-622c-f111-88b3-6045bd02d765",
+          "fields": "dcfg_customer_ap_mappingid,dcfg_name,dcfg_ap_code,dcfg_active_flag,_dcfg_customer_id_value,_dcfg_cost_code_id_value,dcfg_customer_id,dcfg_cost_code_id",
+          "present": true
+        },
+        "Webapi/dcfg_template_field/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "_dcfg_section_id_value",
+            "_dcfg_template_id_value",
+            "createdon",
+            "dcfg_choice_options",
+            "dcfg_column_position",
+            "dcfg_composite_parts",
+            "dcfg_dataverse_path",
+            "dcfg_display_label",
+            "dcfg_field_category",
+            "dcfg_field_categoryname",
+            "dcfg_field_name",
+            "dcfg_field_order",
+            "dcfg_field_type",
+            "dcfg_field_typename",
+            "dcfg_highlight_color",
+            "dcfg_highlight_colorname",
+            "dcfg_is_composite",
+            "dcfg_is_compositename",
+            "dcfg_is_mapped",
+            "dcfg_is_mappedname",
+            "dcfg_is_repeated",
+            "dcfg_is_repeatedname",
+            "dcfg_is_required",
+            "dcfg_is_requiredname",
+            "dcfg_merge_field_name",
+            "dcfg_paragraph_template",
+            "dcfg_repeat_group_key",
+            "dcfg_row_position",
+            "dcfg_section_idname",
+            "dcfg_source_column",
+            "dcfg_source_entity",
+            "dcfg_source_text",
+            "dcfg_system_source_column",
+            "dcfg_system_source_table",
+            "dcfg_template_fieldid",
+            "dcfg_template_idname",
+            "dcfg_user_label",
+            "dcfg_width",
+            "dcfg_widthname",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "dcfg_template_id"
+          ],
+          "componentId": "5966d12d-2127-f111-8341-000d3a35c231",
+          "fields": "_dcfg_section_id_value,_dcfg_template_id_value,createdon,dcfg_choice_options,dcfg_column_position,dcfg_composite_parts,dcfg_dataverse_path,dcfg_display_label,dcfg_field_category,dcfg_field_categoryname,dcfg_field_name,dcfg_field_order,dcfg_field_type,dcfg_field_typename,dcfg_highlight_color,dcfg_highlight_colorname,dcfg_is_composite,dcfg_is_compositename,dcfg_is_mapped,dcfg_is_mappedname,dcfg_is_repeated,dcfg_is_repeatedname,dcfg_is_required,dcfg_is_requiredname,dcfg_merge_field_name,dcfg_paragraph_template,dcfg_repeat_group_key,dcfg_row_position,dcfg_section_idname,dcfg_source_column,dcfg_source_entity,dcfg_source_text,dcfg_system_source_column,dcfg_system_source_table,dcfg_template_fieldid,dcfg_template_idname,dcfg_user_label,dcfg_width,dcfg_widthname,modifiedon,statecode,statuscode,dcfg_template_id",
+          "present": true
+        }
+      },
+      "orgUrl": "https://org06f5de0b.crm.dynamics.com",
+      "siteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+      "portalHost": "dmms1.powerappsportals.com"
+    },
+    "Stage": {
+      "config": {
+        "present": false,
+        "reason": "key-not-found"
+      },
+      "webapi": {
+        "Webapi/dcfg_document_template/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "createdon",
+            "dcfg_activated_date",
+            "dcfg_contract_family",
+            "dcfg_deactivated_date",
+            "dcfg_document_templateid",
+            "dcfg_document_type",
+            "dcfg_exhibit_type",
+            "dcfg_is_active",
+            "dcfg_name",
+            "dcfg_notes",
+            "dcfg_sharepoint_url",
+            "dcfg_validation_status",
+            "dcfg_version",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "dcfg_template_type",
+            "dcfg_field_count",
+            "dcfg_mapped_count",
+            "dcfg_source_file_name",
+            "dcfg_source_file_url",
+            "dcfg_uploaded_by",
+            "dcfg_uploaded_at"
+          ],
+          "componentId": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
+          "fields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
+          "present": true
+        },
+        "Webapi/dcfg_blanket_workorder/fields": {
+          "mode": "wildcard",
+          "fieldList": [
+            "*"
+          ],
+          "componentId": "0b0d5708-7631-f111-88b4-7ced8d709430",
+          "fields": "*",
+          "present": true
+        },
+        "Webapi/dcfg_customer_ap_mapping/fields": {
+          "mode": "wildcard",
+          "fieldList": [
+            "*"
+          ],
+          "componentId": "b999d807-7631-f111-88b4-7ced8d7092ad",
+          "fields": "*",
+          "present": true
+        },
+        "Webapi/dcfg_template_field/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "createdon",
+            "dcfg_choice_options",
+            "dcfg_column_position",
+            "dcfg_display_label",
+            "dcfg_field_name",
+            "dcfg_field_type",
+            "dcfg_is_required",
+            "dcfg_merge_field_name",
+            "dcfg_paragraph_template",
+            "dcfg_row_position",
+            "dcfg_section_id",
+            "dcfg_section_idname",
+            "dcfg_source_column",
+            "dcfg_source_entity",
+            "dcfg_system_source_column",
+            "dcfg_system_source_table",
+            "dcfg_template_fieldid",
+            "dcfg_template_id",
+            "dcfg_template_idname",
+            "dcfg_width",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "_dcfg_section_id_value",
+            "_dcfg_template_id_value",
+            "dcfg_field_order",
+            "dcfg_source_text",
+            "dcfg_user_label",
+            "dcfg_dataverse_path",
+            "dcfg_field_category",
+            "dcfg_is_composite",
+            "dcfg_composite_parts",
+            "dcfg_highlight_color",
+            "dcfg_is_mapped",
+            "dcfg_is_repeated",
+            "dcfg_repeat_group_key"
+          ],
+          "componentId": "637e20d2-bc1b-f111-8341-7ced8d709731",
+          "fields": "createdon,dcfg_choice_options,dcfg_column_position,dcfg_display_label,dcfg_field_name,dcfg_field_type,dcfg_is_required,dcfg_merge_field_name,dcfg_paragraph_template,dcfg_row_position,dcfg_section_id,dcfg_section_idname,dcfg_source_column,dcfg_source_entity,dcfg_system_source_column,dcfg_system_source_table,dcfg_template_fieldid,dcfg_template_id,dcfg_template_idname,dcfg_width,modifiedon,statecode,statuscode,_dcfg_section_id_value,_dcfg_template_id_value,dcfg_field_order,dcfg_source_text,dcfg_user_label,dcfg_dataverse_path,dcfg_field_category,dcfg_is_composite,dcfg_composite_parts,dcfg_highlight_color,dcfg_is_mapped,dcfg_is_repeated,dcfg_repeat_group_key",
+          "present": true
+        }
+      },
+      "orgUrl": "https://org88778bb0.crm.dynamics.com",
+      "siteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+      "portalHost": "holding.powerappsportals.com"
+    },
+    "Test": {
+      "config": {
+        "modifiedon": "2026-03-27T17:53:33Z",
+        "value": "DCFG_Templates_Test",
+        "id": "b8673bdb-052a-f111-8341-7ced8d7092f6",
+        "present": true
+      },
+      "webapi": {
+        "Webapi/dcfg_document_template/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "createdon",
+            "dcfg_activated_date",
+            "dcfg_contract_family",
+            "dcfg_deactivated_date",
+            "dcfg_document_templateid",
+            "dcfg_document_type",
+            "dcfg_exhibit_type",
+            "dcfg_is_active",
+            "dcfg_name",
+            "dcfg_notes",
+            "dcfg_sharepoint_url",
+            "dcfg_validation_status",
+            "dcfg_version",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "_dcfg_customer_id_value",
+            "dcfg_template_type",
+            "dcfg_field_count",
+            "dcfg_mapped_count",
+            "dcfg_source_file_name",
+            "dcfg_source_file_url",
+            "dcfg_uploaded_by",
+            "dcfg_uploaded_at"
+          ],
+          "componentId": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
+          "fields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,_dcfg_customer_id_value,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
+          "present": true
+        },
+        "Webapi/dcfg_blanket_workorder/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "dcfg_blanket_workorderid",
+            "dcfg_name",
+            "dcfg_dollar_threshold",
+            "dcfg_job_number",
+            "dcfg_effective_year",
+            "dcfg_active_flag",
+            "_dcfg_customer_id_value"
+          ],
+          "componentId": "fb379341-5d2c-f111-88b4-7ced8d709731",
+          "fields": "dcfg_blanket_workorderid,dcfg_name,dcfg_dollar_threshold,dcfg_job_number,dcfg_effective_year,dcfg_active_flag,_dcfg_customer_id_value",
+          "present": true
+        },
+        "Webapi/dcfg_customer_ap_mapping/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "dcfg_customer_ap_mappingid",
+            "dcfg_name",
+            "dcfg_ap_code",
+            "dcfg_active_flag",
+            "_dcfg_customer_id_value",
+            "_dcfg_cost_code_id_value"
+          ],
+          "componentId": "17389341-5d2c-f111-88b4-7ced8d709731",
+          "fields": "dcfg_customer_ap_mappingid,dcfg_name,dcfg_ap_code,dcfg_active_flag,_dcfg_customer_id_value,_dcfg_cost_code_id_value",
+          "present": true
+        },
+        "Webapi/dcfg_template_field/fields": {
+          "mode": "explicit",
+          "fieldList": [
+            "_dcfg_section_id_value",
+            "_dcfg_template_id_value",
+            "createdon",
+            "dcfg_choice_options",
+            "dcfg_column_position",
+            "dcfg_display_label",
+            "dcfg_field_name",
+            "dcfg_field_type",
+            "dcfg_is_required",
+            "dcfg_merge_field_name",
+            "dcfg_paragraph_template",
+            "dcfg_row_position",
+            "dcfg_section_id",
+            "dcfg_section_idname",
+            "dcfg_source_column",
+            "dcfg_source_entity",
+            "dcfg_system_source_column",
+            "dcfg_system_source_table",
+            "dcfg_template_fieldid",
+            "dcfg_template_id",
+            "dcfg_template_idname",
+            "dcfg_width",
+            "modifiedon",
+            "statecode",
+            "statuscode",
+            "dcfg_field_order",
+            "dcfg_source_text",
+            "dcfg_user_label",
+            "dcfg_dataverse_path",
+            "dcfg_field_category",
+            "dcfg_is_composite",
+            "dcfg_composite_parts",
+            "dcfg_highlight_color",
+            "dcfg_is_mapped",
+            "dcfg_is_repeated",
+            "dcfg_repeat_group_key"
+          ],
+          "componentId": "637e20d2-bc1b-f111-8341-7ced8d709731",
+          "fields": "_dcfg_section_id_value,_dcfg_template_id_value,createdon,dcfg_choice_options,dcfg_column_position,dcfg_display_label,dcfg_field_name,dcfg_field_type,dcfg_is_required,dcfg_merge_field_name,dcfg_paragraph_template,dcfg_row_position,dcfg_section_id,dcfg_section_idname,dcfg_source_column,dcfg_source_entity,dcfg_system_source_column,dcfg_system_source_table,dcfg_template_fieldid,dcfg_template_id,dcfg_template_idname,dcfg_width,modifiedon,statecode,statuscode,dcfg_field_order,dcfg_source_text,dcfg_user_label,dcfg_dataverse_path,dcfg_field_category,dcfg_is_composite,dcfg_composite_parts,dcfg_highlight_color,dcfg_is_mapped,dcfg_is_repeated,dcfg_repeat_group_key",
+          "present": true
+        }
+      },
+      "orgUrl": "https://org0c17e98d.crm.dynamics.com",
+      "siteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+      "portalHost": "dcfg.powerappsportals.com"
+    }
+  },
+  "generatedAt": "2026-04-09T23:44:07.3375612Z"
+}
