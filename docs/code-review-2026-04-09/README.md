@@ -154,17 +154,111 @@ bbffae5 docs(plans): SPA code review cleanup — plan header + Chunk 1
 
 **CLAUDE.md is stale** — it claims Test=[1], Stage=[2], Prod=[3]. Do NOT trust it. Always `pac auth list` before any deploy.
 
-### Standing rules in force
+### Standing rules in force — complete quick-reference
 
-- `feedback_pick_lane_explicit_or_wildcard.md` — never oscillate Webapi fields between explicit and wildcard. Fix the consumer.
-- `feedback_nora_always_monitors.md` (NEW this session) — every Nora cycle MUST check audit logs + DocGen V4 document requests, no exceptions
-- `feedback_mandatory_planning_gate.md` — investigate → options → approval → act
-- `feedback_sox_principles.md` — before-state capture, full audit trail, rollback capability
-- `feedback_soft_delete_only.md` — never hard delete Dataverse records
-- `feedback_verify_pac_auth_before_deploy.md` — always `pac auth list` before deploy
-- `feedback_testid_golden_rule.md` — every interactive element gets `data-testid`; tests use only `data-testid`
-- SPA is READ-ONLY by default per CLAUDE.md — every edit needs explicit per-change approval
-- curl.exe BLOCKED by endpoint security — use `Invoke-RestMethod` in pwsh
+This is the full landscape of operating rules as of 2026-04-09. Every rule here is either in `CLAUDE.md` (auto-loaded at session start) or in `~/.claude/projects/C--dcfg/memory/` (referenced via `MEMORY.md`). The next session will have all of these loaded automatically — this table exists so they can be seen at a glance without opening 30+ files.
+
+**CLAUDE.md MANDATES (non-negotiable):**
+
+| # | Rule | Source |
+|---|---|---|
+| M1 | **Look before you leap.** Read current state before every write. Query before creating a record. Check if a column exists before adding it. Verify which environment you're connected to before running anything. Investigation IS the work. | CLAUDE.md §MANDATES |
+| M2 | **Limit token usage for database activity.** Use the fewest tokens possible for Dataverse operations. One targeted query beats a verbose script. Use known record IDs instead of searching. | CLAUDE.md §MANDATES |
+
+**CLAUDE.md STANDING BLOCKS:**
+
+| Rule | Summary |
+|---|---|
+| SPA READ-ONLY | `C:\DCFG\spa\` is read-only. Do not create, edit, or delete without explicit per-change approval. Read and search allowed. |
+| Current architecture | Flows use `dcfg_document_requests` (not HTTP triggers). SPA calls `createDocumentRequest()` (not `callFlow()`). Configs read via `loadConfig()` at boot. |
+| Entity set | `dcfg_properties` (NOT `dcfg_propertys`) |
+| Solution name | `DCFGSystemTest` on all environments |
+| Soft delete | `dcfg_active_flag = false`, never hard delete |
+| Deploy order | Test → Stage → Prod, operator specifies envs per deploy. Always restore pac auth to default index after deploy. |
+| Flow build (3 steps) | (1) placeholder push, (2) manual action per connector in designer, (3) read back connection format + push full definition. NEVER overwrite triggers. |
+| Script vs manual | Evaluate manual path first (script-vs-manual-judgment skill) |
+| Audit logging | Close/Delete/Restore all write to `dcfg_audit_logs` |
+| Table permissions | Append AND AppendTo on BOTH sides of relationships |
+| PowerShell | `Connect()` MUST have trailing slash on URL; use `pwsh` not `powershell` |
+| curl.exe BLOCKED | endpoint security — use `Invoke-RestMethod` in pwsh instead |
+| Portal cache | Always clear after metadata changes (manual via admin center) |
+
+**MEMORY — Critical (READ BEFORE ANY ACTION):**
+
+| Rule | Summary |
+|---|---|
+| `feedback_nora_always_monitors` | **NEW this session.** Every Nora cycle MUST check audit logs + DocGen V4 document requests. Never skippable. |
+| `feedback_momentum_regulation` | Was this directed or momentum? Parse for meaning, not action. |
+| `feedback_mandatory_planning_gate` | Investigate → options → approval → act. Non-negotiable sequence. |
+| `feedback_investigate_before_acting` | NEVER modify without investigating current state first. |
+| `feedback_sox_principles` | Before-state capture, full audit trail, rollback capability on every change. |
+| `feedback_token_efficiency` | Track token use. Justify subagent cost. Prefer inline single-query over 200-line scripts. |
+| `feedback_json_over_markdown` | JSON for facts, markdown for instructions. |
+| `feedback_upkeep_readonly` | UpKeep system is READ-ONLY. No writes ever. |
+
+**MEMORY — Behavioral Rules:**
+
+| Rule | Summary |
+|---|---|
+| `feedback_flow_build_process` | 3-step flow build: placeholders → manual connections → full definition |
+| `feedback_flow_rebuild_pattern` | Copy Prod clientdata, replace connectionReferences only |
+| `feedback_flows_update_only` | Only update existing flows, never create new |
+| `feedback_word_online_field_mapping` | dynamicFileSchema/{id}; requires designer for initial setup |
+| `feedback_verify_before_claiming` | Read source before claiming not built |
+| `feedback_verify_pac_auth_before_deploy` | MUST verify `pac auth list` before ANY deploy command |
+| `feedback_soft_delete_only` | Never hard delete. Use `dcfg_active_flag` / `dcfg_active` / `statecode` |
+| `feedback_submitted_docs_locked` | Submitted documents locked unless explicitly declined |
+| `feedback_handoff_links` | After deploy: clear cache + provide launch URLs |
+| `feedback_build_summary_and_audit` | After builds: produce change summary + deployment record |
+| `feedback_monitoring_loops_silent` | Cron loops SILENT unless something changed — no noise |
+| `feedback_windows_hello_auth` | Windows Hello auth via Playwright manual-pause pattern |
+| `feedback_no_crm_online_module` | Never `Connect-CrmOnline`. Use `pac auth` token. |
+| `feedback_clipboard_html` | `C:\dcfg\clipboard.html` is live scratchpad |
+
+**MEMORY — Display & Data:**
+
+| Rule | Summary |
+|---|---|
+| `feedback_pick_lane_explicit_or_wildcard` | **Critical for this review.** Pick explicit OR wildcard per Webapi fields list ONCE. Never oscillate. Fix the consumer, not the config. |
+| `feedback_sharepoint_dms_structure` | `DCFG_Templates` (flat) / `DCFG_Outputs` (Customer/Year/DocType) / `DCFG_Attachments` (Customer/Location/Year) |
+| `feedback_prod_library_names` | No `_Prod` suffix. Read library names from `dcfg_configs`. |
+| `feedback_location_display_order` | Name first, then address |
+| `feedback_field_names_invisible` | Dataverse field names rendered on screens, invisible until highlighted |
+| `feedback_testid_golden_rule` | Every SPA interactive element gets `data-testid`. Tests use only `data-testid`, never CSS or text. |
+| `feedback_properties_not_propertys` | Entity set name is `dcfg_properties` (typo-pluralized correctly) |
+| `feedback_solution_name` | `DCFGSystemTest` on all environments |
+| `feedback_powerpagecomponent_patch` | Enhanced Data Model — PATCH the `powerpagecomponent` content JSON (type 9 for settings, type 18 for permissions). Do NOT PATCH `mspp_sitesettings` (virtual table rejects PATCH). |
+| `feedback_solution_import_orphans` | Delete orphan `powerpagesites` records before SPA deploy |
+| `feedback_wildcard_site_settings` | `Webapi fields=*` doesn't pick up NEW columns. Use explicit lists for new-column scenarios. (Interacts with `pick_lane` rule above.) |
+
+**MEMORY — User profile:**
+
+| Rule | Summary |
+|---|---|
+| `user_joseph.md` | Joseph Cameron — operator of DCFG. Senior, directive, expects terse precise output. Prefers JSON facts + markdown instructions. |
+
+**Primary references (load on demand):**
+
+- `reference_database_bible.json` — COMPLETE Dataverse schema inventory (tables/columns/perms/keys). Refresh via `scripts/build-database-bible.ps1`.
+- `reference_database_bible_guide.md` — how to use the bible + post-change validation procedure
+- `reference_system_snapshot.json` — system snapshot (2026-03-20, may be partially stale)
+- `reference_engineering_journal.md` — engineering lessons (permissions, auth, flows, schema, PowerShell)
+- `reference_entra_app_registration.md` — DO NOT break existing redirect URIs
+- `C:\DCFG\docs\DCFG_Component_Library.md` — UI component library canonical reference
+- `C:\DCFG\calendar.json` — read at session start
+
+**Operator preferences recap (in force from earlier session's handoff):**
+
+- SPA is read-only by default — explicit per-task approval for edits
+- Investigate → options → approval → act mandatory planning gate
+- SOX principles — before-state, audit trail, rollback on every change
+- Token efficiency — bulk queries preferred, justify subagent cost
+- JSON for facts, markdown for instructions
+- Soft delete only
+- `Invoke-RestMethod` not curl
+- Enhanced Data Model for site settings/perms (powerpagecomponent content JSON)
+- Always `@odata.bind mspp_websiteid` when creating site settings
+- Clear portal cache after metadata changes
 
 ### Hotfix state (already landed on Prod — do NOT repeat)
 
