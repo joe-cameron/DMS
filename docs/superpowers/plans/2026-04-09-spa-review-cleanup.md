@@ -3056,33 +3056,77 @@ Archive traces to `docs/code-review-2026-04-09/smoke-runs/batch-<NN>/`.
 
 - [ ] **PB-7: If smoke fails, execute Gate 5.N-smoke failure protocol (spec §7.1.1)**
 
-**Default action: auto-rollback.**
+The smoke failure is classified into one of three branches:
 
-1. Identify which commit broke the smoke (usually the PB-5 commit)
-2. `git revert <commit-sha>` — DO NOT `git reset`. Revert creates a new commit.
-3. Rebuild + redeploy Test: `npm run build && pac pages upload-code-site` (with pac auth dance)
-4. Re-run smoke — must go green on the reverted build
-5. Mark batch as `rolled-back` in its approval doc
-6. For each finding in the batch: reset `status=open`, clear `fixedAt`, `fixCommit`, `verifiedAt`
-7. Notify operator:
+**Branch A — Auto-rollback (default, clear cause linked to this batch):**
+
+If the smoke failure stack trace clearly points at a file changed in this batch (or at a consumer of a file changed in this batch), proceed with auto-rollback.
+
+**Important: pause one chat turn before executing the revert** so the operator has a single clear opportunity to intervene with `fix-forward`. Post:
 
 ```
-Gate 5.<N>-smoke FAILED. Auto-rollback executed.
+Gate 5.<N>-smoke FAILED. Preparing auto-rollback in next turn unless you reply `fix-forward`.
 
 Evidence:
 <paste smoke failure output>
 
-Reverted commit: <sha>
-Batch status: rolled-back
-Findings returned to: open
-
-Options:
-- `fix-forward` → file a new P0 finding, put it at top of next batch
-- `investigate <finding-id>` → dispatch follow-up agent on specific finding
-- `hold` → stop Phase 5, escalate to spec review
+Suspected cause: batch <NN> commit <sha>
+Will revert unless you reply within one turn.
 ```
 
-**Operator override: fix-forward.** If operator replies `fix-forward` BEFORE auto-rollback runs (i.e., within the same chat turn as the smoke failure), halt the rollback, create a new P0 finding describing the regression, append it to the next batch's approval doc.
+If no `fix-forward` reply arrives, execute the rollback:
+
+1. `git revert <commit-sha> --no-edit` — NEVER `git reset`. Revert creates a new commit.
+2. Append rollback entry to `summary.md` under a `## Rollbacks` section (spec §4.6 requirement):
+   ```bash
+   # Append to summary.md — include batch NN, commit sha, failure evidence, resolution
+   ```
+3. Rebuild + redeploy Test: `npm run build && pac pages upload-code-site` (with full pac auth dance per Task 1.4 Step 1 pattern)
+4. Re-run smoke — must go green on the reverted build
+5. Mark batch `rolled-back` in its approval doc
+6. For each finding in the batch: reset `status=open`, clear `fixedAt`, `fixCommit`, `verifiedAt`
+7. Commit the status changes + summary.md rollback entry:
+   ```bash
+   cd C:/dcfg
+   git add docs/code-review-2026-04-09/findings.json docs/code-review-2026-04-09/summary.md docs/code-review-2026-04-09/approvals/2026-04-09-batch-<NN>-*.md
+   git commit --only docs/code-review-2026-04-09/findings.json docs/code-review-2026-04-09/summary.md docs/code-review-2026-04-09/approvals/2026-04-09-batch-<NN>-*.md -m "code-review: batch <NN> rolled back (Gate 5.<N>-smoke failure)"
+   ```
+8. Notify operator that rollback is complete; await direction on whether to file fix-forward or move to next batch.
+
+**Branch B — Fix-forward override:**
+
+If operator replies `fix-forward` during the one-turn pause:
+1. Halt auto-rollback (leave the batch commit in place)
+2. File a new P0 finding in range 1600-1699 describing the regression; include the smoke failure evidence
+3. Insert the new finding at the top of the next batch's approval doc
+4. Do NOT re-deploy Test — leave the broken build in place so the next batch can fix and redeploy together
+5. Update `summary.md` Rollbacks section with a `fix-forward` entry (not a rollback entry): batch N, commit kept, regression P0 deferred to next batch
+
+**Branch C — Unclear failure cause (spec §7.1.1 item 3):**
+
+If the smoke failure is ambiguous — e.g., the failure stack trace does NOT clearly link to a file in this batch, OR the failure looks like a Test environment issue (auth timeout, portal 503, network flake), OR the same failure would have happened against the pre-batch build — do NOT auto-rollback. Instead:
+
+1. Escalate per §7.3 — post evidence to operator
+2. Do not revert, do not rebuild, do not advance
+3. Post:
+   ```
+   Gate 5.<N>-smoke — UNCLEAR cause. Escalating per §7.1.1 item 3.
+
+   Evidence:
+   <paste failure>
+
+   Initial triage:
+   - <why this might not be the batch's fault>
+   - <what could be investigated>
+
+   Options:
+   - `retry smoke` — re-run the same test (may clear env flake)
+   - `investigate` — dispatch diagnostic agent
+   - `rollback anyway` — force Branch A
+   - `fix-forward` — force Branch B
+   - `hold` — stop Phase 5
+   ```
+4. Wait for operator instruction before any code changes
 
 - [ ] **PB-8: If smoke passed, mark findings verified**
 
@@ -3175,7 +3219,7 @@ Ready for Phase 6 — final validation?
 
 ### Task 6.0: Pre-Phase-6 sanity check
 
-- [ ] **Step 1: Confirm all prior phases closed**
+- [ ] **Step 1: Confirm all prior phases closed + scan for TODOs in fix code**
 
 Run:
 ```bash
@@ -3185,39 +3229,73 @@ pwsh -Command "
   \$f = Get-Content 'C:\dcfg\docs\code-review-2026-04-09\findings.json' -Raw | ConvertFrom-Json
   \$byStatus = \$f | Group-Object status | Select-Object Name, Count
   \$byStatus | Format-Table -AutoSize
-  \$p0open = (\$f | Where-Object { \$_.severity -eq 'P0' -and \$_.status -in @('open','approved') }).Count
-  \$p1open = (\$f | Where-Object { \$_.severity -eq 'P1' -and \$_.status -in @('open','approved') }).Count
+  # 'approved' in this context means Gate 5 approval but fix has NOT yet landed OR smoke has not confirmed it.
+  # A properly-closed finding reaches 'verified' (post-smoke) or 'fixed' (awaiting next smoke).
+  # For Phase 6 entry, we require P0/P1 findings to be in terminal states: verified, rejected, or deferred-future.
+  \$p0blocking = (\$f | Where-Object { \$_.severity -eq 'P0' -and \$_.status -notin @('verified','rejected','deferred-future','closed') }).Count
+  \$p1blocking = (\$f | Where-Object { \$_.severity -eq 'P1' -and \$_.status -notin @('verified','rejected','deferred-future','closed') }).Count
   Write-Host ''
-  Write-Host ('P0 not-yet-verified: {0}' -f \$p0open)
-  Write-Host ('P1 not-yet-verified: {0}' -f \$p1open)
-  if (\$p0open -gt 0 -or \$p1open -gt 0) {
-    Write-Host 'BLOCK: Phase 6 requires all P0/P1 fixed or deferred' -ForegroundColor Red
+  Write-Host ('P0 blocking Phase 6: {0}' -f \$p0blocking)
+  Write-Host ('P1 blocking Phase 6: {0}' -f \$p1blocking)
+  if (\$p0blocking -gt 0 -or \$p1blocking -gt 0) {
+    Write-Host 'BLOCK: Phase 6 requires all P0/P1 terminal (verified/rejected/deferred)' -ForegroundColor Red
     exit 1
   }
 "
+
+# Scan for TODO markers added during fix batches (DoD item 8)
+pwsh -Command "
+  \$todos = Select-String -Path 'C:\DCFG\spa\dcfg-shell\src\*' -Pattern 'TODO|FIXME|XXX|HACK' -Recurse -Include *.js,*.jsx -ErrorAction SilentlyContinue
+  # Filter to TODOs introduced by this branch: check git blame for any TODO line
+  if (\$todos) {
+    \$todos | ForEach-Object {
+      \$file = \$_.Path
+      \$line = \$_.LineNumber
+      \$blame = git blame -L \"\$line,\$line\" \$file 2>\$null
+      if (\$blame -match 'code-review') {
+        Write-Host ('TODO introduced by this review: {0}:{1}: {2}' -f \$file, \$line, \$_.Line) -ForegroundColor Yellow
+      }
+    }
+  }
+"
+
 git status
 git branch --show-current
 ```
-Expected: P0 not-yet-verified = 0, P1 not-yet-verified = 0, clean working tree, on `code-review-2026-04-09`.
+Expected: P0 blocking = 0, P1 blocking = 0, clean working tree, on `code-review-2026-04-09`. Any TODO introduced by this branch should be eliminated or explicitly deferred-with-comment before Phase 6.
 
-If the block condition trips, return to Phase 5 and close the outstanding P0/P1 items before proceeding.
+If any block condition trips, return to Phase 5 and close the outstanding items before proceeding.
 
 - [ ] **Step 2: Ensure the Test deployment matches HEAD of `code-review-2026-04-09`**
 
-Phase 5 left Test deployed with the last batch's code. That's the current HEAD commit. If any commits landed AFTER the last batch (e.g., late doc updates), redeploy:
+Phase 5 left Test deployed with the last batch's code. That's the current HEAD commit. If any commits landed AFTER the last batch (e.g., late doc updates), redeploy.
+
+**Capture the pac index BEFORE any switch, and restore to that captured index after** (per the pattern in Chunk 3 Task 1.4 Step 1). Do NOT hardcode the "restore" index based on CLAUDE.md — CLAUDE.md's index table is stale as of 2026-04-09.
 
 ```bash
 cd C:/DCFG/spa/dcfg-shell
+
+# Capture starting state
 pac auth list
-pac auth select --index 2   # Test = [2] per plan env table
-pac auth who                 # MUST confirm DCFGSystems-Test
+# Note which index has the (*) — that is $INITIAL_INDEX. Under verified plan env
+# table (Prod=[1], Test=[2], Stage=[3]) most sessions start on [1] Prod, but
+# ALWAYS check rather than assume.
+
+# Switch to Test = [2] per plan env table
+pac auth select --index 2
+pac auth who                 # MUST confirm DCFGSystems-Test before next line
+
 npm run build
 pac pages upload-code-site --rootPath . --compiledPath dist
-pac auth select --index 1   # Restore to Prod = [1]
+
+# Restore to whatever was active at start (replace the number if your starting index was 2 or 3)
+pac auth select --index 1
 pac auth who
 ```
 
-Clear Test portal cache manually. Operator confirms: `cache cleared`.
+Clear Test portal cache manually (Power Platform admin center → Power Pages → dcfg.powerappsportals.com → Site Actions → Clear cache). Operator confirms: `cache cleared`.
+
+**Note on CLAUDE.md conflict:** CLAUDE.md states "Always restore pac auth to Test (index 1) after deploying," which assumes Test is index [1]. Under current verified indices (Prod=[1], Test=[2], Stage=[3]), that rule would restore to Prod, not Test. Follow the capture-and-restore pattern above rather than either written rule. If in doubt, ask operator.
 
 ---
 
@@ -3226,11 +3304,26 @@ Clear Test portal cache manually. Operator confirms: `cache cleared`.
 **Files:**
 - Create: `C:\dcfg\docs\code-review-2026-04-09\smoke-runs\phase-6-final\`
 
-- [ ] **Step 1: Run full Playwright suite on Test**
+**Note:** The `test-env` and `prod-readonly` projects are defined in `playwright.config.ts` created in Chunk 2 Task 0.6 Step 2. Verify the file exists before running — if Gate 0b was deferred, these projects won't exist and Phase 6 falls back to manual smoke only (Gate 6b).
+
+- [ ] **Step 1: Run full Playwright suite on Test + archive immediately**
 
 ```bash
 cd C:/DCFG/spa/dcfg-shell
+
+# Ensure the final archive directory exists
+mkdir -p C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/test
+mkdir -p C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/prod
+
+# Clean any leftover report from earlier batch runs
+rm -rf playwright-report test-results
+
+# Run the Test project
 npx playwright test --project=test-env
+
+# Archive Test results IMMEDIATELY (before the Prod run overwrites them)
+cp -r playwright-report C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/test/
+cp -r test-results C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/test/
 ```
 
 This runs the full test-env project: `nav-smoke.spec.ts` plus any journey specs that have been promoted from `test.skip` to real implementations during Phase 5.
@@ -3239,21 +3332,32 @@ Expected: all tests green. Any failure here is Phase 6 blocking.
 
 If journey specs are still all `test.skip` (normal case if Phase 5 didn't stabilize testids enough to enable them), the output will show `N passed, M skipped`. Skipped is acceptable; record the count.
 
-- [ ] **Step 2: Run nav-smoke on Prod (read-only)**
+- [ ] **Step 2: Run nav-smoke on Prod (read-only) + archive immediately**
 
 ```bash
 cd C:/DCFG/spa/dcfg-shell
+
+# Clean the leftover Test report before running Prod (so archives don't mix)
+rm -rf playwright-report test-results
+
+# Run the Prod project (nav-smoke only, per prod-readonly project filter)
 npx playwright test --project=prod-readonly specs/nav-smoke.spec.ts
+
+# Archive Prod results into the separate prod/ subfolder
+cp -r playwright-report C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/prod/
+cp -r test-results C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/prod/
 ```
 Expected: all 9 Prod routes green. Prod is still the pre-review build — this confirms Prod hasn't degraded during the review window.
 
-- [ ] **Step 3: Archive results**
+- [ ] **Step 3: Sanity check — confirm Prod is still on the pre-review build**
+
+Before trusting the Prod smoke as meaningful, confirm Prod hasn't been deployed with the review branch during the review window. Run:
 
 ```bash
-mkdir -p C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final
-cp -r C:/DCFG/spa/dcfg-shell/playwright-report C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/
-cp -r C:/DCFG/spa/dcfg-shell/test-results C:/dcfg/docs/code-review-2026-04-09/smoke-runs/phase-6-final/
+pwsh -File "C:/dcfg/scripts/code-review/spa-deployed-state-check.ps1"
 ```
+
+Compare the output to the Phase 0 baseline from `docs/code-review-2026-04-09/spa-deployed-state.json`. Prod signatures should be unchanged. If they differ, someone deployed to Prod during the review window — flag this and halt for operator investigation.
 
 - [ ] **Step 4: Record Gate 6a outcome**
 
@@ -3328,8 +3432,8 @@ Please walk the customer-facing critical path on Test:
 
 **6. Administration**
 - [ ] Navigate to Admin
-- [ ] Open a customer's Blanket Work Order tab — create a new WO (validates Phase 0 hotfix)
-- [ ] Open that customer's AP Mapping tab — add an AP code to a cost code (validates Phase 0 hotfix)
+- [ ] Open a customer's Blanket Work Order tab — create a new **blanket WO record** for that customer (validates Phase 0 bind-form hotfix on dcfg_blanket_workorder — note: this is NOT assigning a WO number, that's Send Queue's job per project memory)
+- [ ] Open that customer's AP Mapping tab — add an AP code to a cost code (validates Phase 0 bind-form hotfix on dcfg_customer_ap_mapping)
 - [ ] Both saves complete without 403 or toast error
 
 **7. Onboarding**
@@ -3342,8 +3446,9 @@ Please walk the customer-facing critical path on Test:
 - [ ] Map view loads
 - [ ] Open a location detail; compliance tab shows certs
 
-**9. Console spot-check**
-- [ ] Throughout the walk, check DevTools Console — ideally zero errors, definitely no 403/500 on `/_api/` calls
+**9. DevTools spot-check (both tabs)**
+- [ ] **Console tab** — ideally zero errors; definitely no red entries from your own SPA code
+- [ ] **Network tab** — filter for `/_api/`; no 4xx or 5xx responses on any row (403 failures on Dataverse calls are often visible only in Network, not Console)
 
 ### Reply format
 
@@ -3374,7 +3479,55 @@ git commit --only docs/code-review-2026-04-09/README.md -m "code-review: Gate 6b
 **Files:**
 - Update: `C:\dcfg\docs\code-review-2026-04-09\summary.md` (final version)
 
-- [ ] **Step 1: Build the final summary.md**
+- [ ] **Step 1: Programmatically compute each "Ready-for-user-testing" criterion from findings.json**
+
+Before building the narrative summary, compute the §8.1 criteria so the verdict is evidence-based, not hand-waved:
+
+```bash
+pwsh -Command "
+  \$f = Get-Content 'C:\dcfg\docs\code-review-2026-04-09\findings.json' -Raw | ConvertFrom-Json
+  \$crit = @{}
+
+  # Criterion 1: Zero open P0 findings
+  \$crit.p0Open = (\$f | Where-Object { \$_.severity -eq 'P0' -and \$_.status -notin @('verified','rejected','deferred-future','closed') }).Count
+
+  # Criterion 4: No console.error findings unresolved (category 2)
+  \$crit.consoleOpen = (\$f | Where-Object { \$_.categoryNumber -eq 2 -and \$_.status -notin @('verified','rejected','deferred-future','closed') }).Count
+
+  # Criterion 5: Testid findings resolved (category 11 testid subset)
+  \$crit.testidOpen = (\$f | Where-Object { \$_.categoryNumber -eq 11 -and \$_.category -match 'testid' -and \$_.status -notin @('verified','rejected','deferred-future','closed') }).Count
+
+  # Criterion 7: No env-drift-blocked on Prod
+  \$crit.envDriftProd = (\$f | Where-Object { \$_.status -eq 'env-drift-blocked' -and \$_.detail -match 'Prod' }).Count
+
+  # Total verified vs. open
+  \$crit.totalVerified = (\$f | Where-Object { \$_.status -eq 'verified' }).Count
+  \$crit.totalOpen = (\$f | Where-Object { \$_.status -eq 'open' }).Count
+
+  Write-Host '=== Ready-for-user-testing criteria ==='
+  Write-Host ('Zero open P0            : ' + (if (\$crit.p0Open -eq 0) { 'PASS' } else { 'FAIL (' + \$crit.p0Open + ' open)' }))
+  Write-Host ('Console category clean  : ' + (if (\$crit.consoleOpen -eq 0) { 'PASS' } else { 'FAIL (' + \$crit.consoleOpen + ' open)' }))
+  Write-Host ('Testid coverage         : ' + (if (\$crit.testidOpen -eq 0) { 'PASS' } else { 'FAIL (' + \$crit.testidOpen + ' open)' }))
+  Write-Host ('Prod env-drift free     : ' + (if (\$crit.envDriftProd -eq 0) { 'PASS' } else { 'FAIL (' + \$crit.envDriftProd + ' blocked)' }))
+  Write-Host ''
+  Write-Host ('Total verified: ' + \$crit.totalVerified)
+  Write-Host ('Total still open: ' + \$crit.totalOpen)
+
+  # Write the computed crit to a file for inclusion in summary.md
+  \$crit | ConvertTo-Json | Set-Content 'C:\dcfg\docs\code-review-2026-04-09\phase-6-criteria-computed.json' -Encoding UTF8
+"
+```
+
+The computed criteria feed directly into the verdict logic below.
+
+**Verdict decision tree** (use these thresholds to pick GREEN/YELLOW/RED):
+- **GREEN** if: p0Open=0 AND consoleOpen=0 AND testidOpen=0 AND envDriftProd=0 AND Gate 6a green AND Gate 6b `smoke green`
+- **YELLOW** if: p0Open=0 BUT some advisory criteria failed OR Gate 6b reported `smoke yellow: ...` with non-blocking issues
+- **RED** if: any of p0Open, envDriftProd > 0 OR Gate 6a or 6b failed
+
+The agent must show its reasoning when picking the verdict — cite which criterion passed/failed.
+
+- [ ] **Step 2: Build the final summary.md**
 
 Overwrite `summary.md` with the Phase 6 final content:
 
@@ -3462,12 +3615,12 @@ Overwrite `summary.md` with the Phase 6 final content:
 - scripts/code-review/validate-findings-json.ps1
 ```
 
-- [ ] **Step 2: Commit the final summary**
+- [ ] **Step 3: Commit the final summary + computed criteria**
 
 ```bash
 cd C:/dcfg
-git add docs/code-review-2026-04-09/summary.md
-git commit --only docs/code-review-2026-04-09/summary.md -m "code-review: final summary with go/no-go verdict"
+git add docs/code-review-2026-04-09/summary.md docs/code-review-2026-04-09/phase-6-criteria-computed.json
+git commit --only docs/code-review-2026-04-09/summary.md docs/code-review-2026-04-09/phase-6-criteria-computed.json -m "code-review: final summary with computed go/no-go verdict"
 ```
 
 ---
@@ -3497,12 +3650,26 @@ Notes about the merge:
 - Prod is NOT auto-deployed; the merge only lands in master. A separate deploy gate is required.
 ```
 
-- [ ] **Step 2: If `merge` approved, execute merge**
+- [ ] **Step 2: If `merge` approved, execute merge — with divergence safety check**
 
 ```bash
 cd C:/dcfg
 git checkout master
-git pull origin master
+
+# Divergence safety: fetch and check if origin is ahead of local
+git fetch origin master
+BEHIND=$(git rev-list --count HEAD..origin/master)
+AHEAD=$(git rev-list --count origin/master..HEAD)
+if [ "$BEHIND" -gt 0 ] && [ "$AHEAD" -gt 0 ]; then
+  echo "DIVERGENCE: local master is ${AHEAD} ahead and ${BEHIND} behind origin/master"
+  echo "HALT: manual rebase required before merge"
+  exit 1
+elif [ "$BEHIND" -gt 0 ]; then
+  echo "Local master is ${BEHIND} behind origin. Fast-forwarding..."
+  git pull --ff-only origin master
+fi
+
+# Now merge the review branch
 git merge --no-ff code-review-2026-04-09 -m "$(cat <<'EOF'
 Merge code-review-2026-04-09 into master
 
@@ -3512,7 +3679,8 @@ docs/superpowers/specs/2026-04-09-spa-review-cleanup-design.md
 Final verdict: <GREEN | YELLOW | RED>
 See docs/code-review-2026-04-09/summary.md
 
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+<Co-Authored-By trailer is optional — include only if operator wants
+Claude credited on the merge commit. Default: omit for operator-led merges.>
 EOF
 )"
 ```
@@ -3522,11 +3690,25 @@ Tag:
 git tag -a code-review-2026-04-09-complete -m "SPA code review complete - ready for user testing"
 ```
 
-Do NOT push without explicit operator approval. The operator may want to push manually or push to a different branch first.
+Do NOT push without explicit operator approval. When approved, the push is:
+```bash
+git push origin master
+git push origin code-review-2026-04-09-complete   # the tag
+```
+The operator may also want to push the review branch for historical reference:
+```bash
+git push origin code-review-2026-04-09
+```
 
-- [ ] **Step 3: Record Gate 6c outcome**
+- [ ] **Step 3: Record Gate 6c outcome + commit README**
 
-Update README Gate Log row `6c`. Append session log entry with the merge commit SHA and tag.
+Update README Gate Log row `6c` with date, outcome, merge SHA, and tag name. Append session log entry.
+
+```bash
+cd C:/dcfg
+git add docs/code-review-2026-04-09/README.md docs/code-review-2026-04-09/session-state.md
+git commit --only docs/code-review-2026-04-09/README.md docs/code-review-2026-04-09/session-state.md -m "code-review: Gate 6c recorded + merge complete"
+```
 
 - [ ] **Step 4: Present final completion message**
 
@@ -3585,11 +3767,11 @@ Because this harness (Claude Code) has subagents, the execution path is:
 **Alternative (not recommended for this plan):** `superpowers:executing-plans` — batch execution with checkpoints. Acceptable only if the operator wants to execute manually step-by-step without subagent orchestration.
 
 **Before execution:**
-1. Verify `pac auth list` output still matches the plan's environment table
-2. Verify `Connect-AzAccount` is active (required for parity sweep)
-3. Confirm which environment the current session is pointed at
-4. Review `docs/code-review-2026-04-09/README.md` "To Resume" block — should say "Phase 0 — Task 0.0" for a fresh start
-5. Confirm the operator is available for gates (this is a quality-driven, high-interaction plan; do not start execution if the operator is away)
+1. Verify `pac auth list` output still matches the plan's environment table — if it doesn't, update the env table before starting
+2. Confirm which environment the current pac session is pointed at — this is your "initial index" for every deploy's capture-and-restore
+3. Review `docs/code-review-2026-04-09/README.md` "To Resume" block — should say "Phase 0 — Task 0.0" for a fresh start
+4. Confirm the operator is available for gates (this is a quality-driven, high-interaction plan; do not start execution if the operator is away)
+5. Phase 0 Task 0.1 requires an active `Connect-AzAccount` session; the operator should run it once before Phase 0 starts if not already active
 
 **Branch reminder:** All execution happens on `code-review-2026-04-09`. If it doesn't exist yet, Task 0.0 creates it.
 
