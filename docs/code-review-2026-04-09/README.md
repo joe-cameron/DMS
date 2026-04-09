@@ -3,7 +3,7 @@
 **Spec:** `C:\dcfg\docs\superpowers\specs\2026-04-09-spa-review-cleanup-design.md` (approved iteration 2)
 **Spec Word version:** `C:\dcfg\docs\superpowers\specs\2026-04-09-spa-review-cleanup-design.docx` (23 pages)
 **Plan:** `C:\dcfg\docs\superpowers\plans\2026-04-09-spa-review-cleanup.md` (3,838 lines, 7 chunks, all approved)
-**Branch:** `code-review-2026-04-09` — **NOT YET CREATED.** Plan is ready to execute but no execution work has started.
+**Branch:** `code-review-2026-04-09` — **CREATED 2026-04-09 (Session 2).** Phase 0 Part A in progress.
 
 ---
 
@@ -34,7 +34,7 @@
 
 ## Phase Status
 
-- [ ] Phase 0 — Parity sweep + Playwright scaffolding decision — NOT STARTED
+- [ ] Phase 0 — Parity sweep + Playwright scaffolding decision — **IN PROGRESS** (Part A read-only work done; Gate 0a pending)
 - [ ] Phase 1 — Shared modules audit — NOT STARTED
 - [ ] Phase 2 — Auto-fix pass (dead code / console / testids) — NOT STARTED
 - [ ] Phase 3 — Screen audit (9 waves) — NOT STARTED
@@ -48,7 +48,7 @@
 
 | Gate | Date | Outcome | Notes |
 |---|---|---|---|
-| 0a | — | pending | Parity backport approvals per env/target |
+| 0a | 2026-04-09 | **matrix presented, awaiting operator decision** | Parity backport approvals per env/target — see Session 2 log |
 | 0b | — | pending | Playwright scaffolding approval |
 | 1a | — | pending | Phase 1 findings review |
 | 1b | — | pending | Phase 1 fix batch |
@@ -101,6 +101,63 @@ Work performed (in order):
 7. **This handoff** saved state to `docs/code-review-2026-04-09/` so the next session can resume cleanly.
 
 **Total commits this session: 6** (all on `master` branch). No `code-review-2026-04-09` branch has been created yet.
+
+### 2026-04-09 — Session 2 (execution — Phase 0 Part A)
+
+Operator approved a constrained "full auto" scope: run all read-only Phase 0 Part A work (scaffold + parity sweep + SPA bundle check + findings validator), commit with scoped `--only` paths, STOP at Gate 0a for backport approvals. `/loop 5m /nora` scheduled as background safety monitor (cron job `670e7fd4`).
+
+Work performed (in order):
+
+1. **Pre-flight verified** — pac auth Prod=[1] active, Test=[2], Stage=[3], Portal=[4] (matches plan env table; CLAUDE.md's stale claim of Test=[1]/Stage=[2]/Prod=[3] confirmed wrong). Working tree has 1,201 intentional pending-mass-commit staged files — ALL scoped commits used `--only <path>` to avoid touching them.
+
+2. **Branch cut** from master HEAD (12b7d52) — `code-review-2026-04-09` created. No remote (origin has no refs for this repo yet).
+
+3. **Task 0.0 scaffold** — created by-screen, by-category, approvals, waves, smoke-runs subdirs + scripts/code-review/ + scripts/_backups/. Seeded findings.json with 6 pre-known findings per spec §11 (CR-2026-04-09-0001…0006). **Skipped Task 0.0 Steps 4-5** (README.md / session-state.md templates) per operator approval — existing handoff files are a superset of the plan's templates.
+   - Commit `5e4fb39` — scaffold + seeded findings.json
+
+4. **Task 0.1 parity sweep** — wrote `scripts/code-review/parity-sweep.ps1`, ran against Prod/Test/Stage. **Two small script fixes required during first runs:** (a) Stage site-id heuristic failed — keyword `holding` didn't match the actual site name "DCFG Contracting Suite" — hardcoded site-id `a150bd53-7fbc-423d-a1ad-dd653ab4c435` (all 3 envs share the same GUID); (b) ConvertFrom-Json crashed on Stage when a wildcard `content` field was stored as raw `*` instead of JSON — added try/catch fallback. Final drift count: 7 items.
+   - Commit `4fbeffe` — parity-sweep.ps1 (force-added via `-f` — `*.ps1` global gitignore rule deviation noted) + parity-report.json
+
+5. **Task 0.1b SPA bundle check** — wrote `scripts/code-review/spa-deployed-state-check.ps1`, ran against all 3 portals. **Results:** Prod has both handoff Changes 3/4 signatures in deployed JS. Test and Stage have NEITHER — their deployed SPAs are pre-handoff builds. Bundle drift: 4 items (2 per env × Test, Stage).
+   - Commit `b5eee25` — spa-deployed-state-check.ps1 (force-added) + spa-deployed-state.json
+
+6. **Task 0.4 findings validator** — wrote `scripts/code-review/validate-findings-json.ps1`, ran clean against the 6 pre-seeded findings. 0 errors.
+   - Commit `7df5176` — validate-findings-json.ps1 (force-added)
+
+7. **Gate 0a matrix built and presented** — see Session 2's Gate 0a entry below. **STOPPED for operator decision** per agreed scope.
+
+**Total commits this session (on `code-review-2026-04-09` branch so far): 4**. No writes to shared state (all Dataverse/SPA calls were read-only queries).
+
+### Session 2 Gate 0a matrix
+
+**Summary of drift to address:**
+
+| Env | Target | Kind | Current state | Proposed backport | Destructive? |
+|---|---|---|---|---|---|
+| Test | Webapi/dcfg_document_template/fields | missing-bind | explicit list, missing `dcfg_customer_id` | append `dcfg_customer_id` | No (append-only) |
+| Test | Webapi/dcfg_blanket_workorder/fields | missing-bind | explicit list, missing `dcfg_customer_id` | append `dcfg_customer_id` | No (append-only) |
+| Test | Webapi/dcfg_customer_ap_mapping/fields | missing-binds | explicit list, missing `dcfg_customer_id`, `dcfg_cost_code_id` | append both | No (append-only) |
+| Test | dcfg_sp_templates_library config | config-drift | `DCFG_Templates_Test` | **QUESTION** — is this intentional env-specific value? | No (but unclear if should be changed) |
+| Test | SPA bundle (change-3 `$select`) | spa-bundle-drift | pre-handoff build | full `npm run build` + `pac pages upload-code-site` to Test | **Yes** — replaces deployed SPA |
+| Test | SPA bundle (change-4 `$select`) | spa-bundle-drift | pre-handoff build | (same deploy covers both) | **Yes** — replaces deployed SPA |
+| Stage | Webapi/dcfg_document_template/fields | missing-bind | explicit list, missing `dcfg_customer_id` | append `dcfg_customer_id` | No (append-only) |
+| Stage | Webapi/dcfg_blanket_workorder/fields | pick-lane inconsistency | **wildcard (`*`)** — diverges from Prod explicit | **QUESTION** — flip to explicit to match Prod, or accept as wildcard? | Depends on choice |
+| Stage | Webapi/dcfg_customer_ap_mapping/fields | pick-lane inconsistency | **wildcard (`*`)** — diverges from Prod explicit | **QUESTION** — flip to explicit to match Prod, or accept as wildcard? | Depends on choice |
+| Stage | dcfg_sp_templates_library config | **missing-key** | row does not exist | insert row with value `DCFG_Templates`? (or env-specific name?) | No (insert) |
+| Stage | SPA bundle (change-3 `$select`) | spa-bundle-drift | pre-handoff build | full `npm run build` + `pac pages upload-code-site` to Stage | **Yes** |
+| Stage | SPA bundle (change-4 `$select`) | spa-bundle-drift | pre-handoff build | (same deploy covers both) | **Yes** |
+
+**Per `feedback_pick_lane_explicit_or_wildcard.md`:** Stage has "picked wildcard" for two tables while Prod has "picked explicit." Per rule, we should NOT oscillate — either keep Stage on wildcard (accept drift, fix any SPA consumer that relies on explicit behavior) or flip Stage to explicit to match Prod. Flipping a wildcard back to explicit is the destructive-ish direction because any SPA call that ever succeeded because of wildcard coverage will start 403-ing.
+
+**Missing Stage config key is load-bearing:** the SPA's `loadConfig()` reads `dcfg_sp_templates_library`. On Stage today, that call returns no row — the SPA will either fail or fall back to a hardcoded default. This is probably blocking any DocGen work on Stage already.
+
+**Gate 0a awaiting operator decision.** Reply formats (per plan Task 0.2):
+  - `approve all` — execute every proposed backport
+  - `approve <env>` — execute all backports for one env (e.g., `approve Test`)
+  - `approve <env>:<target>` — execute one specific backport (e.g., `approve Test:dcfg_blanket_workorder`)
+  - `reject <env>:<target>` — record as accepted drift, do not backport
+  - `defer <env>:<target>` — do not backport now; leave as open question
+  - `hold` — stop, no Gate 0a decisions yet
 
 ---
 
