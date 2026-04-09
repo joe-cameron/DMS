@@ -14,10 +14,33 @@ The DCFG SPA has accumulated fixes, feature additions, and one-off patches over 
 This review is quality-driven (no hard deadline) and explicitly gated — the SPA is read-only by default per `CLAUDE.md`, so every change requires explicit operator approval.
 
 ### 1.1 Source context
-- **Handoff:** `C:\DCFG\docs\handoff-code-review-2026-04-09.md`
-- **Pre-review hotfix landed in this session:** appended missing `@odata.bind` column names to the `Webapi/dcfg_blanket_workorder/fields` and `Webapi/dcfg_customer_ap_mapping/fields` site settings on dmms1 Prod. Backup: `C:\dcfg\scripts\_backups\2026-04-09_admin-bind-forms-before.json`. Fix script: `C:\dcfg\scripts\fix-admin-bind-forms-2026-04-09.ps1`. Validate script: `C:\dcfg\scripts\validate-admin-bind-forms-2026-04-09.ps1`. Portal cache cleared manually by operator + smoke-tested.
-- **Environment correction from handoff:** pac auth indices are currently `[1]=Prod, [2]=Test, [3]=Stage, [4]=Portal`. This disagrees with `CLAUDE.md` but has been verified this session via `pac auth list`. Always run `pac auth list` before any deploy command.
-- **Critical behavioral rule in force:** `feedback_pick_lane_explicit_or_wildcard.md` — never oscillate `Webapi/{table}/fields` between explicit and wildcard. Fix the consumer, not the config.
+
+**Handoff:** `C:\DCFG\docs\handoff-code-review-2026-04-09.md`
+
+**Critical behavioral rule in force:** `feedback_pick_lane_explicit_or_wildcard.md` — never oscillate `Webapi/{table}/fields` between explicit and wildcard. Fix the consumer, not the config.
+
+**Environment correction from handoff:** pac auth indices are currently `[1]=Prod, [2]=Test, [3]=Stage, [4]=Portal`. This disagrees with `CLAUDE.md` but has been verified this session via `pac auth list`. Always run `pac auth list` before any deploy command.
+
+#### 1.1.1 Summary of the six changes already landed on Prod (from handoff + this session)
+
+These are the changes Phase 0 parity-checks against Test and Stage. Every one is on Prod only; neither Test nor Stage has been backported at spec-writing time.
+
+| # | Change | Target | Before | After | Source |
+|---|---|---|---|---|---|
+| 1 | Add `dcfg_template_id` bind form | `Webapi/dcfg_template_field/fields` on dmms1 (component `5966d12d-2127-f111-8341-000d3a35c231`) | trailing `statuscode` | `statuscode,dcfg_template_id` | Handoff Change 1 |
+| 2 | Add `dcfg_customer_id` bind form | `Webapi/dcfg_document_template/fields` on dmms1 (component `7f89f92f-2d34-f111-88b3-000d3a308009`) | trailing `dcfg_template_file_name` | `dcfg_template_file_name,dcfg_customer_id` | Handoff Change 2 |
+| 3 | SPA explicit `$select` | `src/screens/templates/useTemplateFields.js` `loadFields` GET | bare GET | `$select=dcfg_template_fieldid,...` (13 cols) | Handoff Change 3 |
+| 4 | SPA explicit `$select` | `src/screens/templates/TemplateDetail.jsx` line ~414 template GET | bare GET | `$select=dcfg_document_templateid,dcfg_name,dcfg_template_type,dcfg_notes,_dcfg_customer_id_value` | Handoff Change 4 |
+| 5 | Add `dcfg_customer_id` bind form | `Webapi/dcfg_blanket_workorder/fields` on dmms1 (component `da544a98-622c-f111-88b3-6045bd02d765`) | trailing `_dcfg_customer_id_value` | `_dcfg_customer_id_value,dcfg_customer_id` | This session hotfix |
+| 6 | Add `dcfg_customer_id` + `dcfg_cost_code_id` bind forms | `Webapi/dcfg_customer_ap_mapping/fields` on dmms1 (component `e0544a98-622c-f111-88b3-6045bd02d765`) | trailing `_dcfg_cost_code_id_value` | `_dcfg_cost_code_id_value,dcfg_customer_id,dcfg_cost_code_id` | This session hotfix |
+
+Also landed this session (related but not parity-checked): config drift revert on `dcfg_sp_templates_library` from `DMS_Templates` → `DCFG_Templates` (Prod only, handoff Change 6).
+
+**This session's artifacts (scripts + backups, audit trail):**
+- Backup: `C:\dcfg\scripts\_backups\2026-04-09_admin-bind-forms-before.json`
+- Fix script: `C:\dcfg\scripts\fix-admin-bind-forms-2026-04-09.ps1` (idempotent)
+- Validate script: `C:\dcfg\scripts\validate-admin-bind-forms-2026-04-09.ps1` (read-only)
+- Portal cache cleared manually by operator + smoke-tested — Admin blanket WO + AP mapping creation both green.
 
 ---
 
@@ -27,8 +50,8 @@ This review is quality-driven (no hard deadline) and explicitly gated — the SP
 
 Customer-facing bar applies to all of these. Shared modules audited first because their issues propagate to consumers.
 
-**Shared modules (audited first, Phase 1):**
-`portalApi.js`, `useTableControls.jsx`, `usePortalUser.jsx`, `Toast.jsx`, `NavPanel.jsx`, `RoleGuard.jsx`, `SlideOutPanel.jsx`, `SpeechMic.jsx`, `FieldName.jsx`, `AppRouter.jsx`, `App.jsx`, `ErrorReporter.jsx`, `LocationManager.jsx`, `SensorBanner.jsx`.
+**Shared modules (audited first, Phase 1) — 17 files:**
+`main.jsx`, `App.jsx`, `AppRouter.jsx`, `portalApi.js`, `useTableControls.jsx`, `usePortalUser.jsx`, `Toast.jsx`, `NavPanel.jsx`, `RoleGuard.jsx`, `SlideOutPanel.jsx`, `SpeechMic.jsx`, `FieldName.jsx`, `ErrorReporter.jsx`, `LocationManager.jsx`, `SensorBanner.jsx`, `intakeFieldKeys.js`, `projectConstants.js`.
 
 **Sales section:** `SalesDashboard`, `CustomerList`, `CustomerDetail`, `MsaList`, `MsaDetail`.
 
@@ -69,9 +92,25 @@ Identified during context exploration; confirmed at the file level:
 - **Duplicate wizard entry:** `src/NewContractWizard.jsx` live + `src/_archive/NewContractWizard.jsx` archived
 - **Latent build warning:** `NewContractWizard.jsx:942` — stray `)}` JSX closer from a deleted vendor-selection block; esbuild tolerates today but a tighter version could fail
 
-### 2.4 File-count honesty
+### 2.4 File-count reconciliation
 
-`Glob` over `src/**/*.{js,jsx,ts,tsx}` returns roughly 82 files. After excluding `_archive/`, `debug/`, `interview/`, `NoraCopilot`, `AbsorptionDashboard`, `UserManual`, `CapitalPlan`, and the `test/` scaffold, the review targets approximately **68 files**.
+`Glob` over `src/**/*.{js,jsx,ts,tsx}` returns approximately 82 files. After excluding `_archive/`, `debug/`, `interview/`, `NoraCopilot`, `AbsorptionDashboard`, `UserManual`, `CapitalPlan`, and the `test/` scaffold, the review targets exactly **63 in-scope files**:
+
+| Section | Count |
+|---|---|
+| Shared modules (Section 2.1) | 17 |
+| Sales | 5 |
+| Contracts | 7 |
+| Wizards | 3 |
+| Facilities | 9 |
+| Onboarding | 2 |
+| Administration | 3 |
+| Programs & Projects | 7 |
+| Templates subsystem | 9 |
+| Internal tool (FlowMonitor) | 1 |
+| **Total in scope** | **63** |
+
+This number is the denominator for Phase 3 progress tracking. If the file list drifts during the review (new files added, files deleted in Phase 2), the reconciliation table gets updated in `README.md`.
 
 ---
 
@@ -134,13 +173,19 @@ Phase 6 — Final validation
 
 **Output:** `parity-report.json` under the review working tree.
 
-**Gate:** Gate 0 — operator reviews drift report and approves backports per environment before Phase 1 begins. No backport happens without per-env approval.
+**Gates:**
+- **Gate 0a** — operator reviews drift report and approves backports per environment. No backport happens without per-env approval.
+- **Gate 0b** — operator reviews and approves any Playwright scaffolding work proposed in Phase 0 (see Section 6.2) before `tests/e2e/` is created.
+
+**If backport is rejected for an environment:** that env is recorded as **accepted drift** in `parity-report.json` with the operator's reason. The review continues, but any finding in Phase 3 that relies on that env being in sync is flagged `env-drift-blocked` and deferred to `deferred-future` rather than fixed. The final summary verdict (Section 8.1) calls out any deferred env-drift blockers as yellow flags — reviewer cannot declare green for an env that has known drift affecting in-scope files.
+
+**If backport is approved and fails:** halt, escalate to operator. Do not proceed past Phase 0 until resolved.
 
 ### 4.2 Phase 1 — Shared modules audit (sequential, single agent)
 
-**Goal:** find and fix issues in shared modules before they propagate into ~54 consumer screens.
+**Goal:** find and fix issues in shared modules before they propagate into the ~46 consumer screens.
 
-**Approach:** one agent walks the 14 shared modules serially. Because shared-module issues multiply, parallelizing here is counterproductive. The agent applies categories **3, 6, 8, 8a, 8b, 9, 11** — skipping **4, 5, 7** (no UI surface).
+**Approach:** one agent walks all **17 shared modules** (Section 2.1) serially. Because shared-module issues multiply, parallelizing here is counterproductive. The agent applies categories **3, 6, 8, 8a, 8b, 9, 11** — skipping **4, 5, 7** (no UI surface) and **2** (console pollution is handled in Phase 2b's cross-cutting sweep).
 
 **Output:** `by-screen/_shared.json` plus per-module files (`portalApi.json`, `useTableControls.json`, etc.).
 
@@ -151,7 +196,7 @@ Phase 6 — Final validation
 **Goal:** clean up mechanical issues across all in-scope files in a single sweep so the screen audit pass starts from a clean baseline.
 
 **Agents (dispatched in parallel):**
-- **Agent 2a — Dead code & duplicates** (Category 1): audits all ~54 screen files + shared modules not already handled in Phase 1; identifies `_archive/` deletion candidates, duplicate AppRouter/ContractList/NewContractWizard files, unused imports, unused state, orphaned functions; produces a single proposed-fix batch.
+- **Agent 2a — Dead code & duplicates** (Category 1): audits all 63 in-scope files (shared modules already had Phase 1 on them, but Category 1 wasn't in Phase 1's set, so 2a is the first dead-code pass); identifies `_archive/` folder and duplicate AppRouter/ContractList/NewContractWizard files; identifies unused imports, unused state, orphaned functions. **File deletions (including `_archive/`) and duplicate file removals are destructive operations** and escalate per Section 7.3 — Agent 2a proposes them in its batch but never executes the deletes itself. In-file cleanups (unused imports/state/functions) are fair game for the auto-fix tier.
 - **Agent 2b — Console pollution** (Category 2): strips non-gated `console.*` calls; flags any it's uncertain about as `batch` tier findings for operator decision.
 - **Agent 2c — testid golden rule** (Category 11 testid subset): audits every interactive element for `data-testid` presence using `feedback_testid_golden_rule.md` naming convention; auto-adds missing testids.
 
@@ -209,7 +254,15 @@ Phase 6 — Final validation
 - Never mix auto-fix and batch-tier findings in the same batch
 - Never propose a batch larger than ~15 findings — operator cognitive load
 
-**Gate:** Gate 5.N per batch, plus Gate 5.N-smoke per batch.
+**Rollback strategy — immediate (same smoke cycle):** if step 4 fails, revert the commit(s) created in step 3, mark the batch `rolled-back` in its approval doc, file a new finding describing what broke. Do not advance to the next batch until the regression is understood.
+
+**Rollback strategy — post-facto (discovered after subsequent batches have landed):** if a regression is discovered after N additional batches have landed on top of it, the operator chooses one of:
+1. **Revert the specific commit** via `git revert <sha>`. If that produces conflicts against newer batches, fall back to option 2.
+2. **Fix-forward** — file a new P0 finding, put it at the top of the next fix batch, resolve via explicit edit rather than revert.
+
+The default is **fix-forward** unless the operator explicitly chooses revert; silent reverts are prohibited. Every rollback (immediate or post-facto) appends an entry to `summary.md` under a `Rollbacks` section.
+
+**Gate:** Gate 5.N per batch, plus Gate 5.N-smoke per batch. See Section 7.1 for Gate 5.N-smoke failure-behavior defaults.
 
 ### 4.7 Phase 6 — Final validation
 
@@ -232,8 +285,7 @@ Phase 6 — Final validation
 
 ```
 C:\dcfg\docs\code-review-2026-04-09\
-├── README.md                          plan, categories, tier legend, status, resume instructions
-├── plan.md                            reference to this spec doc
+├── README.md                          plan, categories, tier legend, status, resume instructions, link to this spec
 ├── parity-report.json                 Phase 0 output: Test/Stage drift
 ├── findings.json                      master findings (flat append-only array)
 ├── by-screen\                         per-screen JSON outputs (Phase 1 + Phase 3)
@@ -273,7 +325,7 @@ Every finding, in every file, conforms to this schema:
   "categoryNumber": 1,
   "severity": "P0 | P1 | P2 | P3",
   "tier": "auto-fix | batch | catalog-only",
-  "phase": "phase-1 | phase-2 | phase-3",
+  "phase": "phase-0 | phase-1 | phase-2 | phase-3 | phase-4 | phase-5 | pre-seed",
   "agent": "code-review-dead-code-sweep",
   "status": "open | approved | rejected | deferred-future | fixed | verified | closed",
   "title": "short human-readable title",
@@ -290,6 +342,11 @@ Every finding, in every file, conforms to this schema:
 }
 ```
 
+**Field notes:**
+- `line` is nullable — use `null` when the finding is file-level (e.g., duplicate-file issues, deletion recommendations, test-coverage gaps) rather than a specific line
+- `file` should be a path relative to `C:\DCFG\spa\dcfg-shell\` for portability
+- `relatedFindings` is an array (possibly empty) of finding IDs that share a root cause
+
 **Severity meanings:**
 - **P0** — breaks user testing readiness. Must fix before Phase 6 sign-off.
 - **P1** — significant quality or robustness concern; must fix before Phase 6 sign-off unless explicitly deferred.
@@ -298,14 +355,67 @@ Every finding, in every file, conforms to this schema:
 
 **Status lifecycle:** `open → (approved or rejected or deferred-future) → fixed → verified → closed`.
 
+### 5.2.1 Example filled-out finding
+
+```json
+{
+  "id": "CR-2026-04-09-0001",
+  "file": "src/NewContractWizard.jsx",
+  "line": 942,
+  "category": "dead-code",
+  "categoryNumber": 1,
+  "severity": "P2",
+  "tier": "batch",
+  "phase": "pre-seed",
+  "agent": "human-handoff-2026-04-09",
+  "status": "open",
+  "title": "Stray `)}` JSX closer after vendor-selection comment",
+  "detail": "Line 942 contains an orphan `)}` with no matching opening — remnant of a deleted vendor-selection block that was moved to Step 3 of the wizard. esbuild recovers today and the runtime is unaffected, but a tighter esbuild/vite version could fail the build. Build warning has been present since at least 2026-04-07.",
+  "evidence": "NewContractWizard.jsx lines 941-942:\n  941:             {/* Vendor is selected on Step 3 (Contractor & Signer) — not on this step */}\n  942:             )}",
+  "recommendedFix": "Delete lines 941-942 (both the comment and the orphan closer). Verify via `npm run build` that no new esbuild warnings surface.",
+  "relatedFindings": [],
+  "foundAt": "2026-04-09T18:00:00Z",
+  "approvedAt": null,
+  "approvedIn": null,
+  "fixedAt": null,
+  "fixCommit": null,
+  "verifiedAt": null
+}
+```
+
 ### 5.3 Cross-session tracking
 
 Quality-driven timeline means this review will span multiple Claude sessions. Tracking discipline:
 
-- **Single source of truth:** `findings.json`. Agents append with unique ID ranges to avoid conflict.
+- **Single source of truth:** `findings.json`. Agents append with unique, pre-assigned ID ranges to avoid conflict.
 - **Session log:** `README.md` gets an appended session log entry per session — date, phase, what was touched, next step.
 - **Resume instructions:** top of `README.md` has a "To resume" block that tells the next session exactly what state we are in and what to do first.
 - **Task list persistence:** `session-state.md` captures the last known TaskList so TaskCreate/TaskUpdate state survives session boundaries.
+
+**Finding ID ranges (reserved at spec time):**
+
+| Range | Owner | Notes |
+|---|---|---|
+| CR-2026-04-09-0001 … 0099 | Pre-seeded findings (Section 11) | Reserved; no agent may reuse these IDs |
+| 0100 … 0199 | Phase 0 parity sweep | Drift findings |
+| 0200 … 0299 | Phase 1 shared-modules audit | |
+| 0300 … 0399 | Phase 2a dead-code sweep | |
+| 0400 … 0499 | Phase 2b console pollution sweep | |
+| 0500 … 0599 | Phase 2c testid sweep | |
+| 0600 … 0699 | Phase 3 Wave 1 Sales | |
+| 0700 … 0799 | Phase 3 Wave 2 Contracts | |
+| 0800 … 0899 | Phase 3 Wave 3 Wizards | |
+| 0900 … 0999 | Phase 3 Wave 4 Facilities | |
+| 1000 … 1099 | Phase 3 Wave 5 Onboarding | |
+| 1100 … 1199 | Phase 3 Wave 6 Programs/Projects | |
+| 1200 … 1299 | Phase 3 Wave 7 Templates | |
+| 1300 … 1399 | Phase 3 Wave 8 Admin | |
+| 1400 … 1499 | Phase 3 Wave 9 FlowMonitor | |
+| 1500 … 1599 | Phase 4 consolidation (cross-cutting dedupe, new synthesized findings) | |
+| 1600 … 1699 | Phase 5 fix-forward findings filed during rollback | |
+| 1700+ | Reserved for future phases / unplanned escalations | |
+
+Agents exceeding their range halt and escalate rather than overflow into another agent's block.
 
 ### 5.4 Commit strategy
 
@@ -341,7 +451,7 @@ Per the handoff and session exploration, `C:\DCFG\nora\node_modules\@playwright\
 - Does `C:\DCFG\spa\dcfg-shell\` have its own `playwright.config.ts` or `tests/e2e/` tree?
 - Is `auth-state.json` still valid for both Test and Prod? (one file per env expected)
 
-If no specs exist for the SPA, Phase 0 includes scaffolding a minimal spec tree. This scaffolding is itself subject to operator approval.
+If no specs exist for the SPA, Phase 0 includes scaffolding a minimal spec tree. **This scaffolding is subject to Gate 0b** (see Section 4.1) — operator must approve the proposed scaffolding layout, config, and initial spec set before any `tests/e2e/` files are created under `C:\DCFG\spa\dcfg-shell\`.
 
 ### 6.3 Auth pattern
 
@@ -395,7 +505,7 @@ Deploys to Test happen via `npm run build && pac pages upload-code-site` after s
 
 - Visual regression (no screenshot diffing)
 - Performance benchmarks (Cat 6 is static-analysis only)
-- Accessibility automation (Cat 4 is manual; axe-core integration TBD in Phase 1 pilot)
+- Accessibility automation (Cat 4 is manual review only in this pass; automated tooling such as axe-core is explicitly deferred to a future review — no pilot scheduled here)
 - Load / security / fuzz testing — out of scope
 
 ---
@@ -405,7 +515,8 @@ Deploys to Test happen via `npm run build && pac pages upload-code-site` after s
 ### 7.1 Gate list
 
 ```
-Gate 0      Parity report + backport plan reviewed and approved per env
+Gate 0a     Parity report + backport plan reviewed and approved per env
+Gate 0b     Playwright scaffolding layout approved (if scaffolding is needed)
 Gate 1a     Phase 1 findings reviewed
 Gate 1b     Phase 1 fix batch approved
 Gate 1c     Phase 1 smoke-test results green
@@ -423,14 +534,24 @@ Gate 3.7    Wave 7 Templates summary reviewed
 Gate 3.8    Wave 8 Admin summary reviewed
 Gate 3.9    Wave 9 FlowMonitor summary reviewed
 Gate 4      Phase 4 consolidated findings reviewed
-Gate 5.N    Each Phase 5 fix batch approved
-Gate 5.N-s  Each Phase 5 smoke-test green
-Gate 6a     Final Playwright run green on both envs
+Gate 5.N        Each Phase 5 fix batch approved (pre-execution)
+Gate 5.N-smoke  Each Phase 5 smoke-test green (post-execution)
+Gate 6a         Final Playwright run green on both envs
 Gate 6b     Manual operator smoke passed
 Gate 6c     Branch merge approved
 ```
 
-**Minimum explicit approvals:** 15 guaranteed gates, plus 1 per Phase 5 fix batch (expected 10-20) plus 1 smoke gate per fix batch. Practical total: **35-55 approvals over the life of the review**.
+**Minimum explicit approvals:** **21 guaranteed gates** (0a, 0b, 1a, 1b, 1c, 2a, 2b, 2c, 2d, 3.1–3.9 = 9, 4, 6a, 6b, 6c), plus 2 per Phase 5 fix batch (approval + smoke). Expected Phase 5 batch count: 10-20. Practical total: **41-61 approvals over the life of the review**.
+
+### 7.1.1 Gate 5.N-smoke failure behavior
+
+If a Gate 5.N-smoke fails (Test CRUD or Prod nav smoke reports a regression):
+
+1. **Default action — automatic rollback of the batch's commits.** The batch is reverted via `git revert` on the branch. The corresponding findings return to `status: open`. A `rolled-back` entry is added to the batch approval doc with the smoke-test failure evidence.
+2. **Operator override — fix-forward.** The operator can reply `fix-forward` to the smoke-failure report, which halts auto-rollback, files a new P0 finding describing the regression, and puts it at the top of the next batch.
+3. **Unclear failure cause** (the smoke failed but the cause isn't obviously the batch) — escalate per Section 7.3, do not auto-rollback, wait for operator instruction.
+
+The default is **auto-rollback** to avoid cascading state. The operator is notified of every auto-rollback the moment it happens.
 
 ### 7.2 Approval vocabulary
 
@@ -479,10 +600,11 @@ Beyond DoD, the summary's **go verdict** for external user testing requires:
 
 - Zero open P0 findings
 - All wizards complete happy-path flow end-to-end without crashes (`NewContractWizard`, `NewProposalWizard`, `NewRfpWizard`)
-- DocGen V4 produces at least one document per template type successfully
+- **Current DocGen V4 path produces at least one document** through the existing Admin → Template → Generate flow using already-mapped templates. This is a smoke test of the existing functionality, **not** a test of SPEC-TPL-001 field-mapping UI (which is explicitly Out of Scope per Section 9). If the current DocGen V4 path is not ready for this kind of smoke test at Phase 6 time, the criterion is marked `unverifiable-in-this-review` and surfaces as a yellow flag in the summary rather than blocking the go verdict.
 - No `console.error` spam on any in-scope screen during a full nav pass
 - All `data-testid`s present on interactive elements in scope
 - `dcfg_error_message` on any stuck `dcfg_document_requests` in Prod is empty or explained
+- No `env-drift-blocked` deferred findings on any env the user testing will actually run against (Prod is the primary; Test matters only for the regression-smoke path)
 
 ---
 
@@ -509,23 +631,25 @@ Explicitly **not** tackled by this review:
 | Subagent parallelization produces duplicate/conflicting findings | Phase 4 consolidation bloat | Phase 2 parallelizes by *category* to avoid overlap; Phase 3 parallelizes by *screen* with clear file ownership |
 | A "fix" introduces a regression not caught by smoke | Silent break in a less-trafficked screen | Conservative batch sizes, per-batch smoke, rollback-ready commits |
 | Playwright `auth-state.json` expires unpredictably | Smoke runs fail for "wrong" reason | Re-auth is a manual pause pattern; acceptable friction |
-| Operator approval fatigue — 35-55 gates is a lot | Gate-skipping temptation; rushed approvals | Batches are small (≤15 findings); tier system keeps auto-fix work lightweight |
+| Operator approval fatigue — 41-61 gates is a lot | Gate-skipping temptation; rushed approvals | Batches are small (≤15 findings); tier system keeps auto-fix work lightweight |
 | Review spans multiple sessions; state drift | Loss of context across sessions | Session log + `session-state.md` + append-only `findings.json` |
 | Hidden latent bugs that don't surface until Prod cache clears after a real customer tries a flow | False "green" verdict | Phase 6 includes manual operator walk on actual Prod build |
 | Cross-file patterns missed because of per-screen parallelization | Duplicate findings or missed systemic issue | Phase 2 is explicitly cross-cutting; Phase 1 audits shared modules serially before Phase 3 begins |
+| Section 1.1 env correction is itself stale by the time review runs | Deploy to wrong environment; credentials misrouted | Every deploy/PATCH operation in this review runs `pac auth list` first and verifies against the table in Section 13 — no assumptions, no shortcuts |
+| Finding ID collision between agents despite reserved ranges | Overwritten findings in `findings.json` | Append-only discipline; each agent halts and escalates on range overflow; consolidation pass in Phase 4 detects any gaps or duplicates |
 
 ---
 
 ## 11. Appendix — Already-known findings (pre-seed)
 
-These land in `findings.json` on day one, without waiting for any agent to rediscover them:
+These land in `findings.json` on day one, without waiting for any agent to rediscover them. **IDs 0001-0099 are reserved for pre-seeded findings; no agent may reuse them.** Only 6 IDs are currently assigned — 0007-0099 remain available for additional pre-seeds surfaced during Phase 0.
 
 | ID | File | Line | Category | Severity | Source |
 |---|---|---|---|---|---|
 | CR-2026-04-09-0001 | `src/NewContractWizard.jsx` | 942 | Dead code | P2 | Handoff + session-confirmed: stray `)}` JSX closer, esbuild tolerates |
 | CR-2026-04-09-0002 | `src/AppRouter.jsx` vs `src/screens/AppRouter.jsx` | — | Dead code | P1 | Duplicate router files; resolve before user testing |
 | CR-2026-04-09-0003 | `src/ContractsList.jsx` vs `src/screens/ContractList.jsx` | — | Dead code | P1 | Duplicate list component |
-| CR-2026-04-09-0004 | `src/_archive/NewContractWizard.jsx` + rest of `_archive/` | — | Dead code | P2 | Recommend folder deletion |
+| CR-2026-04-09-0004 | `src/_archive/NewContractWizard.jsx` + rest of `_archive/` | — | Dead code | P2 | Recommend folder deletion (escalates per 7.3 — destructive) |
 | CR-2026-04-09-0005 | `src/screens/templates/DocumentPreview.jsx` + `CompositeExpander.jsx` | — | Data integrity (8a) | P1 | Handoff: verify column coverage of handoff Changes 3/4 `$select` lists; may reference columns not yet included |
 | CR-2026-04-09-0006 | `src/interview/interviewGenerate.js` | — | Data integrity | P2 | Still uses stale `callFlow()` — migration to `createDocumentRequest`. Out of scope for this review per Section 2.2; noted for visibility. |
 
