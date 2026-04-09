@@ -1,0 +1,227 @@
+# DCFG SPA Code Review — 2026-04-09
+
+**Spec:** `C:\dcfg\docs\superpowers\specs\2026-04-09-spa-review-cleanup-design.md` (approved iteration 2)
+**Spec Word version:** `C:\dcfg\docs\superpowers\specs\2026-04-09-spa-review-cleanup-design.docx` (23 pages)
+**Plan:** `C:\dcfg\docs\superpowers\plans\2026-04-09-spa-review-cleanup.md` (3,838 lines, 7 chunks, all approved)
+**Branch:** `code-review-2026-04-09` — **NOT YET CREATED.** Plan is ready to execute but no execution work has started.
+
+---
+
+## To Resume
+
+**Current state:** Planning phase complete. Execution has not begun.
+
+**Next session should:**
+
+1. **Read this file** and `session-state.md` in the same directory
+2. **Read the spec's §1.1.1** (six changes already landed on Prod) so you understand what the Phase 0 parity sweep is checking against
+3. **Read the plan's Chunk 1 header** to see Phase 0 entry conditions
+4. **Verify pre-flight** before any code action:
+   - `pac auth list` → compare to env table in plan (Prod=[1], Test=[2], Stage=[3], Portal=[4])
+   - `Connect-AzAccount` active (Phase 0 parity sweep needs it)
+   - `git status` shows clean working tree on `master`
+5. **Confirm with operator** whether to start execution. Do NOT auto-start — the operator is the gate-holder for 41-61 operator interactions over the life of this review.
+6. **If operator green-lights execution:** start at Plan Chunk 1 Task 0.0 Step 1 (pre-flight + branch creation)
+
+**Do NOT:**
+- Re-plan. The spec and plan are approved and committed.
+- Skip Task 0.0 Step 1 (the pre-flight check). Environment drift since 2026-04-09 is the first thing to catch.
+- Start any Phase 5 fix batch without operator approval per gate. The plan's gates are non-negotiable.
+- Re-run the hotfix from 2026-04-09 — it's already landed on Prod (see §1.1.1 of spec for exact scope).
+- Assume CLAUDE.md's pac auth indices are correct — they are stale as of 2026-04-09.
+
+---
+
+## Phase Status
+
+- [ ] Phase 0 — Parity sweep + Playwright scaffolding decision — NOT STARTED
+- [ ] Phase 1 — Shared modules audit — NOT STARTED
+- [ ] Phase 2 — Auto-fix pass (dead code / console / testids) — NOT STARTED
+- [ ] Phase 3 — Screen audit (9 waves) — NOT STARTED
+- [ ] Phase 4 — Consolidation — NOT STARTED
+- [ ] Phase 5 — Fix batches — NOT STARTED
+- [ ] Phase 6 — Final validation — NOT STARTED
+
+---
+
+## Gate Log
+
+| Gate | Date | Outcome | Notes |
+|---|---|---|---|
+| 0a | — | pending | Parity backport approvals per env/target |
+| 0b | — | pending | Playwright scaffolding approval |
+| 1a | — | pending | Phase 1 findings review |
+| 1b | — | pending | Phase 1 fix batch |
+| 1c | — | pending | Phase 1 smoke |
+| 2a | — | pending | Phase 2a dead-code batch preview |
+| 2b | — | pending | Phase 2b console batch preview |
+| 2c | — | pending | Phase 2c testid batch preview |
+| 2d | — | pending | Phase 2 smoke |
+| 3.1–3.9 | — | pending | 9 screen-audit waves |
+| 4 | — | pending | Phase 4 consolidation |
+| 5.N | — | pending | Phase 5 fix batches (~10-20 expected) |
+| 5.N-smoke | — | pending | Phase 5 per-batch smoke |
+| 6a | — | pending | Final Playwright |
+| 6b | — | pending | Manual operator smoke |
+| 6c | — | pending | Merge approval |
+
+---
+
+## Session Log
+
+### 2026-04-09 — Session 1 (planning + hotfix)
+
+Work performed (in order):
+
+1. **Hotfix landed on Prod** (not a Phase 0 backport — this pre-dated plan creation):
+   - Appended `dcfg_customer_id` bind form to `Webapi/dcfg_blanket_workorder/fields` on dmms1
+   - Appended `dcfg_customer_id,dcfg_cost_code_id` bind forms to `Webapi/dcfg_customer_ap_mapping/fields` on dmms1
+   - Operator cleared Prod portal cache manually and smoke-tested both new-record flows green
+   - Backup: `C:\dcfg\scripts\_backups\2026-04-09_admin-bind-forms-before.json`
+   - Fix script: `C:\dcfg\scripts\fix-admin-bind-forms-2026-04-09.ps1` (not committed — `*.ps1` gitignore rule)
+   - Validate script: `C:\dcfg\scripts\validate-admin-bind-forms-2026-04-09.ps1` (not committed)
+   - **These scripts exist in the working tree but not in git.** If the next session needs them, they're on disk.
+
+2. **Memory saved:** `feedback_nora_always_monitors.md` — Nora baseline now always monitors audit logs + DocGen V4 document requests, no exceptions. Added to MEMORY.md index.
+
+3. **Spec written + reviewed + approved** via `superpowers:brainstorming` + `spec-document-reviewer` (2 iterations). Committed:
+   - `5602bf6` — initial spec
+   - `7426f8d` — reviewer iteration 2 revisions
+
+4. **Spec Word version generated:**
+   - `d271c7e` — .docx (23 pages, 18 styled tables, DCFG brand palette) + converter script `scripts/md-to-docx-spa-review.py`
+
+5. **Plan written + reviewed + approved** via `superpowers:writing-plans` + `plan-document-reviewer` (7 chunks, all approved after 1-2 iterations each):
+   - `bbffae5` — plan header + Chunk 1 (Phase 0 part A)
+   - `5ff7347` — Chunks 2-7 (Phase 0B through Phase 6)
+   - `cb37ff3` — Chunk 6+7 revisions per reviewer (spec §7.1.1 "unclear cause" branch added, Chunk 7 8 fixes)
+
+6. **Session paused** when operator said "I will be away full auto." I declined to proceed autonomously with anything that modifies shared state. No execution work was started. Operator confirmed pause.
+
+7. **This handoff** saved state to `docs/code-review-2026-04-09/` so the next session can resume cleanly.
+
+**Total commits this session: 6** (all on `master` branch). No `code-review-2026-04-09` branch has been created yet.
+
+---
+
+## Git commits this session
+
+```
+cb37ff3 docs(plans): revise Chunks 6-7 per reviewer feedback
+5ff7347 docs(plans): add Chunks 2-7 (Phase 0 part B through Phase 6)
+d271c7e docs(specs): Word version of SPA code review design + converter
+bbffae5 docs(plans): SPA code review cleanup — plan header + Chunk 1
+7426f8d docs(specs): revise SPA code review design per reviewer pass
+5602bf6 docs(specs): add SPA code review & cleanup design
+```
+
+---
+
+## Findings ID Cursor
+
+- Pre-seed: 0001-0099 reserved (0001-0006 occupied per spec §11)
+- Phase 0: next = 0100 (no findings filed yet)
+- Phase 1: next = 0200 (no findings filed yet)
+- Phase 2a: next = 0300
+- Phase 2b: next = 0400
+- Phase 2c: next = 0500
+- Phase 3 Wave 1 Sales: next = 0600
+- Phase 3 Wave 2 Contracts: next = 0700
+- Phase 3 Wave 3 Wizards: next = 0800
+- Phase 3 Wave 4 Facilities: next = 0900
+- Phase 3 Wave 5 Onboarding: next = 1000
+- Phase 3 Wave 6 Programs/Projects: next = 1100
+- Phase 3 Wave 7 Templates: next = 1200
+- Phase 3 Wave 8 Admin: next = 1300
+- Phase 3 Wave 9 FlowMonitor: next = 1400
+- Phase 4 consolidation: next = 1500
+- Phase 5 fix-forward: next = 1600
+
+`findings.json` has NOT been created yet. Plan Chunk 1 Task 0.0 Step 6 creates it with the 6 pre-seeded entries from spec §11.
+
+---
+
+## Critical reminders for the next session
+
+### Environment indices (verified 2026-04-09 via `pac auth list`)
+
+| Env | pac index | Org URL | Portal host |
+|---|---|---|---|
+| **Prod** (DCFGSystems-Prod) | `[1]` ← active | `org06f5de0b.crm.dynamics.com` | `dmms1.powerappsportals.com` |
+| **Test** (DCFGSystems-Test) | `[2]` | `org0c17e98d.crm.dynamics.com` | `dcfg.powerappsportals.com` |
+| **Stage** (DCFGSystems-Stage) | `[3]` | `org88778bb0.crm.dynamics.com` | `holding.powerappsportals.com` |
+| **Portal** (legacy) | `[4]` | `orgf625b080.crm.dynamics.com` | `decades.powerappsportals.com` |
+
+**CLAUDE.md is stale** — it claims Test=[1], Stage=[2], Prod=[3]. Do NOT trust it. Always `pac auth list` before any deploy.
+
+### Standing rules in force
+
+- `feedback_pick_lane_explicit_or_wildcard.md` — never oscillate Webapi fields between explicit and wildcard. Fix the consumer.
+- `feedback_nora_always_monitors.md` (NEW this session) — every Nora cycle MUST check audit logs + DocGen V4 document requests, no exceptions
+- `feedback_mandatory_planning_gate.md` — investigate → options → approval → act
+- `feedback_sox_principles.md` — before-state capture, full audit trail, rollback capability
+- `feedback_soft_delete_only.md` — never hard delete Dataverse records
+- `feedback_verify_pac_auth_before_deploy.md` — always `pac auth list` before deploy
+- `feedback_testid_golden_rule.md` — every interactive element gets `data-testid`; tests use only `data-testid`
+- SPA is READ-ONLY by default per CLAUDE.md — every edit needs explicit per-change approval
+- curl.exe BLOCKED by endpoint security — use `Invoke-RestMethod` in pwsh
+
+### Hotfix state (already landed on Prod — do NOT repeat)
+
+Two Webapi site-setting PATCHes on dmms1 for bind-form coverage:
+- `Webapi/dcfg_blanket_workorder/fields` → now includes `dcfg_customer_id`
+- `Webapi/dcfg_customer_ap_mapping/fields` → now includes `dcfg_customer_id,dcfg_cost_code_id`
+
+If the Phase 0 parity sweep reports Prod as "OK" for these two targets, that confirms the hotfix is still in place. If it reports drift, something has been reverted since 2026-04-09 and that is a separate investigation.
+
+---
+
+## Artifacts created this session
+
+### In git (on `master`)
+- `docs/superpowers/specs/2026-04-09-spa-review-cleanup-design.md` (spec, 687 lines)
+- `docs/superpowers/specs/2026-04-09-spa-review-cleanup-design.docx` (Word, 23 pages)
+- `docs/superpowers/plans/2026-04-09-spa-review-cleanup.md` (plan, 3,838 lines)
+- `scripts/md-to-docx-spa-review.py` (converter)
+- `docs/code-review-2026-04-09/README.md` (this file, will be committed as part of handoff)
+- `docs/code-review-2026-04-09/session-state.md` (sibling file, will be committed as part of handoff)
+
+### On disk but NOT in git (blocked by `*.ps1` gitignore rule)
+- `scripts/fix-admin-bind-forms-2026-04-09.ps1` (hotfix script, idempotent, re-runnable)
+- `scripts/validate-admin-bind-forms-2026-04-09.ps1` (hotfix validator, read-only)
+- `scripts/probe-admin-fields.ps1` (early probe — superseded by validator, can be deleted)
+- `scripts/verify-docx.ps1` (one-shot Word COM verifier for the .docx)
+
+### On disk, untracked
+- `scripts/_backups/2026-04-09_admin-bind-forms-before.json` (hotfix before-state; should be committed for audit trail but was missed this session)
+
+### Not yet created (Plan Chunk 1 Task 0.0 creates these when execution starts)
+- `docs/code-review-2026-04-09/findings.json` (master findings — 6 pre-seeded entries pending)
+- `docs/code-review-2026-04-09/parity-report.json`
+- `docs/code-review-2026-04-09/spa-deployed-state.json`
+- `scripts/code-review/` directory and all its contents (parity-sweep.ps1, backport-field-list.ps1, etc.)
+
+---
+
+## Suggested first actions for the next session
+
+1. Read this file + `session-state.md`
+2. `git log --oneline -10` to confirm you're on master with the 6 plan/spec commits present
+3. `pac auth list` to confirm env indices are still as documented
+4. Ask operator: "Ready to start executing the SPA code review plan from Phase 0 Task 0.0? Or do you want to review the spec/plan first?"
+5. If operator says yes: begin Plan Chunk 1 Task 0.0 Step 1
+6. If operator wants to review first: point them at the .docx for readability, or the .md for precision
+
+---
+
+## Open side questions (deferred)
+
+These were raised during this session and never answered. The next session may want to close them:
+
+1. **Should `scripts/verify-docx.ps1` and the hotfix scripts be committed?** Currently blocked by `*.ps1` gitignore rule. Either force-add with `-f`, or narrow the gitignore rule to `/*.ps1` (root-only), or rewrite the scripts in Python.
+2. **Should the plan be generated as a Word doc too?** Same `md-to-docx-spa-review.py` converter can be pointed at the plan file.
+3. **Should `scripts/_backups/2026-04-09_admin-bind-forms-before.json` be committed?** SOX principles say yes (audit trail). It's currently untracked.
+
+---
+
+*End of resume block.*
