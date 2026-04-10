@@ -154,7 +154,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "writeAuditLog session-start .catch(err => console.error(...)) only â€” no toast surface",
     "detail": "Line 237: session-start audit log failure logs to console only. Acceptable for a one-time boot event (don't toast the user about a failed audit log write), but worth noting that if the audit log table is broken at boot, we'll never know unless we check the console. Low risk because the session log is internal-only telemetry.",
     "evidence": "App.jsx:237 `}).catch(err => console.error('Session audit log failed:', err));`",
@@ -163,8 +163,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -536,7 +536,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Effect reads window.Microsoft.Dynamic365.Portal.User synchronously â€” no error path",
     "detail": "Line 32: `const raw = window.Microsoft?.Dynamic365?.Portal?.User ?? null;` â€” uses optional chaining so it can't throw, and falls back to setting an unauthenticated user state. Defensive code, no runtime risk. P3 polish: an explicit warn when the global is missing would help diagnose Power Pages script-load order issues.",
     "evidence": "usePortalUser.jsx:30-65 â€” effect reads window global, no console output.",
@@ -545,8 +545,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -781,7 +781,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "localStorage.setItem wrapped in try/catch with empty handler",
     "detail": "Lines 24, 53, 108-109 (this file and similar in NavPanel/Toast) all wrap localStorage access in `try { ... } catch(e) {}`. localStorage CAN throw (Safari private mode, quota exceeded, disabled storage). The current behavior â€” silently fall back to in-memory state â€” is reasonable. P3 polish: a one-time console.warn would help diagnose 'why doesn't my saved width persist'.",
     "evidence": "SlideOutPanel.jsx:53 `try { localStorage.setItem('dcfg_panel_width_' + testId, String(width)); } catch(e) {}`",
@@ -790,8 +790,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -1210,7 +1210,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "TRADE_OPTIONS constant declared inside CostCodeForm â€” re-created on every render",
     "detail": "Line 891: `const TRADE_OPTIONS = [ ... ];` is declared inside the CostCodeForm component body, so a new array and 13 new option-objects are allocated every time the form re-renders. Not a performance hot path (form is short-lived) but the pattern is inconsistent with the module-level SECTIONS/NAV_ROUTES constants at the top of the file. Low priority.",
     "evidence": "Admin.jsx:891-905 â€” TRADE_OPTIONS inside function CostCodeForm.",
@@ -1219,8 +1219,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -1847,7 +1847,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "fetchSensorAlerts outer `catch {}` silently swallows all errors on every 30s poll",
     "detail": "Lines 169-171: bare `catch { }` with a comment 'Sensor table may not be available â€” fail silently'. Fires every 30 seconds. Any post-deploy regression to dcfg_sensor_readings access or shape is invisible. Parallel to SensorBanner's CR-0242 bare catch.",
     "evidence": "Operations.jsx:169-171 bare catch in fetchSensorAlerts.",
@@ -1858,8 +1858,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -1895,7 +1895,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "SalesDashboard imports useRef, useMemo, isManager â€” none are used",
     "detail": "Line 6: `import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';` â€” useRef, useMemo, useCallback are never used in the file. Line 41: `const { isManager } = usePortalUser();` â€” isManager never used.",
     "evidence": "SalesDashboard.jsx:6, 41. grep confirms no other references in this file.",
@@ -1904,8 +1904,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -1968,7 +1968,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Hardcoded email addresses `team@decades-cg.com` / `compliance@decades-cg.com` in handleRequestInfo templates",
     "detail": "Line 320: `to: 'team@decades-cg.com'` â€” hardcoded sales team email. Line 332: email body includes `compliance@decades-cg.com` as a literal. These should come from dcfg_configs (e.g. `dcfg_email_ops_team`, `dcfg_email_compliance`) so the operator can change them without a SPA deploy.",
     "evidence": "SendQueue.jsx:320, 332.",
@@ -1977,8 +1977,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -1991,7 +1991,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "30s polling interval runs regardless of tab visibility â€” wastes cycles on background tabs",
     "detail": "Lines 61-65: `setInterval(load, 30000)` with no document.visibilityState check. Browser background tabs still run the interval (browsers throttle but don't stop). Same issue in FlowMonitor (5s interval), Operations (30s sensor, 2min WO).",
     "evidence": "AbsorptionDashboard.jsx:61-65.",
@@ -2000,8 +2000,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2014,7 +2014,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "CapitalPlan has no in-component role check â€” relies on AppRouter guard only",
     "detail": "CapitalPlan.jsx never calls isAdmin/isManager/hasRole. Per the post-CR-0219 routing, /capital-plan is wrapped in RoleGuard at the route level â€” so defense-in-depth is the only concern here. Low priority, cataloged for completeness.",
     "evidence": "CapitalPlan.jsx â€” grep for isAdmin/isManager returns no matches.",
@@ -2026,8 +2026,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2063,7 +2063,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Directory imports usePortalUser but never uses it",
     "detail": "Line 9: `import { usePortalUser } from '../usePortalUser.jsx';` â€” never called anywhere in the file.",
     "evidence": "Directory.jsx:9.",
@@ -2072,8 +2072,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2086,7 +2086,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "FlowMonitor polls every 5 seconds with no pause-on-hidden check",
     "detail": "Line 74: `setInterval(fetchRequests, POLL_INTERVAL)` where POLL_INTERVAL=5000. Every 5 seconds fetches up to 50 document request rows + expansion on template. Internal admin tool, low-traffic, but if left open in a background tab for an hour that's 720 unnecessary hits to Dataverse. Same class as CR-0277 (AbsorptionDashboard).",
     "evidence": "FlowMonitor.jsx:7 POLL_INTERVAL=5000, 74 setInterval.",
@@ -2097,8 +2097,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2182,7 +2182,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Save as Template uses browser prompt() â€” bad UX for external testing",
     "detail": "Line 239: `const tplName = prompt('Template name:', `${project.dcfg_name} Template`);` â€” native browser prompt is blocking and visually inconsistent with the rest of the SPA's SlideOutPanel/modal UI. External customer testers will see a system dialog that breaks the navy/amber brand.",
     "evidence": "ProjectDetail.jsx:239.",
@@ -2191,8 +2191,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2426,7 +2426,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "VendorList geocodes via hardcoded `nominatim.openstreetmap.org` URL",
     "detail": "Line 83: `fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + ...)` â€” hardcoded third-party geocoding service. OpenStreetMap's Nominatim has a usage policy limiting to 1 req/sec and requiring a User-Agent header. This fetch sets neither, so heavy use could get the SPA IP-banned from the free Nominatim instance. Should be configurable via dcfg_configs and should set a User-Agent.",
     "evidence": "VendorList.jsx:79-102 doDistanceSearch.",
@@ -2435,8 +2435,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
@@ -2598,7 +2598,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "doToggle uses raw picklist ints `100000007`/`100000008` instead of AuditActionType enum names",
     "detail": "Line 150: `actionType: newActive ? 100000007 : 100000008, // Template Activated / Deactivated`. The magic numbers are AuditActionType.Created (100000007) and AuditActionType.Deleted (100000008) per portalApi.js:96, but the labels 'Template Activated/Deactivated' don't match Created/Deleted. Either the enum is wrong (then we need new values) or the usage is wrong (should reuse StatusChanged = 100000006). Cat 11 handoff cleanliness.",
     "evidence": "TemplateList.jsx:150. portalApi.js:96 AuditActionType map.",
@@ -2607,8 +2607,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:09:18.6245402Z",
     "approvedIn": "approvals/2026-04-09-batch-07-phase1-p3-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:15:20.9667763Z",
+    "fixCommit": "20e55f7d8e251530450e6e7b9b0d0ebe1bb7e3a6",
     "verifiedAt": null
   },
   {
