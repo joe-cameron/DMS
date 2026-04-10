@@ -1,0 +1,7 @@
+{
+  "Webapi/dcfg_document_template/fields": {
+    "componentId": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
+    "beforeFields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
+    "modifiedon": "2026-04-07T19:10:08Z"
+  }
+}

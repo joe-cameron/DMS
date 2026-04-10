@@ -1,0 +1,17 @@
+{
+  "Webapi/dcfg_document_template/fields": {
+    "componentId": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
+    "modifiedon": "2026-04-07T18:43:26Z",
+    "beforeFields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,_dcfg_customer_id_value,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at"
+  },
+  "Webapi/dcfg_blanket_workorder/fields": {
+    "beforeFields": "dcfg_blanket_workorderid,dcfg_name,dcfg_dollar_threshold,dcfg_job_number,dcfg_effective_year,dcfg_active_flag,_dcfg_customer_id_value",
+    "modifiedon": "2026-03-30T17:24:11Z",
+    "componentId": "fb379341-5d2c-f111-88b4-7ced8d709731"
+  },
+  "Webapi/dcfg_customer_ap_mapping/fields": {
+    "beforeFields": "dcfg_customer_ap_mappingid,dcfg_name,dcfg_ap_code,dcfg_active_flag,_dcfg_customer_id_value,_dcfg_cost_code_id_value",
+    "modifiedon": "2026-03-30T17:24:13Z",
+    "componentId": "17389341-5d2c-f111-88b4-7ced8d709731"
+  }
+}
