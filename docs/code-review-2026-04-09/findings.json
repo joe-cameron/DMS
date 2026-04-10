@@ -1442,7 +1442,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "LOGO_BASE hardcoded to legacy portal URL `https://decades.powerappsportals.com/` â€” violates loadConfig mandate",
     "detail": "Line 25: `const LOGO_BASE = 'https://decades.powerappsportals.com/';` â€” this points at the LEGACY non-SPA portal, not dmms1/dcfg/holding. Per CLAUDE.md 'Config: dcfg_configs table read at boot via loadConfig() â€” no hardcoded URLs', every cross-environment URL should be pulled from dcfg_configs. The customer header logo src concatenates this base with LOGO_MAP[customer.dcfg_name] (line 81). On Prod today: customer avatars load from a different portal's asset library, which (a) makes Prod depend on a legacy portal being up, (b) may show stale/wrong logos if the legacy portal was updated independently, and (c) fails if the operator removes the legacy portal later in the decommission plan.",
     "evidence": "CustomerDetail.jsx:25 `const LOGO_BASE = 'https://decades.powerappsportals.com/';`, line 81 img src=LOGO_BASE + filename.",
@@ -1451,10 +1451,10 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:38:47.1272265Z",
+    "fixCommit": "c48949fb3740f88bc665fe69499d292b1905ea3c",
     "verifiedAt": null,
-    "executionNote": "DRIFT during batch 02 execution: approval doc snippets did not match current file. Image style/alt/onError differ; import line is 3-way split with different named imports. Likely the phase-1-expansion-audit captured paraphrased snippets rather than verbatim. Re-audit needed for accurate fix."
+    "executionNote": "RESOLVED: original drift was due to audit-captured paraphrased snippets. Re-applied manually 2026-04-09 with verbatim file read. Build verified 4.87s."
   },
   {
     "id": "CR-2026-04-09-0255",
