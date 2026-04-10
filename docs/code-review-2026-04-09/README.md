@@ -34,7 +34,7 @@
 
 ## Phase Status
 
-- [ ] Phase 0 — Parity sweep + Playwright scaffolding decision — **IN PROGRESS** (Part A read-only work done; Gate 0a pending)
+- [x] Phase 0 — Parity sweep + Playwright scaffolding decision — **PARTIAL** (Part A complete, Gate 0a resolved per operator pivot, Test/Stage SPA bundle redeploys + cache clears DEFERRED — see Session 2 log)
 - [ ] Phase 1 — Shared modules audit — NOT STARTED
 - [ ] Phase 2 — Auto-fix pass (dead code / console / testids) — NOT STARTED
 - [ ] Phase 3 — Screen audit (9 waves) — NOT STARTED
@@ -48,7 +48,7 @@
 
 | Gate | Date | Outcome | Notes |
 |---|---|---|---|
-| 0a | 2026-04-09 | **matrix presented, awaiting operator decision** | Parity backport approvals per env/target — see Session 2 log |
+| 0a | 2026-04-09 | **partially resolved** | Q1=A keep, Q2=B flip Stage, Q3=B insert Stage env-specific, Q4=A source verified, Q5 cache clear DEFERRED. Test SPA + Stage SPA redeploy DEFERRED per operator pivot ("done with stage and test, work later"). |
 | 0b | — | pending | Playwright scaffolding approval |
 | 1a | — | pending | Phase 1 findings review |
 | 1b | — | pending | Phase 1 fix batch |
@@ -124,9 +124,35 @@ Work performed (in order):
 6. **Task 0.4 findings validator** — wrote `scripts/code-review/validate-findings-json.ps1`, ran clean against the 6 pre-seeded findings. 0 errors.
    - Commit `7df5176` — validate-findings-json.ps1 (force-added)
 
-7. **Gate 0a matrix built and presented** — see Session 2's Gate 0a entry below. **STOPPED for operator decision** per agreed scope.
+7. **Gate 0a matrix built and presented** — see Session 2's Gate 0a entry below. **Stopped for operator decision** per agreed scope.
 
-**Total commits this session (on `code-review-2026-04-09` branch so far): 4**. No writes to shared state (all Dataverse/SPA calls were read-only queries).
+8. **Operator approved non-destructive backports (rows 1, 2, 3, 6) via "approve all"** — wrote `scripts/code-review/backport-field-list.ps1`, executed 4 sequential PATCHes via `Get-AzAccessToken`. Each operation captured beforeFields to per-env backup JSON. Re-ran parity sweep: drift dropped 7 → 2.
+   - Commit `b56a481` — backport script + Test/Stage backup files + refreshed parity-report.json
+
+9. **Operator answered remaining questions Q1-Q5** with structured replies. Per decisions:
+   - **Q1=A** — Test `dcfg_sp_templates_library = DCFG_Templates_Test` accepted as intentional per-env drift (no PATCH).
+   - **Q2=B** — Stage `dcfg_blanket_workorder/fields` and `dcfg_customer_ap_mapping/fields` flipped from wildcard `*` to Prod's exact 8-column explicit lists. Destructive but reversible via backup files. Wrote `-Mode Replace` extension to `backport-field-list.ps1`.
+   - **Q3=B** — Stage `dcfg_sp_templates_library` row INSERTED with value `DCFG_Templates_Stage` (env-specific naming pattern matching Test convention). Wrote `scripts/code-review/insert-config-value.ps1` (POST helper, refuses if key already exists).
+   - **Q4=A** — Source verified: master SPA contains both Change 3 (`useTemplateFields.js:33`) and Change 4 (`TemplateDetail.jsx:416`) signatures. Safe to deploy when Test/Stage SPA bundle redeploy is later approved.
+   - **Q5=A** — Started writing Playwright cache-clear script (`nora/clear-portal-cache.mjs`) but operator stopped it before run. Operator feedback saved to memory: "every object has a siteid for playwrite to find it" (`feedback_playwright_siteid_locators.md`). The UI-clicking approach was wrong — use siteId-based deeplinks/selectors next time.
+   - Updated `parity-sweep.ps1` to use per-env expected config values (hashtable). Re-ran sweep: **drift count = 0** across all 3 envs.
+   - Commit `7555b22` — Stage destructive flips + insert helper + per-env config sweep
+
+10. **Operator pivoted Test/Stage work to "later"** — "we are done with stage and test. we will work with them later." This closes Gate 0a as partial: rows 1, 2, 3, 6, 7, 8, 9 done; row 4 accepted-drift; rows 5 + 10 (SPA bundle redeploys) + Q5 cache clears DEFERRED. The actual Phase 1+ code review work for Prod readiness has NOT started.
+
+11. **Memory saved (Session 2):**
+   - `feedback_playwright_siteid_locators.md` — Power Platform Playwright should use siteId, not UI navigation
+   - `project_code_review_prod_focus_2026_04_09.md` — Prod is the user-testing target, Test/Stage deferred
+
+**Total commits this session (on `code-review-2026-04-09` branch): 7** (5 from Phase 0 Part A scaffold/scripts + 2 from Gate 0a backport batches + this README update). Master unchanged at `12b7d52`.
+
+**Working tree note:** `nora/clear-portal-cache.mjs` exists but is uncommitted and the wrong approach (UI navigation instead of siteId deeplinks). Either delete it or leave as a learning artifact — not load-bearing either way.
+
+**Live state for next session to be aware of:**
+- **Test + Stage Dataverse changes ARE LIVE** but **portal caches NOT CLEARED**. Dataverse parity is correct; SPA rendering on Test/Stage portals may show stale behavior until admin center cache clear runs.
+- All changes have rollback files at `scripts/_backups/2026-04-09_parity-{test,stage}-before.json`.
+- Phase 0 Playwright scaffolding (Plan Chunk 2 — Tasks 0.5, 0.6, 0.7) NOT touched. Gate 0b never opened.
+- Phase 1 (Shared modules audit) is the next real work toward Prod code review readiness.
 
 ### Session 2 Gate 0a matrix
 
