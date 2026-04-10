@@ -51,7 +51,7 @@
 | 0a | 2026-04-09 | **partially resolved** | Q1=A keep, Q2=B flip Stage, Q3=B insert Stage env-specific, Q4=A source verified, Q5 cache clear DEFERRED. Test SPA + Stage SPA redeploy DEFERRED per operator pivot ("done with stage and test, work later"). |
 | 0b | — | pending | Playwright scaffolding approval |
 | 1a | 2026-04-09 | **approved** | 43 phase-1 findings reviewed (3 P0, 10 P1, 19 P2, 11 P3); operator approved set, proceeding to Gate 1b fix-batch proposal |
-| 1b | — | pending | Phase 1 fix batch |
+| 1b | 2026-04-09 | **approved batch** | 13 findings (3 P0 + 10 P1) approved for execution; doc: approvals/2026-04-09-batch-01-phase1-shared.md |
 | 1c | — | pending | Phase 1 smoke |
 | 2a | — | pending | Phase 2a dead-code batch preview |
 | 2b | — | pending | Phase 2b console batch preview |
