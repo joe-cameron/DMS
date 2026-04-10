@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CR-2026-04-09-0305",
+    "file": "src/NewContractWizard.jsx",
+    "line": 527,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "handleGenerate contract-lines create loop is sequential \u00e2\u20ac\u201d 10-line exhibit = 10 round-trips",
+    "detail": "Lines 527-538: `for (let i = 0; i < lines.length; i++) { ...; await createContractLine(...); }`. Each line is one sequential POST. Typical contracts have 5-15 lines; each adds ~200ms; total ~2-3s of blocking on the generate click. saveLinesToDataverse (line 381) has the parallel version of the same logic. Inconsistent with itself.",
+    "evidence": "NewContractWizard.jsx:527-538. Compare to saveLinesToDataverse:389 which uses Promise.all.",
+    "recommendedFix": "Parallelize with Promise.all \u00e2\u20ac\u201d same pattern as saveLinesToDataverse. Risk: Dataverse rate-limiting at very high concurrency, acceptable at typical line counts.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  },
+  {
+    "id": "CR-2026-04-09-0306",
+    "file": "src/NewContractWizard.jsx",
+    "line": 942,
+    "category": "handoff-cleanliness",
+    "categoryNumber": 11,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "Stray `)}` JSX closer at line 942 \u00e2\u20ac\u201d same as pre-seed CR-2026-04-09-0001",
+    "detail": "Confirmed presence of the orphan `)}` at line 942 with the 'Vendor is selected on Step 3' comment at line 941. This is the exact block called out in pre-seed CR-2026-04-09-0001. Documented here so the expansion audit's file-by-file coverage doesn't miss it. Cross-referenced, no duplicate fix needed.",
+    "evidence": "NewContractWizard.jsx:941-942 exactly match the pre-seed finding.",
+    "recommendedFix": "Covered by CR-2026-04-09-0001 \u00e2\u20ac\u201d delete lines 941-942.",
+    "relatedFindings": [
+      "CR-2026-04-09-0001"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

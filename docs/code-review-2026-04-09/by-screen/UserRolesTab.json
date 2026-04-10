@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0292",
+    "file": "src/screens/UserRolesTab.jsx",
+    "line": 119,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "UserRolesTab queries `/mspp_webroles` and `/contacts` directly \u00e2\u20ac\u201d may 400 per engineering journal Sec 11",
+    "detail": "Per engineering journal Section 11, the Power Pages Web API (`/_api/`) only supports custom data tables (`dcfg_*`). System tables like `mspp_*`, `contacts`, `environmentvariabledefinitions` are documented as inaccessible. UserRolesTab.jsx makes FOUR such calls: line 119 `/mspp_webroles`, line 131 `/contacts`, line 147 `/mspp_webroles(id)?$expand=mspp_webrole_contact`, line 190 `apiDelete('/contacts(id)/mspp_webrole_contact(roleId)/$ref')`, line 195 POST to `mspp_webrole_contact/$ref`, line 250 `/contacts?$filter=emailaddress1`, line 258 apiPostReturnId '/contacts'. The engineering journal \u00c2\u00a720 notes the N:N nav property `mspp_entitypermission_webrole` returns 0 records even when links exist \u00e2\u20ac\u201d platform limitation. If the same is true for `mspp_webrole_contact`, this entire tab cannot work via Web API. The operator's documented workaround is Power Pages admin center UI for role assignments. NEEDS VERIFICATION against the actual Prod portal \u00e2\u20ac\u201d if the calls DO work (perhaps because DCFG enabled the tables in a site setting), the finding downgrades to P3 informational. If they don't, this tab is dead code and should be marked as such or rebuilt.",
+    "evidence": "UserRolesTab.jsx:119, 131, 147, 190, 195, 250, 258. reference_engineering_journal.md Section 11 'Portal Web API Cannot Access System Tables'. Section 2 'Web Role Assignment in Enhanced Data Model' \u00e2\u20ac\u201d notes 4+ attempts failed.",
+    "recommendedFix": "Three-step: (1) operator loads the Admin \u00e2\u2020\u2019 User Roles tab on Prod and checks the network tab \u00e2\u20ac\u201d confirms whether /_api/mspp_webroles and /_api/contacts 400 or return data. (2) If they 400, mark the tab as a known-broken feature in the Admin UI with a 'Use Power Pages admin center' link. (3) Eventually replace with a custom dcfg_user_role_assignment table the SPA can read/write directly, or a Power Automate flow that proxies the mspp_ operations via application-auth.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

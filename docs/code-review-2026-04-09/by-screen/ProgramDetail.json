@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR-2026-04-09-0284",
+    "file": "src/screens/ProgramDetail.jsx",
+    "line": 46,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "ProgramDetail loadProgram silently swallows load errors with .catch(() => setLoading(false))",
+    "detail": "Line 46: `.catch(() => setLoading(false))` \u00e2\u20ac\u201d no error state, no toast. On failure, loading spinner turns off and the page shows `<p>Program not found.</p>` at line 86, which is indistinguishable from a real 404. Same anti-pattern as ContractList CR-0251.",
+    "evidence": "ProgramDetail.jsx:46.",
+    "recommendedFix": "Add `const [error, setError] = useState(null);` and distinguish load failure from not-found. Show a toast or error banner on load failure.",
+    "relatedFindings": [
+      "CR-2026-04-09-0251"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

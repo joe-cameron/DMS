@@ -1,0 +1,28 @@
+[
+  {
+    "id": "CR-2026-04-09-0278",
+    "file": "src/screens/CapitalPlan.jsx",
+    "line": null,
+    "category": "auth-role-checks",
+    "categoryNumber": 9,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "CapitalPlan has no in-component role check \u00e2\u20ac\u201d relies on AppRouter guard only",
+    "detail": "CapitalPlan.jsx never calls isAdmin/isManager/hasRole. Per the post-CR-0219 routing, /capital-plan is wrapped in RoleGuard at the route level \u00e2\u20ac\u201d so defense-in-depth is the only concern here. Low priority, cataloged for completeness.",
+    "evidence": "CapitalPlan.jsx \u00e2\u20ac\u201d grep for isAdmin/isManager returns no matches.",
+    "recommendedFix": "Optional: destructure isAdmin from usePortalUser and render an access-denied fallback if false. Follows the same pattern as the Admin screen CR-0246.",
+    "relatedFindings": [
+      "CR-2026-04-09-0246",
+      "CR-2026-04-09-0219"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

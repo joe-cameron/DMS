@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0285",
+    "file": "src/screens/ProjectDetail.jsx",
+    "line": 239,
+    "category": "handoff-cleanliness",
+    "categoryNumber": 11,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "Save as Template uses browser prompt() \u00e2\u20ac\u201d bad UX for external testing",
+    "detail": "Line 239: `const tplName = prompt('Template name:', `${project.dcfg_name} Template`);` \u00e2\u20ac\u201d native browser prompt is blocking and visually inconsistent with the rest of the SPA's SlideOutPanel/modal UI. External customer testers will see a system dialog that breaks the navy/amber brand.",
+    "evidence": "ProjectDetail.jsx:239.",
+    "recommendedFix": "Replace with an inline modal or SlideOutPanel for template-name entry. Match the SlideOutPanel usage pattern from NewRfpWizard or Admin.jsx forms.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0247",
+    "file": "src/screens/CompliancePanel.jsx",
+    "line": 168,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "CompliancePanel load + save errors swallowed to console \u00e2\u20ac\u201d no toast surface",
+    "detail": "Line 168 `console.error('CompliancePanel load error:', e)` \u00e2\u20ac\u201d user sees nothing if rules load fails, panel just never renders. Line 202 `console.error('CompliancePanel save error:', e)` \u00e2\u20ac\u201d manual checkbox toggle fails silently, user thinks click worked but the check isn't persisted. The Compliance Panel drives contract readiness scoring, so silent failures mean the score could show 'All Checks Passed' even though the save failed \u00e2\u20ac\u201d false readiness indication.",
+    "evidence": "CompliancePanel.jsx:167-171 load catch, 201-205 save catch \u00e2\u20ac\u201d both console-only, no toast or user notification.",
+    "recommendedFix": "Import useToast at the top: `import { useToast } from '../Toast';`. Inside the component, `const toast = useToast();`. In the load catch block, add `toast.show('warn', 'Failed to load compliance rules');`. In the save catch block, add `toast.show('err', 'Failed to save check \u00e2\u20ac\u201d try again');`.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0282",
+    "file": "src/screens/MapView.jsx",
+    "line": 63,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "MapView caps properties query at $top=2000 \u00e2\u20ac\u201d silent truncation above that",
+    "detail": "Line 63: `$top=2000` \u00e2\u20ac\u201d hardcoded cap. Current scale is ~150 locations so not an issue. But if a customer onboards with 2500 sites, the map silently drops the last 500. No UI indication. Latent data-completeness risk.",
+    "evidence": "MapView.jsx:63.",
+    "recommendedFix": "Keep the cap but add a warning banner when the result is exactly 2000: `if (locs.length === 2000) toast.show('warn', 'Map showing first 2000 locations \u00e2\u20ac\u201d filter by customer to see the rest');`.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

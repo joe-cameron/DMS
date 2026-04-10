@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CR-2026-04-09-0268",
+    "file": "src/screens/OnboardingDetail.jsx",
+    "line": 347,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "handleCreateIntakeSession uses old callFlow-style HTTP pattern instead of createDocumentRequest",
+    "detail": "Lines 347-394: handleCreateIntakeSession reads `getEnvVar('dcfg_flow_intake_setup_url')` then directly `fetch(flowUrl, ...)`. This is the deprecated HTTP-trigger flow pattern. Per engineering journal \u00c2\u00a75 and CLAUDE.md, the DCFG architecture migrated to the Dataverse transaction table pattern: write to dcfg_document_requests, flow triggers on row creation. All other wizards (NewContractWizard, NewProposalWizard, CapitalPlan, ContractDetail) use createDocumentRequest(). interviewGenerate.js is cataloged in CR-2026-04-09-0006 as another stale caller. OnboardingDetail is a third stale caller.",
+    "evidence": "OnboardingDetail.jsx:355-376 \u00e2\u20ac\u201d getEnvVar + raw fetch against flowUrl. Compare to CapitalPlan.jsx:90-98 using createDocumentRequest.",
+    "recommendedFix": "Replace the fetch block with `await createDocumentRequest({ requestType: DocRequestType.IntakeSetup, requestedBy: user?.email, name: 'Intake setup - ' + custName, customerId: custId, notes: JSON.stringify({ access_code: code, provider_name: custName, case_id: ... }) });` \u00e2\u20ac\u201d may require adding IntakeSetup to the DocRequestType enum in portalApi.js. Update the flow trigger to read from dcfg_document_requests instead of HTTP. Coordinate with the intake-session flow owner.",
+    "relatedFindings": [
+      "CR-2026-04-09-0006"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  },
+  {
+    "id": "CR-2026-04-09-0269",
+    "file": "src/screens/OnboardingDetail.jsx",
+    "line": 293,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "handleStepFieldSave logs error to console only \u00e2\u20ac\u201d no user toast",
+    "detail": "Line 285-296: `handleStepFieldSave` wraps the PATCH in try/catch but only `console.error('Step field save failed:', err)`. Every other handler in this file uses toast.show('err', ...) \u00e2\u20ac\u201d this one is the outlier. Admins editing a step field and hitting a save failure get no feedback.",
+    "evidence": "OnboardingDetail.jsx:293 console-only catch.",
+    "recommendedFix": "Add `toast?.show('err', 'Failed to save field: ' + err.message);` alongside the console.error.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

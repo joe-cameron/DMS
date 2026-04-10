@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CR-2026-04-09-0300",
+    "file": "src/screens/templates/TemplateDetail.jsx",
+    "line": 658,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "handleSave template-fields loop is sequential N+1 \u00e2\u20ac\u201d large templates take N \u00c3\u2014 round-trip",
+    "detail": "Lines 658-680: `for (var i = 0; i < localFields.length; i++) { await apiPostReturnId/apiPatch(...) }`. One HTTP round-trip per field. A template with 40 fields = 40 sequential POST/PATCHes. At ~200ms per round-trip on Power Pages that's 8 seconds of blocking UI for a save. Worse, lines 683-692 then do ANOTHER sequential loop for audit log writes. Combined: 2N sequential calls.",
+    "evidence": "TemplateDetail.jsx:658-680 field save loop, 683-692 audit loop.",
+    "recommendedFix": "Parallelize both loops with Promise.all. Risk: race condition on writeAuditLog ordering \u00e2\u20ac\u201d acceptable since order is preserved in dcfg_performed_at. Field save loop: `await Promise.all(localFields.map(async (f, i) => { const body = ...; if (f.dcfg_template_fieldid) await apiPatch(...); else { body['dcfg_template_id@odata.bind'] = ...; await apiPostReturnId(...); } }));`. Same treatment for audit log loop.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  },
+  {
+    "id": "CR-2026-04-09-0301",
+    "file": "src/screens/templates/TemplateDetail.jsx",
+    "line": 526,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "Composite `contract_value_written` references non-existent `dcfg_contract_value` and `dcfg_contract_value_written`",
+    "detail": "Lines 522-528: `contract_value_written` composite defines parts with paths `dcfg_contract_value_written` and `dcfg_contract_value`. Per engineering journal Section 9, `dcfg_contract_value` does not exist; it should be `dcfg_contract_fee`. `dcfg_contract_value_written` similarly likely doesn't exist (no grep hits across /src). Same bug as CR-0296 but in the getCompositeParts function used by the detection code path \u00e2\u20ac\u201d auto-detected composites pick the wrong paths.",
+    "evidence": "TemplateDetail.jsx:522-528.",
+    "recommendedFix": "Change line 526 path to `dcfg_contract_fee`. For line 525, either create `dcfg_contract_fee_written` calculated field in Dataverse or remove the written form from the composite (use only the numeric).",
+    "relatedFindings": [
+      "CR-2026-04-09-0296"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

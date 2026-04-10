@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0304",
+    "file": "src/contracts/useContractData.jsx",
+    "line": 31,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "useContractData loads ALL contracts client-side then paginates in memory",
+    "detail": "Line 31: `fetchContractsPaginated('')` \u00e2\u20ac\u201d the 'Paginated' name is misleading; it fetches all contracts in one query (Power Pages does not support $skip so server-side pagination is not an option). Client-side slice at line 72. Works today at ~200 contracts. Scales poorly to 2,000+.",
+    "evidence": "useContractData.jsx:29-41.",
+    "recommendedFix": "Accept the current pattern \u00e2\u20ac\u201d Power Pages limitation is real. Add `$top=5000` cap to fetchContractsPaginated as a safety. Document the scale ceiling in a comment. Mitigation path: switch to a server-side rollup table when load exceeds 1000 contracts.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

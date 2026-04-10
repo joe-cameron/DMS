@@ -1,0 +1,52 @@
+[
+  {
+    "id": "CR-2026-04-09-0289",
+    "file": "src/screens/RfpDetail.jsx",
+    "line": 140,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P0",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "toggleCheck calls `toast(...)` as a function, but toast is an object \u00e2\u20ac\u201d TypeError on every checklist toggle",
+    "detail": "Line 140: `toast(`Updated: ${key.replace('dcfg_','').replace(/_/g,' ')}`, 'ok');`. Line 142: `toast(e.message, 'err');`. But line 45 sets `const toast = useToast();` which returns an OBJECT with a `.show()` method (verified against other files like ContractDetail.jsx:77, SendQueue.jsx:77, OnboardingDetail.jsx:92 \u00e2\u20ac\u201d all use `toast.show('ok', ...)`). Calling `toast(...)` directly throws 'TypeError: toast is not a function'. Result: EVERY click on an RFP procurement checklist item crashes the handler, the checkbox state does not persist (except the optimistic setRfp at line 139 which runs BEFORE the toast call so actually the state IS updated \u00e2\u20ac\u201d but the user sees a crash in the console, and the audit log entry never gets written). P0 because this is a production bug on a core RFP workflow screen.",
+    "evidence": "RfpDetail.jsx:140, 142 \u00e2\u20ac\u201d `toast(...)` calls. Line 45 `const toast = useToast();`. Toast.jsx exports useToast returning `{ show: (level, msg) => ... }` per other consumers.",
+    "recommendedFix": "Change line 140 to `toast.show('ok', 'Updated: ' + ...);` and line 142 to `toast.show('err', e.message);`. Match the pattern used elsewhere in the file \u00e2\u20ac\u201d except THERE IS NO `toast.show` call anywhere in this file, all uses of `toast` are wrong. Fix both call sites.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  },
+  {
+    "id": "CR-2026-04-09-0290",
+    "file": "src/screens/RfpDetail.jsx",
+    "line": 131,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "Procurement checklist references `dcfg_contract_fe` \u00e2\u20ac\u201d field name mismatch with portalApi.js $select",
+    "detail": "Line 131: `{ key: 'dcfg_contract_fe', label: 'Contract Fully Executed' }`. But portalApi.js line 772 RFP_LIST_COLS selects `dcfg_contract_fee` (as fixed in Phase 1 batch 01 per CR-2026-04-09-0209). There is a mismatch: the $select returns `dcfg_contract_fee` (money column), but the checklist key is `dcfg_contract_fe` (doesn't exist). When user toggles this checklist item, updateRfpPackage is called with `{ dcfg_contract_fe: true }` \u00e2\u2020\u2019 Dataverse 400 (unknown field). Compounded with the toast-as-function bug CR-0289, the user sees nothing happen. The correct column name is almost certainly `dcfg_contract_fully_executed` (to match the label) OR `dcfg_contract_fee_exec` (speculation). NEEDS SCHEMA VERIFICATION before fix.",
+    "evidence": "RfpDetail.jsx:131, RfpList.jsx:63 both reference `dcfg_contract_fe`. portalApi.js:772 RFP_LIST_COLS contains `dcfg_contract_fee` (the money column, not a boolean flag).",
+    "recommendedFix": "Query Dataverse EntityDefinition for dcfg_rfp_package boolean columns: `EntityDefinitions(LogicalName='dcfg_rfp_package')/Attributes?$filter=AttributeType eq 'Boolean'&$select=LogicalName`. Identify the 'fully executed' boolean, likely `dcfg_contract_fully_executed`. Update RfpDetail.jsx:131, RfpList.jsx:63, and portalApi.js RFP_LIST_COLS to use the correct name. If the column does not exist, add it via solution then update consumers.",
+    "relatedFindings": [
+      "CR-2026-04-09-0209",
+      "CR-2026-04-09-0289",
+      "CR-2026-04-09-0291"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

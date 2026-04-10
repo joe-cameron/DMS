@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR-2026-04-09-0281",
+    "file": "src/screens/FlowMonitor.jsx",
+    "line": 74,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "FlowMonitor polls every 5 seconds with no pause-on-hidden check",
+    "detail": "Line 74: `setInterval(fetchRequests, POLL_INTERVAL)` where POLL_INTERVAL=5000. Every 5 seconds fetches up to 50 document request rows + expansion on template. Internal admin tool, low-traffic, but if left open in a background tab for an hour that's 720 unnecessary hits to Dataverse. Same class as CR-0277 (AbsorptionDashboard).",
+    "evidence": "FlowMonitor.jsx:7 POLL_INTERVAL=5000, 74 setInterval.",
+    "recommendedFix": "Gate on `document.visibilityState === 'visible'` before fetching. Or listen for visibilitychange events to stop/resume the interval.",
+    "relatedFindings": [
+      "CR-2026-04-09-0277"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0283",
+    "file": "src/screens/NoraCopilot.jsx",
+    "line": 10,
+    "category": "handoff-cleanliness",
+    "categoryNumber": 11,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "NoraCopilot hardcodes Copilot Studio webchat URL with environment GUID",
+    "detail": "Line 10: `var WEBCHAT_URL = 'https://copilotstudio.microsoft.com/environments/6ee0cd74-e2b2-e429-ac4b-27123cd20d19/bots/cua_agent_iRkq7/webchat?__version__=2';` \u00e2\u20ac\u201d the environment GUID `6ee0cd74-...` is baked into the SPA bundle, so Test and Prod render the SAME Nora bot. If a different Copilot Studio env is used per stage, every deploy has to rebuild the bundle. Violates the loadConfig mandate in CLAUDE.md.",
+    "evidence": "NoraCopilot.jsx:10.",
+    "recommendedFix": "Move the webchat URL to dcfg_configs as `dcfg_nora_webchat_url`. Read via `getEnvVar('dcfg_nora_webchat_url')` with the current value as fallback. Allows per-env override without a SPA build.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

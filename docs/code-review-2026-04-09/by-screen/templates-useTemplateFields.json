@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR-2026-04-09-0303",
+    "file": "src/screens/templates/useTemplateFields.js",
+    "line": 87,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "saveAllFields has two sequential N+1 loops \u00e2\u20ac\u201d save and audit, both serial",
+    "detail": "Lines 87-91 saveField loop: `for (const f of fieldList) { await saveField(f); ... }`. Lines 100-110 writeAuditLog loop: `for (const f of fieldList) { if (f.dcfg_dataverse_path) { await writeAuditLog(...); } }`. Same problem as TemplateDetail.jsx CR-0300 \u00e2\u20ac\u201d the hook is where the N+1 ultimately lives. Callers (TemplateDetail) may not know this.",
+    "evidence": "useTemplateFields.js:87-110.",
+    "recommendedFix": "Parallelize both loops with Promise.all. Same pattern as CR-0300. Audit log writes are fire-and-forget so Promise.all is safe.",
+    "relatedFindings": [
+      "CR-2026-04-09-0300"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0302",
+    "file": "src/screens/templates/TemplateList.jsx",
+    "line": 150,
+    "category": "handoff-cleanliness",
+    "categoryNumber": 11,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "doToggle uses raw picklist ints `100000007`/`100000008` instead of AuditActionType enum names",
+    "detail": "Line 150: `actionType: newActive ? 100000007 : 100000008, // Template Activated / Deactivated`. The magic numbers are AuditActionType.Created (100000007) and AuditActionType.Deleted (100000008) per portalApi.js:96, but the labels 'Template Activated/Deactivated' don't match Created/Deleted. Either the enum is wrong (then we need new values) or the usage is wrong (should reuse StatusChanged = 100000006). Cat 11 handoff cleanliness.",
+    "evidence": "TemplateList.jsx:150. portalApi.js:96 AuditActionType map.",
+    "recommendedFix": "Replace with `actionType: AuditActionType.StatusChanged` \u00e2\u20ac\u201d template activation is a status change, not a create/delete. Drop the raw ints. If business needs distinct audit types for activation, add `TemplateActivated`/`TemplateDeactivated` values to AuditActionType with new picklist values.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

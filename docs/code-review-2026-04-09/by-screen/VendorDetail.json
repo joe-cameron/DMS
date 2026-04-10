@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR-2026-04-09-0293",
+    "file": "src/screens/VendorDetail.jsx",
+    "line": 16,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "VendorDetail $select requests `dcfg_contact_name` and `dcfg_trade` \u00e2\u20ac\u201d likely incorrect schema names",
+    "detail": "Line 16: `$select=dcfg_vendorid,dcfg_legal_name,dcfg_display_name,dcfg_contact_name,dcfg_phone,dcfg_email,dcfg_address,dcfg_trade,dcfg_active_flag`. Two suspect columns: (1) `dcfg_contact_name` \u00e2\u20ac\u201d Admin.jsx VendorsTab $select at line 1134 uses `dcfg_primary_contact` not `dcfg_contact_name`. (2) `dcfg_trade` \u00e2\u20ac\u201d same singular-vs-plural conflict as CR-0279. Both may cause the $select to return partial data or (worse) fail entirely if Dataverse rejects unknown columns.",
+    "evidence": "VendorDetail.jsx:16; Admin.jsx:1134 \u00e2\u20ac\u201d the only other `dcfg_vendors` $select in scope \u00e2\u20ac\u201d uses `dcfg_primary_contact`.",
+    "recommendedFix": "Verify vendor column schema via Dataverse EntityDefinition. Update VendorDetail $select to match actual columns. Also align with the fetchVendors helper in portalApi.js if present.",
+    "relatedFindings": [
+      "CR-2026-04-09-0279"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

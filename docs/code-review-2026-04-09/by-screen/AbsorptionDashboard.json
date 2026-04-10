@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0277",
+    "file": "src/screens/AbsorptionDashboard.jsx",
+    "line": 63,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "30s polling interval runs regardless of tab visibility \u00e2\u20ac\u201d wastes cycles on background tabs",
+    "detail": "Lines 61-65: `setInterval(load, 30000)` with no document.visibilityState check. Browser background tabs still run the interval (browsers throttle but don't stop). Same issue in FlowMonitor (5s interval), Operations (30s sensor, 2min WO).",
+    "evidence": "AbsorptionDashboard.jsx:61-65.",
+    "recommendedFix": "Wrap the load call in a visibility check: `if (document.visibilityState === 'visible') load();`. Or listen for visibilitychange and pause/resume the interval. Cat 6 performance, low priority.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

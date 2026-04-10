@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CR-2026-04-09-0307",
+    "file": "src/NewProposalWizard.jsx",
+    "line": 384,
+    "category": "data-integrity",
+    "categoryNumber": 8,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "generate() picks 'first active vendor' as Decades vendor \u00e2\u20ac\u201d fragile defaulting",
+    "detail": "Line 384: `const vr = await apiGet(`/${EntitySets.vendors}?$filter=dcfg_active_flag eq true&$select=dcfg_vendorid&$top=1`); vendorId = vr.value?.[0]?.dcfg_vendorid`. Picks whichever active vendor happens to be first in the default sort order. On a fresh tenant with multiple active vendors, the 'first one' could be Acme HVAC instead of Decades Construction Group. The subsequent patch (lines 385-390) then writes the Decades signer info to the wrong vendor record, corrupting its data. The 'Decades vendor' should be identified by a canonical flag or ID pulled from dcfg_configs.",
+    "evidence": "NewProposalWizard.jsx:384-390.",
+    "recommendedFix": "Add a dcfg_configs entry `dcfg_decades_vendor_id` (the GUID of the canonical Decades vendor). Read via getEnvVar and use as the hardcoded-but-configurable vendor id. Fallback to the current 'first active vendor' only if the config is missing.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  },
+  {
+    "id": "CR-2026-04-09-0308",
+    "file": "src/NewProposalWizard.jsx",
+    "line": 444,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "MSA-rates create loops are sequential \u00e2\u20ac\u201d one POST per location type",
+    "detail": "Lines 440-467: both the uniform branch (lines 440-452) and the type-based branch (lines 453-467) use sequential for-loops with await inside. With 6-8 location types, that's 6-8 sequential POSTs per proposal generation. Parallelizing cuts wall-clock generation time by ~4-5 seconds.",
+    "evidence": "NewProposalWizard.jsx:440-467.",
+    "recommendedFix": "Promise.all both loops. Same pattern as CR-0305, CR-0300. Minor risk of Dataverse rate-limiting at 8 concurrent POSTs, acceptable.",
+    "relatedFindings": [
+      "CR-2026-04-09-0305"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

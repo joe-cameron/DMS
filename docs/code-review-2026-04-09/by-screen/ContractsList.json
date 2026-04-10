@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR-2026-04-09-0309",
+    "file": "src/ContractsList.jsx",
+    "line": null,
+    "category": "dead-code",
+    "categoryNumber": 1,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-expansion-audit",
+    "status": "open",
+    "title": "ContractsList.jsx remains as dead-code duplicate of screens/ContractList.jsx \u00e2\u20ac\u201d see pre-seed CR-0003",
+    "detail": "Confirmed during file-by-file walk: src/ContractsList.jsx is a 'three switchable views' wrapper that imports from contracts/* but is not referenced by the live router. The active contract-list screen per AppRouter is src/screens/ContractList.jsx (a separate shorter file). Pre-seed CR-2026-04-09-0003 already captures this; this finding is here only to document the expansion audit touched the file and agrees with the pre-seed verdict. No separate audit needed \u00e2\u20ac\u201d skip detailed findings.",
+    "evidence": "ContractsList.jsx header comment 'Three switchable production views'. screens/ContractList.jsx is the live router target.",
+    "recommendedFix": "Covered by CR-2026-04-09-0003 \u00e2\u20ac\u201d operator approves deletion.",
+    "relatedFindings": [
+      "CR-2026-04-09-0003"
+    ],
+    "foundAt": "2026-04-10T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]
