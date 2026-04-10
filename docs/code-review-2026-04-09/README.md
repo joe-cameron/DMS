@@ -57,6 +57,7 @@
 | 1b (round 3, batch 03) | 2026-04-10 | **approved batch** | 15 P2 findings (callFlow cleanup + small fixes + N+1 parallelization); doc: approvals/2026-04-09-batch-03-phase1-p2-cleanup.md. 0006 is catalog-only (no edit). 0274 approved WITH flow-deploy coordination gap accepted by operator. |
 | 1b (round 4, batch 04) | 2026-04-10 | **approved batch** | 15 P2 findings (12 error-handling + 3 OData injection security); doc: approvals/2026-04-09-batch-04-phase1-errhandling-security.md. Introduces escapeOdataString helper in portalApi.js. |
 | 1b (round 5, batch 05) | 2026-04-10 | **approved batch** | 13 active P2 findings (5 perf + 2 auth + 3 data-integrity + 1 err-handling + 2 handoff); 2 housekeeping rejects (CR-0224 dup of 0220, CR-0231 dup of 0202). Doc: approvals/2026-04-09-batch-05-phase1-perf-auth-data.md |
+| 1b (round 6, batch 06) | 2026-04-10 | **approved batch** | 14 active (mix: 2 schema + 4 unused imports + 4 err-handling + 3 perf + 1 data-integrity quick fix) + 1 P3 (0239) = 15 edits. Housekeeping: 0293 rejected schema-verified, 0298 deferred-future schema-blocked. Doc: approvals/2026-04-09-batch-06-phase1-schema-p3-cleanup.md |
 | 1c | — | pending | Phase 1 smoke |
 | 2a | — | pending | Phase 2a dead-code batch preview |
 | 2b | — | pending | Phase 2b console batch preview |
