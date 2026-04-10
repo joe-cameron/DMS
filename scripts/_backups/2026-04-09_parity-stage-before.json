@@ -3,5 +3,20 @@
     "componentId": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
     "beforeFields": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode,dcfg_template_type,dcfg_field_count,dcfg_mapped_count,dcfg_source_file_name,dcfg_source_file_url,dcfg_uploaded_by,dcfg_uploaded_at",
     "modifiedon": "2026-04-07T19:10:08Z"
+  },
+  "config:dcfg_sp_templates_library": {
+    "beforeValue": null,
+    "id": null,
+    "state": "missing-key"
+  },
+  "Webapi/dcfg_blanket_workorder/fields": {
+    "componentId": "0b0d5708-7631-f111-88b4-7ced8d709430",
+    "modifiedon": "2026-04-06T05:04:05Z",
+    "beforeFields": "*"
+  },
+  "Webapi/dcfg_customer_ap_mapping/fields": {
+    "beforeFields": "*",
+    "modifiedon": "2026-04-06T05:04:06Z",
+    "componentId": "b999d807-7631-f111-88b4-7ced8d7092ad"
   }
 }

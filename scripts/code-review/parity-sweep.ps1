@@ -26,7 +26,15 @@ $webapiTargets = @(
     @{ ComponentName = 'Webapi/dcfg_customer_ap_mapping/fields';  RequiredBinds = @('dcfg_customer_id', 'dcfg_cost_code_id') }
 )
 $configKey = 'dcfg_sp_templates_library'
-$expectedConfigValue = 'DCFG_Templates'
+# Per-env expected values — operator decision 2026-04-09 Gate 0a:
+#   Prod  uses DCFG_Templates       (production library)
+#   Test  uses DCFG_Templates_Test  (per-env isolation, Q1=A 'keep')
+#   Stage uses DCFG_Templates_Stage (per-env isolation, Q3=B insert with env-specific name)
+$expectedConfigByEnv = @{
+    'Prod'  = 'DCFG_Templates'
+    'Test'  = 'DCFG_Templates_Test'
+    'Stage' = 'DCFG_Templates_Stage'
+}
 
 function Get-OrgToken { param($OrgUrl)
     [System.Net.NetworkCredential]::new('', (Get-AzAccessToken -ResourceUrl "$OrgUrl/" -AsSecureString).Token).Password
@@ -124,16 +132,17 @@ foreach ($envDef in $envs) {
 
     $cfgState = Get-ConfigValue $envDef.OrgUrl $headers $configKey
     $envState.config = $cfgState
+    $envExpected = $expectedConfigByEnv[$envName]
     if ($cfgState.present) {
-        if ($cfgState.value -eq $expectedConfigValue) {
+        if ($cfgState.value -eq $envExpected) {
             Write-Host "  OK   : $configKey = '$($cfgState.value)'" -ForegroundColor Green
         } else {
-            Write-Host "  DRIFT: $configKey = '$($cfgState.value)' (expected '$expectedConfigValue')" -ForegroundColor Yellow
-            $report.drift += @{ env = $envName; target = $configKey; kind = 'config-drift'; current = $cfgState.value; expected = $expectedConfigValue }
+            Write-Host "  DRIFT: $configKey = '$($cfgState.value)' (expected '$envExpected')" -ForegroundColor Yellow
+            $report.drift += @{ env = $envName; target = $configKey; kind = 'config-drift'; current = $cfgState.value; expected = $envExpected }
         }
     } else {
         Write-Host "  MISS : $configKey - $($cfgState.reason)" -ForegroundColor Red
-        $report.drift += @{ env = $envName; target = $configKey; kind = 'config-missing'; reason = $cfgState.reason; expected = $expectedConfigValue }
+        $report.drift += @{ env = $envName; target = $configKey; kind = 'config-missing'; reason = $cfgState.reason; expected = $envExpected }
     }
 
     $report.envs[$envName] = $envState
