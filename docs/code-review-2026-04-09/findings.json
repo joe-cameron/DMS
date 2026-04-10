@@ -176,7 +176,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "loadConfig() fired in useEffect but AppShell renders immediately — children see null config on first render",
     "detail": "Line 225: `React.useEffect(() => { loadConfig(); }, []);` — the effect runs AFTER first render. NavPanel and SensorBanner both render in the same first paint and both call getEnvVar() during their render bodies (NavPanel:131, SensorBanner:32). On first render they see _configCache === null and getEnvVar returns null. NavPanel listens for the dcfg-config-changed event from reloadConfig() but loadConfig() does NOT emit that event — only reloadConfig() does. So the FIRST load never re-renders nav once config is in. SensorBanner doesn't listen for the event at all, so its kill switch (sensor_enabled='false') never engages. See CR-2026-04-09-0211 for the upstream portalApi side.",
     "evidence": "App.jsx:225 useEffect kicks loadConfig but does not await; portalApi.js:313-341 loadConfig does NOT dispatch the dcfg-config-changed event (only reloadConfig at line 348-354 does); NavPanel.jsx:99 listens for it; SensorBanner.jsx:30 does not.",
@@ -188,8 +188,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -202,7 +202,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "AppRouter has zero RoleGuard wrappers — admin/internal routes accessible to any authenticated user",
     "detail": "AppRouter.jsx defines ~30 routes and not a single one is wrapped in <RoleGuard>. Admin-only paths (/admin, /flow-monitor, /send-queue, /absorption, /capital-plan) and internal-tool paths (/nora, /interview) are reachable by typing the URL hash, regardless of user role. The RoleGuard component exists in shared modules and is correctly built (RoleGuard.jsx); it's just never used in the router. NavPanel hides nav items via the nav_menu_{role} config pattern, but a user who knows the URL can bypass that entirely. For external customer-facing user testing, an external tester landing on /#/admin would see admin actions. Per CR-2026-04-09-0220, NavPanel ALSO doesn't role-gate properly — the two issues compound.",
     "evidence": "AppRouter.jsx:56-151 — every Route uses bare element prop, no RoleGuard imports. Compare to the existence of src/RoleGuard.jsx (which exports the component) and the JS-06/C-06 rule documented in usePortalUser.jsx:9 ('Actions the user cannot perform are REMOVED FROM THE DOM entirely').",
@@ -213,8 +213,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -227,7 +227,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "RFP_LIST_COLS contains typo `dcfg_contract_fe` (should be dcfg_contract_fee)",
     "detail": "Line 754: `const RFP_LIST_COLS = '...,dcfg_contract_fe';` — `dcfg_contract_fe` is a truncation typo of `dcfg_contract_fee`. Dataverse returns 400 on any GET that includes an unknown column in $select, so fetchRfpPackages() (line 757) and fetchRfpDetail() (line 758, which concatenates RFP_LIST_COLS + RFP_DETAIL_COLS) will both 400 on every call. The RFP list and RFP detail screens will be completely broken on every environment until this is fixed. Probably introduced during the RFP-builder session and never validated against the actual schema.",
     "evidence": "portalApi.js:754 ends with `,dcfg_contract_fe'` — no `e` followed by `e`. Compare to dcfg_contract_fee elsewhere in the file (line 361 CONTRACT_LIST_COLS, line 362 CONTRACT_DETAIL_COLS, line 386 fetchMyWIPDrafts).",
@@ -236,8 +236,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -250,7 +250,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "apiPost has no return value but several callers treat it as if it returns the created record",
     "detail": "apiPost (line 159-164) is a void function — it throws on non-OK and falls off the bottom on success with no return statement. But several call sites in the SPA (notably LocationManager.jsx:555, see CR-2026-04-09-0201) await it and read `.dcfg_*id` off the result, which is always undefined. This is a contract bug in the shared API: either the function should return the parsed body / OData-EntityId GUID, or every consumer that needs the created record must use apiPostReturn. Currently the API has both apiPost (void) and apiPostReturn (returns record) and apiPostReturnId (returns just the GUID), but the naming is non-obvious — easy to grab the wrong one.",
     "evidence": "portalApi.js:159-164 — function body has no `return`. portalApi.js:166-188 apiPostReturn returns the record; portalApi.js:191-199 apiPostReturnId returns just the GUID string. LocationManager.jsx:555 uses apiPost expecting a record (see CR-2026-04-09-0201).",
@@ -261,8 +261,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -275,7 +275,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "loadConfig is async but getEnvVar is synchronous — race condition for early consumers",
     "detail": "loadConfig() (line 313-341) populates _configCache asynchronously. getEnvVar() (line 343-346) reads _configCache synchronously and returns null if it hasn't loaded yet. App.jsx kicks off loadConfig() inside a useEffect at boot, but several modules call getEnvVar() during their initial render — most importantly SensorBanner.jsx:32 (`if (getEnvVar('sensor_enabled') === 'false') return null;`) and NavPanel.jsx:131 (`getEnvVar(`nav_menu_${role}`)`) — meaning the first render of those components ALWAYS sees null and proceeds with default behavior (sensor banner enabled, nav menu showing all items). Once loadConfig resolves there's no re-render trigger except the manual `dcfg-config-changed` event from reloadConfig(). NavPanel listens for it (line 99); SensorBanner does not, so the kill-switch never engages until you manually reload.",
     "evidence": "portalApi.js:313-346, App.jsx:225 `React.useEffect(() => { loadConfig(); }, []);`, SensorBanner.jsx:32 `if (getEnvVar('sensor_enabled') === 'false') return null;`, NavPanel.jsx:99 listener for dcfg-config-changed.",
@@ -287,8 +287,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -466,7 +466,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "useMemo dep array includes searchFields — inline-literal callers blow the cache every render",
     "detail": "Line 63: `}, [rows, sortCol, sortDir, searchTerm, searchFields]);` — searchFields is included as a dep, but the convention in this codebase is to call useTableControls with an inline literal: e.g. `useTableControls(rows, { searchFields: ['dcfg_name', 'dcfg_status'] })`. Inline arrays are recreated on every parent render, so React identity-checks the array reference and the useMemo cache is invalidated every render. The expensive sort+filter then re-runs on EVERY parent re-render — defeating the entire purpose of useMemo. This is the highest-leverage performance finding in the shared modules: 6 separate consumers (MsaList, ContractList, CustomerList, Locations, ViewSmartList, CustomerList) each pay this cost on every keystroke and every state update.",
     "evidence": "useTableControls.jsx:14 default param `searchFields = []`, useTableControls.jsx:63 deps array includes searchFields. Grep across src for `searchFields:\\s*\\[` finds 6 callers: MsaList.jsx, contracts/ViewSmartList.jsx, screens/ContractList.jsx, screens/CustomerList.jsx, screens/Locations.jsx, useTableControls.jsx (the default).",
@@ -475,8 +475,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -606,7 +606,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "isVisible() role gating is config-driven only — no nav item declares item.role, so admin items show to everyone",
     "detail": "NavPanel.jsx isVisible() (line 123-148) has a fallback path that checks `item.role` and routes through isAdmin/isManager/isViewer — but NO item in NAV_GROUPS or CREATE_ACTIONS sets `item.role`. So the role-helper branch is dead code. The only gate is the dcfg_configs `nav_menu_{role}` table, which means: if the config table doesn't have `nav_menu_DCFG_Viewer` populated, a viewer falls through to the global `nav_visible_{route}` toggle path, which only excludes routes if you've explicitly set them to 'false' — by default all admin items show. /admin is explicitly hardcoded to always show on line 124. /flow-monitor, /send-queue, /admin are visible to ANY authenticated user unless an admin has gone in and configured per-role nav_menu rows correctly.",
     "evidence": "NavPanel.jsx:123-148 — `if (item.to === '/admin') return true;` always shows admin. Then config check, then fallback to `if (!item.role) return true;`. NAV_GROUPS items at lines 36-84 declare to/label/icon/exact only — no role property anywhere. Compare to RoleGuard.jsx and AppRouter.jsx (CR-2026-04-09-0219).",
@@ -617,8 +617,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -631,7 +631,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "CREATE_ACTIONS references <NewContractIcon /> JSX before the function is declared",
     "detail": "Line 25-31 declares CREATE_ACTIONS as a module-top-level constant containing JSX expressions like `icon: <NewContractIcon />`. The NewContractIcon function is defined at line 644, AFTER this constant. Function declarations are hoisted in JavaScript so this works at runtime by accident — but it's brittle and hostile to readers, especially because every action uses the SAME icon (<NewContractIcon />) which is also wrong UX (per the spec, four create actions should have distinguishable icons). Linting/formatter passes that re-order code or strict-mode bundlers could break this. Plus the duplicated icons are a UX issue: 'Proposal', 'Vendor Agreement', 'Work Order', 'Amendment', 'Project' all show the same icon in the create zone.",
     "evidence": "NavPanel.jsx:25-31 CREATE_ACTIONS array, NavPanel.jsx:644 `function NewContractIcon()` — declared 619 lines later.",
@@ -640,8 +640,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -728,7 +728,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "RoleGuard component is correct but has zero call sites in shared modules — never wired into the router",
     "detail": "RoleGuard.jsx is well-built: it consults usePortalUser, returns null on loading, returns fallback on deny, returns children on allow. The C-06 rule (suppress, never disable) is correctly implemented. The problem is that RoleGuard is essentially dead code — it isn't imported in App.jsx, AppRouter.jsx, NavPanel.jsx, or any other shared module. The intended consumers (admin actions like Void Contract, Generate Document) live in screen files outside the Phase 1 scope, and the routes themselves don't use it (CR-2026-04-09-0219). File-level finding rather than line-level because the issue is the lack of usage, not anything wrong inside the file.",
     "evidence": "Grep across src/ for `RoleGuard` finds: definition in src/RoleGuard.jsx and zero imports in shared modules. Shared modules audited: main, App, AppRouter, portalApi, useTableControls, usePortalUser, Toast, NavPanel, RoleGuard, SlideOutPanel, SpeechMic, FieldName, ErrorReporter, LocationManager, SensorBanner, intakeFieldKeys, projectConstants — none import RoleGuard.",
@@ -741,8 +741,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -895,7 +895,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "APPL_COLS referenced but never defined — ReferenceError on every openLocation()",
     "detail": "Line 473 builds the appliances $select clause via template literal `?$select=${APPL_COLS}&$expand=...`, but APPL_COLS is never defined or imported anywhere in the file. The first time a user taps a location in the field-ops view, openLocation() runs Promise.allSettled with this URL and the apiGet call will throw `ReferenceError: APPL_COLS is not defined` at the URL-build step (before the network call even fires). Promise.allSettled swallows it as a rejected entry, so the appliances state silently stays empty and no toast surfaces — the appliance grid will appear blank and the user has no idea why. Hard breakage of the entire field-ops appliance flow.",
     "evidence": "LocationManager.jsx:473 — `apiGet(`/${EntitySets.appliances}?$select=${APPL_COLS}&$expand=dcfg_appliance_type_id($select=dcfg_name,dcfg_icon,dcfg_expected_lifespan_years)&$filter=_dcfg_property_id_value eq ${propertyId} and dcfg_is_active eq true&$orderby=dcfg_location_in_property asc`)`. Grep across LocationManager.jsx finds APPL_COLS only on this single line; no const/let/var/import declares it.",
@@ -906,8 +906,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -920,7 +920,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "apiPost called with 3rd arg + treated as if it returns the created record",
     "detail": "Line 555: `const created = await apiPost(`/${EntitySets.appliances}`, body, true);` — the third argument `true` is silently ignored because apiPost in portalApi.js (line 159) only accepts (path, body) and returns nothing (it does `if (!resp.ok) throw …` then falls off the bottom with no return statement). The very next line tries to read `created?.dcfg_applianceid`, which is always undefined, so the new appliance card created in setAppliances at line 563 always has id/guid = undefined. Subsequent debounced PATCH attempts keyed off that undefined GUID will fail or no-op. Photo upload at line 559 also passes undefined as the appliance_id. The author clearly intended apiPostReturn (which returns the created record).",
     "evidence": "LocationManager.jsx:555-556: `const created = await apiPost(`/${EntitySets.appliances}`, body, true); const newGuid = created?.dcfg_applianceid;` portalApi.js:159 `export async function apiPost(path, body) { ... }` (no return statement, no third param).",
@@ -931,8 +931,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -945,7 +945,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "userName destructured from usePortalUser() but no such property exists",
     "detail": "Line 354: `const { userEmail, userName } = usePortalUser();`. usePortalUser returns the context shape from PortalUserContext, which exposes `user`, `loading`, `hasRole`, `isAdmin`, `isManager`, `isViewer`, `userEmail` — but NOT `userName`. (The user's display name lives at `user.name`.) As a result, every reference to `userName` in this file resolves to undefined: line 1099 `userName?.split(' ').map(...)` always falls back to 'FT' avatar initials and the avatar is always wrong for the field-ops user.",
     "evidence": "LocationManager.jsx:354 destructures userName from usePortalUser; usePortalUser.jsx:67-71 returns `{ user, loading, ...makeRoleHelpers(user) }` where makeRoleHelpers exposes hasRole/isAdmin/isManager/isViewer/userEmail (line 110-116). LocationManager.jsx:1099 `userName?.split(' ').map(w => w[0]).join('').slice(0, 2) || 'FT'`",
@@ -956,8 +956,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
@@ -1112,7 +1112,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "sensor_enabled kill switch reads getEnvVar synchronously at top of render — race with loadConfig",
     "detail": "Line 32: `if (getEnvVar('sensor_enabled') === 'false') return null;` — runs at the top of every SensorBanner render, BEFORE the component declares any hooks. Two issues: (1) calling `return` before any hook is illegal in React (conditional hook order). The current early-return happens before useState is reached, so on the FIRST render the component returns null and never registers its hooks. The SECOND render (after config loads and a parent re-renders) it returns the full hooked path, which then crashes with 'rendered fewer hooks than expected' or 'rendered more hooks than expected'. This is the React rules-of-hooks violation. (2) Even ignoring the hook-order bug, getEnvVar returns null on first render before loadConfig resolves (see CR-2026-04-09-0211), so the kill switch never engages on first paint.",
     "evidence": "SensorBanner.jsx:30-33 — `export default function SensorBanner() { if (getEnvVar('sensor_enabled') === 'false') return null; const [alerts, setAlerts] = useState([]); ... }`",
@@ -1124,8 +1124,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T01:59:57.5035357Z",
     "approvedIn": "approvals/2026-04-09-batch-01-phase1-shared.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T02:05:55.013769Z",
+    "fixCommit": "39f8efb9328bc934f621e959cec39419407af9fd",
     "verifiedAt": null
   },
   {
