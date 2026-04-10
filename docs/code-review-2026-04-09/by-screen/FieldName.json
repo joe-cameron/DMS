@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0237",
+    "file": "src/FieldName.jsx",
+    "line": 31,
+    "category": "handoff-cleanliness",
+    "categoryNumber": 11,
+    "severity": "P2",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "FieldName visibility relies on bg prop — defaults to '#fff', which fails over non-white backgrounds",
+    "detail": "Line 17 default: `bg = '#fff'`. The visibility trick is to set the field-name span color to match the parent background, so the schema name is invisible until highlight or debug. This works perfectly when the parent IS white, but fails over the navy nav (#1B2A4A), grey card backgrounds, amber callouts, etc. — the schema name shows as a white smudge. There is a separate FnTh wrapper for table headers that defaults to #1B2A4A, but no equivalent for navy banners or amber pills. Many call sites just call <Fn> with no bg and end up with visible '#fff' on non-white parents. Per feedback_field_names_invisible.md the contract is 'invisible until highlight'.",
+    "evidence": "FieldName.jsx:17 default `bg = '#fff'`. LocationManager.jsx:947, 957, 959, 963, 975 calls <Fn f=\"...\"> on a steel-coloured background — defaults to white, becomes a visible smudge. Same in NavPanel sections.",
+    "recommendedFix": "Either: (1) replace default with a CSS variable so it inherits parent background via `currentColor`-style trick (requires parent CSS variable wiring), or (2) add a contextual wrapper convention — every screen that uses non-white backgrounds passes the explicit bg prop. Option 1 is harder (would need design pass), option 2 is mechanical (Phase 3 wave will catch each screen one by one). Phase 1 finding only — log it and let Phase 3 audit each screen. No fix in this batch.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

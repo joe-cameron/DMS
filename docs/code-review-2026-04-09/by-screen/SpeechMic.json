@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0236",
+    "file": "src/SpeechMic.jsx",
+    "line": 40,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "rec.onerror handler discards the error event entirely",
+    "detail": "Line 40: `rec.onerror = () => setListening(false);` — the SpeechRecognition error event includes an `error` property (e.g. 'no-speech', 'not-allowed', 'network') that would be useful diagnostic info. The current handler just stops the spinner and the user sees no feedback. For Safari/iOS users denying mic permission, they get nothing. Low priority because the feature is optional, but worth surfacing.",
+    "evidence": "SpeechMic.jsx:40 `rec.onerror = () => setListening(false);`",
+    "recommendedFix": "Capture the error: `rec.onerror = (e) => { setListening(false); console.warn('[SpeechMic] error:', e.error); };`. Optionally, if onTranscript caller wants to know, add an `onError` prop. Don't toast — that would be annoying for accidental clicks. Just diagnose-via-console for now.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

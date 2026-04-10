@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0227",
+    "file": "src/useTableControls.jsx",
+    "line": 63,
+    "category": "performance",
+    "categoryNumber": 6,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "useMemo dep array includes searchFields — inline-literal callers blow the cache every render",
+    "detail": "Line 63: `}, [rows, sortCol, sortDir, searchTerm, searchFields]);` — searchFields is included as a dep, but the convention in this codebase is to call useTableControls with an inline literal: e.g. `useTableControls(rows, { searchFields: ['dcfg_name', 'dcfg_status'] })`. Inline arrays are recreated on every parent render, so React identity-checks the array reference and the useMemo cache is invalidated every render. The expensive sort+filter then re-runs on EVERY parent re-render — defeating the entire purpose of useMemo. This is the highest-leverage performance finding in the shared modules: 6 separate consumers (MsaList, ContractList, CustomerList, Locations, ViewSmartList, CustomerList) each pay this cost on every keystroke and every state update.",
+    "evidence": "useTableControls.jsx:14 default param `searchFields = []`, useTableControls.jsx:63 deps array includes searchFields. Grep across src for `searchFields:\\s*\\[` finds 6 callers: MsaList.jsx, contracts/ViewSmartList.jsx, screens/ContractList.jsx, screens/CustomerList.jsx, screens/Locations.jsx, useTableControls.jsx (the default).",
+    "recommendedFix": "Two-part: (1) In useTableControls.jsx, hash the searchFields array into a stable string key for the deps: `const searchFieldsKey = (searchFields || []).join('|'); const filtered = useMemo(() => {...}, [rows, sortCol, sortDir, searchTerm, searchFieldsKey]);` This is the smallest change and fixes the cache for every consumer at once without forcing them to refactor. (2) Optionally add a comment block at the top of useTableControls.jsx documenting that callers can safely pass inline literals (because the hook now handles it internally).",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

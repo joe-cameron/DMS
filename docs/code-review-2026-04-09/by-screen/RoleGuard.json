@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0233",
+    "file": "src/RoleGuard.jsx",
+    "line": null,
+    "category": "auth-role-checks",
+    "categoryNumber": 9,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "RoleGuard component is correct but has zero call sites in shared modules — never wired into the router",
+    "detail": "RoleGuard.jsx is well-built: it consults usePortalUser, returns null on loading, returns fallback on deny, returns children on allow. The C-06 rule (suppress, never disable) is correctly implemented. The problem is that RoleGuard is essentially dead code — it isn't imported in App.jsx, AppRouter.jsx, NavPanel.jsx, or any other shared module. The intended consumers (admin actions like Void Contract, Generate Document) live in screen files outside the Phase 1 scope, and the routes themselves don't use it (CR-2026-04-09-0219). File-level finding rather than line-level because the issue is the lack of usage, not anything wrong inside the file.",
+    "evidence": "Grep across src/ for `RoleGuard` finds: definition in src/RoleGuard.jsx and zero imports in shared modules. Shared modules audited: main, App, AppRouter, portalApi, useTableControls, usePortalUser, Toast, NavPanel, RoleGuard, SlideOutPanel, SpeechMic, FieldName, ErrorReporter, LocationManager, SensorBanner, intakeFieldKeys, projectConstants — none import RoleGuard.",
+    "recommendedFix": "Apply RoleGuard wherever role gating is needed. Highest-leverage application is in AppRouter.jsx around the admin/internal routes (see CR-2026-04-09-0219). Phase 3 screen audit will find more action-button gating opportunities (e.g., Void Contract button). Phase 1 fix batch should include RoleGuard imports in AppRouter.jsx + the admin routes wrapped.",
+    "relatedFindings": ["CR-2026-04-09-0219", "CR-2026-04-09-0220", "CR-2026-04-09-0224"],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

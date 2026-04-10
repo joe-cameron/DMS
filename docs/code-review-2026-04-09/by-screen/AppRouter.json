@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0219",
+    "file": "src/AppRouter.jsx",
+    "line": null,
+    "category": "auth-role-checks",
+    "categoryNumber": 9,
+    "severity": "P1",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "AppRouter has zero RoleGuard wrappers — admin/internal routes accessible to any authenticated user",
+    "detail": "AppRouter.jsx defines ~30 routes and not a single one is wrapped in <RoleGuard>. Admin-only paths (/admin, /flow-monitor, /send-queue, /absorption, /capital-plan) and internal-tool paths (/nora, /interview) are reachable by typing the URL hash, regardless of user role. The RoleGuard component exists in shared modules and is correctly built (RoleGuard.jsx); it's just never used in the router. NavPanel hides nav items via the nav_menu_{role} config pattern, but a user who knows the URL can bypass that entirely. For external customer-facing user testing, an external tester landing on /#/admin would see admin actions. Per CR-2026-04-09-0220, NavPanel ALSO doesn't role-gate properly — the two issues compound.",
+    "evidence": "AppRouter.jsx:56-151 — every Route uses bare element prop, no RoleGuard imports. Compare to the existence of src/RoleGuard.jsx (which exports the component) and the JS-06/C-06 rule documented in usePortalUser.jsx:9 ('Actions the user cannot perform are REMOVED FROM THE DOM entirely').",
+    "recommendedFix": "Wrap admin/internal routes in <RoleGuard require=\"admin\">: e.g. `<Route path=\"admin\" element={<RoleGuard require=\"admin\" fallback={<Navigate to=\"/dashboard\" replace />}><Admin /></RoleGuard>} />`. Apply to /admin, /flow-monitor, /send-queue, /absorption, /capital-plan minimum. The fallback should redirect non-admins to /dashboard rather than render null (otherwise the user sees a blank page with no explanation). Same pattern for manager-only routes (e.g. /onboarding/:id depending on rule). This is a coordinated change with CR-2026-04-09-0220 (NavPanel role logic).",
+    "relatedFindings": ["CR-2026-04-09-0220"],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]

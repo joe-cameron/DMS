@@ -1,0 +1,25 @@
+[
+  {
+    "id": "CR-2026-04-09-0232",
+    "file": "src/Toast.jsx",
+    "line": 38,
+    "category": "error-handling",
+    "categoryNumber": 3,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-1",
+    "agent": "phase-1-shared-modules-audit",
+    "status": "open",
+    "title": "writeAuditLog .catch(function(){}) silently swallows audit failures from inside Toast",
+    "detail": "Line 38: when an err/warn toast is shown, the Toast provider auto-writes an audit log entry (`spa_toast` table). If the audit-log write fails, the catch is `.catch(function(){})` — completely silent. If the audit log path is broken (CSRF lost, table permissions revoked), every error toast generates an additional audit-log error that is invisible. Low priority because the user already sees the original toast, but worth a console.warn breadcrumb for diagnostics.",
+    "evidence": "Toast.jsx:33-39 — `writeAuditLog({...}).catch(function(){})`",
+    "recommendedFix": "Replace `.catch(function(){})` with `.catch(function(e){ console.warn('[Toast] audit log failed:', e); })`. Doesn't change UX, helps Nora-style diagnostics. Also consider exposing this failure to the ErrorReporter buffer so it shows up in the Nora panel error count.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-10T00:43:55Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]
