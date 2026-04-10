@@ -32,7 +32,7 @@
     "tier": "batch",
     "phase": "pre-seed",
     "agent": "human-handoff-2026-04-09",
-    "status": "approved",
+    "status": "fixed",
     "title": "Duplicate AppRouter files â€” src/AppRouter.jsx vs src/screens/AppRouter.jsx",
     "detail": "Two AppRouter.jsx files exist in the SPA source tree. Only one can be the live router; the other is dead code that will confuse future maintenance and carry a risk of being edited by mistake. Must be resolved before external customer-facing user testing so route definitions have a single source of truth.",
     "evidence": "File paths: src/AppRouter.jsx and src/screens/AppRouter.jsx both present under C:\\DCFG\\spa\\dcfg-shell\\",
@@ -43,8 +43,8 @@
     "foundAt": "2026-04-09T18:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -57,7 +57,7 @@
     "tier": "batch",
     "phase": "pre-seed",
     "agent": "human-handoff-2026-04-09",
-    "status": "approved",
+    "status": "fixed",
     "title": "Duplicate contract list files â€” src/ContractsList.jsx vs src/screens/ContractList.jsx",
     "detail": "Two contract-list components exist in the SPA source tree with different names (ContractsList.jsx plural vs ContractList.jsx singular). Only one is the live list screen; the other is dead code. Must be resolved before user testing so that any contract-list bug fix has an unambiguous target.",
     "evidence": "File paths: src/ContractsList.jsx and src/screens/ContractList.jsx both present under C:\\DCFG\\spa\\dcfg-shell\\",
@@ -68,8 +68,8 @@
     "foundAt": "2026-04-09T18:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -804,7 +804,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "rec.onerror handler discards the error event entirely",
     "detail": "Line 40: `rec.onerror = () => setListening(false);` â€” the SpeechRecognition error event includes an `error` property (e.g. 'no-speech', 'not-allowed', 'network') that would be useful diagnostic info. The current handler just stops the spinner and the user sees no feedback. For Safari/iOS users denying mic permission, they get nothing. Low priority because the feature is optional, but worth surfacing.",
     "evidence": "SpeechMic.jsx:40 `rec.onerror = () => setListening(false);`",
@@ -813,8 +813,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -1540,7 +1540,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "LocationsMapTab injects Leaflet CSS/JS from CDN at runtime â€” hardcoded unpkg.com URLs",
     "detail": "Lines 613, 618: `css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';` and `js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';`. MapView.jsx (line 10-11) imports leaflet as an npm dependency and bundles it, but CustomerDetail duplicates that functionality by injecting from CDN. Two runtime copies of Leaflet cause memory waste and potential version drift. Cat 11 handoff cleanliness.",
     "evidence": "CustomerDetail.jsx:613, 618 â€” CDN injection. MapView.jsx:10-11 â€” bundled import.",
@@ -1549,8 +1549,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -2111,7 +2111,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "MapView caps properties query at $top=2000 â€” silent truncation above that",
     "detail": "Line 63: `$top=2000` â€” hardcoded cap. Current scale is ~150 locations so not an issue. But if a customer onboards with 2500 sites, the map silently drops the last 500. No UI indication. Latent data-completeness risk.",
     "evidence": "MapView.jsx:63.",
@@ -2120,8 +2120,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -2228,7 +2228,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "New Project panel load-customers/templates/properties apiGets have no error handlers",
     "detail": "Lines 83-88: three useEffect apiGet calls when the new-project panel opens. None has a .catch â€” silent failure results in empty dropdowns with no explanation. Cat 3.",
     "evidence": "ProjectList.jsx:83-88.",
@@ -2237,8 +2237,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
@@ -2646,7 +2646,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "useContractData loads ALL contracts client-side then paginates in memory",
     "detail": "Line 31: `fetchContractsPaginated('')` â€” the 'Paginated' name is misleading; it fetches all contracts in one query (Power Pages does not support $skip so server-side pagination is not an option). Client-side slice at line 72. Works today at ~200 contracts. Scales poorly to 2,000+.",
     "evidence": "useContractData.jsx:29-41.",
@@ -2655,8 +2655,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T13:27:02.6647634Z",
     "approvedIn": "approvals/2026-04-09-batch-08-phase1-final-cleanup.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T13:32:14.5262393Z",
+    "fixCommit": "8972ee04fdd54142c3cab34e5512d8253f062f0d",
     "verifiedAt": null
   },
   {
