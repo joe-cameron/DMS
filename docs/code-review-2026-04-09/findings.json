@@ -1185,7 +1185,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "TemplateSection.removeTemplate clears customer lookup with `dcfg_customer_id: null` â€” wrong payload shape",
     "detail": "Line 2104: `await apiPatch(`/${EntitySets.docTemplates}(${tplId})`, { dcfg_customer_id: null });` â€” this will not clear the customer lookup. To null a Dataverse lookup via Power Pages you must either PATCH with `{ 'dcfg_customer_id@odata.bind': null }` (same bind-name form the code uses to set it on line 2091) or DELETE the `/entity(id)/dcfg_customer_id/$ref`. Sending `dcfg_customer_id: null` as a plain property either throws 400 or is silently ignored. TemplateDetail.jsx line 641 uses the correct `'dcfg_customer_id@odata.bind': null` form. Net effect on the Admin â†’ Customer Config â†’ Custom Templates tab: 'Remove' button appears to succeed but the template stays linked to the customer.",
     "evidence": "Admin.jsx:2100-2108 removeTemplate function; compare to TemplateDetail.jsx:641 which uses the correct null-bind form.",
@@ -1194,8 +1194,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -1302,7 +1302,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Void/Decline buttons visible to any user â€” comment says 'Admin only' but no role check wraps them",
     "detail": "Line 182-188 renders the Void and Decline action buttons for every non-terminal contract. The inline comment says 'Void / Decline - Admin only, non-terminal', and line 28 destructures `isAdmin, isManager` from usePortalUser â€” but neither variable is ever checked before rendering the buttons. Line 9 imports RoleGuard but never uses it. Any authenticated user currently sees and can click Void/Decline on any contract, triggering a forward-only, audit-logged state change. For external-customer user testing this is a real data-integrity risk: a customer clicks through the tool and nukes a live contract.",
     "evidence": "ContractDetail.jsx:28 `const { isAdmin, isManager, userEmail } = usePortalUser();` â€” isAdmin/isManager imported but unused. Line 182-188 btn-void and btn-decline rendered without a guard. Line 9 `import RoleGuard from '../RoleGuard.jsx';` â€” imported but never referenced elsewhere in the file.",
@@ -1313,8 +1313,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -1453,7 +1453,8 @@
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
     "fixedAt": null,
     "fixCommit": null,
-    "verifiedAt": null
+    "verifiedAt": null,
+    "executionNote": "DRIFT during batch 02 execution: approval doc snippets did not match current file. Image style/alt/onError differ; import line is 3-way split with different named imports. Likely the phase-1-expansion-audit captured paraphrased snippets rather than verbatim. Re-audit needed for accurate fix."
   },
   {
     "id": "CR-2026-04-09-0255",
@@ -1465,7 +1466,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "CustomerDetail hardcodes `isManager={true}` / `isAdmin={true}` to sub-tabs â€” every user sees admin actions",
     "detail": "Lines 130, 132, 134, 135 pass hardcoded `isManager={true}` and `isAdmin={true}` to OverviewTab, MsasTab, OnboardingTab, and ProgramsTab. Line 32 destructures `isAdmin, isManager` from usePortalUser but those real values are IGNORED in favor of the hardcoded true. Downstream, those flags gate the `+ New MSA`, `+ New Onboarding Case`, `Mark Complete`, and `+ New Program` buttons â€” so every authenticated user sees and can click those admin-only actions. Same bug class as CR-2026-04-09-0248 (ContractDetail void/decline) but implemented by literal prop override. External customer testers will be able to create MSAs and programs.",
     "evidence": "CustomerDetail.jsx:32 destructures isAdmin, isManager. Lines 130-135 pass `isManager={true}` / `isAdmin={true}` literally. Lines 228, 433, 443, 463, 506 in sub-components use the prop to render admin controls.",
@@ -1477,8 +1478,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -1560,7 +1561,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "handleSubmitForApproval calls `loadMsa()` â€” function is not defined in the component scope",
     "detail": "Line 83: `loadMsa();` â€” but there's no function named loadMsa defined anywhere in the file. The component only has the inline useEffect at line 42-58 for initial load, no named load function. Calling loadMsa() will throw ReferenceError at runtime. Result: clicking 'Submit for Approval' on an MSA succeeds in the PATCH (line 81) and the audit write (line 82), then crashes on the refresh step, leaving the UI showing the OLD status. The user thinks the submit failed and may click again, double-submitting. P1 because this is a silent data-vs-UI divergence on a money-flow action.",
     "evidence": "MsaDetail.jsx:83 `loadMsa();` â€” grep 'function loadMsa' or 'const loadMsa' in this file returns zero hits. The file uses an inline useEffect with no named loader, so the closure has no loadMsa symbol.",
@@ -1569,8 +1570,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -1677,7 +1678,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "loadCases outer apiGet has no try/catch â€” loading spinner stuck on failure",
     "detail": "Lines 54-91: loadCases starts with `setLoading(true)` and directly awaits apiGet at line 64. Only the INNER progress query (line 73) has try/catch. If the outer cases query fails (401, 403, 500, network), the function throws and `setLoading(false)` at line 90 is never reached. The screen gets stuck on the skeleton banner at line 200 forever. No toast, no error banner. External testers will interpret this as 'onboarding broken' and give up.",
     "evidence": "Onboarding.jsx:54-91 loadCases function â€” outer fetch at line 64 has no try/catch wrapper.",
@@ -1686,8 +1687,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -2349,7 +2350,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "UserRolesTab queries `/mspp_webroles` and `/contacts` directly â€” may 400 per engineering journal Sec 11",
     "detail": "Per engineering journal Section 11, the Power Pages Web API (`/_api/`) only supports custom data tables (`dcfg_*`). System tables like `mspp_*`, `contacts`, `environmentvariabledefinitions` are documented as inaccessible. UserRolesTab.jsx makes FOUR such calls: line 119 `/mspp_webroles`, line 131 `/contacts`, line 147 `/mspp_webroles(id)?$expand=mspp_webrole_contact`, line 190 `apiDelete('/contacts(id)/mspp_webrole_contact(roleId)/$ref')`, line 195 POST to `mspp_webrole_contact/$ref`, line 250 `/contacts?$filter=emailaddress1`, line 258 apiPostReturnId '/contacts'. The engineering journal Â§20 notes the N:N nav property `mspp_entitypermission_webrole` returns 0 records even when links exist â€” platform limitation. If the same is true for `mspp_webrole_contact`, this entire tab cannot work via Web API. The operator's documented workaround is Power Pages admin center UI for role assignments. NEEDS VERIFICATION against the actual Prod portal â€” if the calls DO work (perhaps because DCFG enabled the tables in a site setting), the finding downgrades to P3 informational. If they don't, this tab is dead code and should be marked as such or rebuilt.",
     "evidence": "UserRolesTab.jsx:119, 131, 147, 190, 195, 250, 258. reference_engineering_journal.md Section 11 'Portal Web API Cannot Access System Tables'. Section 2 'Web Role Assignment in Enhanced Data Model' â€” notes 4+ attempts failed.",
@@ -2358,8 +2359,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -2444,7 +2445,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Field registry maps 'Contract value' to `dcfg_contract_value` â€” column does not exist (journal Sec 9)",
     "detail": "Line 109: `{ label: 'Contract value', path: 'dcfg_contract_value', category: FieldCategory.WorkOrderTerms, isComposite: false }`. Per engineering journal Section 9 Schema Quick Reference: `dcfg_contract_value` â€” does not exist anywhere. On dcfg_contract the correct column is `dcfg_contract_fee`. Every template that maps a highlight to 'Contract value' produces a Dataverse path that resolves to undefined at document-generation time. The DocGen V4 flow reads the dcfg_template_field rows and looks up each path on the source record â€” undefined â†’ blank in the generated document. Same issue line 525 in TemplateDetail.jsx composite definition for contract_value_written which also references `dcfg_contract_value`. P0 because this breaks document generation for every template using 'Contract value' mapping.",
     "evidence": "fieldRegistry.js:109. TemplateDetail.jsx:525-527 composite. Engineering journal Section 9 'Columns that don't exist'.",
@@ -2455,8 +2456,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -2469,7 +2470,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Field registry maps 'Amendment number' to `dcfg_amendment_no` â€” journal Sec 9 says use `dcfg_amendment_sequence`",
     "detail": "Line 59: `{ label: 'Amendment number', path: 'dcfg_amendment_no', category: FieldCategory.ContractIdentifier, isComposite: false }`. Per engineering journal Section 9: `dcfg_amendment_number` â€” use `dcfg_amendment_sequence`. The registry uses `dcfg_amendment_no` which matches neither the wrong name nor the right name. Compare to NewContractWizard.jsx:336 which correctly writes `payload.dcfg_amendment_sequence = parseInt(...)`. Templates mapping 'Amendment number' will produce blanks in every generated amendment document.",
     "evidence": "fieldRegistry.js:59. NewContractWizard.jsx:336 (correct name).",
@@ -2480,8 +2481,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
@@ -2566,7 +2567,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Composite `contract_value_written` references non-existent `dcfg_contract_value` and `dcfg_contract_value_written`",
     "detail": "Lines 522-528: `contract_value_written` composite defines parts with paths `dcfg_contract_value_written` and `dcfg_contract_value`. Per engineering journal Section 9, `dcfg_contract_value` does not exist; it should be `dcfg_contract_fee`. `dcfg_contract_value_written` similarly likely doesn't exist (no grep hits across /src). Same bug as CR-0296 but in the getCompositeParts function used by the detection code path â€” auto-detected composites pick the wrong paths.",
     "evidence": "TemplateDetail.jsx:522-528.",
@@ -2577,8 +2578,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T03:26:33.7951754Z",
     "approvedIn": "approvals/2026-04-09-batch-02-phase1-expansion.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T03:31:23.663483Z",
+    "fixCommit": "30c693b944131bfd7a33ad07cf30773d12640b0a",
     "verifiedAt": null
   },
   {
