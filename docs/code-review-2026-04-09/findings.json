@@ -302,7 +302,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "fetchProjectsByProgram filters on `_dcfg_portfolioid_value` â€” likely stale/wrong column name",
     "detail": "Line 736: `fetchProjectsByProgram(progId)` filters on `_dcfg_portfolioid_value eq ${progId}`. The `dcfg_projects` table is consistently linked to programs via `dcfg_program_id` elsewhere in the codebase (e.g., line 370 fetchContractsPaginated expands `dcfg_program_id`, line 386 fetchMyWIPDrafts uses `_dcfg_program_id_value`). `_dcfg_portfolioid_value` looks like a holdover from an earlier schema where projects belonged to 'portfolios'. If the column doesn't exist on dcfg_projects, this returns 400. If it does exist as an aliased lookup, it may not match the program-based wiring everywhere else uses. Needs schema verification before fixing.",
     "evidence": "portalApi.js:736 `return apiGet(`/${EntitySets.projects}?$filter=_dcfg_portfolioid_value eq ${progId}&...`)`. Compare to other projectâ†”program references: line 370 `dcfg_program_id`, line 386 `_dcfg_program_id_value`. Grep also matches src/screens/ProjectList.jsx â€” same suspect column there (out of scope for Phase 1 but flagged as related).",
@@ -311,8 +311,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -513,7 +513,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "hasRole hardcodes 'DCFG_Admin' / 'DCFG_Manager' role names â€” not centralized",
     "detail": "makeRoleHelpers (line 105-117) hardcodes the literal strings 'DCFG_Admin', 'DCFG_Manager' inside isAdmin/isManager. NavPanel.jsx getPrimaryRoleLabel (line 399-405) ALSO hardcodes the same strings, plus 'DCFG_Viewer'. RoleGuard.jsx delegates to these helpers (good), but the duplication between usePortalUser and NavPanel means a future role rename would need two changes and is easy to miss. Should be a single ROLES const exported from usePortalUser.",
     "evidence": "usePortalUser.jsx:111-114 hardcoded role names; NavPanel.jsx:401-403 hardcoded same names.",
@@ -522,8 +522,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -758,7 +758,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "useCallback onMouseDown depends on `width` â€” recreated on every drag tick",
     "detail": "Line 31-38: `var onMouseDown = useCallback(function(e) { ... startW.current = width; ... }, [width]);` â€” width changes on every mousemove event during a drag, which means useCallback is invalidated on every drag tick and the React reconciliation may discard memoization further down. The fix is to read width via a ref instead of the closed-over variable: keep a `widthRef.current = width;` ref alongside the state, and read `startW.current = widthRef.current;` inside an empty-deps useCallback. Standard React refs-for-fast-changing-state pattern.",
     "evidence": "SlideOutPanel.jsx:31-38 useCallback with [width] dep; SlideOutPanel.jsx:46 setWidth fires on every mousemove.",
@@ -767,8 +767,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -827,7 +827,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "FieldName visibility relies on bg prop â€” defaults to '#fff', which fails over non-white backgrounds",
     "detail": "Line 17 default: `bg = '#fff'`. The visibility trick is to set the field-name span color to match the parent background, so the schema name is invisible until highlight or debug. This works perfectly when the parent IS white, but fails over the navy nav (#1B2A4A), grey card backgrounds, amber callouts, etc. â€” the schema name shows as a white smudge. There is a separate FnTh wrapper for table headers that defaults to #1B2A4A, but no equivalent for navy banners or amber pills. Many call sites just call <Fn> with no bg and end up with visible '#fff' on non-white parents. Per feedback_field_names_invisible.md the contract is 'invisible until highlight'.",
     "evidence": "FieldName.jsx:17 default `bg = '#fff'`. LocationManager.jsx:947, 957, 959, 963, 975 calls <Fn f=\"...\"> on a steel-coloured background â€” defaults to white, becomes a visible smudge. Same in NavPanel sections.",
@@ -836,8 +836,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1069,7 +1069,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-shared-modules-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "updateApplField runs Array.find on appliances array on every keystroke",
     "detail": "updateApplField (line 520-533) does `appliances.find(x => x.id === id)` after the optimistic setAppliances. This happens on EVERY keystroke into the appliance text fields (custom_label, brand, location, install_date, serial). For a property with 20 appliances that's 20 lookups per character typed. Not a perf catastrophe but combines with the debounced setTimeout to make the data flow harder to reason about. Bonus issue: the closure reads `appliances` from the render snapshot, so it sees the OLD array (pre-update) â€” the optimistic update is one step ahead of the lookup.",
     "evidence": "LocationManager.jsx:520-533 â€” `setAppliances(prev => prev.map(...)); const a = appliances.find(x => x.id === id);` â€” note that `appliances` is the captured stale array, not the just-updated one.",
@@ -1078,8 +1078,8 @@
     "foundAt": "2026-04-10T00:43:55Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1256,7 +1256,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Admin screen has no in-component isAdmin check â€” relies entirely on route-level guard",
     "detail": "Admin.jsx destructures `const { user } = usePortalUser()` at line 97 but never calls isAdmin() or gates anything by role. Every tab (including Customer Config + AP Mappings which PATCH lookups, and Navigation which writes site config) is visible and editable to any user who reaches the /admin route. This works today because CR-2026-04-09-0219 added a RoleGuard wrapper on the /admin route in AppRouter.jsx (batch 01 fix). But defense-in-depth suggests the component itself should verify admin role before rendering â€” especially since the non-admin fallback currently relies on NavPanel hiding the /admin link and RoleGuard redirecting. If the router guard is ever removed or bypassed, every admin action is exposed.",
     "evidence": "Admin.jsx:97 `const { user } = usePortalUser();` â€” isAdmin/isManager are NOT destructured.",
@@ -1267,8 +1267,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1494,7 +1494,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "OverviewTab counts use $count=true but reads value?.length â€” returns top-page count, not total",
     "detail": "Lines 145-149: two apiGet calls with `$count=true` but the callback reads `msaRes?.value?.length` and `locRes?.value?.length` rather than `@odata.count`. Dataverse returns the total count as `@odata.count` when $count=true is present; `.value` is still the first page of up-to-5000 records. For customers with <5000 MSAs/locations the current code happens to work because value.length == total. For a customer with more, the KPI cards will silently show the wrong number. Low impact today but a latent data bug.",
     "evidence": "CustomerDetail.jsx:145-149 `$count=true` with `.value.length`.",
@@ -1503,8 +1503,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1728,7 +1728,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "Progress query loads ALL checklist records across ALL cases (no $top, no case-id filter)",
     "detail": "Line 73-75: `apiGet('/dcfg_onboarding_checks?...$filter=dcfg_is_complete ne null')` â€” with no $top and no scope to the visible cases, this returns every checklist row ever created. For a system with 30 cases Ã— 30 steps each, that's 900 rows every poll, pulled in a single query. Power Pages Web API will cap at 5000 by default but the code doesn't handle that boundary. Cat 6 performance; also a Cat 8a candidate if dcfg_onboarding_check switches to explicit-fields mode in the future.",
     "evidence": "Onboarding.jsx:72-87 progress-query block.",
@@ -1737,8 +1737,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1872,7 +1872,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "SalesDashboard loads ALL contracts and MSAs with no $top cap and no active_flag filter",
     "detail": "Line 62: `apiGet('/dcfg_contracts?$select=dcfg_contractid,dcfg_status,...')` â€” no $filter for dcfg_active_flag eq true, no $top. Loads every contract ever created including soft-deleted. Line 63: same for MSAs (no filter at all). Line 64: same for customers (no filter, no $top). Dashboard is flagged as 'no caching - fresh fetch every mount' (line 4 comment JS-10), so every route change to / re-runs these. At current scale (~200 contracts) this is fine. At 2,000 contracts the dashboard becomes the single most expensive page load in the SPA.",
     "evidence": "SalesDashboard.jsx:61-68 Promise.all with 6 unbounded apiGets.",
@@ -1881,8 +1881,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -1943,7 +1943,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "SendQueue loadAll fires 5 unbounded queries at mount â€” contracts/msas have no $top",
     "detail": "Lines 109-114: contracts query (line 110), msas query (line 111), customers query (line 112), onboardingCases query (line 113), wipContracts query (line 114) all lack $top caps. customers filter by active only, onboarding filters by status, wipContracts filters by status+active. But contracts has only an $orderby (no filter) and msas has only $orderby+$expand. Same pattern as SalesDashboard CR-0272. The dashboard page is the SendQueue so this is the highest-traffic landing page in the SPA â€” every admin session hits all 5 queries.",
     "evidence": "SendQueue.jsx:109-114 Promise.all.",
@@ -1954,8 +1954,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -2134,7 +2134,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "NoraCopilot hardcodes Copilot Studio webchat URL with environment GUID",
     "detail": "Line 10: `var WEBCHAT_URL = 'https://copilotstudio.microsoft.com/environments/6ee0cd74-e2b2-e429-ac4b-27123cd20d19/bots/cua_agent_iRkq7/webchat?__version__=2';` â€” the environment GUID `6ee0cd74-...` is baked into the SPA bundle, so Test and Prod render the SAME Nora bot. If a different Copilot Studio env is used per stage, every deploy has to rebuild the bundle. Violates the loadConfig mandate in CLAUDE.md.",
     "evidence": "NoraCopilot.jsx:10.",
@@ -2143,8 +2143,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -2157,7 +2157,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "ProgramDetail loadProgram silently swallows load errors with .catch(() => setLoading(false))",
     "detail": "Line 46: `.catch(() => setLoading(false))` â€” no error state, no toast. On failure, loading spinner turns off and the page shows `<p>Program not found.</p>` at line 86, which is indistinguishable from a real 404. Same anti-pattern as ContractList CR-0251.",
     "evidence": "ProgramDetail.jsx:46.",
@@ -2168,8 +2168,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
@@ -2714,7 +2714,7 @@
     "tier": "batch",
     "phase": "phase-1",
     "agent": "phase-1-expansion-audit",
-    "status": "approved",
+    "status": "fixed",
     "title": "generate() picks 'first active vendor' as Decades vendor â€” fragile defaulting",
     "detail": "Line 384: `const vr = await apiGet(`/${EntitySets.vendors}?$filter=dcfg_active_flag eq true&$select=dcfg_vendorid&$top=1`); vendorId = vr.value?.[0]?.dcfg_vendorid`. Picks whichever active vendor happens to be first in the default sort order. On a fresh tenant with multiple active vendors, the 'first one' could be Acme HVAC instead of Decades Construction Group. The subsequent patch (lines 385-390) then writes the Decades signer info to the wrong vendor record, corrupting its data. The 'Decades vendor' should be identified by a canonical flag or ID pulled from dcfg_configs.",
     "evidence": "NewProposalWizard.jsx:384-390.",
@@ -2723,8 +2723,8 @@
     "foundAt": "2026-04-10T12:00:00Z",
     "approvedAt": "2026-04-10T12:24:11.4355199Z",
     "approvedIn": "approvals/2026-04-09-batch-05-phase1-perf-auth-data.md",
-    "fixedAt": null,
-    "fixCommit": null,
+    "fixedAt": "2026-04-10T12:29:32.2792963Z",
+    "fixCommit": "4250f9e15671351029e63a39e14082a9cd28a0d8",
     "verifiedAt": null
   },
   {
