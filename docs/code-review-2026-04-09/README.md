@@ -52,7 +52,8 @@
 | 0b | — | pending | Playwright scaffolding approval |
 | 1a (round 1) | 2026-04-09 | **approved** | 43 phase-1 findings reviewed (3 P0, 10 P1, 19 P2, 11 P3); operator approved set, proceeding to Gate 1b fix-batch proposal |
 | 1a (round 2 — expansion) | 2026-04-09 | **approved** | 68 phase-1 expansion findings (2 P0, 13 P1, 30 P2, 23 P3) covering 49 newly-tracked SPA files. Closed pre-seed CR-0005 (false positive). Rejected CR-0306, 0309 as duplicates. Proceeding to Gate 1b round 2 (batch 02). |
-| 1b | 2026-04-09 | **approved batch** | 13 findings (3 P0 + 10 P1) approved for execution; doc: approvals/2026-04-09-batch-01-phase1-shared.md |
+| 1b (round 1, batch 01) | 2026-04-09 | **approved batch** | 13 findings (3 P0 + 10 P1) approved for execution; doc: approvals/2026-04-09-batch-01-phase1-shared.md |
+| 1b (round 2, batch 02) | 2026-04-09 | **approved reduced** | 10 of 14 approved (1 P0 + 9 P1); 4 deferred-future per Gate 1.5b: 0289/0290/0291 (RFP — module not on Prod), 0294 (vendor lat/lon — columns don't exist anywhere). 0292 uses Option A (gate banner). 0301 uses code-only Option B (remove _written half from composite). Doc: approvals/2026-04-09-batch-02-phase1-expansion.md. **Major schema drift discovered: Prod has 66 dcfg_* entities, Test has 79, Stage has 66 with different gaps. RFP module entirely missing from Prod.** |
 | 1c | — | pending | Phase 1 smoke |
 | 2a | — | pending | Phase 2a dead-code batch preview |
 | 2b | — | pending | Phase 2b console batch preview |
