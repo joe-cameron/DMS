@@ -80,7 +80,7 @@ Each card shows an icon, title, one-line description, and a count footer (e.g. `
 
 **Modified:**
 - `App.jsx` — swap tab state for hash routing + dashboard container
-- `storage.js` — add `dates: []` and `delegations: []` arrays to the provider data blob
+- `storage.js` — add `dates: []` and `delegations: []` arrays to the provider data blob. `storage.js` is a **localStorage cache only** (offline fallback + warm-load snapshot). Dataverse is the source of truth; every mutation writes to Dataverse via `intakeApi.js` and also refreshes the local blob. Reads prefer Dataverse when online, fall back to localStorage when offline.
 - `intakeApi.js` — add `createDate`, `updateDate`, `deleteDate`, `loadDates`, `createDelegation`, `loadDelegations`, `softDeleteDelegation`, annotation uploader for date records
 
 **Retired:**
@@ -102,7 +102,7 @@ Purpose: Standalone list of important dates the customer wants Decades to know a
 | `dcfg_name` | String 200 | primary name = the label (e.g. "Fire marshal inspection") |
 | `dcfg_sessionid` | Lookup → `dcfg_intake_session` | ApplicationRequired |
 | `dcfg_due_date` | DateTime (DateOnly) | when it's due |
-| `dcfg_category` | OptionSet | Inspection / Cert Expiration / Contract Anniversary / Insurance / Other |
+| `dcfg_category` | OptionSet | Inspection / Cert Expiration / Contract Anniversary / Insurance / Other. Integer codes are pinned in the implementation plan before table creation to avoid re-seed. |
 | `dcfg_notes` | Memo 1000 | free text |
 | `dcfg_location_ref` | String 100 | optional free-text pointer to a location; not a lookup |
 | `dcfg_active_flag` | Boolean | default Active=1, Retired=0 |
@@ -121,7 +121,7 @@ Purpose: Audit trail of who got delegated to. Not a login/auth table — the del
 | `dcfg_delegate_email` | String 200 | Email format |
 | `dcfg_sender_name` | String 200 | captured from modal (anonymous sender) |
 | `dcfg_sender_email` | String 200 | Email format — used as Reply-To |
-| `dcfg_card_scope` | OptionSet | Vendors / Dates / Locations / Documents / All — advisory |
+| `dcfg_card_scope` | OptionSet | Vendors / Dates / Locations / Documents / All — advisory. Integer codes pinned in the implementation plan. |
 | `dcfg_personal_note` | Memo 1000 | optional |
 | `dcfg_sent_at` | DateTime | written by flow after send |
 | `dcfg_active_flag` | Boolean | soft delete (revoke) |
@@ -180,6 +180,7 @@ Steps:
    - **Reply-To:** `dcfg_sender_email`
    - **Subject:** `[{providerName}] — {senderName} has asked you to help with their Decades onboarding`
    - **Body:** HTML template — greeting, personal note, portal link with `?code={accessCode}`, scoped card name(s), Decades blurb
+   - **Security note (intentional):** The access code is embedded in the link as a query-string parameter. This is the simplest way to honor the "delegate logs in with the same code, sees everything" decision without a new auth path. Known tradeoffs: email forwarding leaks the code, and an email-provider compromise leaks it. Mitigations: access codes already have `dcfg_expires_at`; revoking a delegation does not kill the code (explicit non-goal), so operator can rotate the code manually if needed. Accept and move on.
 4. Patch the row: `dcfg_sent_at = utcNow()`.
 5. On failure: log to `dcfg_audit_logs` with row ID and error; retry up to 3 times via Scope + run-after configuration per DCFG flow patterns.
 
@@ -218,7 +219,7 @@ First sheet only. Extra columns ignored with a non-blocking warning. Missing req
 - Runs 100% in the browser. No server round-trip.
 - Parse output = array of candidate vendor objects matching `createEmptyVendor()`.
 - Date columns read as Excel serial / JS Date / text — tolerant parse.
-- Soft cap of 500 rows; above that, show "Large upload — please split into multiple files."
+- Soft cap of 500 rows, **enforced after parse** (we read the full sheet into memory first — safe because `.xlsx` files at this row count are small). If parsed row count > 500, reject in the preview modal with "Large upload — please split into multiple files" and commit zero rows.
 
 ### Flow
 
@@ -294,7 +295,11 @@ One end-to-end walkthrough via `decades-concierge.powerappsportals.com`.
 2. Create `dcfg_intake_date` and `dcfg_intake_delegation` + site settings + permissions in **Test** (`org0c17e98d`, PAC `[1]`)
 3. Build flow `dcfg_SendIntakeDelegationInvite` via the DCFG three-step pattern
 4. Deploy build to `decadeswelcomesyou.powerappsportals.com`, clear cache, smoke
-5. Mirror schema + flow into **Portal env** (`orgf625b080`, PAC `[6]`)
+5. Mirror into **Portal env** (`orgf625b080`, PAC `[6]`):
+   a. Create `dcfg_intake_date` and `dcfg_intake_delegation` tables in the `DCFGSystemTest` solution
+   b. Add site settings (`Webapi/...enabled`, `Webapi/...fields`) scoped to the Portal concierge site GUID
+   c. Add Parent-scoped table permissions linked to the existing anonymous intake web role; verify via `mspp_entitypermission_webroleset` intersect query
+   d. Build the `dcfg_SendIntakeDelegationInvite` flow via the three-step placeholder → manual connection → full definition pattern
 6. Deploy build to `decades-concierge.powerappsportals.com`, clear cache, smoke
 7. Stage env is skipped — concierge does not deploy to staging today; flag if that changes
 
