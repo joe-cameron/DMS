@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "household-knowledge",
+    "version": "1.0",
+    "description": "Household facts and institutional knowledge. Each entry is a discrete fact captured from conversation or manual entry. Agent: when the user mentions a household fact in passing, offer to save it here.",
+    "file": "brain/household/knowledge.json"
+  },
+  "entries": []
+}

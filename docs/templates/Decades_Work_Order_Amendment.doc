@@ -1,0 +1,53 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name="ProgId" content="Word.Document">
+<meta name="Generator" content="DCFG Tag Builder">
+<style>
+body { font-family: Calibri, sans-serif; margin: 1in; }
+h1 { font-size: 16pt; color: #1a3a5c; margin-bottom: 4pt; }
+.meta { font-size: 9pt; color: #666; margin-bottom: 12pt; }
+table { border-collapse: collapse; width: 100%; }
+th { background: #1a3a5c; color: white; font-size: 11pt; padding: 6pt 10pt;
+     text-align: left; border: 1px solid #1a3a5c; }
+td { font-size: 11pt; padding: 5pt 10pt; border: 1px solid #ccc; }
+tr:nth-child(even) td { background: #f5f7fa; }
+.tag { font-family: Consolas, monospace; color: #2d6a4f; font-weight: bold; }
+.note { font-size: 9pt; color: #888; margin-top: 16pt; font-style: italic; }
+</style>
+</head>
+<body>
+<h1>Decades Work Order Amendment</h1>
+<p class="meta">SharePoint file: <b>Decades_Work_Order_Amendment.docx</b> &mdash; 24 fields</p>
+<table>
+<tr><th>#</th><th>Field Label</th><th>Content Control Name</th></tr>
+<tr><td>1</td><td>Amendment Sequence</td><td class="tag">contract_amendment_sequence</td></tr>
+<tr><td>2</td><td>Client Name</td><td class="tag">contract_client_name</td></tr>
+<tr><td>3</td><td>Contractor Legal Name</td><td class="tag">contract_contractor_legal_name</td></tr>
+<tr><td>4</td><td>Contractor Name</td><td class="tag">contract_contractor_name</td></tr>
+<tr><td>5</td><td>Description of Service</td><td class="tag">contract_description_of_service</td></tr>
+<tr><td>6</td><td>Description of Work</td><td class="tag">contract_description_of_work</td></tr>
+<tr><td>7</td><td>Contract End Date</td><td class="tag">contract_end_date</td></tr>
+<tr><td>8</td><td>Contract Fee</td><td class="tag">contract_fee</td></tr>
+<tr><td>9</td><td>Owner City</td><td class="tag">contract_owner_city</td></tr>
+<tr><td>10</td><td>Owner Contact</td><td class="tag">contract_owner_contact</td></tr>
+<tr><td>11</td><td>Owner Email</td><td class="tag">contract_owner_email</td></tr>
+<tr><td>12</td><td>Owner Phone</td><td class="tag">contract_owner_phone</td></tr>
+<tr><td>13</td><td>Owner State</td><td class="tag">contract_owner_state</td></tr>
+<tr><td>14</td><td>Owner Street</td><td class="tag">contract_owner_street</td></tr>
+<tr><td>15</td><td>Owner Title</td><td class="tag">contract_owner_title</td></tr>
+<tr><td>16</td><td>PO Number</td><td class="tag">contract_po_number</td></tr>
+<tr><td>17</td><td>Contract Start Date</td><td class="tag">contract_start_date</td></tr>
+<tr><td>18</td><td>Work Category</td><td class="tag">contract_work_category</td></tr>
+<tr><td>19</td><td>Property Name</td><td class="tag">property_name</td></tr>
+<tr><td>20</td><td>Vendor Address</td><td class="tag">vendor_address</td></tr>
+<tr><td>21</td><td>Vendor Email</td><td class="tag">vendor_email</td></tr>
+<tr><td>22</td><td>Vendor Phone</td><td class="tag">vendor_phone</td></tr>
+<tr><td>23</td><td>Vendor Primary Contact</td><td class="tag">vendor_primary_contact</td></tr>
+<tr><td>24</td><td>Vendor Signer Title</td><td class="tag">vendor_signer_title</td></tr>
+</table>
+<p class="note">Open in Word &rarr; Alt+F8 &rarr; ConvertTableToContentControls &rarr; Save As .docx &rarr; Upload to DCFG_Templates</p>
+</body>
+</html>

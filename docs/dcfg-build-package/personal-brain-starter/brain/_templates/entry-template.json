@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "REPLACE-WITH-TYPE",
+    "version": "1.0",
+    "description": "REPLACE-WITH-DESCRIPTION. Include agent instructions for how to use this file.",
+    "file": "brain/CATEGORY/FILENAME.json"
+  },
+  "entries": []
+}

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCFG — Contract Screen Design Review</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fb; color: #1a2332; }
+
+  :root {
+    --navy: #0f2b46; --navy-mid: #1a3a5c; --navy-pale: #e8eef4;
+    --amber: #d4a017; --amber-lt: #fef9e7; --amber-dk: #8b6914;
+    --green: #16a34a; --green-lt: #dcfce7;
+    --red: #dc2626; --red-lt: #fee2e2;
+    --blue: #2563eb; --blue-lt: #dbeafe;
+    --steel: #f1f5f9; --border: #e2e8f0;
+    --text1: #1a2332; --text2: #475569; --text3: #94a3b8;
+    --mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    --radius: 12px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    padding: 48px 32px 40px; text-align: center; color: #fff;
+  }
+  .hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .hero p { font-size: 15px; opacity: 0.75; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+  .hero .subtitle {
+    display: inline-block; margin-top: 20px; padding: 8px 20px;
+    background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px;
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+
+  .instructions {
+    max-width: 800px; margin: -20px auto 32px; background: #fff;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 24px 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .instructions h2 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .instructions p { font-size: 14px; color: var(--text2); line-height: 1.6; }
+  .instructions ul { margin: 12px 0 0 20px; font-size: 14px; color: var(--text2); line-height: 1.8; }
+
+  .options { max-width: 1200px; margin: 0 auto; padding: 0 24px 40px; }
+  .option-card {
+    background: #fff; border-radius: var(--radius); border: 3px solid var(--border);
+    margin-bottom: 32px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer; position: relative;
+  }
+  .option-card:hover { border-color: var(--navy-mid); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .option-card.selected { border-color: var(--amber); box-shadow: 0 8px 24px rgba(212,160,23,0.15); }
+  .option-card.selected::after {
+    content: '\2713  YOUR PICK'; position: absolute; top: 16px; right: 16px;
+    background: var(--amber); color: var(--navy); padding: 6px 14px; border-radius: 20px;
+    font-size: 11px; font-weight: 800; letter-spacing: 1px; z-index: 10;
+  }
+
+  .option-header {
+    display: flex; align-items: center; gap: 16px; padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .option-letter {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--navy);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; flex-shrink: 0;
+  }
+  .option-header h3 { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .option-header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+  .option-body { display: flex; }
+  .option-preview {
+    flex: 1; padding: 20px; background: var(--steel); min-height: 380px;
+    display: flex; align-items: stretch;
+  }
+  .option-details {
+    width: 320px; padding: 24px; border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .detail-item h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 4px; }
+  .detail-item p { font-size: 13px; color: var(--text1); line-height: 1.5; }
+
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros h4 { color: var(--green); }
+  .cons h4 { color: var(--red); }
+  .pros li, .cons li { font-size: 12px; color: var(--text2); line-height: 1.6; margin-left: 14px; }
+
+  /* Mini mockup shared */
+  .mini-mock { width: 100%; background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; font-size: 12px; }
+  .mm-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid var(--border); background: #fff;
+  }
+  .mm-title { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .mm-btn { background: var(--navy); color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; position: relative; }
+  .mm-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 4px; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 160px; z-index: 50; overflow: hidden; }
+  .mm-dropdown.open { display: block; }
+  .mm-dropdown-item { padding: 10px 16px; font-size: 12px; color: var(--text1); cursor: pointer; border-bottom: 1px solid #f8f9fb; font-weight: 500; }
+  .mm-dropdown-item:last-child { border-bottom: none; }
+  .mm-dropdown-item:hover { background: var(--navy-pale); color: var(--navy); }
+  .mm-toggles { display: flex; gap: 4px; }
+  .mm-toggle { padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 10px; font-weight: 600; background: #fff; }
+  .mm-toggle.active { background: var(--navy-pale); border-color: var(--navy); color: var(--navy); }
+  .mm-search { width: 180px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; }
+
+  .mm-table { width: 100%; border-collapse: collapse; }
+  .mm-table th { text-align: left; padding: 6px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); border-bottom: 1px solid var(--border); }
+  .mm-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 11px; color: var(--text1); }
+  .mm-table tr:hover td { background: #f8fafc; }
+  .mm-num { font-family: var(--mono); font-weight: 700; font-size: 11px; }
+  .mm-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.3px; }
+  .mm-pending { background: #fef3c7; color: #92400e; }
+  .mm-generated { background: var(--blue-lt); color: var(--blue); }
+  .mm-sent { background: var(--amber-lt); color: var(--amber-dk); }
+  .mm-draft { background: var(--steel); color: var(--text2); }
+  .mm-signed { background: var(--green-lt); color: var(--green); }
+  .mm-program { font-size: 10px; color: var(--text3); font-family: var(--mono); }
+  .mm-fee { font-family: var(--mono); text-align: right; }
+  .mm-expand-row td { background: var(--navy-pale); }
+  .mm-detail-panel {
+    margin: 0 12px 8px; padding: 12px 16px; background: #fff;
+    border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 10px;
+  }
+  .mm-detail-panel label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--text3); display: block; }
+  .mm-doc-link { color: var(--blue); font-weight: 600; font-size: 10px; text-decoration: none; background: var(--blue-lt); padding: 2px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px; }
+  .mm-detail-actions { grid-column: 1 / -1; display: flex; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .mm-action-btn { background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 5px; padding: 5px 10px; font-size: 10px; font-weight: 600; cursor: pointer; }
+
+  /* Customer grouped */
+  .mm-cust-header {
+    display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+    background: var(--navy); color: #fff; font-size: 12px; font-weight: 700;
+  }
+  .mm-cust-count { font-size: 10px; opacity: 0.7; margin-left: auto; }
+
+  /* Split panel */
+  .mm-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 100%; }
+  .mm-split-section { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
+  .mm-split-title { padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+  .mm-split-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .mm-card-item { padding: 10px 14px; border-bottom: 1px solid #f8f9fb; }
+  .mm-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .mm-card-cust { font-size: 11px; color: var(--text1); }
+  .mm-card-meta { font-size: 10px; color: var(--text3); display: flex; gap: 10px; align-items: center; }
+  .mm-search-empty { padding: 30px; text-align: center; color: var(--text3); font-size: 11px; }
+
+  .mm-pagination { display: flex; gap: 4px; justify-content: center; padding: 10px; border-top: 1px solid var(--border); }
+  .mm-page-btn { padding: 4px 10px; border: 1px solid var(--border); background: #fff; border-radius: 4px; font-size: 10px; cursor: pointer; }
+  .mm-page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* Vote */
+  .vote-section {
+    max-width: 800px; margin: 0 auto 40px; background: #fff;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .vote-section h2 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .vote-section p { font-size: 14px; color: var(--text2); margin-bottom: 20px; }
+  .vote-buttons { display: flex; gap: 12px; margin-bottom: 20px; }
+  .vote-btn {
+    flex: 1; padding: 16px; border: 2px solid var(--border); border-radius: 10px;
+    background: #fff; cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .vote-btn:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .vote-btn.voted { border-color: var(--amber); background: var(--amber-lt); }
+  .vote-btn .letter { font-size: 24px; font-weight: 800; color: var(--navy); display: block; margin-bottom: 4px; }
+  .vote-btn .label { font-size: 12px; color: var(--text2); }
+  .vote-notes textarea {
+    width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 10px;
+    font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; outline: none;
+  }
+  .vote-notes textarea:focus { border-color: var(--navy); }
+  .vote-notes label { font-size: 13px; font-weight: 600; color: var(--text2); display: block; margin-bottom: 8px; }
+  .vote-submit {
+    margin-top: 16px; background: var(--navy); color: #fff; border: none;
+    border-radius: 10px; padding: 14px 32px; font-size: 15px; font-weight: 700;
+    cursor: pointer; width: 100%;
+  }
+  .vote-submit:disabled { background: var(--text3); cursor: not-allowed; }
+  .vote-thanks {
+    display: none; text-align: center; padding: 32px;
+    background: var(--green-lt); border-radius: 10px;
+  }
+  .vote-thanks h3 { font-size: 18px; color: var(--green); margin-bottom: 8px; }
+  .vote-thanks p { font-size: 14px; color: var(--text2); }
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Contract Screen Redesign</h1>
+  <p>We're redesigning the contracts screen to handle thousands of contracts and make it faster to find what you need. We'd like your input on the layout direction.</p>
+  <div class="subtitle">Review the 3 options below and pick your favorite</div>
+</div>
+
+<div class="instructions">
+  <h2>How This Works</h2>
+  <p>Below are three layout concepts for the new contracts screen. Each one shows the same data and the same creation options — they just organize it differently.</p>
+  <ul>
+    <li><strong>All three</strong> have a "+ New" dropdown for creating Work Orders, Amendments, and Vendor MSAs</li>
+    <li><strong>All three</strong> show document links directly — no extra clicks to find a signed document</li>
+    <li><strong>All three</strong> default to showing contracts that need attention, with a toggle to see everything</li>
+    <li><strong>Scroll down to vote</strong> for your favorite — you can also leave notes</li>
+  </ul>
+</div>
+
+<div class="options">
+
+  <!-- ═══ OPTION A ═══ -->
+  <div class="option-card" id="card-a" onclick="selectCard('a')">
+    <div class="option-header">
+      <div class="option-letter">A</div>
+      <div>
+        <h3>Smart List</h3>
+        <p>Familiar table with expandable rows — click a row to see details and documents without leaving the page</p>
+      </div>
+    </div>
+    <div class="option-body">
+      <div class="option-preview">
+        <div class="mini-mock">
+          <div class="mm-toolbar">
+            <span class="mm-title">Contracts</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="mm-toggles">
+                <span class="mm-toggle active">Needs Attention</span>
+                <span class="mm-toggle">All Active</span>
+              </div>
+              <input class="mm-search" placeholder="Search customer, contract #...">
+              <span class="mm-btn" onclick="event.stopPropagation();toggleDrop('drop-a')">+ New &#x25BE;
+                <div class="mm-dropdown" id="drop-a">
+                  <div class="mm-dropdown-item">Work Order</div>
+                  <div class="mm-dropdown-item">Amendment</div>
+                  <div class="mm-dropdown-item">Vendor MSA</div>
+                </div>
+              </span>
+            </div>
+          </div>
+          <table class="mm-table">
+            <thead><tr><th>Contract #</th><th>Customer</th><th>Program</th><th>Status</th><th style="text-align:right">Fee</th><th>Date</th><th style="width:30px"></th></tr></thead>
+            <tbody>
+              <tr class="mm-expand-row"><td class="mm-num">WO-2026-0847</td><td>Bancroft Neurohealth</td><td><span class="mm-program">Residential East</span></td><td><span class="mm-badge mm-pending">Pending</span></td><td class="mm-fee">$14,500</td><td>Mar 28</td><td>&#x25B2;</td></tr>
+            </tbody>
+          </table>
+          <div class="mm-detail-panel">
+            <div><label>Contractor</label>Decades Contracting</div>
+            <div><label>Vendor</label>Jersey Plumbing Co.</div>
+            <div><label>Location</label>42 Maple Ave, Cherry Hill</div>
+            <div><label>Program</label>Residential East</div>
+            <div><label>Sent / Signed</label>Mar 29 / —</div>
+            <div><label>Document</label><a href="#" class="mm-doc-link">&#x1F4C4; View Doc</a></div>
+            <div class="mm-detail-actions">
+              <button class="mm-action-btn">Open Full Detail</button>
+            </div>
+          </div>
+          <table class="mm-table">
+            <tbody>
+              <tr><td class="mm-num">WO-2026-0843</td><td>Bancroft Neurohealth</td><td><span class="mm-program">Campus North</span></td><td><span class="mm-badge mm-generated">Generated</span></td><td class="mm-fee">$8,200</td><td>Mar 25</td><td>&#x25BC;</td></tr>
+              <tr><td class="mm-num">WO-2026-0839</td><td>Allies Inc.</td><td><span class="mm-program">Main Campus</span></td><td><span class="mm-badge mm-sent">Sent</span></td><td class="mm-fee">$22,750</td><td>Mar 22</td><td>&#x25BC;</td></tr>
+              <tr><td class="mm-num">WO-2026-0835</td><td>Allies Inc.</td><td><span class="mm-program">South Wing</span></td><td><span class="mm-badge mm-draft">Draft</span></td><td class="mm-fee">$3,100</td><td>Mar 20</td><td>&#x25BC;</td></tr>
+              <tr><td class="mm-num">AMD-2026-0012</td><td>Bancroft Neurohealth</td><td><span class="mm-program">Residential East</span></td><td><span class="mm-badge mm-pending">Pending</span></td><td class="mm-fee">$6,800</td><td>Mar 18</td><td>&#x25BC;</td></tr>
+              <tr><td class="mm-num">VMSA-2026-003</td><td>SERV Behavioral Health</td><td><span class="mm-program">Community Living</span></td><td><span class="mm-badge mm-signed">Signed</span></td><td class="mm-fee">$11,400</td><td>Mar 15</td><td>&#x25BC;</td></tr>
+            </tbody>
+          </table>
+          <div class="mm-pagination">
+            <button class="mm-page-btn">&larr;</button>
+            <button class="mm-page-btn active">1</button>
+            <button class="mm-page-btn">2</button>
+            <button class="mm-page-btn">3</button>
+            <button class="mm-page-btn">&rarr;</button>
+          </div>
+        </div>
+      </div>
+      <div class="option-details">
+        <div class="detail-item"><h4>How It Works</h4><p>Click any row to expand it inline — see contractor, vendor, location, dates, and document link without navigating away. Click again to collapse. Create any contract type from the "+ New" dropdown.</p></div>
+        <div class="detail-item"><h4>Default View</h4><p>Shows contracts needing attention — unsigned, in approval, or recently generated. One click to see all active. Server-side pagination handles thousands.</p></div>
+        <div class="detail-item"><h4>Document Access</h4><p>Document link appears in the expanded detail. One click from the list — no need to open the full detail page to find a signed document.</p></div>
+        <div class="pros-cons">
+          <div class="pros"><h4>Strengths</h4><ul><li>Familiar spreadsheet feel</li><li>See details without losing your place</li><li>Easy to scan many rows quickly</li></ul></div>
+          <div class="cons"><h4>Trade-offs</h4><ul><li>Expanded rows push content down</li><li>One row expanded at a time</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION B ═══ -->
+  <div class="option-card" id="card-b" onclick="selectCard('b')">
+    <div class="option-header">
+      <div class="option-letter">B</div>
+      <div>
+        <h3>Customer Groups</h3>
+        <p>Contracts organized by customer — expand a customer to see their contracts, programs, and documents</p>
+      </div>
+    </div>
+    <div class="option-body">
+      <div class="option-preview">
+        <div class="mini-mock">
+          <div class="mm-toolbar">
+            <span class="mm-title">Contracts</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="mm-toggles">
+                <span class="mm-toggle active">Needs Attention</span>
+                <span class="mm-toggle">All Active</span>
+              </div>
+              <input class="mm-search" placeholder="Search customer...">
+              <span class="mm-btn" onclick="event.stopPropagation();toggleDrop('drop-b')">+ New &#x25BE;
+                <div class="mm-dropdown" id="drop-b">
+                  <div class="mm-dropdown-item">Work Order</div>
+                  <div class="mm-dropdown-item">Amendment</div>
+                  <div class="mm-dropdown-item">Vendor MSA</div>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="mm-cust-header">Bancroft Neurohealth <span class="mm-cust-count">3 contracts</span></div>
+          <table class="mm-table">
+            <tbody>
+              <tr><td class="mm-num">WO-2026-0847</td><td><span class="mm-program">Residential East</span> Plumbing</td><td><span class="mm-badge mm-pending">Pending</span></td><td class="mm-fee">$14,500</td><td>Mar 28</td><td><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4;</a></td></tr>
+              <tr><td class="mm-num">AMD-2026-0012</td><td><span class="mm-program">Residential East</span> Amendment #1</td><td><span class="mm-badge mm-pending">Pending</span></td><td class="mm-fee">$6,800</td><td>Mar 18</td><td><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4;</a></td></tr>
+              <tr><td class="mm-num">WO-2026-0843</td><td><span class="mm-program">Campus North</span> HVAC</td><td><span class="mm-badge mm-generated">Generated</span></td><td class="mm-fee">$8,200</td><td>Mar 25</td><td style="color:var(--text3)">—</td></tr>
+            </tbody>
+          </table>
+          <div class="mm-cust-header" style="margin-top:4px">Allies Inc. <span class="mm-cust-count">2 contracts</span></div>
+          <table class="mm-table">
+            <tbody>
+              <tr><td class="mm-num">WO-2026-0839</td><td><span class="mm-program">Main Campus</span> Roof repair</td><td><span class="mm-badge mm-sent">Sent</span></td><td class="mm-fee">$22,750</td><td>Mar 22</td><td><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4;</a></td></tr>
+              <tr><td class="mm-num">WO-2026-0835</td><td><span class="mm-program">South Wing</span> Electrical</td><td><span class="mm-badge mm-draft">Draft</span></td><td class="mm-fee">$3,100</td><td>Mar 20</td><td style="color:var(--text3)">—</td></tr>
+            </tbody>
+          </table>
+          <div class="mm-cust-header" style="margin-top:4px">SERV Behavioral Health <span class="mm-cust-count">1 contract</span></div>
+          <table class="mm-table">
+            <tbody>
+              <tr><td class="mm-num">VMSA-2026-003</td><td><span class="mm-program">Community Living</span> Vendor MSA</td><td><span class="mm-badge mm-signed">Signed</span></td><td class="mm-fee">$11,400</td><td>Mar 15</td><td><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4;</a></td></tr>
+            </tbody>
+          </table>
+          <div class="mm-pagination">
+            <button class="mm-page-btn">&larr;</button>
+            <button class="mm-page-btn active">1</button>
+            <button class="mm-page-btn">2</button>
+            <button class="mm-page-btn">&rarr;</button>
+          </div>
+        </div>
+      </div>
+      <div class="option-details">
+        <div class="detail-item"><h4>How It Works</h4><p>Contracts grouped under their customer. Click a customer header to collapse/expand. Programs shown inline per row. Document icons visible directly on each row — click to open the signed document.</p></div>
+        <div class="detail-item"><h4>Default View</h4><p>Only customers with contracts needing attention are shown. Toggle to see all customers. Create any contract type from the "+ New" dropdown.</p></div>
+        <div class="detail-item"><h4>Document Access</h4><p>Document icon appears directly on each row. If a document exists, one click opens it. No expanding, no detail page needed.</p></div>
+        <div class="pros-cons">
+          <div class="pros"><h4>Strengths</h4><ul><li>Matches how you think: "Show me Bancroft"</li><li>Natural grouping by program</li><li>Doc links visible immediately</li></ul></div>
+          <div class="cons"><h4>Trade-offs</h4><ul><li>Can't sort across all contracts</li><li>Many open groups = scrolling</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION C ═══ -->
+  <div class="option-card" id="card-c" onclick="selectCard('c')">
+    <div class="option-header">
+      <div class="option-letter">C</div>
+      <div>
+        <h3>Split View</h3>
+        <p>Two panels side by side — your action items on the left, search on the right</p>
+      </div>
+    </div>
+    <div class="option-body">
+      <div class="option-preview">
+        <div class="mini-mock" style="display:flex;flex-direction:column">
+          <div class="mm-toolbar">
+            <span class="mm-title">Contracts</span>
+            <span class="mm-btn" onclick="event.stopPropagation();toggleDrop('drop-c')">+ New &#x25BE;
+              <div class="mm-dropdown" id="drop-c">
+                <div class="mm-dropdown-item">Work Order</div>
+                <div class="mm-dropdown-item">Amendment</div>
+                <div class="mm-dropdown-item">Vendor MSA</div>
+              </div>
+            </span>
+          </div>
+          <div class="mm-split" style="flex:1;padding:8px">
+            <div class="mm-split-section">
+              <div class="mm-split-title"><span class="mm-split-dot" style="background:var(--amber)"></span> Needs Attention (6)</div>
+              <div class="mm-card-item">
+                <div class="mm-card-top"><span class="mm-num">WO-2026-0847</span><span class="mm-badge mm-pending">Pending</span></div>
+                <div class="mm-card-cust">Bancroft — Residential East</div>
+                <div class="mm-card-meta"><span>$14,500</span><span>Mar 28</span><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4; Doc</a></div>
+              </div>
+              <div class="mm-card-item">
+                <div class="mm-card-top"><span class="mm-num">AMD-2026-0012</span><span class="mm-badge mm-pending">Pending</span></div>
+                <div class="mm-card-cust">Bancroft — Residential East</div>
+                <div class="mm-card-meta"><span>$6,800</span><span>Mar 18</span><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4; Doc</a></div>
+              </div>
+              <div class="mm-card-item">
+                <div class="mm-card-top"><span class="mm-num">WO-2026-0843</span><span class="mm-badge mm-generated">Generated</span></div>
+                <div class="mm-card-cust">Bancroft — Campus North</div>
+                <div class="mm-card-meta"><span>$8,200</span><span>Mar 25</span></div>
+              </div>
+              <div class="mm-card-item">
+                <div class="mm-card-top"><span class="mm-num">WO-2026-0839</span><span class="mm-badge mm-sent">Sent</span></div>
+                <div class="mm-card-cust">Allies — Main Campus</div>
+                <div class="mm-card-meta"><span>$22,750</span><span>Mar 22</span><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4; Doc</a></div>
+              </div>
+              <div class="mm-card-item">
+                <div class="mm-card-top"><span class="mm-num">VMSA-2026-003</span><span class="mm-badge mm-signed">Signed</span></div>
+                <div class="mm-card-cust">SERV — Community Living</div>
+                <div class="mm-card-meta"><span>$11,400</span><span>Mar 15</span><a href="#" class="mm-doc-link" style="font-size:9px;padding:1px 6px">&#x1F4C4; Doc</a></div>
+              </div>
+            </div>
+            <div class="mm-split-section">
+              <div class="mm-split-title"><span class="mm-split-dot" style="background:var(--navy)"></span> Search All Contracts</div>
+              <div style="padding:8px 12px"><input class="mm-search" placeholder="Customer, contract #, program..." style="width:100%"></div>
+              <div class="mm-search-empty">
+                Type a customer name or contract number<br>
+                <span style="font-size:9px;margin-top:4px;display:block">Searches all contracts including signed, closed, and voided</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="option-details">
+        <div class="detail-item"><h4>How It Works</h4><p>Left panel always shows contracts needing your attention. Right panel is dedicated search — find any contract across the entire system. Both panels show document links inline. Create any contract type from the "+ New" dropdown.</p></div>
+        <div class="detail-item"><h4>Default View</h4><p>Both panels visible at all times. Left auto-refreshes with attention items. Right starts empty until you search.</p></div>
+        <div class="detail-item"><h4>Document Access</h4><p>Document links appear on every card in both panels. Signed documents are always one click away.</p></div>
+        <div class="pros-cons">
+          <div class="pros"><h4>Strengths</h4><ul><li>Action items always visible</li><li>Search doesn't interfere with queue</li><li>Clean separation of workflows</li></ul></div>
+          <div class="cons"><h4>Trade-offs</h4><ul><li>Less screen space per panel</li><li>Cards show less data per item</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VOTE ═══ -->
+<div class="vote-section" id="vote-form">
+  <h2>Cast Your Vote</h2>
+  <p>Which layout would work best for how you use contracts day-to-day?</p>
+  <div class="vote-buttons">
+    <div class="vote-btn" id="vote-a" onclick="vote('a')"><span class="letter">A</span><span class="label">Smart List</span></div>
+    <div class="vote-btn" id="vote-b" onclick="vote('b')"><span class="letter">B</span><span class="label">Customer Groups</span></div>
+    <div class="vote-btn" id="vote-c" onclick="vote('c')"><span class="letter">C</span><span class="label">Split View</span></div>
+  </div>
+  <div class="vote-notes">
+    <label>Anything you'd change or combine from these options? (optional)</label>
+    <textarea id="vote-comment" placeholder="e.g. 'I like B's grouping but want A's expandable rows within each group...'"></textarea>
+  </div>
+  <button class="vote-submit" id="submit-btn" onclick="submitVote()" disabled>Select an option above to submit</button>
+</div>
+<div class="vote-thanks" id="vote-thanks">
+  <h3>Thanks for your input!</h3>
+  <p>Your vote and notes have been saved. We'll share the results with the team.</p>
+</div>
+
+<div class="footer">DCFG Contracting Suite — Design Review — April 2026</div>
+
+<script>
+let selectedVote = null;
+
+function selectCard(id) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-' + id).classList.add('selected');
+}
+
+function vote(id) {
+  selectedVote = id;
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('voted'));
+  document.getElementById('vote-' + id).classList.add('voted');
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Submit Vote for Option ' + id.toUpperCase();
+  selectCard(id);
+}
+
+function submitVote() {
+  const comment = document.getElementById('vote-comment').value;
+  const result = { vote: selectedVote.toUpperCase(), comment: comment, timestamp: new Date().toISOString() };
+  const votes = JSON.parse(localStorage.getItem('dcfg-contract-votes') || '[]');
+  votes.push(result);
+  localStorage.setItem('dcfg-contract-votes', JSON.stringify(votes));
+  document.getElementById('vote-form').style.display = 'none';
+  document.getElementById('vote-thanks').style.display = 'block';
+  console.log('[DCFG Vote]', JSON.stringify(result));
+}
+
+function toggleDrop(id) {
+  event.stopPropagation();
+  const el = document.getElementById(id);
+  document.querySelectorAll('.mm-dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
+  el.classList.toggle('open');
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.mm-dropdown').forEach(d => d.classList.remove('open'));
+});
+</script>
+</body>
+</html>

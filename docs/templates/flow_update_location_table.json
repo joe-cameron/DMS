@@ -1,0 +1,206 @@
+{
+  "_description": "Flow update: Add location_table to Build_Token_Map for Exhibit B",
+  "_instructions": [
+    "1. Add 3 new actions AFTER Condition_Is_Contract (parallel with Get_Customer, Get_Vendor, Get_Property)",
+    "2. Add location_table to Build_Token_Map inputs",
+    "3. Update Build_Token_Map runAfter to include Build_Location_Table"
+  ],
+
+  "new_actions": {
+
+    "Get_MSA_Locations": {
+      "_description": "Query all active locations for the MSA's customer, with location type",
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "entityName": "dcfg_properties",
+          "$select": "dcfg_propertyid,dcfg_name,dcfg_address,dcfg_address_2,dcfg_city,dcfg_state,dcfg_zip,dcfg_is_no_charge",
+          "$expand": "dcfg_location_type_id($select=dcfg_location_typeid,dcfg_name)",
+          "$filter": "_dcfg_customer_id_value eq @{if(not(empty(outputs('Get_Contract')?['body/_dcfg_customer_id_value'])), outputs('Get_Contract')?['body/_dcfg_customer_id_value'], outputs('Get_MSA')?['body/_dcfg_customer_id_value'])} and dcfg_active_flag eq true",
+          "$orderby": "dcfg_name asc"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+          "operationId": "ListRecords",
+          "connectionName": "shared_commondataserviceforapps"
+        },
+        "authentication": "@parameters('$authentication')"
+      },
+      "runAfter": {
+        "Get_Customer": [
+          "Succeeded"
+        ]
+      }
+    },
+
+    "Get_MSA_Rates": {
+      "_description": "Query all active MSA rates (membership + onboarding by location type)",
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "entityName": "dcfg_msa_rates",
+          "$select": "dcfg_msa_rateid,dcfg_name,dcfg_membership_rate,dcfg_onboarding_rate,dcfg_is_active,_dcfg_location_type_id_value",
+          "$expand": "dcfg_location_type_id($select=dcfg_location_typeid,dcfg_name)",
+          "$filter": "_dcfg_msa_id_value eq @{coalesce(triggerOutputs()?['body/_dcfg_msa_id_value'], outputs('Get_Contract')?['body/_dcfg_msa_id_value'])} and dcfg_is_active eq true",
+          "$orderby": "dcfg_name asc"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+          "operationId": "ListRecords",
+          "connectionName": "shared_commondataserviceforapps"
+        },
+        "authentication": "@parameters('$authentication')"
+      },
+      "runAfter": {
+        "Condition_Is_Contract": [
+          "Succeeded"
+        ]
+      }
+    },
+
+    "Build_Location_Table": {
+      "_description": "Build HTML table for Exhibit B location list. Matches locations to MSA rates by location type. No Charge locations show $0.00. Monthly total at bottom.",
+      "type": "Compose",
+      "inputs": "@{concat('<table style=\"border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:10pt\"><thead><tr style=\"background:#1B2A4A;color:#fff\"><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">#</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">Type</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">Address 1</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">ADR 2</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">City</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">State</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">ZIP</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:right\">Cost</th></tr></thead><tbody>', join(body('Select_Location_Rows'), ''), '</tbody><tfoot><tr style=\"font-weight:bold;border-top:2px solid #1B2A4A\"><td colspan=\"7\" style=\"padding:4px 8px;text-align:right;border:1px solid #999\">MONTHLY TOTAL</td><td style=\"padding:4px 8px;text-align:right;border:1px solid #999\">$', formatNumber(outputs('Sum_Monthly_Total'), '0,0.00'), '</td></tr></tfoot></table>')}",
+      "runAfter": {
+        "Select_Location_Rows": [
+          "Succeeded"
+        ],
+        "Sum_Monthly_Total": [
+          "Succeeded"
+        ]
+      }
+    },
+
+    "Select_Location_Rows": {
+      "_description": "Transform each location into an HTML table row. Matches location type to MSA rate for cost column.",
+      "type": "Select",
+      "inputs": {
+        "from": "@outputs('Get_MSA_Locations')?['body/value']",
+        "select": "@concat('<tr style=\"border-bottom:1px solid #ddd\"><td style=\"padding:4px 8px;border:1px solid #ddd\">', string(add(indexOf(outputs('Get_MSA_Locations')?['body/value'], item()), 1)), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_location_type_id']?['dcfg_name'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_address'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_address_2'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_city'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_state'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(item()?['dcfg_zip'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd;text-align:right\">', if(equals(item()?['dcfg_is_no_charge'], true), 'No Charge', concat('$', formatNumber(float(coalesce(first(body('Filter_Rate_For_Location'))?['dcfg_membership_rate'], 0)), '0,0.00'))), '</td></tr>')"
+      },
+      "runAfter": {
+        "Get_MSA_Locations": [
+          "Succeeded"
+        ],
+        "Get_MSA_Rates": [
+          "Succeeded"
+        ]
+      }
+    },
+
+    "Filter_Rate_For_Location": {
+      "_description": "For each location in Select_Location_Rows, filter MSA rates to find the matching location type rate. Used inside Select_Location_Rows via expression.",
+      "_note": "THIS ACTION IS REFERENCED INLINE — Power Automate Select cannot reference a separate Filter. Instead, the rate lookup must be done inline in the Select expression. See alternative approach below.",
+      "_alternative": "Use a preceding 'Apply to each' loop that builds the rows array with rate lookup, or use an inline expression that searches the rates array."
+    },
+
+    "Sum_Monthly_Total": {
+      "_description": "Sum all monthly rates for billable (non-no-charge) locations",
+      "_note": "Power Automate doesn't have a native SUM over filtered arrays. Use an Apply to Each with a running total variable, or use inline expression with a Select + sum pattern.",
+      "type": "Compose",
+      "inputs": "@float(0)"
+    }
+  },
+
+  "_revised_approach": {
+    "_description": "The Select + Filter approach above won't work because Power Automate Select can't call Filter_Rate_For_Location per row. Revised approach uses Apply to Each to build the HTML rows and running total.",
+
+    "Init_varLocationRows": {
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [
+          {
+            "name": "varLocationRows",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      },
+      "runAfter": {}
+    },
+
+    "Init_varMonthlyTotal": {
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [
+          {
+            "name": "varMonthlyTotal",
+            "type": "Float",
+            "value": 0
+          }
+        ]
+      },
+      "runAfter": {}
+    },
+
+    "Loop_Locations": {
+      "_description": "Build HTML rows and sum monthly total. For each location, find matching rate by location type.",
+      "type": "Foreach",
+      "foreach": "@outputs('Get_MSA_Locations')?['body/value']",
+      "actions": {
+        "Filter_Rate_By_Type": {
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Get_MSA_Rates')?['body/value']",
+            "where": "@equals(item()?['_dcfg_location_type_id_value'], items('Loop_Locations')?['dcfg_location_type_id']?['dcfg_location_typeid'])"
+          }
+        },
+        "Set_Rate_Value": {
+          "type": "Compose",
+          "inputs": "@if(equals(items('Loop_Locations')?['dcfg_is_no_charge'], true), float(0), float(coalesce(first(body('Filter_Rate_By_Type'))?['dcfg_membership_rate'], 0)))",
+          "runAfter": {
+            "Filter_Rate_By_Type": ["Succeeded"]
+          }
+        },
+        "Append_Row": {
+          "type": "AppendToStringVariable",
+          "inputs": {
+            "name": "varLocationRows",
+            "value": "@{concat('<tr style=\"border-bottom:1px solid #ddd\"><td style=\"padding:4px 8px;border:1px solid #ddd\">', string(add(iterationIndexes('Loop_Locations'), 1)), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_location_type_id']?['dcfg_name'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_address'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_address_2'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_city'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_state'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd\">', coalesce(items('Loop_Locations')?['dcfg_zip'], ''), '</td><td style=\"padding:4px 8px;border:1px solid #ddd;text-align:right\">', if(equals(items('Loop_Locations')?['dcfg_is_no_charge'], true), 'No Charge', concat('$', formatNumber(outputs('Set_Rate_Value'), '0,0.00'))), '</td></tr>')}"
+          },
+          "runAfter": {
+            "Set_Rate_Value": ["Succeeded"]
+          }
+        },
+        "Add_To_Total": {
+          "type": "IncrementVariable",
+          "inputs": {
+            "name": "varMonthlyTotal",
+            "value": "@outputs('Set_Rate_Value')"
+          },
+          "runAfter": {
+            "Set_Rate_Value": ["Succeeded"]
+          }
+        }
+      },
+      "runAfter": {
+        "Get_MSA_Locations": ["Succeeded"],
+        "Get_MSA_Rates": ["Succeeded"]
+      },
+      "runtimeConfiguration": {
+        "concurrency": {
+          "repetitions": 1
+        }
+      }
+    },
+
+    "Build_Location_Table": {
+      "type": "Compose",
+      "inputs": "@{concat('<table style=\"border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:10pt\"><thead><tr style=\"background:#1B2A4A;color:#fff\"><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">#</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">Type</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">Address 1</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">ADR 2</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">City</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">State</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:left\">ZIP</th><th style=\"padding:4px 8px;border:1px solid #999;text-align:right\">Cost</th></tr></thead><tbody>', variables('varLocationRows'), '</tbody><tfoot><tr style=\"font-weight:bold;border-top:2px solid #1B2A4A\"><td colspan=\"7\" style=\"padding:4px 8px;text-align:right;border:1px solid #999\">MONTHLY TOTAL</td><td style=\"padding:4px 8px;text-align:right;border:1px solid #999\">$', formatNumber(variables('varMonthlyTotal'), '0,0.00'), '</td></tr></tfoot></table>')}",
+      "runAfter": {
+        "Loop_Locations": ["Succeeded"]
+      }
+    }
+  },
+
+  "build_token_map_addition": {
+    "_description": "Add this key to the existing Build_Token_Map Compose inputs object",
+    "location_table": "@{outputs('Build_Location_Table')}"
+  },
+
+  "build_token_map_runafter_addition": {
+    "_description": "Add Build_Location_Table to the runAfter dependencies of Build_Token_Map",
+    "Build_Location_Table": ["Succeeded"]
+  }
+}

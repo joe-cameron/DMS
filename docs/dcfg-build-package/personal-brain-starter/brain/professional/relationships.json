@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "professional-relationships",
+    "version": "1.0",
+    "description": "Professional contacts with relationship health tracking. Agent: when asked who have I been neglecting or who should I reach out to, scan for contacts where days since last_contact exceeds warmth_threshold_days. Warmth statuses: hot (within threshold), warm (approaching threshold), cooling (past threshold), cold (2x past threshold).",
+    "file": "brain/professional/relationships.json"
+  },
+  "entries": []
+}

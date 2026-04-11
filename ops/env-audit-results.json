@@ -1,0 +1,198 @@
+[
+  {
+    "siteSettings": {
+      "ok": 64,
+      "missing": [
+        "Webapi/dcfg_contract_attachment/enabled",
+        "Webapi/dcfg_contract_attachment/fields"
+      ]
+    },
+    "environment": "TEST",
+    "timestamp": "2026-03-24 16:20:49",
+    "permissions": {
+      "drifted": [],
+      "errors": [],
+      "missing": [],
+      "ok": 33,
+      "noRoles": []
+    },
+    "flows": {
+      "active": 11,
+      "down": [],
+      "missing": []
+    },
+    "orgUrl": "https://org0c17e98d.crm.dynamics.com",
+    "sites": [
+      {
+        "id": "843a07fd-0233-43d4-ad4f-579db5169c98",
+        "name": "DCFG Contracting Suite - dcfg"
+      },
+      {
+        "id": "d5cc0e9a-9d2b-44d7-83ca-6ec8b69e2c4d",
+        "name": null
+      },
+      {
+        "id": "621081cf-c167-442d-9317-7e79f0b8f1fc",
+        "name": null
+      },
+      {
+        "id": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+        "name": "DCFG Contracting Suite"
+      }
+    ]
+  },
+  {
+    "siteSettings": {
+      "ok": 52,
+      "missing": [
+        "Webapi/dcfg_contract_attachment/enabled",
+        "Webapi/dcfg_contract_attachment/fields",
+        "Webapi/dcfg_compliance_check/enabled",
+        "Webapi/dcfg_compliance_check/fields",
+        "Webapi/dcfg_compliance_rule/enabled",
+        "Webapi/dcfg_compliance_rule/fields",
+        "Webapi/dcfg_agent_audit_log/enabled",
+        "Webapi/dcfg_agent_audit_log/fields",
+        "Webapi/dcfg_agent_config/enabled",
+        "Webapi/dcfg_agent_config/fields",
+        "Webapi/dcfg_agent_session_trace/enabled",
+        "Webapi/dcfg_agent_session_trace/fields",
+        "Webapi/dcfg_agent_diagnostic/enabled",
+        "Webapi/dcfg_agent_diagnostic/fields"
+      ]
+    },
+    "environment": "STAGE",
+    "timestamp": "2026-03-24 16:21:20",
+    "permissions": {
+      "drifted": [],
+      "errors": [],
+      "missing": [
+        "dcfg_contract_attachment",
+        "dcfg_document_request",
+        "dcfg_config",
+        "dcfg_appliance_type",
+        "dcfg_appliance_photo",
+        "dcfg_compliance_check",
+        "dcfg_compliance_rule",
+        "dcfg_agent_audit_log",
+        "dcfg_agent_config",
+        "dcfg_agent_session_trace",
+        "dcfg_agent_diagnostic"
+      ],
+      "ok": 22,
+      "noRoles": []
+    },
+    "flows": {
+      "active": 0,
+      "down": [],
+      "missing": [
+        "DCFG - SharePoint Write Cache",
+        "DCFG - HTTP Bridge Query Active Portfolio",
+        "DCFG - Compute Metrics",
+        "flow_send_email",
+        "DCFG - Error Reporter",
+        "flow_cert_upload",
+        "flow_commit - Budget Commit on Signed/Received",
+        "flow_docgen - Document Generation Engine",
+        "flow_template_validate - Template Upload Validation",
+        "flow_cert_alert",
+        "flow_onboarding_init"
+      ]
+    },
+    "orgUrl": "https://org88778bb0.crm.dynamics.com",
+    "sites": [
+      {
+        "id": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+        "name": "DCFG Contracting Suite"
+      }
+    ]
+  },
+  {
+    "siteSettings": {
+      "ok": 52,
+      "missing": [
+        "Webapi/dcfg_contract_attachment/enabled",
+        "Webapi/dcfg_contract_attachment/fields",
+        "Webapi/dcfg_compliance_check/enabled",
+        "Webapi/dcfg_compliance_check/fields",
+        "Webapi/dcfg_compliance_rule/enabled",
+        "Webapi/dcfg_compliance_rule/fields",
+        "Webapi/dcfg_agent_audit_log/enabled",
+        "Webapi/dcfg_agent_audit_log/fields",
+        "Webapi/dcfg_agent_config/enabled",
+        "Webapi/dcfg_agent_config/fields",
+        "Webapi/dcfg_agent_session_trace/enabled",
+        "Webapi/dcfg_agent_session_trace/fields",
+        "Webapi/dcfg_agent_diagnostic/enabled",
+        "Webapi/dcfg_agent_diagnostic/fields"
+      ]
+    },
+    "environment": "PROD",
+    "timestamp": "2026-03-24 16:21:51",
+    "permissions": {
+      "drifted": [],
+      "errors": [],
+      "missing": [
+        "dcfg_contract",
+        "dcfg_contract_line",
+        "dcfg_contract_attachment",
+        "dcfg_customer",
+        "dcfg_msa",
+        "dcfg_msa_rate",
+        "dcfg_property",
+        "dcfg_property_detail",
+        "dcfg_vendor",
+        "dcfg_location_type",
+        "dcfg_location_document",
+        "dcfg_document_template",
+        "dcfg_template_field",
+        "dcfg_document_output",
+        "dcfg_document_request",
+        "dcfg_onboarding_case",
+        "dcfg_onboarding_checklist",
+        "dcfg_program",
+        "dcfg_send_queue",
+        "dcfg_audit_log",
+        "dcfg_ap_cost_code",
+        "dcfg_config",
+        "dcfg_appliance",
+        "dcfg_appliance_type",
+        "dcfg_appliance_photo",
+        "dcfg_compliance_check",
+        "dcfg_compliance_rule",
+        "dcfg_brain_insight",
+        "dcfg_equipment_benchmark",
+        "dcfg_agent_audit_log",
+        "dcfg_agent_config",
+        "dcfg_agent_session_trace",
+        "dcfg_agent_diagnostic"
+      ],
+      "ok": 0,
+      "noRoles": []
+    },
+    "flows": {
+      "active": 0,
+      "down": [],
+      "missing": [
+        "DCFG - SharePoint Write Cache",
+        "DCFG - HTTP Bridge Query Active Portfolio",
+        "DCFG - Compute Metrics",
+        "flow_send_email",
+        "DCFG - Error Reporter",
+        "flow_cert_upload",
+        "flow_commit - Budget Commit on Signed/Received",
+        "flow_docgen - Document Generation Engine",
+        "flow_template_validate - Template Upload Validation",
+        "flow_cert_alert",
+        "flow_onboarding_init"
+      ]
+    },
+    "orgUrl": "https://org06f5de0b.crm.dynamics.com",
+    "sites": [
+      {
+        "id": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+        "name": "Decades Management System"
+      }
+    ]
+  }
+]

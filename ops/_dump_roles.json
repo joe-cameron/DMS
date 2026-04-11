@@ -1,0 +1,68 @@
+[
+  {
+    "mspp_modifiedon": "2026-03-24T12:37:33Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "b69bbf57-2186-4e72-94c3-55415bb48927",
+    "mspp_createdon": "2026-03-09T13:02:45Z",
+    "mspp_name": "Administrators",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  },
+  {
+    "mspp_modifiedon": "2026-03-09T18:39:13Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "32993d47-be1b-f111-8341-7ced8d709731",
+    "mspp_createdon": "2026-03-09T13:45:51Z",
+    "mspp_name": "DCFG_Admin",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  },
+  {
+    "mspp_modifiedon": "2026-03-09T13:45:53Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "35993d47-be1b-f111-8341-7ced8d709731",
+    "mspp_createdon": "2026-03-09T13:45:53Z",
+    "mspp_name": "DCFG_Manager",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  },
+  {
+    "mspp_modifiedon": "2026-03-09T13:45:56Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "38993d47-be1b-f111-8341-7ced8d709731",
+    "mspp_createdon": "2026-03-09T13:45:56Z",
+    "mspp_name": "DCFG_Viewer",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  },
+  {
+    "mspp_modifiedon": "2026-03-24T12:37:33Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "ae785cc2-54bb-400e-b0be-b448ea923352",
+    "mspp_createdon": "2026-03-09T13:02:46Z",
+    "mspp_name": "Authenticated Users",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  },
+  {
+    "mspp_modifiedon": "2026-03-24T12:37:33Z",
+    "statecode": 0,
+    "_mspp_createdby_value": "e60569a6-6114-f111-8341-002248047293",
+    "statuscode": 1,
+    "mspp_webroleid": "3d05ee72-2d60-43ff-8cb3-e5d38b411858",
+    "mspp_createdon": "2026-03-09T13:02:46Z",
+    "mspp_name": "Anonymous Users",
+    "_mspp_modifiedby_value": "e60569a6-6114-f111-8341-002248047293",
+    "_mspp_websiteid_value": "a150bd53-7fbc-423d-a1ad-dd653ab4c435"
+  }
+]

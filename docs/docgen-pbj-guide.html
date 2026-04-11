@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DCFG DocGen — PB&J Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans','Segoe UI',sans-serif;background:#f8fafc;color:#1B2A4A;line-height:1.6}
+.page{max-width:900px;margin:0 auto;padding:24px 20px 80px}
+h1{font-family:'Fraunces',serif;font-size:28px;color:#1B2A4A;margin-bottom:4px}
+.sub{font-size:13px;color:#8695AA;margin-bottom:32px}
+.toc{background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px 24px;margin-bottom:36px}
+.toc h2{font-size:15px;color:#2E5295;margin-bottom:10px}
+.toc a{display:block;padding:4px 0;font-size:13px;color:#2E5295;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.toc .indent{padding-left:20px;font-size:12px;color:#8695AA}
+
+/* Category banner */
+.cat{background:#1B2A4A;color:#fff;padding:12px 20px;border-radius:8px;font-size:16px;font-weight:700;margin:40px 0 16px;letter-spacing:.5px}
+.cat.amber{background:linear-gradient(135deg,#C4A24C,#8A6B12)}
+.cat.green{background:linear-gradient(135deg,#2D8659,#1a5c3a)}
+.cat.blue{background:linear-gradient(135deg,#2E5295,#1B2A4A)}
+
+/* Doc type section */
+.doc{background:#fff;border:1px solid #D4D9E2;border-radius:10px;margin-bottom:20px;overflow:hidden}
+.doc-head{padding:16px 20px;border-bottom:1px solid #e8ecf1;display:flex;align-items:center;gap:12px;cursor:pointer}
+.doc-head:hover{background:#fafbfc}
+.doc-name{font-weight:700;font-size:15px;flex:1}
+.doc-file{font-size:11px;color:#8695AA;font-family:'IBM Plex Mono','Consolas',monospace}
+.doc-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px}
+.badge-wo{background:#EDF1F8;color:#2E5295}
+.badge-amend{background:#FFF8E7;color:#8A6B12}
+.badge-msa{background:#E8F5EE;color:#2D8659}
+.badge-exhibit{background:#F3E8FF;color:#6B21A8}
+.badge-proposal{background:#FEE2E2;color:#991B1B}
+
+.doc-body{padding:0 20px 20px}
+
+/* Steps */
+.steps{counter-reset:step;padding:16px 0 0}
+.step{position:relative;padding:0 0 16px 48px;border-left:2px solid #D4D9E2;margin-left:15px}
+.step:last-child{border-left-color:transparent;padding-bottom:0}
+.step::before{counter-increment:step;content:counter(step);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:#2E5295;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step.done::before{background:#2D8659}
+.step-title{font-weight:700;font-size:13px;color:#1B2A4A;margin-bottom:2px}
+.step-detail{font-size:12px;color:#3D5080}
+.step-detail code{background:#EDF1F8;padding:1px 6px;border-radius:3px;font-size:11px;font-family:'IBM Plex Mono','Consolas',monospace;color:#2E5295}
+.step-detail .warn{color:#C4A24C;font-weight:600}
+.step-detail .crit{color:#C0392B;font-weight:600}
+.step-detail ul{margin:4px 0 0 16px}
+.step-detail li{margin-bottom:2px}
+
+/* Flow section */
+.flow-box{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:8px;padding:14px 18px;margin:12px 0 0}
+.flow-box h4{font-size:12px;color:#2E5295;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.flow-box p{font-size:12px;color:#3D5080;margin-bottom:4px}
+
+/* What happens behind the scenes */
+.behind{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin:12px 0 0}
+.behind h4{font-size:12px;color:#8A6B12;margin-bottom:6px}
+.behind p{font-size:12px;color:#78716c}
+
+/* Where it ends up */
+.result{background:#E8F5EE;border:1px solid #a7f3d0;border-radius:8px;padding:14px 18px;margin:12px 0 0}
+.result h4{font-size:12px;color:#2D8659;margin-bottom:6px}
+.result p{font-size:12px;color:#3D5080}
+
+/* Shared prereqs */
+.prereq{background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:16px 20px;margin-bottom:24px}
+.prereq h3{font-size:14px;color:#1B2A4A;margin-bottom:8px}
+.prereq ul{font-size:13px;padding-left:20px}
+.prereq li{margin-bottom:4px}
+
+/* Toggle */
+.toggle{font-size:11px;color:#8695AA;float:right;font-weight:400}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>DCFG DocGen — PB&amp;J Guide</h1>
+<p class="sub">Every document type, start to finish. No steps skipped. Like making a sandwich.</p>
+
+<!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
+<div class="toc">
+<h2>Document Types</h2>
+<a href="#prereq">Before You Start (Every Time)</a>
+<a href="#contracts">Work Orders &amp; Amendments</a>
+<a href="#wo-decades" class="indent">Decades Work Order</a>
+<a href="#wo-bancroft" class="indent">Bancroft Work Order</a>
+<a href="#wo-blanket" class="indent">Bancroft Blanket Work Order</a>
+<a href="#amend-decades" class="indent">Decades Amendment</a>
+<a href="#amend-bancroft" class="indent">Bancroft Amendment</a>
+<a href="#amend-blanket" class="indent">Bancroft Blanket Amendment</a>
+<a href="#proposals">New Customer Proposals (MSA + Exhibits)</a>
+<a href="#proposal-full" class="indent">Full Proposal Package</a>
+<a href="#exhibits">Exhibits (generated with proposals)</a>
+<a href="#exh-a" class="indent">Exhibit A — Service Package (A/B/C)</a>
+<a href="#exh-b" class="indent">Exhibit B — Location List</a>
+<a href="#exh-c" class="indent">Exhibit C — Fee Schedule</a>
+<a href="#exh-d" class="indent">Exhibit D — Insurance Requirements</a>
+<a href="#msa-standalone">Standalone MSA</a>
+<a href="#whathappens">What Happens Behind the Scenes</a>
+</div>
+
+<!-- ═══════════════ PREREQUISITES ═══════════════ -->
+<div id="prereq" class="prereq">
+<h3>Before You Start (Every Time)</h3>
+<ul>
+<li><strong>Log in</strong> to the DCFG portal (dcfg.powerappsportals.com)</li>
+<li><strong>Customer must exist</strong> — if new, you'll create them in the wizard</li>
+<li><strong>Vendor must exist</strong> — if not, add via Admin > Vendors first</li>
+<li><strong>Location must exist</strong> — if not, add via Locations screen or in wizard</li>
+<li><strong>Template must be active</strong> — check Admin > Templates if generation fails</li>
+<li><strong>You'll need:</strong> customer name, vendor name, location, start/end dates, fee amount, description of work</li>
+</ul>
+</div>
+
+<!-- ═══════════════ WORK ORDERS & AMENDMENTS ═══════════════ -->
+<div class="cat" id="contracts">WORK ORDERS &amp; AMENDMENTS</div>
+<p style="font-size:13px;color:#3D5080;margin-bottom:16px">All use the <strong>New Contract Wizard</strong> — same 5 steps, different doc type selection at Step 2.</p>
+
+<!-- Decades Work Order -->
+<div class="doc" id="wo-decades">
+<div class="doc-head">
+  <span class="doc-name">Decades Work Order</span>
+  <span class="doc-badge badge-wo">Work Order</span>
+  <span class="doc-file">Decades_Work_Order.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Go to Contracts > New > Work Order</div>
+    <div class="step-detail">Or click <code>+ New</code> button on contracts list, pick "Work Order"</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 1 — Pick the Customer</div>
+    <div class="step-detail">Search by name. Select. Their programs and locations load automatically.<br>
+    <span class="warn">Family is auto-detected</span> — Decades customers get Decades templates.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 2 — Document Type</div>
+    <div class="step-detail">
+      <ul>
+        <li>Type: <strong>Work Order</strong> (already selected)</li>
+        <li>Pick the <strong>Location</strong> (property)</li>
+        <li>Pick the <strong>Vendor</strong></li>
+        <li>Set <strong>Start Date</strong> and <strong>End Date</strong></li>
+        <li>Enter <strong>Description of Work</strong></li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 3 — Contractor &amp; Signer</div>
+    <div class="step-detail">Vendor details auto-fill from vendor record. Enter or confirm:
+      <ul>
+        <li><strong>Signer name</strong> and <strong>title</strong> (who signs for the vendor)</li>
+        <li><strong>Owner contact</strong> — name, title, email (who signs for the customer)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 4 — Exhibit A Lines</div>
+    <div class="step-detail">Add line items:
+      <ul>
+        <li><strong>Cost code</strong> (dropdown)</li>
+        <li><strong>Description</strong></li>
+        <li><strong>Amount</strong> ($)</li>
+      </ul>
+      Total auto-calculates. Add as many lines as needed.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 5 — Review &amp; Generate</div>
+    <div class="step-detail">Review all details. Click <strong>"Generate Document"</strong>.<br>
+    <span class="warn">Wait for the spinner.</span> It polls up to 30 seconds.<br>
+    <ul>
+      <li>Green toast = success. Click the link to open the document.</li>
+      <li>Yellow toast = submitted but still processing. Check contract detail later.</li>
+      <li>Red toast = failed. Check flow history.</li>
+    </ul>
+    </div>
+  </div>
+</div>
+<div class="behind">
+  <h4>What happens when you click Generate</h4>
+  <p>1. Contract record created/updated in Dataverse (dcfg_contracts)</p>
+  <p>2. Line items saved (dcfg_contract_lines)</p>
+  <p>3. Template resolved — system finds "Decades_Work_Order" template by family + type</p>
+  <p>4. Document request written to dcfg_document_requests (status: Pending)</p>
+  <p>5. Flow triggers automatically on new row</p>
+  <p>6. Flow reads contract + vendor + customer + property, builds token map, populates Word template</p>
+  <p>7. Output saved to SharePoint (DCFG_Outputs/CustomerName/Year/WorkOrder/)</p>
+  <p>8. Document request updated to Complete with output URL</p>
+</div>
+<div class="result">
+  <h4>Where it ends up</h4>
+  <p><strong>SharePoint:</strong> DCFG_Outputs > [Customer Name] > [Year] > WorkOrder</p>
+  <p><strong>Contract Detail:</strong> Document link appears on the contract record</p>
+</div>
+</div>
+</div>
+
+<!-- Bancroft Work Order -->
+<div class="doc" id="wo-bancroft">
+<div class="doc-head">
+  <span class="doc-name">Bancroft Work Order</span>
+  <span class="doc-badge badge-wo">Work Order</span>
+  <span class="doc-file">Bancroft_Work_Order.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Same 5 steps as Decades Work Order</div>
+    <div class="step-detail">The <strong>only difference</strong>: pick a <strong>Bancroft/TPA customer</strong> at Step 1.<br>
+    System auto-detects the family and picks the Bancroft template.<br>
+    <span class="warn">If the contract fee is under the blanket threshold, the system uses the Blanket template instead.</span></div>
+  </div>
+</div>
+<div class="behind">
+  <h4>Template resolution</h4>
+  <p>TPA customer + Work Order type + fee OVER threshold = <code>Bancroft_Work_Order.docx</code></p>
+  <p>TPA customer + Work Order type + fee UNDER threshold = <code>BANCROFT_BLANKET_WORKORDER_TEMPLATE.docx</code></p>
+  <p>Threshold set per customer in dcfg_blanket_workorders table.</p>
+</div>
+</div>
+</div>
+
+<!-- Bancroft Blanket Work Order -->
+<div class="doc" id="wo-blanket">
+<div class="doc-head">
+  <span class="doc-name">Bancroft Blanket Work Order</span>
+  <span class="doc-badge badge-wo">Work Order</span>
+  <span class="doc-file">BANCROFT_BLANKET_WORKORDER_TEMPLATE.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Same wizard, automatic selection</div>
+    <div class="step-detail">You don't manually choose "blanket" — the system routes to this template when:<br>
+      <ul>
+        <li>Customer is TPA (Bancroft family)</li>
+        <li>Contract fee is <strong>at or below</strong> the blanket dollar threshold</li>
+      </ul>
+      <span class="crit">Same 22 fields as standard Bancroft WO.</span> Identical user experience.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Decades Amendment -->
+<div class="doc" id="amend-decades">
+<div class="doc-head">
+  <span class="doc-name">Decades Work Order Amendment</span>
+  <span class="doc-badge badge-amend">Amendment</span>
+  <span class="doc-file">Decades_Work_Order_Amendment.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Go to Contracts > New > Amendment</div>
+    <div class="step-detail">Or click <code>+ New</code> > "Amendment"</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 1 — Pick the Customer</div>
+    <div class="step-detail">Same as Work Order.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 2 — Document Type: Amendment</div>
+    <div class="step-detail">
+      <ul>
+        <li>Type: <strong>Amendment</strong></li>
+        <li><strong>Select the parent Work Order</strong> — search by customer + location + vendor</li>
+        <li>Vendor and location <strong>auto-fill from parent WO</strong></li>
+        <li>Enter <strong>Amendment Number</strong> (sequence: 1, 2, 3...)</li>
+        <li>Set new <strong>Start Date</strong>, <strong>End Date</strong></li>
+        <li>Enter updated <strong>Description of Work</strong> and <strong>Description of Service</strong></li>
+      </ul>
+      <span class="warn">Users don't know WO numbers.</span> Identify parent by customer + location + vendor + date.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Steps 3-5 — Same as Work Order</div>
+    <div class="step-detail">Signer, Exhibit A lines, Review &amp; Generate. Amendment has 2 extra fields: <code>contract_po_number</code> and <code>contract_work_category</code>.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Bancroft Amendment -->
+<div class="doc" id="amend-bancroft">
+<div class="doc-head">
+  <span class="doc-name">Bancroft Work Order Amendment</span>
+  <span class="doc-badge badge-amend">Amendment</span>
+  <span class="doc-file">Bancroft_Work_Order_Amendment.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Same as Decades Amendment</div>
+    <div class="step-detail">Pick a <strong>Bancroft/TPA customer</strong>. System selects Bancroft amendment template. 24 fields.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Bancroft Blanket Amendment -->
+<div class="doc" id="amend-blanket">
+<div class="doc-head">
+  <span class="doc-name">Bancroft Blanket Work Order Amendment</span>
+  <span class="doc-badge badge-amend">Amendment</span>
+  <span class="doc-file">Bancroft_Blanket_Work_Order_Amendment.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Same wizard, automatic selection</div>
+    <div class="step-detail">Routes to blanket amendment template when TPA customer + fee under threshold. Same 24 fields.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ PROPOSALS ═══════════════ -->
+<div class="cat amber" id="proposals">NEW CUSTOMER PROPOSALS (MSA + EXHIBITS)</div>
+<p style="font-size:13px;color:#3D5080;margin-bottom:16px">Uses the <strong>New Proposal Wizard</strong> — creates an MSA record + rates + locations, then generates the full document package.</p>
+
+<div class="doc" id="proposal-full">
+<div class="doc-head">
+  <span class="doc-name">Full Proposal Package</span>
+  <span class="doc-badge badge-proposal">Proposal</span>
+  <span class="doc-file">MSA + Exhibits A, B, C, D</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Go to Proposals > New Proposal</div>
+    <div class="step-detail">Opens the 4-step Proposal Wizard. <span class="warn">Decades family only.</span></div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 1 — Service Package</div>
+    <div class="step-detail">Pick one:
+      <ul>
+        <li><strong>Package A</strong> — Essential (basic maintenance)</li>
+        <li><strong>Package B</strong> — Extended (full-service + seasonal)</li>
+        <li><strong>Package C</strong> — Premium (all-inclusive + specialty)</li>
+      </ul>
+      This determines which Exhibit A template is used.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 2 — Customer &amp; Vendor</div>
+    <div class="step-detail">
+      <strong>Customer:</strong> Search existing OR create new. Fill in:
+      <ul>
+        <li>Name, contact, email, phone, title</li>
+        <li>Signer name + title (who signs for customer)</li>
+        <li>Billing address (street, city, state, zip)</li>
+      </ul>
+      <strong>MSA details:</strong>
+      <ul>
+        <li>MSA name (auto-generates from customer name)</li>
+        <li>Effective date</li>
+      </ul>
+      <strong>Vendor:</strong> Pre-filled with Decades info. Enter vendor signer name + title.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 3 — Pricing &amp; Locations</div>
+    <div class="step-detail">
+      <strong>Pricing mode:</strong>
+      <ul>
+        <li><strong>Uniform</strong> — one rate for all location types</li>
+        <li><strong>Type-based</strong> — different rate per location type (e.g., office vs warehouse)</li>
+      </ul>
+      Enter <strong>monthly membership rate</strong> and <strong>onboarding fee</strong> per location (or per type).<br>
+      Enter <strong>service fee %</strong>.<br><br>
+      <strong>Locations:</strong> Add each property/location with name, type, address.<br>
+      <span class="warn">Admin locations are $0 — system zeros them automatically.</span><br>
+      Totals calculate live: monthly total, annual membership, total onboarding, total contract value.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Step 4 — Review &amp; Generate</div>
+    <div class="step-detail">Review everything. Click <strong>"Generate Proposal"</strong>.<br><br>
+    <strong>What happens in order:</strong>
+      <ol style="margin:4px 0 0 16px">
+        <li>Customer created (if new)</li>
+        <li>MSA record created in Dataverse</li>
+        <li>MSA Rates created (one per location type)</li>
+        <li>Template resolved by package (A/B/C)</li>
+        <li>Document request submitted</li>
+        <li>Flow generates the document</li>
+        <li>Polls up to 90 seconds for result</li>
+      </ol>
+    <span class="warn">Wait for the spinner.</span> Proposal generation takes longer than WOs.
+    </div>
+  </div>
+</div>
+<div class="flow-box">
+  <h4>Current State vs. Future State</h4>
+  <p><strong>Today:</strong> Generates one document per request. Each exhibit is a separate flow run.</p>
+  <p><strong>Future (Send Pipeline):</strong> Submit for approval > approver initiates > system generates ALL docs (MSA + all Exhibits) > PDF > merge > send as one package.</p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ EXHIBITS ═══════════════ -->
+<div class="cat green" id="exhibits">EXHIBITS (Generated with Proposals)</div>
+<p style="font-size:13px;color:#3D5080;margin-bottom:16px">Exhibits are MSA attachments. Today each is a separate document request. Future: all generated together in one send action.</p>
+
+<!-- Exhibit A -->
+<div class="doc" id="exh-a">
+<div class="doc-head">
+  <span class="doc-name">Exhibit A — Service Package</span>
+  <span class="doc-badge badge-exhibit">Exhibit</span>
+  <span class="doc-file">3 variants: A, B, C</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Template selected by package choice</div>
+    <div class="step-detail">
+      <ul>
+        <li>Package A (Essential) → <code>Exhibit_A_Basic_Platform_Package_A.docx</code></li>
+        <li>Package B (Extended) → <code>Exhibit_A_Concierge_Package_B.docx</code></li>
+        <li>Package C (Premium) → <code>Exhibit_A_Optimized_Package_C.docx</code></li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">8 fields populated from MSA + Customer</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>contract_client_name</code> — customer name</li>
+        <li><code>contract_contractor_legal_name</code> — vendor legal name</li>
+        <li><code>contract_owner_city</code>, <code>contract_owner_street</code> — customer address</li>
+        <li><code>contract_owner_title</code> — customer signer title</li>
+        <li><code>customer_president_name</code> — customer signer name</li>
+        <li><code>msa_effective_date</code>, <code>msa_expiration_date</code> — MSA dates</li>
+      </ul>
+      <span class="warn">All 3 variants use the same 8 fields.</span> Only the template body differs.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Flow Switch case names</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>Decades_Exhibit_A_Basic_A</code></li>
+        <li><code>Decades_Exhibit_A_Concierge_B</code></li>
+        <li><code>Decades_Exhibit_A_Optimized_C</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Exhibit B -->
+<div class="doc" id="exh-b">
+<div class="doc-head">
+  <span class="doc-name">Exhibit B — Location List</span>
+  <span class="doc-badge badge-exhibit">Exhibit</span>
+  <span class="doc-file">Exhibit_B_Location_List.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">3 fields only</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>contract_client_name</code></li>
+        <li><code>property_name</code></li>
+        <li><code>msa_effective_date</code></li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Location rows are NOT auto-populated</div>
+    <div class="step-detail"><span class="crit">Variable row count.</span> Word Online can't populate repeating sections.<br><br>
+    <strong>Path A:</strong> Flow fills scalar fields, user opens in Word Online and manually adds location rows.<br>
+    <strong>Path B:</strong> User pastes from Excel into the Word document after generation.<br>
+    Flow Switch case: <code>Decades_Exhibit_B_Location_List</code>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Exhibit C -->
+<div class="doc" id="exh-c">
+<div class="doc-head">
+  <span class="doc-name">Exhibit C — Fee Schedule</span>
+  <span class="doc-badge badge-exhibit">Exhibit</span>
+  <span class="doc-file">Exhibit_C_Fee_Schedule.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">7 fields — includes computed rates</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>contract_client_name</code></li>
+        <li><code>msa_effective_date</code></li>
+        <li><code>membership_qty</code> — number of billable locations</li>
+        <li><code>membership_rate</code> — monthly rate per location</li>
+        <li><code>onboarding_qty</code> — number of locations being onboarded</li>
+        <li><code>onboarding_rate</code> — one-time fee per location</li>
+        <li><code>onboarding_total</code> — qty x rate</li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Rates come from dcfg_msa_rates</div>
+    <div class="step-detail">The flow queries <code>dcfg_msa_rates</code> by MSA ID to get membership and onboarding rates.<br>
+    These rates were created in Step 3 of the Proposal Wizard.<br>
+    Flow Switch case: <code>Decades_Exhibit_C_Fee_Schedule</code>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Exhibit D -->
+<div class="doc" id="exh-d">
+<div class="doc-head">
+  <span class="doc-name">Exhibit D — Insurance Requirements</span>
+  <span class="doc-badge badge-exhibit">Exhibit</span>
+  <span class="doc-file">Exhibit_D_Insurance_Requirements.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">2 fields — simplest document</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>contract_client_name</code></li>
+        <li><code>contract_contractor_legal_name</code></li>
+      </ul>
+      Flow Switch case: <code>Decades_Exhibit_D_Insurance</code><br>
+      This is essentially a cover page. The insurance requirements themselves are static template content.
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ STANDALONE MSA ═══════════════ -->
+<div class="cat blue" id="msa-standalone">STANDALONE MSA</div>
+
+<div class="doc">
+<div class="doc-head">
+  <span class="doc-name">Decades Management Services Agreement</span>
+  <span class="doc-badge badge-msa">MSA</span>
+  <span class="doc-file">Decades_Management_Services_Agreement.docx</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">Created via Proposal Wizard (Step 4)</div>
+    <div class="step-detail">The MSA document is generated as part of the proposal flow.<br>
+    It can also be regenerated from the <strong>MSA Detail</strong> screen if needed.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">8 fields</div>
+    <div class="step-detail">
+      <ul>
+        <li><code>contract_client_name</code>, <code>contract_contractor_legal_name</code></li>
+        <li><code>contract_owner_city</code>, <code>contract_owner_street</code>, <code>contract_owner_title</code></li>
+        <li><code>customer_president_name</code></li>
+        <li><code>msa_effective_date</code>, <code>msa_expiration_date</code></li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-title">Flow Switch case: <code>Decades_Management_Services_Agreement</code></div>
+    <div class="step-detail">Same 8 fields as Exhibit A variants. MSA is the master agreement; Exhibits are attachments to it.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ BEHIND THE SCENES ═══════════════ -->
+<div class="cat" id="whathappens" style="background:linear-gradient(135deg,#334155,#1e293b)">THE ENGINE — What Happens Behind the Scenes</div>
+
+<div class="doc">
+<div class="doc-head">
+  <span class="doc-name">The DocGen v2 Flow — Every Document, Same Engine</span>
+</div>
+<div class="doc-body">
+<div class="steps">
+  <div class="step">
+    <div class="step-title">SPA writes a row to dcfg_document_requests</div>
+    <div class="step-detail">Status: Pending. Contains: request type, template ID, contract/MSA ID, requested by.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Dataverse trigger fires the flow</div>
+    <div class="step-detail">Flow ID: <code>ada6473f-d528-f111-8341-7ced8d709173</code><br>
+    Trigger: "When a row is added" on dcfg_document_requests.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Flow reads the template record</div>
+    <div class="step-detail">Gets <code>dcfg_name</code> from the template — this is the Switch case value.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Flow reads source data</div>
+    <div class="step-detail">Depending on doc type: contract + vendor + customer + property + MSA + MSA rates.<br>
+    All data gathered into a <code>Build_Token_Map</code> Compose action.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Switch_Template routes to the right Populate action</div>
+    <div class="step-detail">13 cases, one per template. Each case has a "Populate a Microsoft Word template" action.<br>
+    The Populate action maps token map values → Word content controls.</div>
+  </div>
+  <div class="step">
+    <div class="step-title">Populated document saved to SharePoint</div>
+    <div class="step-detail">Output path: <code>DCFG_Outputs/[Customer]/[Year]/[DocType]/</code></div>
+  </div>
+  <div class="step">
+    <div class="step-title">Document request updated to Complete</div>
+    <div class="step-detail"><code>dcfg_status</code> → Complete (100000002), <code>dcfg_output_file_url</code> → SharePoint link.<br>
+    SPA picks up the URL on next poll and shows the download link.</div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+</body></html>

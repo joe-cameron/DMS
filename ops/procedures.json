@@ -1,0 +1,624 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "updated": "2026-03-24",
+    "description": "General DevOps procedures for Power Pages Enhanced Data Model portals. Platform knowledge — not project-specific. Consumed by agents and scripts.",
+    "principle": "Never guess when the trail to a successful resolution has already been discovered."
+  },
+
+  "operations": {
+
+    "setTablePermission": {
+      "id": "setTablePermission",
+      "category": "tablePermissions",
+      "description": "Create or update a table permission with role links that the portal runtime actually enforces.",
+      "primary": {
+        "method": "New-Record to mspp_entitypermissions + PATCH powerpagecomponent content JSON with adx_entitypermission_webrole array",
+        "steps": [
+          {
+            "order": 1,
+            "action": "createPermission",
+            "description": "POST to mspp_entitypermissions. This also creates a powerpagecomponent type=18 record with the same ID.",
+            "api": "New-Record -setName 'mspp_entitypermissions'",
+            "requiredFields": ["mspp_entityname", "mspp_entitylogicalname", "mspp_scope", "mspp_read", "mspp_write", "mspp_create", "mspp_delete", "mspp_append", "mspp_appendto", "mspp_websiteid@odata.bind"],
+            "scopeValues": { "global": 756150000, "contact": 756150001, "account": 756150002, "parent": 756150003 },
+            "notes": "The mspp_entitypermissions record and powerpagecomponent type=18 record share the same GUID."
+          },
+          {
+            "order": 2,
+            "action": "patchContentJsonWithRoles",
+            "description": "PATCH the powerpagecomponent content JSON to include adx_entitypermission_webrole array. This is the CRITICAL step — without it the portal returns 403.",
+            "api": "Update-Record -setName 'powerpagecomponents' -id {permId} -body @{ content = '{...}' }",
+            "contentJsonSchema": {
+              "read": "boolean",
+              "write": "boolean",
+              "create": "boolean",
+              "delete": "boolean",
+              "append": "boolean",
+              "appendto": "boolean",
+              "scope": "integer (756150000=Global)",
+              "entityname": "string (logical table name)",
+              "entitylogicalname": "string (same as entityname)",
+              "adx_entitypermission_webrole": "array of role GUIDs (mspp_webrole IDs)",
+              "filecontent": "null (optional)",
+              "parentrelationship": "null or string (for Parent scope)",
+              "parententitypermission": "null or GUID (for Parent scope)",
+              "contactrelationship": "null or string (for Contact scope)",
+              "accountrelationship": "null or string (for Account scope)",
+              "childTablePermissions": "array (usually empty)",
+              "permissionfetchxml": "null or string"
+            },
+            "notes": "The portal runtime reads role links from this JSON, NOT from the mspp_entitypermission_webrole intersection table."
+          }
+        ],
+        "verified": "2026-03-24",
+        "verifiedBy": "Playwright E2E test against dcfg.powerappsportals.com",
+        "confidence": 1.0,
+        "avgDurationMs": 1500
+      },
+      "fallbacks": [
+        {
+          "id": "fallback-delete-recreate",
+          "trigger": "Update-Record PATCH fails on powerpagecomponent",
+          "method": "DELETE the mspp_entitypermission, then re-CREATE with correct values. The powerpagecomponent is auto-recreated.",
+          "steps": [
+            "Read current permission state",
+            "Read current role links from content JSON",
+            "DELETE mspp_entitypermissions({id})",
+            "New-Record with updated flags",
+            "PATCH new powerpagecomponent content JSON with role links"
+          ],
+          "confidence": 0.95,
+          "notes": "WARNING: After deleting/recreating ANY permission, verify ALL other permissions still have their role links. See engineering journal section 20."
+        },
+        {
+          "id": "fallback-direct-ppc-patch",
+          "trigger": "mspp_entitypermissions New-Record fails",
+          "method": "Create the powerpagecomponent type=18 record directly with full content JSON including roles.",
+          "steps": [
+            "New-Record -setName 'powerpagecomponents' with powerpagecomponenttype=18, content JSON with all fields + adx_entitypermission_webrole array, powerpagesiteid bind"
+          ],
+          "confidence": 0.80,
+          "notes": "Not fully tested. The mspp_entitypermissions view may not pick it up."
+        }
+      ],
+      "verification": {
+        "primary": {
+          "method": "portalApiCall",
+          "description": "Call /_api/{entitySet} from an authenticated portal session. 200 = working, 403 = not enforced.",
+          "requires": "Authenticated browser session (Playwright or manual)",
+          "confidence": 1.0
+        },
+        "secondary": {
+          "method": "contentJsonCheck",
+          "description": "GET powerpagecomponents({id}), parse content JSON, verify adx_entitypermission_webrole array contains expected role GUIDs.",
+          "api": "GET /powerpagecomponents({id})?$select=content",
+          "confidence": 0.95,
+          "notes": "Confirms the data is set correctly but doesn't prove the portal has picked it up (cache may be stale)."
+        },
+        "doNotUse": {
+          "method": "intersectionTableQuery",
+          "description": "Query mspp_entitypermission_webroleset — this shows intersection records exist but the portal IGNORES these. Not a valid verification.",
+          "reason": "Portal reads from powerpagecomponent content JSON, not intersection table."
+        },
+        "doNotUse2": {
+          "method": "navigationProperty",
+          "description": "GET mspp_entitypermissions({id})/mspp_entitypermission_webrole — always returns 0 results due to platform bug.",
+          "reason": "Known platform limitation. N:N navigation on this relationship is broken."
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "403 Forbidden on /_api/{entitySet} even though mspp_entitypermission exists",
+          "cause": "powerpagecomponent content JSON missing adx_entitypermission_webrole array",
+          "fix": "PATCH content JSON to include role GUIDs",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "Raw PATCH to mspp_entitypermissions fails with 'key not present in dictionary' (0x80040224)",
+          "cause": "mspp_entitypermissions is a virtual table that doesn't support standard PATCH",
+          "fix": "Use Update-Record helper (handles encoding) OR PATCH the underlying powerpagecomponent content JSON",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "N:N navigation mspp_entitypermission_webrole returns 0 results",
+          "cause": "Platform bug — navigation property broken on this N:N relationship",
+          "fix": "Query mspp_entitypermission_webroleset directly to verify intersection records, but note this is NOT what the portal uses",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "$ref POST succeeds silently but portal still returns 403",
+          "cause": "$ref creates intersection table records but portal reads content JSON instead",
+          "fix": "Always PATCH the powerpagecomponent content JSON — $ref alone is insufficient",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "Deleting one permission unlinks ALL permissions",
+          "cause": "N:N relationships stored in a way that modifying permission table can cascade",
+          "fix": "After ANY permission delete/recreate, re-run full role-linking for ALL permissions and clear cache",
+          "discovered": "2026-03-18",
+          "confidence": 0.90
+        }
+      ]
+    },
+
+    "updatePermissionFlags": {
+      "id": "updatePermissionFlags",
+      "category": "tablePermissions",
+      "description": "Change CRUD flags on an existing table permission.",
+      "primary": {
+        "method": "PATCH powerpagecomponent content JSON directly",
+        "steps": [
+          {
+            "order": 1,
+            "action": "readCurrentContent",
+            "description": "GET the powerpagecomponent record, parse content JSON",
+            "api": "GET /powerpagecomponents({id})?$select=content"
+          },
+          {
+            "order": 2,
+            "action": "patchContent",
+            "description": "Modify the flags in the parsed JSON, serialize back, PATCH",
+            "api": "Update-Record -setName 'powerpagecomponents' -id {id} -body @{ content = '{...}' }",
+            "notes": "Keys in content JSON are: read, write, create, delete, append, appendto (NO mspp_ prefix)"
+          }
+        ],
+        "verified": "2026-03-24",
+        "confidence": 1.0
+      },
+      "fallbacks": [
+        {
+          "id": "fallback-update-record-mspp",
+          "trigger": "powerpagecomponent PATCH fails",
+          "method": "Update-Record -setName 'mspp_entitypermissions' — the helper function handles encoding that raw PATCH cannot",
+          "confidence": 0.90,
+          "notes": "This updates the mspp_ virtual table but may not sync to content JSON. Always verify content JSON afterward."
+        }
+      ],
+      "verification": {
+        "primary": {
+          "method": "Read back content JSON and verify flags match expected values",
+          "api": "GET /powerpagecomponents({id})?$select=content"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "Raw Invoke-RestMethod -Method PATCH on mspp_entitypermissions fails",
+          "cause": "Virtual table encoding issue",
+          "fix": "Use Update-Record helper or PATCH powerpagecomponent content JSON directly",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        }
+      ]
+    },
+
+    "createSiteSetting": {
+      "id": "createSiteSetting",
+      "category": "siteSettings",
+      "description": "Create a Web API site setting (enabled + fields) for a table.",
+      "primary": {
+        "method": "New-Record to powerpagecomponents with type=9",
+        "steps": [
+          {
+            "order": 1,
+            "action": "checkExists",
+            "description": "Query for existing setting to ensure idempotency",
+            "api": "Get-Records -setName 'powerpagecomponents' -query \"?$filter=_powerpagesiteid_value eq {siteId} and powerpagecomponenttype eq 9 and name eq '{settingName}'\""
+          },
+          {
+            "order": 2,
+            "action": "createEnabled",
+            "description": "Create Webapi/{table}/enabled setting",
+            "api": "New-Record -setName 'powerpagecomponents'",
+            "body": {
+              "name": "Webapi/{tableName}/enabled",
+              "powerpagecomponenttype": 9,
+              "content": "{\"value\":\"true\"}",
+              "powerpagesiteid@odata.bind": "/powerpagesites({siteId})"
+            },
+            "notes": "content must be JSON string with value key: {\"value\":\"true\"}, NOT just 'true'"
+          },
+          {
+            "order": 3,
+            "action": "createFields",
+            "description": "Create Webapi/{table}/fields setting",
+            "body": {
+              "name": "Webapi/{tableName}/fields",
+              "powerpagecomponenttype": 9,
+              "content": "{\"value\":\"*\"}",
+              "powerpagesiteid@odata.bind": "/powerpagesites({siteId})"
+            },
+            "notes": "Use * for all fields, or comma-separated column names for specific fields"
+          }
+        ],
+        "verified": "2026-03-24",
+        "confidence": 1.0
+      },
+      "fallbacks": [],
+      "verification": {
+        "primary": {
+          "method": "Query powerpagecomponents for the setting and verify content",
+          "api": "Get-Records with filter on name and type=9"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "400 Bad Request on site setting creation with 'value' as a top-level field",
+          "cause": "powerpagecomponents does not have a 'value' column — the value goes inside the content JSON",
+          "fix": "Use content = '{\"value\":\"true\"}' not a separate value field",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        }
+      ]
+    },
+
+    "deployFlow": {
+      "id": "deployFlow",
+      "category": "flowDeployment",
+      "description": "Deploy or update a Power Automate cloud flow via the Dataverse workflows table.",
+      "primary": {
+        "method": "Three-step flow build process",
+        "steps": [
+          {
+            "order": 1,
+            "action": "pushPlaceholder",
+            "description": "Push flow definition with Compose actions replacing connection-dependent actions. This creates the flow shell.",
+            "api": "PATCH workflows({flowId}) with clientdata containing placeholder actions",
+            "notes": "NEVER overwrite the trigger — only replace actions."
+          },
+          {
+            "order": 2,
+            "action": "userAddsConnections",
+            "description": "MANUAL STEP: User opens flow in Power Automate designer, adds one action per connector type. This establishes the connection references.",
+            "requires": "Human interaction in Power Automate designer"
+          },
+          {
+            "order": 3,
+            "action": "pushFullDefinition",
+            "description": "Read back the connection format from the flow, then push full definition with real actions using the proven connection format.",
+            "api": "PATCH workflows({flowId}) clientdata with full actions"
+          }
+        ],
+        "verified": "2026-03-20",
+        "confidence": 0.95
+      },
+      "fallbacks": [
+        {
+          "id": "fallback-designer-only",
+          "trigger": "PATCH fails with ActiveUnpublished state (0x80040203)",
+          "method": "User must open flow in designer and Save or Discard, then retry PATCH",
+          "confidence": 1.0
+        }
+      ],
+      "verification": {
+        "primary": {
+          "method": "Query workflows table for statecode=1 (activated) and verify clientdata contains expected actions",
+          "api": "GET /workflows({id})?$select=statecode,name"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "0x80040203 — unpublished active row",
+          "cause": "Someone edited the flow in designer without saving",
+          "fix": "User must open flow and Save or Discard — no API workaround exists",
+          "discovered": "2026-03-20",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "Connection references have no connections after solution import",
+          "cause": "Solution import copies connectionreferences without connectionid values",
+          "fix": "User opens flow in designer to fix connections, OR swap connectionReferenceLogicalName to existing refs",
+          "discovered": "2026-03-19",
+          "confidence": 0.95
+        },
+        {
+          "symptom": "Word Online field mapping rejected by API",
+          "cause": "Fields use dynamicFileSchema/{contentControlId} — requires designer for initial setup",
+          "fix": "Have user map fields in designer first, then read back the proven format",
+          "discovered": "2026-03-20",
+          "confidence": 1.0
+        }
+      ]
+    },
+
+    "deploySPA": {
+      "id": "deploySPA",
+      "category": "spaDeployment",
+      "description": "Build and deploy the DCFG React SPA to Power Pages.",
+      "primary": {
+        "method": "npm build + pac pages upload",
+        "steps": [
+          {
+            "order": 1,
+            "action": "build",
+            "description": "Build the Vite React app",
+            "command": "cd {spaRoot} && npm run build",
+            "notes": "spaRoot is environment-specific — read from desired-state.json"
+          },
+          {
+            "order": 2,
+            "action": "upload",
+            "description": "Upload compiled assets to Power Pages",
+            "command": "pac pages upload-code-site --rootPath . --compiledPath dist --siteId {pacSiteId}",
+            "notes": "Uses pac CLI auth — ensure correct auth profile is selected"
+          },
+          {
+            "order": 3,
+            "action": "clearCache",
+            "description": "Clear portal cache so new assets are served",
+            "url": "https://{portalDomain}/_services/about?clearCache=true",
+            "notes": "Must be called from authenticated session. Can be done via browser or Playwright."
+          },
+          {
+            "order": 4,
+            "action": "provideLaunchUrls",
+            "description": "Give operator the portal URL and cache clear URL for verification",
+            "notes": "Always provide these after deploy — feedback rule"
+          }
+        ],
+        "verified": "2026-03-20",
+        "confidence": 1.0
+      },
+      "fallbacks": [
+        {
+          "id": "fallback-manifest-reset",
+          "trigger": "pac pages upload targets wrong site",
+          "method": "Delete .powerpages-site/.portalconfig/manifest.yml, re-run pac pages download with correct --webSiteId, then upload again",
+          "confidence": 0.95
+        }
+      ],
+      "verification": {
+        "primary": {
+          "method": "Navigate to portal URL in browser, verify SPA loads and shows current version",
+          "url": "https://{portalDomain}/#/dashboard"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "pac pages upload deploys to wrong site",
+          "cause": "Local manifest.yml locked to incorrect site from prior deploy or solution import",
+          "fix": "Delete manifest, pac pages download with --webSiteId {correctId}, then upload",
+          "discovered": "2026-03-19",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "SPA loads but shows old version after deploy",
+          "cause": "Portal cache not cleared",
+          "fix": "Hit /_services/about?clearCache=true from authenticated session",
+          "discovered": "2026-03-09",
+          "confidence": 1.0
+        }
+      ]
+    },
+
+    "promoteEnvironment": {
+      "id": "promoteEnvironment",
+      "category": "environmentPromotion",
+      "description": "Promote solution from test to stage/prod.",
+      "primary": {
+        "method": "PAC solution export + import + post-import cleanup",
+        "steps": [
+          {
+            "order": 1,
+            "action": "export",
+            "description": "Export solution from source environment",
+            "command": "pac solution export --name {solutionName} --path {exportPath} --overwrite"
+          },
+          {
+            "order": 2,
+            "action": "selectTargetAuth",
+            "description": "Switch pac auth to target environment",
+            "command": "pac auth select --index {targetPacIndex}"
+          },
+          {
+            "order": 3,
+            "action": "import",
+            "description": "Import solution to target",
+            "command": "pac solution import --path {exportPath} --publish-changes"
+          },
+          {
+            "order": 4,
+            "action": "cleanOrphans",
+            "description": "Delete orphan powerpagesites records created by import",
+            "api": "Query powerpagesites, delete any that aren't the real site",
+            "notes": "Solution import creates duplicate site records. These MUST be cleaned up before SPA deploy."
+          },
+          {
+            "order": 5,
+            "action": "verifyPermissions",
+            "description": "Check all table permission powerpagecomponent content JSONs still have adx_entitypermission_webrole arrays",
+            "notes": "Solution import can reset content JSON. Always verify."
+          },
+          {
+            "order": 6,
+            "action": "deploySPA",
+            "description": "Run deploySPA procedure against target environment"
+          },
+          {
+            "order": 7,
+            "action": "clearCache",
+            "description": "Clear portal cache on target"
+          }
+        ],
+        "verified": "2026-03-19",
+        "confidence": 0.90
+      },
+      "fallbacks": [],
+      "verification": {
+        "primary": {
+          "method": "Navigate to target portal, verify SPA loads, test one /_api/ call"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "Orphan powerpagesites after import",
+          "cause": "Solution contains powerpagesites references from source environment",
+          "fix": "Delete all orphan site records, keep only the real one",
+          "discovered": "2026-03-19",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "All permissions lose role links after import",
+          "cause": "Solution import can reset powerpagecomponent content JSON, dropping adx_entitypermission_webrole arrays",
+          "fix": "Re-run permission role-linking script against all tables",
+          "discovered": "2026-03-18",
+          "confidence": 0.90
+        }
+      ]
+    },
+
+    "monitorHealth": {
+      "id": "monitorHealth",
+      "category": "monitoring",
+      "description": "Run a Nora monitoring cycle — check audit logs, document requests, flow health.",
+      "primary": {
+        "method": "Execute nora-monitor.ps1",
+        "steps": [
+          {
+            "order": 1,
+            "action": "runMonitor",
+            "command": "pwsh -File C:\\DCFG\\nora\\nora-monitor.ps1"
+          },
+          {
+            "order": 2,
+            "action": "interpretResults",
+            "description": "Parse output for: stuck requests (>10min processing), inactive flows, error patterns in audit log"
+          },
+          {
+            "order": 3,
+            "action": "autoFix",
+            "description": "Nora can auto-fix dcfg_document_requests status ONLY when output is verified in both Dataverse AND SharePoint",
+            "notes": "Read-only by default. Auto-fix only for verified completions."
+          },
+          {
+            "order": 4,
+            "action": "escalate",
+            "description": "Write unresolvable issues to dcfg_brain_insights for operator review"
+          }
+        ],
+        "verified": "2026-03-24",
+        "confidence": 0.95
+      },
+      "fallbacks": [],
+      "verification": {
+        "primary": {
+          "method": "Check Nora output for 'All systems monitored' message and 12 active flows"
+        }
+      },
+      "knownFailures": [
+        {
+          "symptom": "Nora fails to write insight (400 Bad Request)",
+          "cause": "dcfg_brain_insights schema mismatch or missing required fields",
+          "fix": "Check required columns on dcfg_brain_insight table",
+          "discovered": "2026-03-24",
+          "confidence": 0.70
+        }
+      ]
+    },
+
+    "clearPortalCache": {
+      "id": "clearPortalCache",
+      "category": "utility",
+      "description": "Clear portal cache after any metadata change.",
+      "primary": {
+        "method": "Hit cache clear URL from authenticated session",
+        "url": "https://{portalDomain}/_services/about?clearCache=true",
+        "notes": "MUST be done from an authenticated session. Changes to permissions, site settings, web roles are NOT visible until cache is cleared."
+      },
+      "verification": {
+        "primary": {
+          "method": "Navigate to portal, verify changes are reflected"
+        }
+      }
+    },
+
+    "createTable": {
+      "id": "createTable",
+      "category": "schema",
+      "description": "Create a new Dataverse custom table via API.",
+      "primary": {
+        "method": "New-Table from MetadataOperations.ps1",
+        "steps": [
+          {
+            "order": 1,
+            "action": "defineTable",
+            "description": "Build table metadata hashtable with IsPrimaryName=true on primary attribute",
+            "requiredFields": ["SchemaName", "DisplayName", "DisplayCollectionName", "OwnershipType", "PrimaryNameAttribute", "Attributes"],
+            "notes": "Primary attribute MUST have IsPrimaryName=$true. Do NOT use 'PrimaryAttribute' as a top-level field — use 'Attributes' array."
+          },
+          {
+            "order": 2,
+            "action": "createTable",
+            "api": "New-Table -body $tableData -solutionUniqueName {solutionName}",
+            "notes": "Requires MetadataOperations.ps1 dot-sourced. Table metadata propagation takes 3-5 seconds."
+          },
+          {
+            "order": 3,
+            "action": "verifyEntitySet",
+            "description": "Query EntityDefinitions to get the auto-generated EntitySetName",
+            "api": "GET /EntityDefinitions(LogicalName='{tableName}')?$select=EntitySetName",
+            "notes": "Wait 3-5 seconds after creation before querying — propagation delay."
+          }
+        ],
+        "verified": "2026-03-24",
+        "confidence": 0.95
+      },
+      "knownFailures": [
+        {
+          "symptom": "400 — Required field 'PrimaryAttribute' is missing",
+          "cause": "Using Attributes array without IsPrimaryName=$true on the primary name attribute",
+          "fix": "Add IsPrimaryName=$true to the primary attribute in the Attributes array",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "400 — Cannot find nested property 'PrimaryAttribute'",
+          "cause": "Using 'PrimaryAttribute' as a top-level property instead of putting the attribute in the Attributes array",
+          "fix": "Use Attributes array with IsPrimaryName=$true, not a separate PrimaryAttribute field",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        },
+        {
+          "symptom": "404 on EntityDefinitions query immediately after table creation",
+          "cause": "Metadata propagation delay",
+          "fix": "Wait 3-5 seconds before querying the new table metadata",
+          "discovered": "2026-03-24",
+          "confidence": 1.0
+        }
+      ]
+    }
+  },
+
+  "platformRules": {
+    "enhancedDataModel": {
+      "description": "DCFG uses Enhanced Data Model. Classic adx_* tables do not exist for portal metadata.",
+      "tableMap": {
+        "siteSettings": "powerpagecomponents type=9",
+        "webRoles": "powerpagecomponents type=11",
+        "tablePermissions": "mspp_entitypermissions (virtual) backed by powerpagecomponents type=18",
+        "webPages": "powerpagecomponents type=2",
+        "webTemplates": "powerpagecomponents type=8",
+        "contentSnippets": "powerpagecomponents type=7"
+      }
+    },
+    "portalCacheRule": "ALL metadata changes (permissions, settings, roles) require cache clear before portal reflects them.",
+    "softDeleteRule": "Always soft delete (dcfg_active_flag=false), never hard delete.",
+    "bothEnvironmentsRule": "Always deploy to BOTH test and stage environments.",
+    "trailingSlashRule": "Connect() MUST have trailing slash on org URL.",
+    "appendBothSidesRule": "Append AND AppendTo must be set on BOTH sides of any relationship."
+  },
+
+  "scriptDependencies": {
+    "corePath": "C:\\DCFG\\PowerApps-Samples\\dataverse\\webapi\\PS\\Core.ps1",
+    "tableOpsPath": "C:\\DCFG\\PowerApps-Samples\\dataverse\\webapi\\PS\\TableOperations.ps1",
+    "metadataOpsPath": "C:\\DCFG\\PowerApps-Samples\\dataverse\\webapi\\PS\\MetadataOperations.ps1",
+    "commonFunctionsPath": "C:\\DCFG\\PowerApps-Samples\\dataverse\\webapi\\PS\\CommonFunctions.ps1",
+    "dotSourcePattern": ". \"{path}\"",
+    "connectPattern": "Connect 'https://{orgUrl}/'",
+    "wrapperPattern": "Invoke-DataverseCommands { ... }"
+  }
+}

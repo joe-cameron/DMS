@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCFG Wizard Preview — Click Demo</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:#F5F7FA; color:#1B2A4A; }
+
+  /* Layout */
+  .shell { display:flex; height:100vh; }
+  .nav { width:200px; background:#1B2A4A; color:#fff; padding:20px 0; flex-shrink:0; }
+  .nav h2 { font-size:18px; padding:0 20px 16px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:12px; font-weight:700; }
+  .nav a { display:block; padding:8px 20px; font-size:13px; color:rgba(255,255,255,0.6); text-decoration:none; cursor:pointer; }
+  .nav a:hover { color:#fff; background:rgba(255,255,255,0.05); }
+  .nav a.active { color:#D4A017; border-left:3px solid #D4A017; background:rgba(255,255,255,0.05); }
+  .nav .section { font-size:10px; font-weight:700; color:rgba(255,255,255,0.3); padding:12px 20px 4px; text-transform:uppercase; letter-spacing:1px; }
+  .main { flex:1; overflow-y:auto; }
+
+  /* Stepper */
+  .stepper { display:flex; background:#fff; border-bottom:1px solid #D4D9E2; padding:0 24px; }
+  .step-item { flex:1; padding:14px 12px; text-align:center; font-size:12px; color:#8695AA; cursor:pointer; position:relative; }
+  .step-item.active { color:#1B2A4A; font-weight:700; }
+  .step-item.active::after { content:''; position:absolute; bottom:0; left:20%; right:20%; height:3px; background:#D4A017; border-radius:2px; }
+  .step-item.done { color:#2D8659; }
+  .step-item .num { display:inline-block; width:22px; height:22px; border-radius:50%; background:#E2E8F0; color:#8695AA; font-size:11px; line-height:22px; text-align:center; margin-right:6px; font-weight:700; }
+  .step-item.active .num { background:#1B2A4A; color:#fff; }
+  .step-item.done .num { background:#2D8659; color:#fff; }
+  .step-sub { font-size:10px; color:#8695AA; margin-top:2px; }
+
+  /* Content */
+  .content { max-width:900px; margin:0 auto; padding:36px 24px; }
+  h1 { font-size:26px; margin-bottom:8px; font-weight:700; }
+  .subtitle { font-size:13px; color:#8695AA; margin-bottom:32px; line-height:1.6; }
+  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:#3D5080; margin-bottom:12px; }
+
+  /* Cards */
+  .cards { display:flex; gap:16px; margin-bottom:32px; }
+  .card { flex:1; border:2px solid #D4D9E2; border-radius:16px; padding:22px; cursor:pointer; background:#fff; transition:all 0.15s; position:relative; }
+  .card:hover { border-color:#2E5295; }
+  .card.selected { border-color:#1B2A4A; background:#EDF1F8; }
+  .card .check { position:absolute; top:14px; right:14px; width:22px; height:22px; border-radius:50%; background:#1B2A4A; color:#fff; font-size:12px; line-height:22px; text-align:center; display:none; }
+  .card.selected .check { display:block; }
+  .card .tag { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#8695AA; margin-bottom:8px; font-family:monospace; }
+  .card h3 { font-size:22px; font-weight:700; margin-bottom:6px; }
+  .card p { font-size:12px; color:#8695AA; line-height:1.5; }
+
+  /* Form elements */
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:12px; font-weight:600; color:#3D5080; margin-bottom:4px; }
+  .form-group label .req { color:#C0392B; }
+  select, input[type=text], input[type=email], input[type=date] {
+    width:100%; padding:8px 10px; border:1px solid #D4D9E2; border-radius:6px; font-size:13px; background:#fff; color:#1B2A4A;
+  }
+  .field-row { display:flex; gap:12px; margin-bottom:14px; }
+  .field-row > * { flex:1; }
+  .field-row .flex2 { flex:2; }
+
+  /* Customer card */
+  .cust-card { background:#EDF1F8; border-radius:10px; padding:16px; margin:16px 0; display:flex; align-items:center; gap:16px; }
+  .cust-card .avatar { width:40px; height:40px; border-radius:50%; background:#1B2A4A; color:#fff; font-size:14px; line-height:40px; text-align:center; font-weight:700; flex-shrink:0; }
+  .cust-card .info { flex:1; }
+  .cust-card .name { font-weight:700; font-size:15px; }
+  .cust-card .meta { font-size:12px; color:#3D5080; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:8px; }
+  .badge-tpa { background:#FFF8E7; color:#8A6B12; }
+  .badge-green { background:#E8F5EE; color:#2D8659; }
+  .badge-orange { background:#FFF3E0; color:#E65100; }
+
+  /* Warning banner */
+  .warn { background:#FFF3E0; border:1px solid #FFB74D; border-radius:8px; padding:10px 14px; font-size:12px; color:#E65100; margin:12px 0; }
+
+  /* Buttons */
+  .btn-row { display:flex; justify-content:space-between; align-items:center; padding:20px 0; border-top:1px solid #E2E8F0; margin-top:32px; }
+  .btn-row .info { font-size:12px; color:#8695AA; }
+  .btn { padding:10px 24px; border-radius:8px; font-size:13px; font-weight:600; border:none; cursor:pointer; }
+  .btn-primary { background:#C4A24C; color:#0F1A30; }
+  .btn-primary:hover { background:#D4B65C; }
+  .btn-ghost { background:none; border:1px solid #D4D9E2; color:#3D5080; }
+  .btn-ghost:hover { background:#F5F7FA; }
+  .btn-link { background:none; border:none; color:#2E5295; font-weight:600; cursor:pointer; font-size:13px; padding:0; }
+  .btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+  /* Add customer inline */
+  .inline-form { background:#F5F7FA; border:1px solid #D4D9E2; border-radius:10px; padding:16px; margin:12px 0; }
+  .inline-form h4 { font-size:14px; margin-bottom:12px; }
+
+  /* Review grid */
+  .review-grid { display:grid; grid-template-columns:1fr 1fr; border:1px solid #D4D9E2; border-radius:8px; overflow:hidden; }
+  .review-cell { padding:12px 16px; border-bottom:1px solid #E2E8F0; }
+  .review-cell:nth-child(odd) { border-right:1px solid #E2E8F0; }
+  .review-label { font-size:11px; font-weight:600; color:#8695AA; text-transform:uppercase; margin-bottom:4px; }
+  .review-value { font-size:13px; color:#2D8659; }
+  .review-value.empty { color:#8695AA; font-style:italic; }
+
+  /* Sidebar */
+  .wrap { display:flex; flex-direction:column; gap:24px; }
+  .wrap .form-area { flex:1; }
+  .sidebar { display:flex; gap:16px; flex-wrap:wrap; }
+  .sidebar-card { background:#1B2A4A; color:#fff; border-radius:12px; padding:20px; flex:1; min-width:220px; }
+  .sidebar-card h4 { font-size:12px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.5); margin-bottom:12px; }
+  .sidebar-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:12px; }
+  .sidebar-row .label { color:rgba(255,255,255,0.45); }
+  .sidebar-row .value { font-family:monospace; color:rgba(255,255,255,0.9); font-weight:500; }
+  .btn-generate { width:100%; padding:14px; border-radius:10px; background:#2D8659; color:#fff; font-size:14px; font-weight:700; border:none; cursor:pointer; margin-top:12px; }
+  .btn-generate:hover { background:#38996A; }
+
+  /* Tabs */
+  .tab-bar { display:flex; gap:0; border-bottom:2px solid #E2E8F0; margin-bottom:20px; }
+  .tab { padding:10px 20px; font-size:13px; color:#8695AA; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; }
+  .tab.active { color:#1B2A4A; font-weight:600; border-bottom-color:#D4A017; }
+
+  /* Wizard switcher */
+  .wizard-switch { display:flex; gap:12px; padding:16px 24px; background:#fff; border-bottom:1px solid #E2E8F0; }
+  .wizard-switch button { padding:8px 16px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:2px solid #D4D9E2; background:#fff; color:#3D5080; }
+  .wizard-switch button.active { border-color:#1B2A4A; background:#EDF1F8; color:#1B2A4A; }
+
+  .hidden { display:none; }
+  .tpa-info { font-size:12px; color:#3D5080; margin:8px 0; padding:8px 12px; background:#EDF1F8; border-radius:6px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Nav -->
+  <div class="nav">
+    <h2>Decades</h2>
+    <a>Dashboard</a>
+    <div class="section">Sales</div>
+    <a>Customers</a>
+    <a>New Proposal</a>
+    <div class="section">Contracts</div>
+    <a>MSAs</a>
+    <a>Contracts</a>
+    <a class="active" id="nav-contract">New Contract</a>
+    <a>Send Queue</a>
+    <div class="section">Operations</div>
+    <a>Operations</a>
+    <a>Onboarding</a>
+    <a>Locations</a>
+    <a>Field Ops</a>
+    <div class="section">Admin</div>
+    <a>System Admin</a>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Wizard switcher -->
+    <div class="wizard-switch">
+      <button class="active" onclick="showWizard('contract')">Contract Wizard (New Flow)</button>
+      <button onclick="showWizard('proposal')">Proposal Wizard</button>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- CONTRACT WIZARD -->
+    <!-- ═══════════════════════════════════ -->
+    <div id="contract-wizard">
+      <div class="stepper" id="c-stepper"></div>
+      <div class="content" id="c-content"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- PROPOSAL WIZARD -->
+    <!-- ═══════════════════════════════════ -->
+    <div id="proposal-wizard" class="hidden">
+      <div class="stepper" id="p-stepper"></div>
+      <div class="content" id="p-content"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONTRACT WIZARD — NEW CUSTOMER-FIRST FLOW
+// ═══════════════════════════════════════════
+
+const C_STEPS = [
+  { label:'Customer', sub:'Select or create' },
+  { label:'Document Type', sub:'WO, Amendment, or Vendor MSA' },
+  { label:'Contractor & Signer', sub:'Vendor details + signer' },
+  { label:'Exhibit A — Lines', sub:'Line items + cost codes' },
+  { label:'Review & Generate', sub:'Validate + generate' },
+];
+
+let cStep = 1;
+let cCustomer = null;
+let cProgram = null;
+let cLocation = null;
+let cDocType = null;
+let cVendor = null;
+let cShowAddCustomer = false;
+
+function renderCStepper() {
+  const el = document.getElementById('c-stepper');
+  el.innerHTML = C_STEPS.map((s,i) => {
+    const n = i+1;
+    const cls = n === cStep ? 'active' : n < cStep ? 'done' : '';
+    return `<div class="step-item ${cls}" onclick="cGoStep(${n})">
+      <span class="num">${n < cStep ? '&#10003;' : n}</span>${s.label}
+      <div class="step-sub">${s.sub}</div>
+    </div>`;
+  }).join('');
+}
+
+function cGoStep(n) {
+  if (n < 1 || n > 5) return;
+  if (n > 1 && !cCustomer) return;
+  if (n > 2 && !cDocType) return;
+  cStep = n;
+  renderCStepper();
+  renderCContent();
+}
+
+const CUSTOMER_DATA = {
+  acp: {
+    name:'Albany Capital Partners', tpa:false, custom:false,
+    contact:'Rebecca Torres · rtorres@albanycapital.org · (609) 555-1000',
+    programs:[
+      { id:'standalone', name:'Standalone WO', desc:'No program — individual work order', budget:null },
+      { id:'window', name:'Window Replacement 2026', desc:'Budget: $125,000 · Remaining: $87,400', pct:30 },
+      { id:'hvac', name:'HVAC Upgrade 2026', desc:'Budget: $200,000 · Remaining: $200,000', pct:0 },
+    ],
+    locations:[
+      { id:'asbury', name:'ACP-AsburyPark-48', addr:'1022 Atco Ave, Asbury Park, NJ', type:'Group Home' },
+      { id:'borden', name:'ACP-Bordentown-14', addr:'14 Crosswicks St, Bordentown, NJ', type:'Apartment' },
+      { id:'brick', name:'ACP-Brick-100', addr:'100 Chambers Bridge Rd, Brick, NJ', type:'Group Home', badge:'Expiring' },
+      { id:'ewing', name:'ACP-Ewing-22', addr:'22 Parkway Ave, Ewing, NJ', type:'Day Program' },
+    ],
+  },
+  ban: {
+    name:'Bancroft', tpa:true, custom:true,
+    contact:'Admissions · admissions@bancroft.org · (800) 774-5516',
+    programs:[
+      { id:'standalone', name:'Standalone WO', desc:'No program — individual work order', budget:null },
+      { id:'lakeside', name:'Lakeside Campus Maintenance', desc:'Budget: $340,000 · Remaining: $215,000', pct:37 },
+      { id:'community', name:'Community Residential Upkeep', desc:'Budget: $180,000 · Remaining: $142,500', pct:21 },
+      { id:'flicker', name:'Flicker Residences Renovation', desc:'Budget: $95,000 · Remaining: $95,000', pct:0 },
+    ],
+    locations:[
+      { id:'welsh', name:'Welsh Campus — The Lindens', addr:'311 Walton Ave, Mount Laurel, NJ', type:'Campus' },
+      { id:'lakeside', name:'Lakeside Campus', addr:'1255 Caldwell Rd, Cherry Hill, NJ', type:'Campus' },
+      { id:'flicker', name:'Flicker Residences', addr:'100 Flicker Ln, Voorhees, NJ', type:'Senior Residential' },
+      { id:'cherry1', name:'Cherry Hill Community Home 1', addr:'42 Brace Rd, Cherry Hill, NJ', type:'Group Home' },
+      { id:'cherry2', name:'Cherry Hill Community Home 2', addr:'118 Chapel Ave, Cherry Hill, NJ', type:'Group Home' },
+      { id:'camden1', name:'Camden Community Home', addr:'220 Market St, Camden, NJ', type:'Group Home' },
+    ],
+  },
+  arch: {
+    name:'Archway Programs', tpa:true, custom:false,
+    contact:'Mickie Patetta · mickie.patetta@archwayprograms.org · (856) 767-5757',
+    programs:[
+      { id:'standalone', name:'Standalone WO', desc:'No program — individual work order', budget:null },
+      { id:'reschomes', name:'Residential Homes Maintenance', desc:'Budget: $220,000 · Remaining: $178,000', pct:19 },
+      { id:'coopers', name:"Cooper's Poynt Renovation", desc:'Budget: $65,000 · Remaining: $65,000', pct:0 },
+    ],
+    locations:[
+      { id:'atco', name:'Main Campus Lower', addr:'280-A Jackson Rd, Atco, NJ', type:'Campus' },
+      { id:'evesham', name:'Main Campus Upper', addr:'185 Raymond Ave, Evesham, NJ', type:'Campus' },
+      { id:'camden', name:"Cooper's Poynt", addr:'201 State St, Camden, NJ', type:'Day Program' },
+      { id:'vineland', name:'Creative Achievement', addr:'1667 E Landis Ave, Vineland, NJ', type:'Vocational' },
+      { id:'atco2', name:'Atco Community Home 1', addr:'312 White Horse Pike, Atco, NJ', type:'Group Home' },
+      { id:'berlin', name:'Berlin Community Home', addr:'45 S White Horse Pike, Berlin, NJ', type:'Group Home' },
+    ],
+  },
+};
+
+function cSelectCustomer(key) {
+  const d = CUSTOMER_DATA[key];
+  cCustomer = { key, name:d.name, tpa:d.tpa, custom:d.custom, contact:d.contact, programs:d.programs, locations:d.locations };
+  cProgram = null;
+  cLocation = null;
+  renderCContent();
+}
+
+function cSelectDocType(t) {
+  cDocType = t;
+  cVendor = t === 'amendment' ? '1-800-GOT-JUNK?' : null;
+  renderCContent();
+}
+
+function cSelectVendor(name, hasMSA) {
+  cVendor = { name, hasMSA };
+  renderCContent();
+}
+
+function renderCContent() {
+  const el = document.getElementById('c-content');
+
+  if (cStep === 1) {
+    const tpaInfo = cCustomer?.tpa
+      ? (cCustomer.custom
+        ? `<div class="tpa-info">TPA — using <strong>${cCustomer.name}</strong> templates</div>`
+        : `<div class="tpa-info">TPA — using <strong>Decades</strong> templates</div>`)
+      : '';
+
+    const custCard = cCustomer
+      ? `<div class="cust-card">
+          <div class="avatar">${cCustomer.name[0]}</div>
+          <div class="info">
+            <div class="name">${cCustomer.name}${cCustomer.tpa ? '<span class="badge badge-tpa">TPA</span>' : ''}</div>
+            <div class="meta">${cCustomer.contact}</div>
+          </div>
+        </div>${tpaInfo}`
+      : '';
+
+    const addForm = cShowAddCustomer
+      ? `<div class="inline-form">
+          <h4>New Customer</h4>
+          <div class="form-group"><label>Customer Legal Name <span class="req">*</span></label><input type="text" placeholder="Enter customer name"></div>
+          <button class="btn-link" onclick="cShowAddCustomer=false;renderCContent()">Cancel</button>
+          &nbsp;&nbsp;
+          <button class="btn btn-primary" onclick="cSelectCustomer('New Test Customer',false,false);cShowAddCustomer=false;">Create</button>
+        </div>`
+      : `<button class="btn-link" onclick="cShowAddCustomer=true;renderCContent()">+ Add Customer</button>`;
+
+    const programsSection = cCustomer?.programs ? `
+      <div class="section-label" style="margin-top:24px">Programs — Cost Assignment</div>
+      <div class="cards" style="flex-wrap:wrap">
+        ${cCustomer.programs.map(p => `
+          <div class="card ${cProgram===p.id?'selected':''}" style="min-width:200px" onclick="cProgram='${p.id}';renderCContent()">
+            <div class="check">&#10003;</div>
+            <h3 style="font-size:16px">${p.name}</h3>
+            <p>${p.desc}</p>
+            ${p.pct != null ? `<div style="margin-top:8px;height:4px;background:#E2E8F0;border-radius:2px"><div style="width:${p.pct}%;height:100%;background:#2D8659;border-radius:2px"></div></div>` : ''}
+          </div>
+        `).join('')}
+      </div>` : '';
+
+    const locationsSection = cCustomer?.locations ? `
+      <div class="section-label" style="margin-top:24px">Locations</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${cCustomer.locations.map(l => `
+          <div class="card" style="padding:14px;border-radius:10px;flex:none;cursor:pointer;display:flex;align-items:center;gap:14px" onclick="cLocation='${l.id}';renderCContent()">
+            <div style="width:8px;height:8px;border-radius:50%;background:${cLocation===l.id?'#1B2A4A':'#D4D9E2'}"></div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">${l.name}</div>
+              <div style="font-size:12px;color:#8695AA">${l.addr}</div>
+            </div>
+            <div style="font-size:11px;color:#8695AA">${l.type}${l.badge ? ' &nbsp;<span class="badge badge-orange">'+l.badge+'</span>' : ''}</div>
+          </div>
+        `).join('')}
+      </div>` : '';
+
+    el.innerHTML = `
+      <h1>Select Customer</h1>
+      <div class="subtitle">Choose the customer for this contract. Programs and locations load automatically.</div>
+
+      <div class="form-group">
+        <label>Customer <span class="req">*</span></label>
+        <select onchange="if(this.value)cSelectCustomer(this.value);">
+          <option value="">— Select a customer —</option>
+          <option value="acp" ${cCustomer?.key==='acp'?'selected':''}>Albany Capital Partners</option>
+          <option value="ban" ${cCustomer?.key==='ban'?'selected':''}>Bancroft</option>
+          <option value="arch" ${cCustomer?.key==='arch'?'selected':''}>Archway Programs</option>
+        </select>
+      </div>
+      ${custCard}
+      ${addForm}
+      ${programsSection}
+      ${locationsSection}
+
+      <div class="btn-row">
+        <div class="info">Step 1 of 5</div>
+        <button class="btn btn-primary" ${!cCustomer?'disabled':''} onclick="cGoStep(2)">Next: Document Type &rarr;</button>
+      </div>
+    `;
+  }
+
+  else if (cStep === 2) {
+    const vendorSection = cDocType
+      ? `<div class="section-label" style="margin-top:24px">Vendor</div>
+         <div class="form-group">
+           <label>Select Vendor</label>
+           <select onchange="if(this.value==='junk')cSelectVendor('1-800-GOT-JUNK?',true);if(this.value==='ace')cSelectVendor('Ace Landscaping',false);">
+             <option value="">— Select vendor —</option>
+             <option value="junk">1-800-GOT-JUNK?</option>
+             <option value="ace">Ace Landscaping</option>
+           </select>
+         </div>
+         ${cVendor?.hasMSA===true ? '<div><span class="badge badge-green">MSA on file</span></div>' : ''}
+         ${cVendor?.hasMSA===false ? '<div class="warn">No MSA on file for this vendor — proceed with caution</div>' : ''}
+         ${cDocType==='amendment' ? '<div class="tpa-info">Vendor auto-filled from original Work Order. Override above if needed.</div>' : ''}`
+      : '';
+
+    const locationSection = cDocType
+      ? `<div class="section-label" style="margin-top:24px">Location & Date</div>
+         <div class="field-row">
+           <div class="flex2 form-group"><label>Location <span class="req">*</span></label>
+             <select><option>— Select location —</option><option>ACP-AsburyPark-48</option><option>ACP-Bordentown-14</option><option>ACP-Brick-100</option></select>
+           </div>
+           <div class="form-group"><label>Contract Date</label><input type="date" value="2026-03-29"></div>
+         </div>`
+      : '';
+
+    el.innerHTML = `
+      <h1>Document Type</h1>
+      <div class="subtitle">Select the type of document to generate for <strong>${cCustomer.name}</strong>.</div>
+
+      <div class="section-label">Document Type</div>
+      <div class="cards">
+        <div class="card ${cDocType==='wo'?'selected':''}" onclick="cSelectDocType('wo')">
+          <div class="check">&#10003;</div>
+          <h3>Work Order</h3>
+          <p>New contract for a specific location and scope of work.</p>
+        </div>
+        <div class="card ${cDocType==='amendment'?'selected':''}" onclick="cSelectDocType('amendment')">
+          <div class="check">&#10003;</div>
+          <h3>Amendment</h3>
+          <p>Modifies the scope or value of an existing Work Order.</p>
+        </div>
+        <div class="card ${cDocType==='msa'?'selected':''}" onclick="cSelectDocType('msa')">
+          <div class="check">&#10003;</div>
+          <h3>Vendor MSA</h3>
+          <p>Master subcontract agreement. Routes to Tyler for approval.</p>
+        </div>
+      </div>
+
+      ${vendorSection}
+      ${locationSection}
+
+      <div class="btn-row">
+        <div><button class="btn btn-ghost" onclick="cGoStep(1)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 2 of 5</span></div>
+        <button class="btn btn-primary" ${!cDocType?'disabled':''} onclick="cGoStep(3)">Next: Contractor & Signer &rarr;</button>
+      </div>
+    `;
+  }
+
+  else if (cStep === 3) {
+    const vendorName = typeof cVendor === 'object' ? cVendor.name : (cVendor || '');
+    el.innerHTML = `
+      <div class="wrap">
+        <div class="form-area">
+          <h1>Contractor & Signer</h1>
+          <div class="subtitle">Vendor details and authorized signer for the contract.</div>
+
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px;margin-bottom:20px">
+            <div class="section-label">Contractor</div>
+            <div class="form-group"><label>Search Vendor</label><input type="text" value="${vendorName}" placeholder="Type 2+ characters..."></div>
+            <div class="field-row">
+              <div class="flex2 form-group"><label>Contractor Legal Name</label><input type="text" value="${vendorName}"></div>
+              <div class="form-group"><label>Company</label><input type="text" value="${vendorName}"></div>
+            </div>
+            <div class="field-row">
+              <div class="flex2 form-group"><label>Contractor Address</label><input type="text" value="600 Gateway Blvd, Westville"></div>
+              <div class="form-group"><label>Phone</label><input type="text" value="856-219-3058"></div>
+            </div>
+            <div class="field-row">
+              <div class="form-group"><label>Email</label><input type="text" value="info@vendor.com"></div>
+              <div class="form-group"><label>Payment Terms <span class="req">*</span></label><input type="text" value="Net 30 — ACH"></div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px">
+            <div class="section-label">Signer Block</div>
+            <div class="field-row">
+              <div class="form-group"><label>Signer Printed Name <span class="req">*</span></label><input type="text" placeholder="Required"></div>
+              <div class="form-group"><label>Signer Title <span class="req">*</span></label><input type="text" placeholder="Required"></div>
+            </div>
+            <div class="form-group"><label>Signature Image</label><input type="text" value="— / — (automatic)" disabled style="background:#F5F7FA"></div>
+          </div>
+
+          <div class="btn-row">
+            <div><button class="btn btn-ghost" onclick="cGoStep(2)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 3 of 5</span></div>
+            <button class="btn btn-primary" onclick="cGoStep(4)">Next: Exhibit A &rarr;</button>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <h4>Contract Summary</h4>
+            <div class="sidebar-row"><span class="label">Customer</span><span class="value">${cCustomer.name}</span></div>
+            <div class="sidebar-row"><span class="label">Type</span><span class="value">${cDocType==='wo'?'Work Order':cDocType==='amendment'?'Amendment':'Vendor MSA'}</span></div>
+            <div class="sidebar-row"><span class="label">Vendor</span><span class="value">${vendorName||'—'}</span></div>
+            <div class="sidebar-row"><span class="label">Family</span><span class="value">${cCustomer.tpa&&cCustomer.custom?'Bancroft':'Decades'}</span></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  else if (cStep === 4) {
+    el.innerHTML = `
+      <div class="wrap">
+        <div class="form-area">
+          <h1>Exhibit A — Line Items</h1>
+          <div class="subtitle">Add line items with cost codes, descriptions, and amounts.</div>
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead><tr style="text-align:left;font-size:11px;color:#8695AA;text-transform:uppercase">
+                <th style="padding:8px;width:50">#</th><th style="padding:8px;width:220">Cost Code</th><th style="padding:8px">Description</th><th style="padding:8px;width:110;text-align:right">Amount</th><th style="padding:8px;width:110">AP Code</th><th style="padding:8px;width:40"></th>
+              </tr></thead>
+              <tbody>
+                <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px;font-family:monospace">1</td><td style="padding:8px"><select style="width:100%;padding:4px"><option>6200 - Appliance Repair</option></select></td><td style="padding:8px"><input type="text" style="width:100%;padding:4px" placeholder="Description"></td><td style="padding:8px"><input type="text" style="width:100%;padding:4px;text-align:right;font-family:monospace" value="2,500.00"></td><td style="padding:8px"><input type="text" style="width:80px;padding:4px;font-family:monospace;font-size:11px" value=""></td><td style="padding:8px;color:#C0392B;cursor:pointer">&times;</td></tr>
+                <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px;font-family:monospace">2</td><td style="padding:8px"><select style="width:100%;padding:4px"><option>6100 - General Maintenance</option></select></td><td style="padding:8px"><input type="text" style="width:100%;padding:4px" placeholder="Description"></td><td style="padding:8px"><input type="text" style="width:100%;padding:4px;text-align:right;font-family:monospace" value="1,200.00"></td><td style="padding:8px"><input type="text" style="width:80px;padding:4px;font-family:monospace;font-size:11px" value=""></td><td style="padding:8px;color:#C0392B;cursor:pointer">&times;</td></tr>
+                <tr style="border-top:2px solid #D4D9E2"><td colspan="3" style="padding:10px 8px;text-align:right;font-weight:700;font-size:12px;color:#3D5080">Total (SUM)</td><td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:700;font-size:15px;color:#1B2A4A">3,700.00</td><td colspan="2"></td></tr>
+              </tbody>
+            </table>
+            <button class="btn-link" style="margin-top:12px">+ Add Line</button>
+          </div>
+
+          <div class="btn-row">
+            <div><button class="btn btn-ghost" onclick="cGoStep(3)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 4 of 5</span></div>
+            <button class="btn btn-primary" onclick="cGoStep(5)">Next: Review &rarr;</button>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <h4>Contract Summary</h4>
+            <div class="sidebar-row"><span class="label">Customer</span><span class="value">${cCustomer.name}</span></div>
+            <div class="sidebar-row"><span class="label">Type</span><span class="value">${cDocType==='wo'?'Work Order':cDocType==='amendment'?'Amendment':'Vendor MSA'}</span></div>
+            <div class="sidebar-row"><span class="label">Lines</span><span class="value">2</span></div>
+          </div>
+          <div class="sidebar-card">
+            <h4>Contract Value</h4>
+            <div style="font-size:28px;font-weight:700;color:#D4B65C">$3,700.00</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">2 line items</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  else if (cStep === 5) {
+    const family = cCustomer.tpa && cCustomer.custom ? 'Bancroft' : 'Decades';
+    el.innerHTML = `
+      <div class="wrap">
+        <div class="form-area">
+          <h1>Review & Generate</h1>
+          <div class="subtitle">Verify all merge fields before generating the contract document.</div>
+
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px;margin-bottom:20px">
+            <div class="section-label">Merge Fields — Contract Body</div>
+            <div class="review-grid">
+              <div class="review-cell"><div class="review-label">Contractor Name</div><div class="review-value">1-800-GOT-JUNK?</div></div>
+              <div class="review-cell"><div class="review-label">Company</div><div class="review-value">1-800-GOT-JUNK?</div></div>
+              <div class="review-cell"><div class="review-label">Contractor Address</div><div class="review-value">600 Gateway Blvd, Westville</div></div>
+              <div class="review-cell"><div class="review-label">Payment Terms</div><div class="review-value">Net 30 — ACH</div></div>
+              <div class="review-cell"><div class="review-label">Signer Name</div><div class="review-value">John Doe</div></div>
+              <div class="review-cell"><div class="review-label">Signer Title</div><div class="review-value">VP Operations</div></div>
+              <div class="review-cell"><div class="review-label">Owner Contact</div><div class="review-value">Rebecca Torres</div></div>
+              <div class="review-cell"><div class="review-label">Owner Email</div><div class="review-value">rtorres@example.com</div></div>
+              <div class="review-cell"><div class="review-label">Client Name</div><div class="review-value empty">Not yet provided</div></div>
+              <div class="review-cell"><div class="review-label">Signature Image</div><div class="review-value empty">Automatic</div></div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px">
+            <div class="section-label">Exhibit A — Line Items (2)</div>
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead><tr style="font-size:11px;color:#8695AA;text-transform:uppercase"><th style="padding:8px">Item</th><th style="padding:8px">Cost Code</th><th style="padding:8px">Description</th><th style="padding:8px;text-align:right">Amount</th></tr></thead>
+              <tbody>
+                <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px;font-family:monospace">1</td><td>Appliance Repair</td><td>—</td><td style="text-align:right;font-family:monospace">2,500.00</td></tr>
+                <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px;font-family:monospace">2</td><td>General Maintenance</td><td>—</td><td style="text-align:right;font-family:monospace">1,200.00</td></tr>
+                <tr style="border-top:2px solid #D4D9E2"><td colspan="3" style="padding:8px;text-align:right;font-weight:700">Total</td><td style="text-align:right;font-family:monospace;font-weight:700">3,700.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="btn-row">
+            <div><button class="btn btn-ghost" onclick="cGoStep(4)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 5 of 5</span></div>
+            <div></div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <h4>Final Summary</h4>
+            <div class="sidebar-row"><span class="label">Family</span><span class="value">${family}</span></div>
+            <div class="sidebar-row"><span class="label">Type</span><span class="value">${cDocType==='wo'?'Work Order':'Amendment'}</span></div>
+            <div class="sidebar-row"><span class="label">Customer</span><span class="value">${cCustomer.name}</span></div>
+            <div class="sidebar-row"><span class="label">Lines</span><span class="value">2</span></div>
+          </div>
+          <div class="sidebar-card">
+            <h4>Contract Value</h4>
+            <div style="font-size:28px;font-weight:700;color:#D4B65C">$3,700.00</div>
+          </div>
+          <div class="sidebar-card" style="background:#2D8659">
+            <h4 style="color:rgba(255,255,255,0.7)">Merge Readiness</h4>
+            <button class="btn-generate" onclick="alert('Contract generated! Document saved to SharePoint.')">&#9889; Generate Contract</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ═══════════════════════════════════════════
+// PROPOSAL WIZARD (existing flow, for reference)
+// ═══════════════════════════════════════════
+
+const P_STEPS = [
+  { label:'Service Package', sub:'Essential, Extended, Premium' },
+  { label:'Customer & Vendor', sub:'Select or create' },
+  { label:'Pricing & Locations', sub:'Fees + location list' },
+  { label:'Review & Generate', sub:'Validate + generate' },
+];
+
+let pStep = 1;
+let pPkg = null;
+
+function renderPStepper() {
+  const el = document.getElementById('p-stepper');
+  el.innerHTML = P_STEPS.map((s,i) => {
+    const n = i+1;
+    const cls = n === pStep ? 'active' : n < pStep ? 'done' : '';
+    return `<div class="step-item ${cls}" onclick="pGoStep(${n})">
+      <span class="num">${n < pStep ? '&#10003;' : n}</span>${s.label}
+      <div class="step-sub">${s.sub}</div>
+    </div>`;
+  }).join('');
+}
+
+function pGoStep(n) {
+  if (n < 1 || n > 4) return;
+  if (n > 1 && !pPkg) return;
+  pStep = n;
+  renderPStepper();
+  renderPContent();
+}
+
+function renderPContent() {
+  const el = document.getElementById('p-content');
+
+  if (pStep === 1) {
+    el.innerHTML = `
+      <h1>Service Package</h1>
+      <div class="subtitle">Select a service package. This determines Exhibit A scope and anchors all fee calculations.</div>
+      <div class="section-label">Exhibit A — Select Package</div>
+      <div class="cards">
+        <div class="card ${pPkg==='a'?'selected':''}" onclick="pPkg='a';renderPContent()">
+          <div class="check">&#10003;</div>
+          <div class="tag">Package A</div>
+          <h3>Essential</h3>
+          <p>Core maintenance services</p>
+        </div>
+        <div class="card ${pPkg==='b'?'selected':''}" onclick="pPkg='b';renderPContent()">
+          <div class="check">&#10003;</div>
+          <div class="tag">Package B</div>
+          <h3>Extended</h3>
+          <p>Full-service + seasonal</p>
+        </div>
+        <div class="card ${pPkg==='c'?'selected':''}" onclick="pPkg='c';renderPContent()">
+          <div class="check">&#10003;</div>
+          <div class="tag">Package C</div>
+          <h3>Premium</h3>
+          <p>All-inclusive + specialty</p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <div class="info">Step 1 of 4 &middot; New Customer Proposal (Decades)</div>
+        <button class="btn btn-primary" ${!pPkg?'disabled':''} onclick="pGoStep(2)">Next: Customer & Vendor &rarr;</button>
+      </div>
+    `;
+  } else if (pStep === 2) {
+    el.innerHTML = `
+      <h1>Customer & Vendor</h1>
+      <div class="subtitle">Select or create the customer and assign the vendor for this MSA proposal.</div>
+      <div class="field-row">
+        <div class="flex2 form-group"><label>Customer <span class="req">*</span></label><select><option>— Select —</option><option>Albany Capital Partners</option><option>Archway Programs</option></select></div>
+        <div class="form-group"><label>MSA Date <span class="req">*</span></label><input type="date" value="2026-03-29"></div>
+      </div>
+      <div class="form-group"><label>MSA Name</label><input type="text" placeholder="Auto-generated if blank"></div>
+      <div style="border-top:1px solid #E2E8F0;padding-top:14px;margin-top:14px">
+        <div class="section-label">Vendor / Contractor</div>
+        <div class="field-row">
+          <div class="form-group"><label>Vendor Name</label><input type="text" value="1-800-GOT-JUNK?"></div>
+          <div class="form-group"><label>Vendor Email</label><input type="text" value="info@vendor.com"></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <div><button class="btn btn-ghost" onclick="pGoStep(1)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 2 of 4</span></div>
+        <button class="btn btn-primary" onclick="pGoStep(3)">Next: Pricing &rarr;</button>
+      </div>
+    `;
+  } else if (pStep === 3) {
+    el.innerHTML = `
+      <h1>Pricing & Locations</h1>
+      <div class="subtitle">Set fee structure and assign locations for this proposal.</div>
+      <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px;margin-bottom:20px">
+        <div class="section-label">Exhibit C — Pricing</div>
+        <div class="field-row">
+          <div class="form-group"><label>Monthly Management Fee</label><input type="text" value="1,500.00"></div>
+          <div class="form-group"><label>Onboarding Fee</label><input type="text" value="500.00"></div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px">
+        <div class="section-label">Exhibit B — Locations</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <thead><tr style="color:#8695AA;font-size:11px;text-transform:uppercase"><th style="padding:8px;text-align:left">Location</th><th style="padding:8px">Type</th><th style="padding:8px;text-align:right">Monthly</th><th style="padding:8px;text-align:right">Onboarding</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px">ACP-AsburyPark-48</td><td style="padding:8px">Group Home</td><td style="padding:8px;text-align:right;font-family:monospace">1,500.00</td><td style="padding:8px;text-align:right;font-family:monospace">500.00</td></tr>
+            <tr style="border-top:1px solid #E2E8F0"><td style="padding:8px">ACP-Bordentown-14</td><td style="padding:8px">Apartment</td><td style="padding:8px;text-align:right;font-family:monospace">1,500.00</td><td style="padding:8px;text-align:right;font-family:monospace">500.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="btn-row">
+        <div><button class="btn btn-ghost" onclick="pGoStep(2)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 3 of 4</span></div>
+        <button class="btn btn-primary" onclick="pGoStep(4)">Next: Review &rarr;</button>
+      </div>
+    `;
+  } else if (pStep === 4) {
+    el.innerHTML = `
+      <h1>Review & Generate</h1>
+      <div class="subtitle">Verify all fields before generating the proposal document.</div>
+      <div class="wrap">
+        <div class="form-area">
+          <div style="background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px;margin-bottom:20px">
+            <div class="section-label">MSA Body — Merge Fields</div>
+            <div class="review-grid">
+              <div class="review-cell"><div class="review-label">Client Name</div><div class="review-value">Albany Capital Partners</div></div>
+              <div class="review-cell"><div class="review-label">MSA Date</div><div class="review-value">March 29, 2026</div></div>
+              <div class="review-cell"><div class="review-label">Vendor Name</div><div class="review-value">1-800-GOT-JUNK?</div></div>
+              <div class="review-cell"><div class="review-label">Vendor Email</div><div class="review-value">info@vendor.com</div></div>
+              <div class="review-cell"><div class="review-label">Package</div><div class="review-value">${pPkg==='a'?'Essential':pPkg==='b'?'Extended':'Premium'}</div></div>
+              <div class="review-cell"><div class="review-label">Signature Image</div><div class="review-value empty">Automatic</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <h4>Proposal Summary</h4>
+            <div class="sidebar-row"><span class="label">Package</span><span class="value">${pPkg==='a'?'Essential':pPkg==='b'?'Extended':'Premium'}</span></div>
+            <div class="sidebar-row"><span class="label">Locations</span><span class="value">2</span></div>
+          </div>
+          <div class="sidebar-card">
+            <h4>Total Contract Value</h4>
+            <div style="font-size:28px;font-weight:700;color:#D4B65C">$48,000.00</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5)">$3,000/mo + $1,000 onboarding</div>
+          </div>
+          <div class="sidebar-card" style="background:#2D8659">
+            <button class="btn-generate" onclick="alert('Proposal generated!')">&#9889; Generate Proposal</button>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <div><button class="btn btn-ghost" onclick="pGoStep(3)">&larr; Back</button> <span class="info" style="margin-left:12px">Step 4 of 4</span></div>
+        <div></div>
+      </div>
+    `;
+  }
+}
+
+// ═══════════════════════════════════════════
+// WIZARD SWITCHER
+// ═══════════════════════════════════════════
+
+function showWizard(which) {
+  document.querySelectorAll('.wizard-switch button').forEach(b => b.classList.remove('active'));
+  if (which === 'contract') {
+    document.getElementById('contract-wizard').classList.remove('hidden');
+    document.getElementById('proposal-wizard').classList.add('hidden');
+    document.querySelector('.wizard-switch button:first-child').classList.add('active');
+  } else {
+    document.getElementById('contract-wizard').classList.add('hidden');
+    document.getElementById('proposal-wizard').classList.remove('hidden');
+    document.querySelector('.wizard-switch button:last-child').classList.add('active');
+  }
+}
+
+// Init
+renderCStepper();
+renderCContent();
+renderPStepper();
+renderPContent();
+</script>
+</body>
+</html>

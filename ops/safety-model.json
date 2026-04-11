@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "updated": "2026-03-24",
+    "description": "Kiosk-mode safety model for DCFG DevOps monitoring agent. Default read-only, explicit approval per write, auto-fallback."
+  },
+
+  "operatingMode": {
+    "default": "READ_ONLY",
+    "description": "Agent monitors all systems and writes ONLY to its own operational tables. Any write to business/portal data requires explicit operator approval.",
+
+    "readOnlyScope": {
+      "allowed": [
+        "Query any Dataverse table",
+        "Read powerpagecomponents, mspp_entitypermissions, workflows",
+        "Read dcfg_audit_logs, dcfg_document_requests",
+        "Run Nora monitoring cycles",
+        "Run drift audits",
+        "Read SPA source (no writes)",
+        "Check flow health",
+        "Write to agent-owned tables (dcfg_brain_insights, dcfg_agent_audit_log, dcfg_agent_session_trace, dcfg_agent_diagnostic)"
+      ],
+      "blocked": [
+        "Create/update/delete mspp_entitypermissions",
+        "Patch powerpagecomponents",
+        "Create/update/delete site settings",
+        "Modify workflows (activate, deactivate, patch definitions)",
+        "Write to any dcfg_ business table",
+        "Deploy SPA (pac pages upload)",
+        "Solution import/export",
+        "Clear portal cache",
+        "Any destructive operation"
+      ]
+    },
+
+    "readWriteScope": {
+      "activation": {
+        "method": "EXPLICIT_POSITIVE_AFFIRMATION",
+        "description": "Operator must type 'y' or 'yes' (case-insensitive) in response to a specific write request. No other input activates write mode.",
+        "validResponses": ["y", "yes"],
+        "invalidResponses": ["anything else, including 'ok', 'sure', 'go ahead', 'do it'"],
+        "promptFormat": "WRITE REQUEST: {description of what will be changed}\nType 'y' to approve this single operation, or anything else to skip.",
+        "notes": "The prompt must state exactly what will be written, to which table, in which environment. No vague approvals."
+      },
+      "scope": "SINGLE_OPERATION",
+      "fallback": "IMMEDIATE",
+      "description": "Write mode activates for exactly ONE operation, then immediately returns to READ_ONLY. No batching, no session-based approval."
+    },
+
+    "autoFallback": {
+      "trigger": "After every write operation completes (success or failure)",
+      "action": "Return to READ_ONLY mode",
+      "noTimeout": true,
+      "description": "Write mode never persists. Each write is a one-shot approval. If the operator walks away mid-prompt, the system stays read-only because no 'y' was received."
+    }
+  },
+
+  "agentOwnedTables": {
+    "description": "Tables the agent can write to without approval — these are its operational data, not business data.",
+    "tables": [
+      "dcfg_brain_insights",
+      "dcfg_agent_audit_log",
+      "dcfg_agent_session_trace",
+      "dcfg_agent_diagnostic"
+    ]
+  },
+
+  "auditOfAudits": {
+    "description": "Every write operation (approved or denied) is logged to dcfg_agent_audit_log.",
+    "logFields": {
+      "timestamp": "ISO 8601",
+      "operation": "What was requested",
+      "target": "Table and record",
+      "environment": "Org URL",
+      "approved": "boolean",
+      "result": "success/failure/skipped",
+      "operator": "Who approved (or 'denied'/'timeout')"
+    }
+  }
+}

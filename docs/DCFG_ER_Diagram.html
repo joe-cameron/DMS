@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DCFG Dataverse Schema — Entity Relationship Diagram</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Fraunces:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #F8FAFC;
+    color: #1E293B;
+    padding: 28px 32px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1B2A4A;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: #475569;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  /* Legend — card pattern */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #1E293B; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 4px; }
+  .legend-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-right: 4px; }
+  .legend-divider { width: 1px; height: 20px; background: #E2E8F0; margin: 0 4px; }
+  .blend-note { font-size: 11px; color: #94A3B8; margin-top: 6px; width: 100%; }
+
+  /* Entity card — follows .card pattern */
+  .entity {
+    position: absolute;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    min-width: 200px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .entity-header {
+    padding: 7px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .entity-header .table-name { flex: 1; }
+  /* System indicator dots in header */
+  .sys-dots { display: flex; gap: 3px; }
+  .sys-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .entity-fields {
+    padding: 6px 12px 8px;
+    line-height: 1.7;
+    font-size: 12.5px;
+  }
+  .entity-fields .pk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: #D4A017;
+    background: #FFF8E7;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-right: 2px;
+  }
+  .entity-fields .fk {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: #2E5295;
+    background: #EDF1F8;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-right: 2px;
+  }
+  .entity-fields .field { color: #1E293B; }
+  .entity-fields .type { color: #94A3B8; font-size: 11px; margin-left: 3px; }
+  .entity-fields .note { color: #94A3B8; font-size: 11px; font-style: italic; }
+
+  /* System-colored left border accent (2px strip) */
+  .accent-sales { border-left: 3px solid #2E5295; }
+  .accent-contracts { border-left: 3px solid #2D8659; }
+  .accent-locations { border-left: 3px solid #D4A017; }
+  .accent-onboarding { border-left: 3px solid #7C3AED; }
+  .accent-operations { border-left: 3px solid #C0392B; }
+  .accent-docgen { border-left: 3px solid #1E40AF; }
+  .accent-crosscut { border-left: 3px solid #94A3B8; border-style: dashed; border-left-style: dashed; }
+
+  /* Multi-system: thicker left border with segments via gradient */
+  .accent-sales-contracts { border-left: 4px solid transparent; border-image: linear-gradient(to bottom, #2E5295 50%, #2D8659 50%) 1; border-image-slice: 1; }
+  .accent-sales-contracts { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+  .accent-contracts-locations { border-left: 4px solid transparent; border-image: linear-gradient(to bottom, #2D8659 50%, #D4A017 50%) 1; border-image-slice: 1; }
+  .accent-contracts-locations { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+  .accent-onboarding-operations { border-left: 4px solid transparent; border-image: linear-gradient(to bottom, #7C3AED 50%, #C0392B 50%) 1; border-image-slice: 1; }
+  .accent-onboarding-operations { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+  .accent-operations-docgen { border-left: 4px solid transparent; border-image: linear-gradient(to bottom, #C0392B 50%, #1E40AF 50%) 1; border-image-slice: 1; }
+  .accent-operations-docgen { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+  .accent-loc-ops-docgen { border-left: 5px solid transparent; border-image: linear-gradient(to bottom, #D4A017 33%, #C0392B 33%, #C0392B 66%, #1E40AF 66%) 1; border-image-slice: 1; }
+  .accent-loc-ops-docgen { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+  .accent-shared { border-left: 6px solid transparent; border-image: linear-gradient(to bottom, #2E5295 20%, #2D8659 20%, #2D8659 40%, #D4A017 40%, #D4A017 60%, #7C3AED 60%, #7C3AED 80%, #C0392B 80%) 1; border-image-slice: 1; }
+  .accent-shared { border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
+
+  /* Section labels */
+  .section-label {
+    position: absolute;
+    font-size: 10px;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  /* Canvas */
+  .canvas-wrap {
+    position: relative;
+    width: 1340px;
+    height: 1580px;
+    margin: 0 auto;
+  }
+  .rel-canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+
+  /* Info panel — card pattern */
+  .info-panel {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 1340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .info-panel h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1B2A4A;
+    margin-bottom: 8px;
+  }
+  .info-panel ul { padding-left: 20px; }
+  .info-panel li { margin-bottom: 4px; color: #475569; }
+  .info-panel strong { color: #1E293B; }
+  .info-panel code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: #F1F5F9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #1B2A4A;
+  }
+
+  /* Ownership table */
+  .ownership-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .ownership-table th {
+    background: #F8FAFC;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: #475569;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .ownership-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #1E293B;
+  }
+  .ownership-table td:first-child { font-weight: 600; }
+  .ownership-table .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ownership-table .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<h1>DCFG Dataverse Schema</h1>
+<p class="subtitle">19 custom tables &middot; 22 relationships &middot; Color-coded by system &middot; 2026-04-03</p>
+
+<div class="legend">
+  <span class="legend-label">Systems:</span>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2E5295"></div> Sales</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2D8659"></div> Contracts</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#D4A017"></div> Locations</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#7C3AED"></div> Onboarding</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#C0392B"></div> Operations</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#1E40AF"></div> Doc Generation</div>
+  <div class="legend-divider"></div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#94A3B8; border: 1px dashed #94A3B8"></div> Cross-Cutting</div>
+  <div class="blend-note">Left border stripe shows system ownership. Multi-color stripes = shared across systems. Dashed = cross-cutting (all systems write).</div>
+</div>
+
+<div class="canvas-wrap" id="canvas">
+  <svg class="rel-canvas" id="lines" width="1340" height="1580"></svg>
+
+  <!-- ====== ROW 1: Vendor & Customer Hierarchy ====== -->
+  <div class="section-label" style="top:6px; left:0;">Vendor &amp; Customer Hierarchy</div>
+
+  <!-- dcfg_vendor — Contracts + Operations -->
+  <div class="entity accent-contracts" id="vendor" style="top:28px; left:0; width:220px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_vendor</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2D8659" title="Contracts"></div><div class="sys-dot" style="background:#C0392B" title="Operations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_vendorid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_legal_name</span></div>
+      <div><span class="field">dcfg_contract_family</span> <span class="type">Bancroft|Decades</span></div>
+      <div><span class="field">dcfg_active_flag</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_customer — Shared across 5 systems -->
+  <div class="entity accent-shared" id="customer" style="top:28px; left:320px; width:250px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_customer</span>
+      <div class="sys-dots">
+        <div class="sys-dot" style="background:#2E5295" title="Sales"></div>
+        <div class="sys-dot" style="background:#2D8659" title="Contracts"></div>
+        <div class="sys-dot" style="background:#D4A017" title="Locations"></div>
+        <div class="sys-dot" style="background:#7C3AED" title="Onboarding"></div>
+        <div class="sys-dot" style="background:#C0392B" title="Operations"></div>
+      </div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_customerid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_primary_contact_name</span></div>
+      <div><span class="field">dcfg_primary_contact_email</span></div>
+      <div><span class="field">dcfg_president_name</span></div>
+      <div><span class="fk">FK</span> dcfg_vendor_id <span class="type">&rarr; vendor</span></div>
+      <div><span class="field">dcfg_active_flag</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_program — Sales exclusive -->
+  <div class="entity accent-sales" id="program" style="top:28px; left:680px; width:210px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_program</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2E5295" title="Sales"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_programid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_budget_total</span> <span class="type">currency</span></div>
+      <div><span class="field">dcfg_budget_committed</span> <span class="type">read-only</span></div>
+      <div><span class="fk">FK</span> dcfg_customer_id <span class="type">&rarr; customer</span></div>
+    </div>
+  </div>
+
+  <!-- ====== ROW 2: MSA + Location Type + Property ====== -->
+  <div class="section-label" style="top:246px; left:0;">Agreements &amp; Locations</div>
+
+  <!-- dcfg_msa — Sales + Contracts -->
+  <div class="entity accent-sales-contracts" id="msa" style="top:268px; left:0; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_msa</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2E5295" title="Sales"></div><div class="sys-dot" style="background:#2D8659" title="Contracts"></div><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_msaid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_msa_date</span> <span class="type">date</span></div>
+      <div><span class="field">dcfg_status</span> <span class="type">Draft&hellip;Inactive</span></div>
+      <div><span class="field">dcfg_exhibit_type</span> <span class="type">PkgA|B|C</span></div>
+      <div><span class="field">dcfg_budget_total</span> <span class="type">currency</span></div>
+      <div><span class="fk">FK</span> dcfg_customer_id <span class="type">&rarr; customer</span></div>
+      <div><span class="fk">FK</span> dcfg_vendor_id <span class="type">&rarr; vendor</span></div>
+      <div><span class="field">dcfg_active_flag</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_location_type — Locations + Operations + DocGen -->
+  <div class="entity accent-loc-ops-docgen" id="location_type" style="top:268px; left:340px; width:220px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_location_type</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#D4A017" title="Locations"></div><div class="sys-dot" style="background:#C0392B" title="Operations"></div><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_location_typeid</div>
+      <div><span class="field">dcfg_name</span> <span class="type">GroupHome|Day|School|Admin</span></div>
+      <div><span class="field">dcfg_description</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_property — Contracts + Locations -->
+  <div class="entity accent-contracts-locations" id="property" style="top:268px; left:680px; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_property</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2D8659" title="Contracts"></div><div class="sys-dot" style="background:#D4A017" title="Locations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_propertyid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_address / city / state</span></div>
+      <div><span class="field">dcfg_contact_person</span></div>
+      <div><span class="field">dcfg_contact_email</span></div>
+      <div><span class="fk">FK</span> dcfg_customer_id <span class="type">&rarr; customer</span></div>
+      <div><span class="fk">FK</span> dcfg_location_type_id <span class="type">&rarr; loc_type</span></div>
+      <div><span class="field">dcfg_active_flag</span></div>
+    </div>
+  </div>
+
+  <!-- ====== ROW 3: MSA Rate + Property children ====== -->
+
+  <!-- dcfg_msa_rate — Contracts + DocGen -->
+  <div class="entity accent-contracts" id="msa_rate" style="top:520px; left:0; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_msa_rate</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2D8659" title="Contracts"></div><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_msa_rateid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_membership_rate</span> <span class="type">currency</span></div>
+      <div><span class="field">dcfg_onboarding_rate</span> <span class="type">currency</span></div>
+      <div><span class="fk">FK</span> dcfg_msa_id <span class="type">&rarr; msa</span></div>
+      <div><span class="fk">FK</span> dcfg_location_type_id <span class="type">&rarr; loc_type</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_property_detail — Locations exclusive -->
+  <div class="entity accent-locations" id="property_detail" style="top:520px; left:680px; width:210px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_property_detail</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#D4A017" title="Locations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_property_detailid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="fk">FK</span> dcfg_property_id <span class="type">&rarr; property</span></div>
+      <div><span class="note">+ 35 extended attributes</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_location_document — Locations exclusive -->
+  <div class="entity accent-locations" id="location_document" style="top:520px; left:960px; width:220px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_location_document</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#D4A017" title="Locations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_location_documentid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="fk">FK</span> dcfg_property_id <span class="type">&rarr; property</span></div>
+    </div>
+  </div>
+
+  <!-- ====== ROW 4: Contract Lifecycle ====== -->
+  <div class="section-label" style="top:698px; left:0;">Contract Lifecycle</div>
+
+  <!-- dcfg_contract — Sales + Contracts -->
+  <div class="entity accent-sales-contracts" id="contract" style="top:718px; left:0; width:270px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_contract</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2E5295" title="Sales"></div><div class="sys-dot" style="background:#2D8659" title="Contracts"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_contractid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_contract_number</span></div>
+      <div><span class="field">dcfg_status</span> <span class="type">Draft&hellip;Declined</span></div>
+      <div><span class="field">dcfg_contract_family</span> <span class="type">Bancroft|Decades</span></div>
+      <div><span class="field">dcfg_amendment_number</span> <span class="type">int</span></div>
+      <div><span class="field">dcfg_budget_committed</span> <span class="type">read-only</span></div>
+      <div><span class="fk">FK</span> dcfg_msa_id <span class="type">&rarr; msa</span></div>
+      <div><span class="fk">FK</span> dcfg_property_id <span class="type">&rarr; property</span></div>
+      <div><span class="fk">FK</span> dcfg_parent_contract_id <span class="type">&rarr; self (amend)</span></div>
+      <div><span class="fk">FK</span> dcfg_program_id <span class="type">&rarr; program</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_ap_cost_code — Operations exclusive -->
+  <div class="entity accent-operations" id="ap_cost_code" style="top:718px; left:680px; width:210px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_ap_cost_code</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#C0392B" title="Operations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_ap_cost_codeid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_customer_ap_code</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_contract_line — Contracts exclusive -->
+  <div class="entity accent-contracts" id="contract_line" style="top:968px; left:0; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_contract_line</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2D8659" title="Contracts"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_contract_lineid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_item_number</span> <span class="type">int</span></div>
+      <div><span class="field">dcfg_description</span></div>
+      <div><span class="field">dcfg_amount</span> <span class="type">currency</span></div>
+      <div><span class="fk">FK</span> dcfg_contract_id <span class="type">&rarr; contract</span></div>
+      <div><span class="fk">FK</span> dcfg_cost_code_id <span class="type">&rarr; cost_code</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_send_queue — Operations exclusive -->
+  <div class="entity accent-operations" id="send_queue" style="top:968px; left:340px; width:220px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_send_queue</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#C0392B" title="Operations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_send_queueid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="fk">FK</span> dcfg_contract_id <span class="type">&rarr; contract</span></div>
+    </div>
+  </div>
+
+  <!-- ====== Onboarding ====== -->
+  <div class="section-label" style="top:698px; left:960px;">Onboarding</div>
+
+  <!-- dcfg_onboarding_case — Onboarding exclusive -->
+  <div class="entity accent-onboarding" id="onboarding_case" style="top:718px; left:960px; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_onboarding_case</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#7C3AED" title="Onboarding"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_onboarding_caseid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_status</span> <span class="type">NotStarted&hellip;Closed</span></div>
+      <div><span class="field">dcfg_phase</span> <span class="type">SalesProposal&hellip;GoLive</span></div>
+      <div><span class="fk">FK</span> dcfg_customer_id <span class="type">&rarr; customer</span></div>
+      <div><span class="fk">FK</span> dcfg_msa_id <span class="type">&rarr; msa</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_onboarding_checklist — Onboarding + Operations -->
+  <div class="entity accent-onboarding-operations" id="onboarding_checklist" style="top:928px; left:960px; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_onboarding_checklist</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#7C3AED" title="Onboarding"></div><div class="sys-dot" style="background:#C0392B" title="Operations"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_onboarding_checklistid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="fk">FK</span> dcfg_onboarding_case_id <span class="type">&rarr; case</span></div>
+    </div>
+  </div>
+
+  <!-- ====== ROW 5: Document Generation Pipeline ====== -->
+  <div class="section-label" style="top:1128px; left:0;">Document Generation Pipeline</div>
+
+  <!-- dcfg_document_template — Operations + DocGen -->
+  <div class="entity accent-operations-docgen" id="document_template" style="top:1148px; left:0; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_document_template</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#C0392B" title="Operations"></div><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_document_templateid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_exhibit_type</span> <span class="type">PkgA|B|C</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_template_field — DocGen exclusive -->
+  <div class="entity accent-docgen" id="template_field" style="top:1148px; left:340px; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_template_field</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_template_fieldid</div>
+      <div><span class="field">dcfg_field_name</span></div>
+      <div><span class="field">dcfg_source_entity</span></div>
+      <div><span class="field">dcfg_source_column</span></div>
+      <div><span class="field">dcfg_is_required</span> <span class="type">bool</span></div>
+      <div><span class="fk">FK</span> dcfg_document_template_id <span class="type">&rarr; template</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_document_output — Contracts exclusive -->
+  <div class="entity accent-contracts" id="document_output" style="top:1148px; left:680px; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_document_output</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#2D8659" title="Contracts"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_document_outputid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="fk">FK</span> dcfg_template_id <span class="type">&rarr; template</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_document_request — DocGen exclusive -->
+  <div class="entity accent-docgen" id="document_requests" style="top:1348px; left:0; width:240px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_document_request</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#1E40AF" title="DocGen"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_document_requestid</div>
+      <div><span class="field">dcfg_request_type</span> <span class="type">DocGen|Email|Cert</span></div>
+      <div><span class="field">dcfg_status</span> <span class="type">Pending&hellip;Failed</span></div>
+      <div><span class="note">Flow trigger table &mdash; Dataverse When row added</span></div>
+    </div>
+  </div>
+
+  <!-- ====== Cross-Cutting ====== -->
+  <div class="section-label" style="top:1128px; left:960px;">Cross-Cutting</div>
+
+  <!-- dcfg_audit_log -->
+  <div class="entity accent-crosscut" id="audit_log" style="top:1148px; left:960px; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_audit_log</span>
+      <div class="sys-dots">
+        <div class="sys-dot" style="background:#2E5295" title="Sales"></div>
+        <div class="sys-dot" style="background:#2D8659" title="Contracts"></div>
+        <div class="sys-dot" style="background:#C0392B" title="Operations"></div>
+      </div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_audit_logid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="field">dcfg_action_type</span> <span class="type">Generated&hellip;Other</span></div>
+      <div><span class="note">Immutable &mdash; CREATE only, no updates</span></div>
+    </div>
+  </div>
+
+  <!-- dcfg_config -->
+  <div class="entity accent-crosscut" id="configs" style="top:1348px; left:960px; width:230px;">
+    <div class="entity-header">
+      <span class="table-name">dcfg_config</span>
+      <div class="sys-dots"><div class="sys-dot" style="background:#94A3B8" title="Infrastructure"></div></div>
+    </div>
+    <div class="entity-fields">
+      <div><span class="pk">PK</span> dcfg_configid</div>
+      <div><span class="field">dcfg_name</span></div>
+      <div><span class="note">Boot config, nav toggles, feature flags</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const svg = document.getElementById('lines');
+const NS = 'http://www.w3.org/2000/svg';
+
+const rels = [
+  ['customer','vendor'],['msa','customer'],['msa','vendor'],
+  ['msa_rate','msa'],['msa_rate','location_type'],
+  ['property','customer'],['property','location_type'],
+  ['property_detail','property'],['location_document','property'],
+  ['contract','msa'],['contract','property'],['contract','program'],
+  ['contract_line','contract'],['contract_line','ap_cost_code'],
+  ['send_queue','contract'],
+  ['onboarding_case','customer'],['onboarding_case','msa'],
+  ['onboarding_checklist','onboarding_case'],
+  ['template_field','document_template'],['document_output','document_template'],
+  ['program','customer']
+];
+
+function box(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  return {
+    x: el.offsetLeft, y: el.offsetTop,
+    w: el.offsetWidth, h: el.offsetHeight,
+    cx: el.offsetLeft + el.offsetWidth/2,
+    cy: el.offsetTop + el.offsetHeight/2
+  };
+}
+
+function edgePt(a, b) {
+  const dx = b.cx - a.cx, dy = b.cy - a.cy;
+  let fx, fy, tx, ty;
+  if (Math.abs(dy) > Math.abs(dx)*0.6) {
+    fy = dy < 0 ? a.y : a.y + a.h;
+    ty = dy < 0 ? b.y + b.h : b.y;
+    fx = a.cx; tx = b.cx;
+  } else {
+    fx = dx < 0 ? a.x : a.x + a.w;
+    tx = dx < 0 ? b.x + b.w : b.x;
+    fy = a.cy; ty = b.cy;
+  }
+  return {fx,fy,tx,ty};
+}
+
+rels.forEach((r, i) => {
+  const a = box(r[0]), b = box(r[1]);
+  if (!a || !b) return;
+  const p = edgePt(a, b);
+  const off = ((i % 5) - 2) * 3;
+
+  // Curved path
+  const mx = (p.fx + p.tx)/2 + off, my = (p.fy + p.ty)/2 + off;
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', `M${p.fx},${p.fy} Q${mx + off},${my - off} ${p.tx},${p.ty}`);
+  path.setAttribute('stroke', '#CBD5E1');
+  path.setAttribute('stroke-width', '1.2');
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+
+  // Arrowhead
+  const angle = Math.atan2(p.ty - my, p.tx - mx);
+  const al = 7;
+  const poly = document.createElementNS(NS, 'polygon');
+  const ax1 = p.tx - al*Math.cos(angle-0.35), ay1 = p.ty - al*Math.sin(angle-0.35);
+  const ax2 = p.tx - al*Math.cos(angle+0.35), ay2 = p.ty - al*Math.sin(angle+0.35);
+  poly.setAttribute('points', `${p.tx},${p.ty} ${ax1},${ay1} ${ax2},${ay2}`);
+  poly.setAttribute('fill', '#CBD5E1');
+  svg.appendChild(poly);
+});
+
+// Self-ref for contract amendments
+(function(){
+  const c = box('contract');
+  if (!c) return;
+  const x = c.x + c.w, y1 = c.y + 50, y2 = c.y + 90, bulge = 28;
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', `M${x},${y1} C${x+bulge},${y1} ${x+bulge},${y2} ${x},${y2}`);
+  path.setAttribute('stroke', '#94A3B8');
+  path.setAttribute('stroke-width', '1.2');
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+  const text = document.createElementNS(NS, 'text');
+  text.setAttribute('x', x + bulge + 4);
+  text.setAttribute('y', (y1+y2)/2 + 3);
+  text.setAttribute('fill', '#94A3B8');
+  text.setAttribute('font-size', '10');
+  text.setAttribute('font-family', 'IBM Plex Sans, sans-serif');
+  text.textContent = 'amendments';
+  svg.appendChild(text);
+  const poly = document.createElementNS(NS, 'polygon');
+  poly.setAttribute('points', `${x},${y2} ${x+5},${y2-4} ${x+5},${y2+4}`);
+  poly.setAttribute('fill', '#94A3B8');
+  svg.appendChild(poly);
+})();
+</script>
+
+<div class="info-panel">
+  <h3>Key Concepts</h3>
+  <ul>
+    <li><strong>Vendor</strong> and <strong>Customer</strong> are mutually exclusive at the top level &mdash; a record is one or the other. Vendors own Customers.</li>
+    <li><strong>MSAs</strong> are entity-level agreements (Customer + Vendor). No location reference &mdash; no Property FK.</li>
+    <li><strong>Contracts</strong> (Work Orders) are location-level &mdash; they reference both an MSA (terms) and a Property (site).</li>
+    <li><strong>Amendments</strong> are Contracts that self-reference a parent Contract. <code>dcfg_amendment_number</code> tracks the version.</li>
+    <li><strong>MSA Rates</strong> set pricing per Location Type per MSA. Location Types are shared reference data.</li>
+    <li><strong>Document Generation</strong> is triggered by writing to <code>dcfg_document_request</code>. Power Automate picks it up via Dataverse trigger.</li>
+    <li><strong>dcfg_customer</strong> is the most-connected table &mdash; referenced by Sales, Contracts, Locations, Onboarding, and Operations.</li>
+  </ul>
+
+  <h3 style="margin-top:20px;">System Ownership</h3>
+  <table class="ownership-table">
+    <thead>
+      <tr><th>System</th><th>Exclusive Tables</th><th>Shared Tables</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="swatch" style="background:#2E5295"></span>Sales</td>
+        <td class="mono">dcfg_program</td>
+        <td class="mono">customer, msa, contract, audit_log</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#2D8659"></span>Contracts</td>
+        <td class="mono">dcfg_contract_line, dcfg_document_output</td>
+        <td class="mono">contract, msa, msa_rate, vendor, property</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#D4A017"></span>Locations</td>
+        <td class="mono">dcfg_property_detail, dcfg_location_document</td>
+        <td class="mono">property, location_type</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#7C3AED"></span>Onboarding</td>
+        <td class="mono">dcfg_onboarding_case</td>
+        <td class="mono">customer, msa, onboarding_checklist</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#C0392B"></span>Operations</td>
+        <td class="mono">dcfg_ap_cost_code, dcfg_send_queue</td>
+        <td class="mono">vendor, checklist, templates, location_type</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#1E40AF"></span>Doc Generation</td>
+        <td class="mono">dcfg_template_field, dcfg_document_request</td>
+        <td class="mono">templates, msa_rate, location_type</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background:#94A3B8"></span>Cross-Cutting</td>
+        <td class="mono">dcfg_audit_log, dcfg_config</td>
+        <td class="mono">&mdash;</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

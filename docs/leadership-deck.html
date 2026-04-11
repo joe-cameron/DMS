@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>DCFG Leadership Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=Fraunces:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  /* --- Slide container --- */
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1920px;
+    height: 1080px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 140px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* --- Beats --- */
+  .beat {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+    margin-bottom: 32px;
+  }
+  .beat.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .beat.muted {
+    opacity: 0.28;
+    transform: translateY(0);
+  }
+
+  /* --- Typography --- */
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 96px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    margin-bottom: 60px;
+    color: #ffffff;
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 56px;
+    color: #ffffff;
+  }
+  .beat-text {
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #e6edf3;
+  }
+  .beat-text strong {
+    font-weight: 600;
+    color: #ffffff;
+  }
+  .beat-sub {
+    font-size: 28px;
+    font-weight: 300;
+    color: #8b949e;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .number {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    color: #58a6ff;
+  }
+  .accent {
+    color: #58a6ff;
+  }
+  .embellishment .beat-text {
+    color: #8b949e;
+    font-style: italic;
+  }
+  .embellishment .beat-text strong {
+    color: #8b949e;
+  }
+  .bg-beat .beat-text {
+    font-size: 30px;
+    color: #484f58;
+  }
+
+  /* --- Progress bar --- */
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: #58a6ff;
+    transition: width 0.6s ease;
+    z-index: 100;
+  }
+
+  /* --- Slide number --- */
+  .slide-num {
+    position: absolute;
+    bottom: 32px;
+    right: 48px;
+    font-size: 20px;
+    color: #30363d;
+    font-weight: 300;
+  }
+
+  /* --- Print / PDF --- */
+  @media print {
+    html, body {
+      width: auto;
+      height: auto;
+      overflow: visible;
+    }
+    .slide {
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
+      page-break-after: always;
+      padding: 60px 80px;
+    }
+    .beat {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .beat.muted {
+      opacity: 0.5 !important;
+    }
+    .progress { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: ROI ==================== -->
+<div class="slide active" id="slide-1">
+  <h1>ROI</h1>
+  <div class="beat" data-beat="1">
+    <div class="beat-text"><strong>Built by one person + AI</strong> in 2 months</div>
+  </div>
+  <div class="beat" data-beat="2">
+    <div class="number">$600&ndash;$1,200<span style="font-size:32px;font-weight:400;color:#8b949e">/yr</span></div>
+    <div class="beat-sub">Pay-as-you-go Microsoft licensing. The entire platform.</div>
+  </div>
+  <div class="beat" data-beat="3">
+    <div class="number">$10M &rarr; $100M</div>
+    <div class="beat-sub">+2-3 staff. The platform scales, not the payroll.</div>
+  </div>
+  <div class="slide-num">1 / 3</div>
+</div>
+
+<!-- ==================== SLIDE 2: CONTRACTS ==================== -->
+<div class="slide" id="slide-2">
+  <h2>Contracts</h2>
+  <div class="beat" data-beat="1">
+    <div class="beat-text"><strong>Contract creation + approval workflow</strong></div>
+    <div class="beat-sub">Structured workflow and approval gates replace Word docs and email chains</div>
+  </div>
+  <div class="beat" data-beat="2">
+    <div class="beat-text"><strong>Customer database</strong></div>
+    <div class="beat-sub">You didn't buy a CRM &mdash; a contracting system built one</div>
+  </div>
+  <div class="beat" data-beat="3">
+    <div class="beat-text"><strong>Document automation</strong></div>
+    <div class="beat-sub">Proposals, contracts, exhibits &mdash; generated, not typed</div>
+  </div>
+  <div class="beat bg-beat" data-beat="4">
+    <div class="beat-text">$1,200/yr platform &bull; AI harness &bull; continuous improvement</div>
+  </div>
+  <div class="slide-num">2 / 3</div>
+</div>
+
+<!-- ==================== SLIDE 3: ONBOARDING ==================== -->
+<div class="slide" id="slide-3">
+  <h2>Onboarding</h2>
+  <div class="beat" data-beat="1">
+    <div class="beat-text"><strong>Customer onboarding process</strong></div>
+    <div class="beat-sub">Guided, digital property data collection replaces manual intake</div>
+  </div>
+  <div class="beat" data-beat="2">
+    <div class="beat-text"><strong>Locations + scheduling</strong></div>
+    <div class="beat-sub">Operational backbone emerged from onboarding new properties</div>
+  </div>
+  <div class="beat" data-beat="3">
+    <div class="beat-text"><strong>Process task management</strong></div>
+    <div class="beat-sub">Phased steps, due dates, progress tracking, evidence capture</div>
+  </div>
+  <div class="beat embellishment" data-beat="4">
+    <div class="beat-text"><strong>Field ops</strong> &mdash; jumping-off point for remote inspectors</div>
+  </div>
+  <div class="beat embellishment" data-beat="5">
+    <div class="beat-text"><strong>Delegation</strong> &mdash; many hands make light work when you're not paying the hands</div>
+  </div>
+  <div class="beat bg-beat" data-beat="6">
+    <div class="beat-text">AI knowledge layer &bull; training &bull; information retrieval &bull; always-on monitoring</div>
+  </div>
+  <div class="slide-num">3 / 3</div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress" id="progress"></div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let currentSlide = 0;
+  let currentBeat = 0;
+
+  function getBeats(slideIdx) {
+    return Array.from(slides[slideIdx].querySelectorAll('.beat'));
+  }
+
+  function totalSteps() {
+    return slides.reduce((sum, s) => sum + s.querySelectorAll('.beat').length + 1, 0);
+  }
+
+  function completedSteps() {
+    let steps = 0;
+    for (let i = 0; i < currentSlide; i++) {
+      steps += getBeats(i).length + 1; // all beats + slide transition
+    }
+    steps += currentBeat;
+    return steps;
+  }
+
+  function updateProgress() {
+    const pct = (completedSteps() / totalSteps()) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  }
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+      // Reset beats on non-active slides
+      if (i !== idx) {
+        Array.from(s.querySelectorAll('.beat')).forEach(b => {
+          b.classList.remove('visible', 'muted');
+        });
+      }
+    });
+  }
+
+  function advance() {
+    const beats = getBeats(currentSlide);
+
+    if (currentBeat < beats.length) {
+      // Mute all previous beats
+      for (let i = 0; i < currentBeat; i++) {
+        beats[i].classList.add('muted');
+        beats[i].classList.remove('visible');
+      }
+      // Show current beat
+      beats[currentBeat].classList.add('visible');
+      beats[currentBeat].classList.remove('muted');
+      currentBeat++;
+    } else if (currentSlide < slides.length - 1) {
+      // Next slide
+      currentSlide++;
+      currentBeat = 0;
+      showSlide(currentSlide);
+    }
+    updateProgress();
+  }
+
+  function retreat() {
+    if (currentBeat > 0) {
+      currentBeat--;
+      const beats = getBeats(currentSlide);
+      // Hide current beat
+      beats[currentBeat].classList.remove('visible', 'muted');
+      // Un-mute the previous one
+      if (currentBeat > 0) {
+        beats[currentBeat - 1].classList.remove('muted');
+        beats[currentBeat - 1].classList.add('visible');
+      }
+    } else if (currentSlide > 0) {
+      currentSlide--;
+      const beats = getBeats(currentSlide);
+      currentBeat = beats.length;
+      showSlide(currentSlide);
+      // Restore all beats as visible with proper muting
+      beats.forEach((b, i) => {
+        if (i < beats.length - 1) {
+          b.classList.add('muted');
+          b.classList.remove('visible');
+        } else {
+          b.classList.add('visible');
+          b.classList.remove('muted');
+        }
+      });
+    }
+    updateProgress();
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      advance();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      retreat();
+    }
+  });
+
+  // Initialize
+  showSlide(0);
+  updateProgress();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "reading-list",
+    "version": "1.0",
+    "description": "Books, articles, videos, and courses with reading status. Agent: when the user mentions something they want to read or watch, add it here. Statuses: queued, in-progress, completed, abandoned.",
+    "file": "brain/learning/reading-list.json"
+  },
+  "entries": []
+}

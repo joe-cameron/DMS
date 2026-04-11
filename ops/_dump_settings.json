@@ -1,0 +1,332 @@
+[
+  {
+    "name": "Webapi/dcfg_contract/enabled",
+    "id": "270d52ba-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_contract/fields",
+    "id": "fd396ec0-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_asset_id_value,_dcfg_customer_id_value,_dcfg_default_cost_code_value,_dcfg_duplicated_from_id_value,_dcfg_msa_id_value,_dcfg_parent_contract_id_value,_dcfg_program_id_value,_dcfg_property_id_value,_dcfg_vendor_id_value,createdon,dcfg_active_flag,dcfg_amendment_sequence,dcfg_ap_cover_sheet_url,dcfg_asset_id,dcfg_asset_idname,dcfg_billing_frequency,dcfg_client_name,dcfg_company,dcfg_contract_date,dcfg_contract_family,dcfg_contract_fee,dcfg_contract_fee_base,dcfg_contract_number,dcfg_contract_type,dcfg_contractid,dcfg_contractor_address,dcfg_contractor_email,dcfg_contractor_legal_name,dcfg_contractor_name,dcfg_contractor_phone,dcfg_current_properties_included,dcfg_customer_id,dcfg_customer_idname,dcfg_declined_reason,dcfg_default_cost_code,dcfg_default_cost_codename,dcfg_description_of_service,dcfg_description_of_work,dcfg_document_url,dcfg_duplicated_from_id,dcfg_duplicated_from_idname,dcfg_end_date,dcfg_envelope_id,dcfg_fee,dcfg_fiscal_year,dcfg_form_of_payment,dcfg_generated_date,dcfg_is_budgeted,dcfg_msa_id,dcfg_msa_idname,dcfg_notes,dcfg_override_reason,dcfg_owner_city,dcfg_owner_contact,dcfg_owner_email,dcfg_owner_state,dcfg_owner_street,dcfg_owner_title,dcfg_parent_contract_id,dcfg_parent_contract_idname,dcfg_payment_process,dcfg_payment_terms,dcfg_po_number,dcfg_program_id,dcfg_program_idname,dcfg_property_id,dcfg_property_idname,dcfg_sage_job_number,dcfg_sent_by,dcfg_sent_date,dcfg_signed_by_staff,dcfg_signed_date,dcfg_signer_printed,dcfg_signer_title,dcfg_start_date,dcfg_status,dcfg_vendor_id,dcfg_vendor_idname,dcfg_void_reason,dcfg_work_category,dcfg_work_completed_date,dcfg_work_hours,dcfg_work_start_date,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_customer/fields",
+    "id": "003a6ec0-bc1b-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_active_flag,dcfg_billing_address,dcfg_billing_address_line2,dcfg_billing_city,dcfg_billing_state,dcfg_billing_zip,dcfg_contract_family,dcfg_customerid,dcfg_display_name,dcfg_is_tpa,dcfg_name,dcfg_notes,dcfg_onboarding_complete,dcfg_onboarding_status,dcfg_president_name,dcfg_president_title,dcfg_primary_contact_email,dcfg_primary_contact_name,dcfg_primary_contact_phone,dcfg_primary_contact_title,dcfg_status,dcfg_upkeep_customer_id,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_msa_rate/enabled",
+    "id": "043a6ec0-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_msa_rate/fields",
+    "id": "073a6ec0-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_location_type_id_value,_dcfg_msa_id_value,createdon,dcfg_is_active,dcfg_location_type_id,dcfg_location_type_idname,dcfg_membership_rate,dcfg_membership_rate_base,dcfg_msa_id,dcfg_msa_idname,dcfg_msa_rateid,dcfg_name,dcfg_onboarding_rate,dcfg_onboarding_rate_base,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_property/enabled",
+    "id": "06dc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_property_detail/fields",
+    "id": "09dc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_property_id_value,createdon,dcfg_dca_due,dcfg_dca_last,dcfg_entry_time,dcfg_fire_alarm_due,dcfg_fire_alarm_last,dcfg_fire_alarm_type,dcfg_generator_install_date,dcfg_generator_present,dcfg_grease_trap_install_date,dcfg_grease_trap_present,dcfg_has_detectors,dcfg_has_floor_plans,dcfg_has_garage,dcfg_has_lockbox,dcfg_has_pool,dcfg_has_solar,dcfg_heating_type,dcfg_home_ownership,dcfg_home_type,dcfg_idd_due,dcfg_idd_last,dcfg_name,dcfg_parking,dcfg_property_detailid,dcfg_property_id,dcfg_property_idname,dcfg_septic_install_date,dcfg_septic_present,dcfg_service_line,dcfg_sprinkler_last_inspection,dcfg_sprinkler_next_due,dcfg_sprinkler_present,dcfg_trash_collection,dcfg_water_supply,dcfg_water_treatment_due,dcfg_water_treatment_last,dcfg_water_treatment_present,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_location_type/enabled",
+    "id": "0cdc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_location_type/fields",
+    "id": "0fdc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_description,dcfg_is_active,dcfg_location_typeid,dcfg_name,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_location_document/enabled",
+    "id": "12dc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_location_document/fields",
+    "id": "15dc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_property_id_value,createdon,dcfg_alert_status,dcfg_certification_date,dcfg_days_until_expiry,dcfg_doc_description,dcfg_doc_type,dcfg_expiration_date,dcfg_is_active,dcfg_location_documentid,dcfg_property_id,dcfg_property_idname,dcfg_provider_name,dcfg_sharepoint_file_name,dcfg_sharepoint_item_id,dcfg_sharepoint_url,dcfg_uploaded_at,dcfg_uploaded_by,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_ap_cost_code/fields",
+    "id": "18dc27c7-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_customer_id_value,createdon,dcfg_active_flag,dcfg_ap_cost_codeid,dcfg_customer_ap_code,dcfg_customer_id,dcfg_customer_idname,dcfg_dcfg_cost_code,dcfg_description,dcfg_is_active,dcfg_trade_category,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_document_output/fields",
+    "id": "0ebf85ce-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_template_id_value,createdon,dcfg_document_outputid,dcfg_generated_at,dcfg_generated_by,dcfg_merge_status,dcfg_missing_field_count,dcfg_name,dcfg_output_file_url,dcfg_override_reason,dcfg_source_entity,dcfg_source_record_id,dcfg_template_id,dcfg_template_idname,dcfg_template_version,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_onboarding_case/enabled",
+    "id": "2abf85ce-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_program/fields",
+    "id": "32bf85ce-bc1b-f111-8341-7ced8d709173",
+    "value": "_dcfg_customer_id_value,createdon,dcfg_active_flag,dcfg_budget_committed,dcfg_budget_remaining,dcfg_budget_total,dcfg_customer_id,dcfg_customer_idname,dcfg_end_date,dcfg_max_term_days,dcfg_name,dcfg_notes,dcfg_program_code,dcfg_programid,dcfg_start_date,dcfg_status,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_template_field/enabled",
+    "id": "5f7a98d4-bc1b-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_appliance_type/fields",
+    "id": "5f150749-191e-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_appliance_typeid,dcfg_category,dcfg_expected_lifespan_years,dcfg_icon,dcfg_is_active,dcfg_name,dcfg_notes,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_appliance/enabled",
+    "id": "62150749-191e-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_appliance/fields",
+    "id": "65150749-191e-f111-8341-7ced8d709173",
+    "value": "_dcfg_appliance_type_id_value,_dcfg_property_id_value,createdon,dcfg_appliance_type_id,dcfg_appliance_type_idname,dcfg_applianceid,dcfg_brand,dcfg_custom_label,dcfg_estimated_replace_by,dcfg_install_date,dcfg_is_active,dcfg_location_in_property,dcfg_months_to_replace_by,dcfg_name,dcfg_notes,dcfg_primary_photo_sp_id,dcfg_primary_photo_url,dcfg_property_id,dcfg_property_idname,dcfg_replace_by_override,dcfg_replace_by_status,dcfg_serial_number,dcfg_serial_photo_sp_id,dcfg_serial_photo_url,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_appliance_photo/enabled",
+    "id": "68150749-191e-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_appliance_photo/fields",
+    "id": "6b150749-191e-f111-8341-7ced8d709173",
+    "value": "_dcfg_appliance_id_value,createdon,dcfg_appliance_id,dcfg_appliance_idname,dcfg_appliance_photoid,dcfg_file_url,dcfg_is_active,dcfg_name,dcfg_sort_order,dcfg_sp_item_id,dcfg_uploaded_at,dcfg_uploaded_by,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_brain_insight/fields",
+    "id": "61eddb6d-be20-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_brain_insight_name,dcfg_brain_insightid,dcfg_created_by_flow,dcfg_detail,dcfg_domain,dcfg_expires_on,dcfg_insight_status,dcfg_insight_type,dcfg_is_actionable,dcfg_priority,dcfg_source_entity,dcfg_source_record_id,dcfg_title,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_equipment_benchmark/enabled",
+    "id": "63eddb6d-be20-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_compliance_check/enabled",
+    "id": "eade5c8b-5921-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_compliance_check/fields",
+    "id": "ecde5c8b-5921-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_checked_at,dcfg_checked_by,dcfg_compliance_check_name,dcfg_compliance_checkid,dcfg_contract_id_ref,dcfg_is_checked,dcfg_notes,dcfg_rule_id_ref,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_document_request/enabled",
+    "id": "591c7c0d-2324-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_config/fields",
+    "id": "f54d6775-6524-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_active,dcfg_configid,dcfg_key,dcfg_value,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_agent_audit_log/enabled",
+    "id": "03a759b6-3f27-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_agent_session_trace/enabled",
+    "id": "c4f9f9c3-3f27-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_agent_session_trace/fields",
+    "id": "c9f9f9c3-3f27-f111-8341-7ced8d709173",
+    "value": "createdon,dcfg_active_flag,dcfg_agent_session_traceid,dcfg_duration_seconds,dcfg_session_id,dcfg_timestamp,dcfg_trace_data,dcfg_trigger_event,dcfg_trigger_type,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_permtest/enabled",
+    "id": "028995f0-8f27-f111-8341-7ced8d709173",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_permtest/fields",
+    "id": "048995f0-8f27-f111-8341-7ced8d709173",
+    "value": "*"
+  },
+  {
+    "name": "Webapi/dcfg_contract_line/enabled",
+    "id": "7a1d2fbc-bc1b-f111-8341-7ced8d7092f6",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_contract_line/fields",
+    "id": "49285ac2-bc1b-f111-8341-7ced8d7092f6",
+    "value": "_dcfg_contract_id_value,_dcfg_cost_code_id_value,createdon,dcfg_amount,dcfg_ap_mapping_status,dcfg_contract_id,dcfg_contract_idname,dcfg_contract_lineid,dcfg_cost_code,dcfg_cost_code_id,dcfg_cost_code_idname,dcfg_customer_ap_code,dcfg_description,dcfg_item_number,dcfg_qty,dcfg_sort_order,dcfg_unit_rate,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_customer/enabled",
+    "id": "4c285ac2-bc1b-f111-8341-7ced8d7092f6",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_property/fields",
+    "id": "50285ac2-bc1b-f111-8341-7ced8d7092f6",
+    "value": "_dcfg_customer_id_value,_dcfg_location_type_id_value,_dcfg_parent_location_id_value,createdon,dcfg_active_flag,dcfg_address,dcfg_address_line2,dcfg_alarm_date,dcfg_city,dcfg_contact_email,dcfg_contact_person,dcfg_contact_phone,dcfg_contact_title,dcfg_customer_id,dcfg_customer_idname,dcfg_fire_cert_date,dcfg_fire_contact_email,dcfg_is_no_charge,dcfg_latitude,dcfg_location_type_id,dcfg_location_type_idname,dcfg_longitude,dcfg_name,dcfg_nj_dca_date,dcfg_notes,dcfg_parent_location_id,dcfg_parent_location_idname,dcfg_property_type,dcfg_propertyid,dcfg_sprinkler_date,dcfg_state,dcfg_upkeep_location_id,dcfg_upkeep_parent_location_id,dcfg_upkeep_push_date,dcfg_upkeep_push_status,dcfg_zip,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_document_template/fields",
+    "id": "aad8c6cf-bc1b-f111-8341-7ced8d7092f6",
+    "value": "createdon,dcfg_activated_date,dcfg_contract_family,dcfg_deactivated_date,dcfg_document_templateid,dcfg_document_type,dcfg_exhibit_type,dcfg_is_active,dcfg_name,dcfg_notes,dcfg_sharepoint_url,dcfg_validation_status,dcfg_version,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_onboarding_case/fields",
+    "id": "add8c6cf-bc1b-f111-8341-7ced8d7092f6",
+    "value": "_dcfg_customer_id_value,_dcfg_msa_id_value,createdon,dcfg_active_flag,dcfg_case_label,dcfg_case_number,dcfg_completed_date,dcfg_customer_id,dcfg_customer_idname,dcfg_initiated_date,dcfg_msa_id,dcfg_msa_idname,dcfg_notes,dcfg_onboarding_caseid,dcfg_status,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_send_queue/enabled",
+    "id": "b3d8c6cf-bc1b-f111-8341-7ced8d7092f6",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_compliance_rule/enabled",
+    "id": "0799b988-5921-f111-8341-7ced8d7092f6",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_document_request/fields",
+    "id": "6388630c-2324-f111-8341-7ced8d7092f6",
+    "value": "_dcfg_contract_id_value,_dcfg_customer_id_value,_dcfg_msa_id_value,_dcfg_template_id_value,createdon,dcfg_completed_at,dcfg_contract_id,dcfg_contract_idname,dcfg_customer_id,dcfg_customer_idname,dcfg_document_requestid,dcfg_error_message,dcfg_missing_field_count,dcfg_msa_id,dcfg_msa_idname,dcfg_name,dcfg_notes,dcfg_output_file_url,dcfg_request_type,dcfg_requested_at,dcfg_requested_by,dcfg_status,dcfg_template_id,dcfg_template_idname,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_msa/enabled",
+    "id": "2b29f8c3-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_msa/fields",
+    "id": "2e29f8c3-bc1b-f111-8341-7ced8d709731",
+    "value": "_dcfg_customer_id_value,_dcfg_vendor_id_value,createdon,dcfg_budget_committed,dcfg_budget_remaining,dcfg_budget_total,dcfg_contract_family,dcfg_customer_id,dcfg_customer_idname,dcfg_declined_reason,dcfg_document_url,dcfg_effective_date,dcfg_exhibit_type,dcfg_expiration_date,dcfg_generated_date,dcfg_msaid,dcfg_name,dcfg_notes,dcfg_pricing_alternative,dcfg_sent_date,dcfg_signed_by_staff,dcfg_signed_date,dcfg_status,dcfg_vendor_id,dcfg_vendor_idname,dcfg_void_reason,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_vendor/enabled",
+    "id": "3129f8c3-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_vendor/fields",
+    "id": "3429f8c3-bc1b-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_active_flag,dcfg_address,dcfg_address_line2,dcfg_city,dcfg_cle_status,dcfg_contact_name,dcfg_display_name,dcfg_email,dcfg_insurance_coverage_types,dcfg_insurance_expiration_date,dcfg_insurance_file_url,dcfg_insurance_gl_expiration,dcfg_insurance_policy_number,dcfg_insurance_provider,dcfg_legal_name,dcfg_msa_date,dcfg_net_terms,dcfg_notes,dcfg_payment_process,dcfg_payment_terms,dcfg_phone,dcfg_primary_contact,dcfg_signer_name,dcfg_signer_phone,dcfg_signer_title,dcfg_state,dcfg_trade,dcfg_vendorid,dcfg_zip,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_property_detail/enabled",
+    "id": "3729f8c3-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_ap_cost_code/enabled",
+    "id": "62051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_audit_log/enabled",
+    "id": "65051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_audit_log/fields",
+    "id": "68051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_action_type,dcfg_audit_logid,dcfg_new_value,dcfg_old_value,dcfg_performed_at,dcfg_performed_by,dcfg_reason,dcfg_related_contract_id,dcfg_target_record_id,dcfg_target_table,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_document_output/enabled",
+    "id": "6b051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_document_template/enabled",
+    "id": "6e051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_onboarding_checklist/enabled",
+    "id": "71051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_onboarding_checklist/fields",
+    "id": "74051ccc-bc1b-f111-8341-7ced8d709731",
+    "value": "_dcfg_case_id_value,_dcfg_customer_id_value,createdon,dcfg_accountable,dcfg_accountable_email,dcfg_accountable_name,dcfg_action_type,dcfg_assigned_email,dcfg_assigned_name,dcfg_case_id,dcfg_case_idname,dcfg_completed_date,dcfg_consulted,dcfg_customer_id,dcfg_customer_idname,dcfg_dependency_type,dcfg_due_date,dcfg_email_triggered,dcfg_evidence_url,dcfg_expected_hours,dcfg_informed,dcfg_is_complete,dcfg_is_template,dcfg_notes,dcfg_onboarding_checklistid,dcfg_phase,dcfg_planner_task_id,dcfg_predecessor_step,dcfg_responsible_person,dcfg_responsible_role,dcfg_status,dcfg_step_name,dcfg_step_number,dcfg_turnaround_days,dcfg_turnaround_days_medium,dcfg_turnaround_days_small,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_program/enabled",
+    "id": "5c7e20d2-bc1b-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_send_queue/fields",
+    "id": "5f7e20d2-bc1b-f111-8341-7ced8d709731",
+    "value": "_dcfg_contract_id_value,_dcfg_customer_id_value,createdon,dcfg_added_to_queue_date,dcfg_contract_id,dcfg_contract_idname,dcfg_customer_id,dcfg_customer_idname,dcfg_docusign_envelope_id,dcfg_notes,dcfg_queue_status,dcfg_send_queueid,dcfg_sent_by,dcfg_sent_date,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_template_field/fields",
+    "id": "637e20d2-bc1b-f111-8341-7ced8d709731",
+    "value": "_dcfg_section_id_value,_dcfg_template_id_value,createdon,dcfg_choice_options,dcfg_column_position,dcfg_display_label,dcfg_field_name,dcfg_field_type,dcfg_is_required,dcfg_merge_field_name,dcfg_paragraph_template,dcfg_row_position,dcfg_section_id,dcfg_section_idname,dcfg_source_column,dcfg_source_entity,dcfg_system_source_column,dcfg_system_source_table,dcfg_template_fieldid,dcfg_template_id,dcfg_template_idname,dcfg_width,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_appliance_type/enabled",
+    "id": "2528fe48-191e-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_brain_insight/enabled",
+    "id": "49adae67-be20-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_equipment_benchmark/fields",
+    "id": "f4d7566e-be20-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_avg_replacement_cost,dcfg_benchmark_type,dcfg_category,dcfg_equipment_benchmark_name,dcfg_equipment_benchmarkid,dcfg_failure_modes,dcfg_is_safety_critical,dcfg_max_life_years,dcfg_notes,dcfg_planned_replace_years,dcfg_setting,dcfg_top_brands,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_compliance_rule/fields",
+    "id": "1a90378e-5921-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_compliance_rule_name,dcfg_compliance_ruleid,dcfg_customer_id_ref,dcfg_instructions,dcfg_is_active,dcfg_is_automated,dcfg_rule_category,dcfg_sort_order,dcfg_validation_type,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_config/enabled",
+    "id": "a7e25375-6524-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_agent_audit_log/fields",
+    "id": "effd0fba-3f27-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_active_flag,dcfg_agent_audit_logid,dcfg_event_data,dcfg_event_name,dcfg_performed_by,dcfg_retry_count,dcfg_screen,dcfg_session_id,dcfg_severity,dcfg_status,dcfg_timestamp,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_agent_diagnostic/enabled",
+    "id": "df7f6dc7-3f27-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_agent_diagnostic/fields",
+    "id": "e27f6dc7-3f27-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_active_flag,dcfg_agent_diagnosticid,dcfg_analyzer_name,dcfg_created_at,dcfg_finding_type,dcfg_related_record_id,dcfg_related_table,dcfg_resolution_outcome,dcfg_resolved_at,dcfg_severity,dcfg_status,dcfg_suggestion,modifiedon,statecode,statuscode"
+  },
+  {
+    "name": "Webapi/dcfg_agent_config/enabled",
+    "id": "e57f6dc7-3f27-f111-8341-7ced8d709731",
+    "value": "true"
+  },
+  {
+    "name": "Webapi/dcfg_agent_config/fields",
+    "id": "ed7f6dc7-3f27-f111-8341-7ced8d709731",
+    "value": "createdon,dcfg_active_flag,dcfg_agent_configid,dcfg_config_key,dcfg_config_value,dcfg_updated_at,dcfg_updated_by,modifiedon,statecode,statuscode"
+  }
+]

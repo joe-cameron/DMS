@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DCFG Tag Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#1e1e2e;color:#cdd6f4;padding:16px;max-width:1400px;margin:0 auto}
+h1{font-size:1.2rem;color:#89b4fa;margin-bottom:2px}
+.sub{font-size:.75rem;color:#6c7086;margin-bottom:12px}
+.toast{position:fixed;top:10px;right:10px;background:#a6e3a1;color:#1e1e2e;padding:5px 12px;border-radius:4px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;z-index:10;font-size:.8rem}
+.toast.show{opacity:1}
+
+/* Mode toggle */
+.mode-bar{display:flex;gap:4px;margin-bottom:8px;align-items:center}
+.mode-btn{padding:5px 14px;border-radius:14px;border:1px solid #45475a;background:#313244;color:#bac2de;cursor:pointer;font-size:.75rem;transition:all .12s;font-weight:600}
+.mode-btn.active{border-color:#89b4fa}
+.mode-btn.active.mode-word{background:#89b4fa;color:#1e1e2e}
+.mode-btn.active.mode-flow{background:#cba6f7;color:#1e1e2e}
+.mode-label{font-size:.7rem;color:#6c7086;margin-right:6px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.tab{padding:4px 10px;border-radius:12px;border:1px solid #45475a;background:#313244;color:#bac2de;cursor:pointer;font-size:.72rem;transition:all .12s;white-space:nowrap}
+.tab.active{background:#89b4fa;color:#1e1e2e;border-color:#89b4fa}
+.tab .count{opacity:.6;font-size:.65rem}
+
+/* Sections */
+.section{display:none}
+.section.active{display:block}
+.section h2{font-size:.85rem;color:#cba6f7;margin-bottom:1px}
+.section .file{font-size:.7rem;color:#94e2d5;font-family:'Cascadia Code','Consolas',monospace;margin-bottom:1px;cursor:pointer;display:inline-block;padding:1px 4px;border-radius:3px}
+.section .file:hover{background:#45475a}
+.section .desc{font-size:.68rem;color:#6c7086;margin-bottom:6px}
+
+/* Tag grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:3px}
+.grid.flow-mode{grid-template-columns:1fr}
+.tag-row{display:flex;align-items:center;gap:6px;padding:4px 8px;background:#313244;border-radius:3px;user-select:none}
+.tag-row .num{color:#585b70;font-size:.65rem;min-width:16px;text-align:right}
+.tag-row .src{font-size:.58rem;flex-shrink:0;padding:1px 4px;border-radius:6px;border:1px solid}
+.src-Customer{color:#94e2d5;border-color:#94e2d5}
+.src-Vendor{color:#fab387;border-color:#fab387}
+.src-Contract{color:#f9e2af;border-color:#f9e2af}
+.src-Property{color:#a6e3a1;border-color:#a6e3a1}
+.src-MSA{color:#cba6f7;border-color:#cba6f7}
+.src-Exhibit{color:#74c7ec;border-color:#74c7ec}
+.src-Date{color:#f38ba8;border-color:#f38ba8}
+
+/* Clickable cells */
+.cell{cursor:pointer;transition:background .1s;padding:2px 4px;border-radius:3px;font-family:'Cascadia Code','Consolas',monospace;font-size:.76rem}
+.cell:hover{background:#45475a}
+.cell:active{background:#585b70}
+.cell-tag{color:#f9e2af;flex:1}
+.cell-merge{color:#6c7086;flex:1;font-size:.72rem;cursor:default}
+.cell-expr{color:#cba6f7;flex:2;font-size:.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Column headers */
+.col-headers{display:flex;align-items:center;gap:6px;padding:2px 8px;margin-bottom:2px}
+.col-headers span{font-size:.6rem;color:#6c7086;text-transform:uppercase;letter-spacing:.05em}
+.col-h-num{min-width:16px;text-align:right}
+.col-h-merge{flex:1}
+.col-h-tag{flex:1}
+.col-h-expr{flex:2}
+.col-h-src{min-width:55px;text-align:center}
+
+/* Instructions */
+.instructions{font-size:.7rem;color:#6c7086;padding:8px;background:#313244;border-radius:4px;margin-bottom:10px;line-height:1.5}
+.instructions strong{color:#89b4fa}
+.instructions code{background:#45475a;padding:1px 4px;border-radius:2px;color:#f9e2af;font-size:.68rem}
+.instructions.flow-instructions strong{color:#cba6f7}
+.instructions.flow-instructions code{color:#cba6f7}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<h1>DCFG Tag Builder</h1>
+<p class="sub">Click any value to copy. Switch between Word and Flow modes.</p>
+<div id="toast" class="toast"></div>
+
+<div class="mode-bar">
+  <span class="mode-label">Mode:</span>
+  <span class="mode-btn mode-word active" data-mode="word">Word — Content Controls</span>
+  <span class="mode-btn mode-flow" data-mode="flow">Flow — Populate Expressions</span>
+</div>
+
+<div id="instr-word" class="instructions">
+  <strong>Word Content Controls:</strong> 1. Open template in desktop Word  2. Developer > Plain Text Content Control  3. Click control > Developer > Properties  4. Click a tag below to copy  5. Paste into <code>Title</code> field  6. Paste into <code>Tag</code> field  7. OK  8. Repeat  9. Save as .docx  10. Upload to SharePoint DCFG_Templates
+</div>
+
+<div id="instr-flow" class="instructions flow-instructions hidden">
+  <strong>Flow Populate Fields:</strong> 1. Open flow designer > Switch_Template > your template case  2. Click Populate action  3. Check <code>Show all</code> under Advanced parameters  4. Check each field's checkbox  5. Click in the field > switch to <code>Expression</code> tab  6. Click the expression below to copy  7. Paste into the expression box  8. Click OK  9. Repeat  10. Save flow
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div id="sections"></div>
+
+<script>
+const T = [
+  {
+    id:"blanket_wo", tab:"Blanket WO",
+    name:"Bancroft Blanket Work Order",
+    file:"BANCROFT_BLANKET_WORKORDER_TEMPLATE.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_contractor_name","Vendor"],["contract_description_of_work","Contract"],
+      ["contract_end_date","Contract"],["contract_fee","Contract"],
+      ["contract_owner_city","Customer"],["contract_owner_contact","Customer"],
+      ["contract_owner_email","Customer"],["contract_owner_phone","Customer"],
+      ["contract_owner_state","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["contract_start_date","Contract"],
+      ["contract_type","Contract"],["property_name","Property"],
+      ["vendor_address","Vendor"],["vendor_email","Vendor"],
+      ["vendor_payment_terms","Contract"],["vendor_phone","Vendor"],
+      ["vendor_primary_contact","Vendor"],["vendor_signer_title","Vendor"]
+    ]
+  },
+  {
+    id:"bancroft_wo", tab:"Bancroft WO",
+    name:"Bancroft Work Order",
+    file:"Bancroft-Workorder(Template).docx",
+    hasMergeMap:true,
+    tags:[
+      ["contract_completed_date","Date","WORK_COMPLETED_DATE"],
+      ["contract_main_contract_date","Date","MAIN_CONTRACT_DATE"],
+      ["contract_original_wo_date","Date","WORK_ORDER_DATE"],
+      ["contract_work_start_date","Date","WORK_START_DATE"],
+      ["contract_client_name","Customer","CLIENT_NAME"],
+      ["contract_owner_city","Customer","OWNER_CITY"],
+      ["contract_owner_contact","Customer","OWNER_CONTACT"],
+      ["contract_owner_email","Customer","OWNER_EMAIL"],
+      ["contract_owner_phone","Customer","OWNER_PHONE"],
+      ["contract_owner_state","Customer","OWNER_STATE"],
+      ["contract_owner_street","Customer","OWNER_STREET"],
+      ["contract_owner_title","Customer","OWNER_TITLE"],
+      ["contract_fee","Contract","WORK_ORDER_FEE"],
+      ["contract_form_of_payment","Contract","FORMOFPAYMENT"],
+      ["contract_hours_of_operation","Contract","HOURS_OF_OPERATION"],
+      ["contract_payment_process","Contract","PAYMENTPROCESS"],
+      ["contract_service_location","Contract","SERVICE_LOCATION_DESCRIPTION"],
+      ["contract_type","Contract","BANCROFTWORKORDERTYPE"],
+      ["contract_contractor_legal_name","Vendor","CONTRACTOR_LEGAL_NAME"],
+      ["contract_contractor_name","Vendor","CONTRACTOR_NAME"],
+      ["vendor_address","Vendor","CONTRACTOR_ADDRESS"],
+      ["vendor_email","Vendor","CONTRACTOR_EMAIL"],
+      ["vendor_phone","Vendor","CONTRCTOR_PHONE"],
+      ["vendor_primary_contact","Vendor","CONTRACTOR_PRIMARY_CONTACT"],
+      ["vendor_signer_title","Vendor","CONTRACTOR_TITLE"]
+    ]
+  },
+  {
+    id:"decades_wo", tab:"Decades WO",
+    name:"Decades Work Order",
+    file:"Decades_Work_Order.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_contractor_name","Vendor"],["contract_description_of_work","Contract"],
+      ["contract_end_date","Contract"],["contract_fee","Contract"],
+      ["contract_owner_city","Customer"],["contract_owner_contact","Customer"],
+      ["contract_owner_email","Customer"],["contract_owner_phone","Customer"],
+      ["contract_owner_state","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["contract_start_date","Contract"],
+      ["contract_type","Contract"],["property_name","Property"],
+      ["vendor_address","Vendor"],["vendor_email","Vendor"],
+      ["vendor_payment_terms","Contract"],["vendor_phone","Vendor"],
+      ["vendor_primary_contact","Vendor"],["vendor_signer_title","Vendor"]
+    ]
+  },
+  {
+    id:"bancroft_amend", tab:"Bancroft Amend",
+    name:"Bancroft Work Order Amendment",
+    file:"Bancroft_Work_Order_Amendment.docx",
+    tags:[
+      ["contract_amendment_sequence","Contract"],["contract_client_name","Customer"],
+      ["contract_contractor_legal_name","Vendor"],["contract_contractor_name","Vendor"],
+      ["contract_description_of_service","Contract"],["contract_description_of_work","Contract"],
+      ["contract_end_date","Contract"],["contract_fee","Contract"],
+      ["contract_owner_city","Customer"],["contract_owner_contact","Customer"],
+      ["contract_owner_email","Customer"],["contract_owner_phone","Customer"],
+      ["contract_owner_state","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["contract_po_number","Contract"],
+      ["contract_start_date","Contract"],["contract_work_category","Contract"],
+      ["property_name","Property"],["vendor_address","Vendor"],
+      ["vendor_email","Vendor"],["vendor_phone","Vendor"],
+      ["vendor_primary_contact","Vendor"],["vendor_signer_title","Vendor"]
+    ]
+  },
+  {
+    id:"blanket_amend", tab:"Blanket Amend",
+    name:"Bancroft Blanket Work Order Amendment",
+    file:"Bancroft_Blanket_Work_Order_Amendment.docx",
+    tags:[
+      ["contract_amendment_sequence","Contract"],["contract_client_name","Customer"],
+      ["contract_contractor_legal_name","Vendor"],["contract_contractor_name","Vendor"],
+      ["contract_description_of_service","Contract"],["contract_description_of_work","Contract"],
+      ["contract_end_date","Contract"],["contract_fee","Contract"],
+      ["contract_owner_city","Customer"],["contract_owner_contact","Customer"],
+      ["contract_owner_email","Customer"],["contract_owner_phone","Customer"],
+      ["contract_owner_state","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["contract_po_number","Contract"],
+      ["contract_start_date","Contract"],["contract_work_category","Contract"],
+      ["property_name","Property"],["vendor_address","Vendor"],
+      ["vendor_email","Vendor"],["vendor_phone","Vendor"],
+      ["vendor_primary_contact","Vendor"],["vendor_signer_title","Vendor"]
+    ]
+  },
+  {
+    id:"decades_amend", tab:"Decades Amend",
+    name:"Decades Work Order Amendment",
+    file:"Decades_Work_Order_Amendment.docx",
+    tags:[
+      ["contract_amendment_sequence","Contract"],["contract_client_name","Customer"],
+      ["contract_contractor_legal_name","Vendor"],["contract_contractor_name","Vendor"],
+      ["contract_description_of_service","Contract"],["contract_description_of_work","Contract"],
+      ["contract_end_date","Contract"],["contract_fee","Contract"],
+      ["contract_owner_city","Customer"],["contract_owner_contact","Customer"],
+      ["contract_owner_email","Customer"],["contract_owner_phone","Customer"],
+      ["contract_owner_state","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["contract_po_number","Contract"],
+      ["contract_start_date","Contract"],["contract_work_category","Contract"],
+      ["property_name","Property"],["vendor_address","Vendor"],
+      ["vendor_email","Vendor"],["vendor_phone","Vendor"],
+      ["vendor_primary_contact","Vendor"],["vendor_signer_title","Vendor"]
+    ]
+  },
+  {
+    id:"msa", tab:"MSA",
+    name:"Decades Management Services Agreement",
+    file:"Decades_Management_Services_Agreement.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_owner_city","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["customer_president_name","Customer"],
+      ["msa_effective_date","MSA"],["msa_expiration_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_a_basic", tab:"Exhibit A Basic",
+    name:"Exhibit A — Basic Platform Package A",
+    file:"Exhibit_A_Basic_Platform_Package_A.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_owner_city","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["customer_president_name","Customer"],
+      ["msa_effective_date","MSA"],["msa_expiration_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_a_concierge", tab:"Exhibit A Concierge",
+    name:"Exhibit A — Concierge Package B",
+    file:"Exhibit_A_Concierge_Package_B.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_owner_city","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["customer_president_name","Customer"],
+      ["msa_effective_date","MSA"],["msa_expiration_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_a_optimized", tab:"Exhibit A Optimized",
+    name:"Exhibit A — Optimized Package C",
+    file:"Exhibit_A_Optimized_Package_C.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"],
+      ["contract_owner_city","Customer"],["contract_owner_street","Customer"],
+      ["contract_owner_title","Customer"],["customer_president_name","Customer"],
+      ["msa_effective_date","MSA"],["msa_expiration_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_b", tab:"Exhibit B",
+    name:"Exhibit B — Location List",
+    file:"Exhibit_B_Location_List.docx",
+    tags:[
+      ["contract_client_name","Customer"],["property_name","Property"],
+      ["msa_effective_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_c", tab:"Exhibit C",
+    name:"Exhibit C — Fee Schedule",
+    file:"Exhibit_C_Fee_Schedule.docx",
+    tags:[
+      ["contract_client_name","Customer"],["membership_qty","Exhibit"],
+      ["membership_rate","Exhibit"],["onboarding_qty","Exhibit"],
+      ["onboarding_rate","Exhibit"],["onboarding_total","Exhibit"],
+      ["msa_effective_date","MSA"]
+    ]
+  },
+  {
+    id:"exh_d", tab:"Exhibit D",
+    name:"Exhibit D — Insurance Requirements",
+    file:"Exhibit_D_Insurance_Requirements.docx",
+    tags:[
+      ["contract_client_name","Customer"],["contract_contractor_legal_name","Vendor"]
+    ]
+  }
+];
+
+let mode = "word";
+
+function cp(text){
+  navigator.clipboard.writeText(text);
+  const t=document.getElementById("toast");
+  t.textContent="Copied: "+text;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1200);
+}
+
+function expr(tag){
+  return "outputs('Build_Token_Map')?['"+tag+"']";
+}
+
+const tabsEl=document.getElementById("tabs");
+const sectionsEl=document.getElementById("sections");
+
+T.forEach((t,i)=>{
+  const tab=document.createElement("span");
+  tab.className="tab"+(i===0?" active":"");
+  tab.dataset.id=t.id;
+  tab.innerHTML=t.tab+' <span class="count">'+t.tags.length+'</span>';
+  tabsEl.appendChild(tab);
+
+  const sec=document.createElement("div");
+  sec.className="section"+(i===0?" active":"");
+  sec.id="sec-"+t.id;
+
+  const h2=document.createElement("h2");
+  h2.textContent=t.name;
+  sec.appendChild(h2);
+
+  const fileEl=document.createElement("span");
+  fileEl.className="file";
+  fileEl.textContent=t.file;
+  fileEl.addEventListener("click",()=>cp(t.file));
+  sec.appendChild(fileEl);
+
+  const desc=document.createElement("p");
+  desc.className="desc";
+  desc.textContent=t.tags.length+" fields";
+  sec.appendChild(desc);
+
+  // Column headers
+  const colH=document.createElement("div");
+  colH.className="col-headers";
+  const mergeHdr=t.hasMergeMap?'<span class="col-h-merge">Merge Field</span>':'';
+  colH.innerHTML='<span class="col-h-num">#</span>'+mergeHdr+'<span class="col-h-tag">Content Control (click to copy)</span><span class="col-h-expr flow-col">Flow Expression (click to copy)</span><span class="col-h-src">Source</span>';
+  sec.appendChild(colH);
+
+  const grid=document.createElement("div");
+  grid.className="grid";
+  grid.id="grid-"+t.id;
+
+  t.tags.forEach(([tag,src,mergeField],j)=>{
+    const row=document.createElement("div");
+    row.className="tag-row";
+
+    const numEl=document.createElement("span");
+    numEl.className="num";
+    numEl.textContent=j+1;
+
+    // If template has merge field mapping, show merge field on left
+    if(t.hasMergeMap && mergeField){
+      const mergeCell=document.createElement("span");
+      mergeCell.className="cell cell-merge";
+      mergeCell.textContent=mergeField;
+      mergeCell.title="Original merge field";
+      row.appendChild(numEl);
+      row.appendChild(mergeCell);
+    } else {
+      row.appendChild(numEl);
+    }
+
+    const tagCell=document.createElement("span");
+    tagCell.className="cell cell-tag";
+    tagCell.textContent=tag;
+    tagCell.title="Click to copy content control name: "+tag;
+    tagCell.addEventListener("click",()=>cp(tag));
+
+    const exprCell=document.createElement("span");
+    exprCell.className="cell cell-expr flow-col";
+    const ex=expr(tag);
+    exprCell.textContent=ex;
+    exprCell.title="Copy expression: "+ex;
+    exprCell.addEventListener("click",()=>cp(ex));
+
+    const srcEl=document.createElement("span");
+    srcEl.className="src src-"+src;
+    srcEl.textContent=src;
+
+    row.appendChild(tagCell);
+    row.appendChild(exprCell);
+    row.appendChild(srcEl);
+    grid.appendChild(row);
+  });
+
+  sec.appendChild(grid);
+  sectionsEl.appendChild(sec);
+});
+
+// Tab switching
+tabsEl.addEventListener("click",e=>{
+  const tab=e.target.closest(".tab");
+  if(!tab)return;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  tab.classList.add("active");
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("sec-"+tab.dataset.id).classList.add("active");
+});
+
+// Mode switching
+function setMode(m){
+  mode=m;
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelector('.mode-btn[data-mode="'+m+'"]').classList.add("active");
+
+  const flowCols=document.querySelectorAll(".flow-col");
+  const wordInstr=document.getElementById("instr-word");
+  const flowInstr=document.getElementById("instr-flow");
+
+  if(m==="word"){
+    flowCols.forEach(c=>c.style.display="none");
+    document.querySelectorAll(".grid").forEach(g=>g.classList.remove("flow-mode"));
+    wordInstr.classList.remove("hidden");
+    flowInstr.classList.add("hidden");
+  } else {
+    flowCols.forEach(c=>c.style.display="");
+    document.querySelectorAll(".grid").forEach(g=>g.classList.add("flow-mode"));
+    wordInstr.classList.add("hidden");
+    flowInstr.classList.remove("hidden");
+  }
+}
+
+document.querySelectorAll(".mode-btn").forEach(b=>{
+  b.addEventListener("click",()=>setMode(b.dataset.mode));
+});
+
+// Start in word mode
+setMode("word");
+</script>
+</body>
+</html>

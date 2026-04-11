@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "household-contacts",
+    "version": "1.0",
+    "description": "Service providers for the household — plumber, electrician, HVAC, pediatrician, etc. Agent: when the user mentions using a service provider, offer to save the contact here.",
+    "file": "brain/household/contacts.json"
+  },
+  "entries": []
+}

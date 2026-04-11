@@ -1,0 +1,79 @@
+[
+  {
+    "@odata.etag": "W/\"3552788\"",
+    "statuscode": 2,
+    "name": "DCFG - SharePoint Write Cache",
+    "workflowid": "1e2faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3553230\"",
+    "statuscode": 2,
+    "name": "DCFG - HTTP Bridge Query Active Portfolio",
+    "workflowid": "1f2faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3553944\"",
+    "statuscode": 2,
+    "name": "DCFG - Compute Metrics",
+    "workflowid": "202faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3552962\"",
+    "statuscode": 2,
+    "name": "flow_send_email",
+    "workflowid": "212faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3553348\"",
+    "statuscode": 2,
+    "name": "DCFG - Error Reporter",
+    "workflowid": "532faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3553028\"",
+    "statuscode": 2,
+    "name": "flow_cert_upload",
+    "workflowid": "542faeef-7522-f111-8341-7ced8d709173",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3677829\"",
+    "statuscode": 2,
+    "name": "flow_commit - Budget Commit on Signed/Received",
+    "workflowid": "3c3d278d-7522-f111-8341-7ced8d709731",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3726046\"",
+    "statuscode": 2,
+    "name": "flow_docgen - Document Generation Engine",
+    "workflowid": "3d3d278d-7522-f111-8341-7ced8d709731",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3552901\"",
+    "statuscode": 2,
+    "name": "flow_template_validate - Template Upload Validation",
+    "workflowid": "3e3d278d-7522-f111-8341-7ced8d709731",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3553120\"",
+    "statuscode": 2,
+    "name": "flow_cert_alert",
+    "workflowid": "534249ee-7522-f111-8341-7ced8d709731",
+    "statecode": 1
+  },
+  {
+    "@odata.etag": "W/\"3728370\"",
+    "statuscode": 2,
+    "name": "flow_onboarding_init",
+    "workflowid": "5e5ffeb9-c722-f111-8341-7ced8d709731",
+    "statecode": 1
+  }
+]

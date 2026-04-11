@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "type": "project-session-state",
+    "version": "1.0",
+    "description": "Session handoff file for the DCFG Contracting Suite project. Read this at the start of every session to know where things stand. Update it at the end of every session. JSON format deliberately chosen so agent edits fields rather than rewriting structure.",
+    "file": "brain/projects/dcfg/session-state.json"
+  },
+  "project": "DCFG Contracting Suite",
+  "last_session": {
+    "date": null,
+    "summary": "",
+    "model_used": "",
+    "session_duration_minutes": null
+  },
+  "current_state": {
+    "active_workstream": "",
+    "blocked_items": [],
+    "in_progress": [],
+    "completed_recently": []
+  },
+  "features": [],
+  "decisions_pending": [],
+  "next_session_should": []
+}

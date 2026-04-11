@@ -1,2 +1,61 @@
 .worktrees/
 node_modules/
+dist/
+*.zip
+*.map
+.claude/
+.superpowers/
+tmp/
+tmp_*
+pac-log.txt
+*.log
+
+# Build artifacts
+spa/dcfg-shell/dist/
+spa/dcfg-shell/.powerpages-site/
+spa/dcfg-shell/decades-management-system---dmms/
+spa/dcfg-shell/production-decades-management-system---decadesdms/
+spa/dcfg-shell/dcfg-contracting-suite/
+spa/dcfg-shell/dmstest---dmstest/
+spa/dcfg-property-intake/dist/
+spa/dcfg-property-intake/.powerpages-site/
+
+# Temp Word docs at root
+*.docx
+*.xlsx
+*.pdf
+*.jpg
+*.png
+
+# Temp PowerShell scripts at root
+*.ps1
+
+# Keep these directories
+!docs/**
+!Templates/**
+!WordTemplates/**
+!spa/**/public/*.png
+!ops/**
+!nora/**
+!azure-functions/**
+
+# Re-exclude node_modules even under whitelisted dirs
+nora/node_modules/
+spa/*/node_modules/
+azure-functions/*/node_modules/
+
+# Power Pages site folders (deployed artifacts, not source)
+spa/dcfg-shell/decades-management-system---dmms/
+spa/dcfg-shell/production-decades-management-system---decadesdms/
+spa/dcfg-shell/dcfg-contracting-suite/
+spa/dcfg-shell/dmstest---dmstest/
+spa/dcfg-shell/.powerpages-site/
+spa/dcfg-property-intake/.powerpages-site/
+
+# Misc
+wip/
+extracted/
+power-pages-samples/
+clipboard.html
+calendar.json
+meeting.zip

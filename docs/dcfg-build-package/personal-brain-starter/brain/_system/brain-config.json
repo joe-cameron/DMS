@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "type": "brain-config",
+    "version": "1.0",
+    "description": "Root configuration for the OneDrive Brain system. Read this first to understand the folder structure, categories, and rules for interacting with brain files.",
+    "owner": "",
+    "created": "2026-03-15T00:00:00Z",
+    "last_modified": "2026-03-15T00:00:00Z"
+  },
+  "categories": [
+    {
+      "id": "household",
+      "path": "brain/household/",
+      "description": "Home and family knowledge — physical items, maintenance, service contacts",
+      "files": ["knowledge.json", "maintenance.json", "contacts.json"]
+    },
+    {
+      "id": "professional",
+      "path": "brain/professional/",
+      "description": "Career, network, conferences, professional relationships",
+      "files": ["relationships.json", "conferences.json", "career.json"]
+    },
+    {
+      "id": "projects",
+      "path": "brain/projects/",
+      "description": "Active project state, decisions, and session handoffs. One subfolder per project.",
+      "files": []
+    },
+    {
+      "id": "finance",
+      "path": "brain/finance/",
+      "description": "Subscriptions, insurance, recurring financial items",
+      "files": ["subscriptions.json", "insurance.json"]
+    },
+    {
+      "id": "health",
+      "path": "brain/health/",
+      "description": "Healthcare providers, appointments, recurring checkups",
+      "files": ["providers.json", "schedule.json"]
+    },
+    {
+      "id": "learning",
+      "path": "brain/learning/",
+      "description": "Reading list, skill development, research notes",
+      "files": ["reading-list.json", "skills-tracker.json"]
+    }
+  ],
+  "agent_rules": {
+    "path_format": "All paths use forward slashes. No spaces in any path or filename. Kebab-case only. All lowercase.",
+    "id_format": "UUIDv4 for all entry IDs. Never reuse an ID.",
+    "timestamp_format": "ISO 8601 UTC (e.g., 2026-03-15T14:30:00Z)",
+    "update_protocol": "Read the file, find the entry by ID, update in place, write the full file back. Never append a duplicate.",
+    "new_entry_protocol": "Generate a new UUIDv4 ID. Set created and last_modified to current UTC time. Append to the entries array.",
+    "never_delete": "Entries are never deleted. Set status to archived instead.",
+    "file_encoding": "UTF-8, no BOM",
+    "quote_all_paths": "Always wrap file paths in quotes in any shell command or script. The OneDrive root path may contain spaces even though brain paths do not."
+  }
+}

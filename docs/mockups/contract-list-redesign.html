@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contract List Redesign — DCFG Mockups</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #1a2332; }
+
+  /* Tokens matching DCFG design system */
+  :root {
+    --navy: #0f2b46; --navy-mid: #1a3a5c; --navy-pale: #e8eef4;
+    --amber: #d4a017; --amber-lt: #fef9e7; --amber-dk: #8b6914;
+    --green: #16a34a; --green-lt: #dcfce7;
+    --red: #dc2626; --red-lt: #fee2e2;
+    --blue: #2563eb; --blue-lt: #dbeafe;
+    --steel: #f1f5f9; --border: #e2e8f0;
+    --text1: #1a2332; --text2: #475569; --text3: #94a3b8;
+    --mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    --radius: 12px;
+  }
+
+  .mockup-switcher {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--navy); padding: 12px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .mockup-switcher h1 { color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .mockup-switcher button {
+    padding: 8px 20px; border: 2px solid rgba(255,255,255,0.3); background: transparent;
+    color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mockup-switcher button:hover { border-color: var(--amber); color: var(--amber); }
+  .mockup-switcher button.active { background: var(--amber); color: var(--navy); border-color: var(--amber); }
+  .mockup-switcher .desc { color: var(--text3); font-size: 12px; margin-left: auto; }
+
+  .mockup { display: none; padding: 72px 24px 24px; max-width: 1400px; margin: 0 auto; }
+  .mockup.active { display: block; }
+  .mockup-label {
+    background: var(--navy-pale); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 24px; font-size: 13px; color: var(--text2); line-height: 1.6;
+  }
+  .mockup-label strong { color: var(--navy); }
+
+  /* ═══ Shared components ═══ */
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .page-title { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .btn-primary {
+    background: var(--navy); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .btn-outline {
+    background: #fff; color: var(--navy); border: 2px solid var(--border); border-radius: 8px;
+    padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .btn-outline.active { border-color: var(--navy); background: var(--navy-pale); }
+
+  .search-bar {
+    width: 100%; padding: 12px 16px 12px 40px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 14px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 14px center no-repeat;
+    outline: none; transition: border-color 0.2s;
+  }
+  .search-bar:focus { border-color: var(--navy); }
+  .search-bar::placeholder { color: var(--text3); }
+
+  .status-badge {
+    display: inline-flex; padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
+    font-family: var(--mono);
+  }
+  .status-draft { background: var(--steel); color: var(--text2); }
+  .status-generated { background: var(--blue-lt); color: var(--blue); }
+  .status-sent { background: var(--amber-lt); color: var(--amber-dk); }
+  .status-signed { background: var(--green-lt); color: var(--green); }
+  .status-pending { background: #fef3c7; color: #92400e; }
+  .status-void { background: var(--red-lt); color: var(--red); }
+
+  .doc-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    color: var(--blue); font-size: 12px; font-weight: 600; text-decoration: none;
+    padding: 4px 10px; border-radius: 6px; background: var(--blue-lt);
+  }
+  .doc-link:hover { background: #bfdbfe; }
+
+  .card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); }
+
+  .view-toggles { display: flex; gap: 8px; margin-bottom: 16px; }
+
+  /* ═══ OPTION A: Smart List with Expandable Rows ═══ */
+  .a-filters { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; }
+  .a-table { width: 100%; border-collapse: collapse; }
+  .a-table th {
+    text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3);
+    border-bottom: 2px solid var(--border); cursor: pointer; user-select: none;
+  }
+  .a-table th:hover { color: var(--navy); }
+  .a-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .a-table tr:hover td { background: var(--steel); }
+  .a-table tr.expanded td { background: var(--navy-pale); border-bottom: none; }
+  .a-row-detail {
+    background: #fff; border: 1px solid var(--border); border-top: none;
+    margin: 0 16px 8px; border-radius: 0 0 10px 10px; padding: 20px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+  }
+  .a-detail-field label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); display: block; margin-bottom: 4px; }
+  .a-detail-field span { font-size: 13px; color: var(--text1); }
+  .a-detail-actions { grid-column: 1 / -1; display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .a-count { font-size: 12px; color: var(--text3); padding: 8px 0; }
+  .a-pagination { display: flex; gap: 8px; align-items: center; justify-content: center; padding: 16px; }
+  .a-pagination button {
+    padding: 6px 14px; border: 1px solid var(--border); background: #fff;
+    border-radius: 6px; font-size: 12px; cursor: pointer;
+  }
+  .a-pagination button.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* ═══ OPTION B: Customer-First Grouped ═══ */
+  .b-customer-group { margin-bottom: 16px; }
+  .b-customer-header {
+    display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+    background: var(--navy); color: #fff; border-radius: var(--radius) var(--radius) 0 0;
+    cursor: pointer;
+  }
+  .b-customer-header h3 { font-size: 14px; font-weight: 700; flex: 1; }
+  .b-customer-header .count { font-size: 12px; opacity: 0.7; }
+  .b-customer-header .chevron { font-size: 18px; transition: transform 0.2s; }
+  .b-customer-contracts {
+    border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius); overflow: hidden;
+  }
+  .b-contract-row {
+    display: grid; grid-template-columns: 140px 1fr 120px 100px 100px 80px;
+    padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center;
+    font-size: 13px; cursor: pointer; transition: background 0.15s;
+  }
+  .b-contract-row:hover { background: var(--steel); }
+  .b-contract-row:last-child { border-bottom: none; }
+  .b-program-label { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+  /* ═══ OPTION C: My Queue + Search Split ═══ */
+  .c-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .c-section-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text3); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .c-section-title .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .c-contract-card {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .c-contract-card:hover { background: var(--steel); }
+  .c-contract-card:last-child { border-bottom: none; }
+  .c-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .c-card-num { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--navy); }
+  .c-card-customer { font-size: 13px; color: var(--text1); }
+  .c-card-meta { font-size: 11px; color: var(--text3); display: flex; gap: 12px; }
+  .c-empty { padding: 40px; text-align: center; color: var(--text3); font-size: 13px; }
+
+  /* Annotations */
+  .annotation {
+    position: relative; display: inline-block;
+  }
+  .annotation::after {
+    content: attr(data-note);
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: var(--navy); color: #fff; padding: 4px 10px; border-radius: 6px;
+    font-size: 10px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+  }
+  .annotation:hover::after { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ═══ SWITCHER BAR ═══ -->
+<div class="mockup-switcher">
+  <h1>Contract List Redesign</h1>
+  <button class="active" onclick="show('a')">Option A</button>
+  <button onclick="show('b')">Option B</button>
+  <button onclick="show('c')">Option C</button>
+  <span class="desc">Click options to compare layouts. Hover annotations for design notes.</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OPTION A: Smart List with Inline Expand        -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="mockup-a" class="mockup active">
+  <div class="mockup-label">
+    <strong>Option A: Smart List with Expandable Rows</strong> — Familiar table, but rows expand inline to show detail + document link without leaving the page. Default view shows "Needs Attention" (unsigned/in-approval). Toggle to "All Active." Server-side pagination for 1000s of records.
+  </div>
+
+  <div class="page-header">
+    <h2 class="page-title">Contracts</h2>
+    <button class="btn-primary">+ New Contract</button>
+  </div>
+
+  <div class="a-filters">
+    <input class="search-bar" placeholder="Search by customer, contract #, or program..." style="flex:1">
+    <div class="view-toggles">
+      <button class="btn-outline active" onclick="this.classList.add('active');this.nextElementSibling.classList.remove('active')">Needs Attention</button>
+      <button class="btn-outline" onclick="this.classList.add('active');this.previousElementSibling.classList.remove('active')">All Active</button>
+    </div>
+  </div>
+
+  <div class="a-count">Showing 12 contracts needing attention</div>
+
+  <div class="card">
+    <table class="a-table">
+      <thead>
+        <tr>
+          <th>Contract # &#x25B4;</th>
+          <th>Customer</th>
+          <th>Program</th>
+          <th>Status</th>
+          <th style="text-align:right">Fee</th>
+          <th>Date</th>
+          <th style="width:50px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="expanded" onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">WO-2026-0847</td>
+          <td>Bancroft Neurohealth</td>
+          <td><span class="b-program-label">Residential East</span></td>
+          <td><span class="status-badge status-pending">Pending Approval</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$14,500</td>
+          <td style="color:var(--text2)">Mar 28, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25B2;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Expanded detail panel -->
+    <div class="a-row-detail">
+      <div class="a-detail-field"><label>Contractor</label><span>Decades Contracting Group</span></div>
+      <div class="a-detail-field"><label>Vendor</label><span>Jersey Plumbing Co.</span></div>
+      <div class="a-detail-field"><label>Location</label><span>42 Maple Ave, Cherry Hill, NJ</span></div>
+      <div class="a-detail-field"><label>Sent</label><span>Mar 29, 2026</span></div>
+      <div class="a-detail-field"><label>Signed</label><span>—</span></div>
+      <div class="a-detail-field"><label>Document</label><span><a href="#" class="doc-link">&#x1F4C4; View Document</a></span></div>
+      <div class="a-detail-actions">
+        <button class="btn-outline" style="font-size:12px">Open Full Detail</button>
+        <button class="btn-outline" style="font-size:12px">Mark as Signed</button>
+      </div>
+    </div>
+
+    <table class="a-table">
+      <tbody>
+        <tr onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">WO-2026-0843</td>
+          <td>Bancroft Neurohealth</td>
+          <td><span class="b-program-label">Campus North</span></td>
+          <td><span class="status-badge status-generated">Generated</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$8,200</td>
+          <td style="color:var(--text2)">Mar 25, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25BC;</td>
+        </tr>
+        <tr onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">WO-2026-0839</td>
+          <td>Allies Inc.</td>
+          <td><span class="b-program-label">Main Campus</span></td>
+          <td><span class="status-badge status-sent">Sent</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$22,750</td>
+          <td style="color:var(--text2)">Mar 22, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25BC;</td>
+        </tr>
+        <tr onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">WO-2026-0835</td>
+          <td>Allies Inc.</td>
+          <td><span class="b-program-label">South Wing</span></td>
+          <td><span class="status-badge status-draft">Draft</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$3,100</td>
+          <td style="color:var(--text2)">Mar 20, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25BC;</td>
+        </tr>
+        <tr onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">AMD-2026-0012</td>
+          <td>Bancroft Neurohealth</td>
+          <td><span class="b-program-label">Residential East</span></td>
+          <td><span class="status-badge status-pending">Pending Approval</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$6,800</td>
+          <td style="color:var(--text2)">Mar 18, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25BC;</td>
+        </tr>
+        <tr onclick="toggleRow(this)">
+          <td style="font-family:var(--mono);font-weight:700">WO-2026-0831</td>
+          <td>SERV Behavioral Health</td>
+          <td><span class="b-program-label">Community Living</span></td>
+          <td><span class="status-badge status-generated">Generated</span></td>
+          <td style="text-align:right;font-family:var(--mono)">$11,400</td>
+          <td style="color:var(--text2)">Mar 15, 2026</td>
+          <td style="text-align:center;color:var(--text3)">&#x25BC;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="a-pagination">
+      <button>&#x2190; Prev</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>Next &#x2192;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OPTION B: Customer-First Grouped               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="mockup-b" class="mockup">
+  <div class="mockup-label">
+    <strong>Option B: Customer-First Grouped</strong> — Contracts grouped by customer, matching the mental model "I work with Bancroft, show me their contracts." Each customer is collapsible. Programs shown as labels within. Search filters customers, not individual contracts.
+  </div>
+
+  <div class="page-header">
+    <h2 class="page-title">Contracts</h2>
+    <button class="btn-primary">+ New Contract</button>
+  </div>
+
+  <div class="a-filters">
+    <input class="search-bar" placeholder="Search by customer..." style="flex:1">
+    <div class="view-toggles">
+      <button class="btn-outline active">Needs Attention</button>
+      <button class="btn-outline">All Active</button>
+    </div>
+  </div>
+
+  <!-- Customer: Bancroft -->
+  <div class="b-customer-group">
+    <div class="b-customer-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h3>Bancroft Neurohealth</h3>
+      <span class="count">3 contracts needing attention</span>
+      <span class="chevron">&#x25BC;</span>
+    </div>
+    <div class="b-customer-contracts">
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">WO-2026-0847</span>
+        <span>Residential East <span class="b-program-label" style="margin-left:8px">Plumbing repair</span></span>
+        <span><span class="status-badge status-pending">Pending</span></span>
+        <span style="font-family:var(--mono);text-align:right">$14,500</span>
+        <span style="color:var(--text2);font-size:12px">Mar 28</span>
+        <span><a href="#" class="doc-link" style="font-size:11px">&#x1F4C4;</a></span>
+      </div>
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">AMD-2026-0012</span>
+        <span>Residential East <span class="b-program-label" style="margin-left:8px">Amendment #1</span></span>
+        <span><span class="status-badge status-pending">Pending</span></span>
+        <span style="font-family:var(--mono);text-align:right">$6,800</span>
+        <span style="color:var(--text2);font-size:12px">Mar 18</span>
+        <span><a href="#" class="doc-link" style="font-size:11px">&#x1F4C4;</a></span>
+      </div>
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">WO-2026-0843</span>
+        <span>Campus North <span class="b-program-label" style="margin-left:8px">HVAC service</span></span>
+        <span><span class="status-badge status-generated">Generated</span></span>
+        <span style="font-family:var(--mono);text-align:right">$8,200</span>
+        <span style="color:var(--text2);font-size:12px">Mar 25</span>
+        <span style="color:var(--text3);font-size:12px">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer: Allies -->
+  <div class="b-customer-group">
+    <div class="b-customer-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h3>Allies Inc.</h3>
+      <span class="count">2 contracts needing attention</span>
+      <span class="chevron">&#x25BC;</span>
+    </div>
+    <div class="b-customer-contracts">
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">WO-2026-0839</span>
+        <span>Main Campus <span class="b-program-label" style="margin-left:8px">Roof repair</span></span>
+        <span><span class="status-badge status-sent">Sent</span></span>
+        <span style="font-family:var(--mono);text-align:right">$22,750</span>
+        <span style="color:var(--text2);font-size:12px">Mar 22</span>
+        <span><a href="#" class="doc-link" style="font-size:11px">&#x1F4C4;</a></span>
+      </div>
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">WO-2026-0835</span>
+        <span>South Wing <span class="b-program-label" style="margin-left:8px">Electrical</span></span>
+        <span><span class="status-badge status-draft">Draft</span></span>
+        <span style="font-family:var(--mono);text-align:right">$3,100</span>
+        <span style="color:var(--text2);font-size:12px">Mar 20</span>
+        <span style="color:var(--text3);font-size:12px">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer: SERV -->
+  <div class="b-customer-group">
+    <div class="b-customer-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h3>SERV Behavioral Health</h3>
+      <span class="count">1 contract needing attention</span>
+      <span class="chevron">&#x25BC;</span>
+    </div>
+    <div class="b-customer-contracts">
+      <div class="b-contract-row">
+        <span style="font-family:var(--mono);font-weight:700">WO-2026-0831</span>
+        <span>Community Living <span class="b-program-label" style="margin-left:8px">General maintenance</span></span>
+        <span><span class="status-badge status-generated">Generated</span></span>
+        <span style="font-family:var(--mono);text-align:right">$11,400</span>
+        <span style="color:var(--text2);font-size:12px">Mar 15</span>
+        <span style="color:var(--text3);font-size:12px">—</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OPTION C: My Queue + Search Split              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="mockup-c" class="mockup">
+  <div class="mockup-label">
+    <strong>Option C: Split Panel — My Queue + Search</strong> — Left side shows your contracts needing attention (always visible, no search needed). Right side is a dedicated search panel for finding any contract. Two distinct workflows side by side — action vs. research.
+  </div>
+
+  <div class="page-header">
+    <h2 class="page-title">Contracts</h2>
+    <button class="btn-primary">+ New Contract</button>
+  </div>
+
+  <div class="c-layout">
+    <!-- LEFT: My Queue -->
+    <div>
+      <div class="c-section-title"><span class="dot" style="background:var(--amber)"></span> Needs Attention (6)</div>
+      <div class="card">
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">WO-2026-0847</span>
+            <span class="status-badge status-pending">Pending Approval</span>
+          </div>
+          <div class="c-card-customer">Bancroft Neurohealth &mdash; Residential East</div>
+          <div class="c-card-meta">
+            <span>$14,500</span>
+            <span>Mar 28, 2026</span>
+            <a href="#" class="doc-link" style="font-size:11px;padding:2px 8px">&#x1F4C4; Doc</a>
+          </div>
+        </div>
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">AMD-2026-0012</span>
+            <span class="status-badge status-pending">Pending Approval</span>
+          </div>
+          <div class="c-card-customer">Bancroft Neurohealth &mdash; Residential East</div>
+          <div class="c-card-meta">
+            <span>$6,800</span>
+            <span>Mar 18, 2026</span>
+            <a href="#" class="doc-link" style="font-size:11px;padding:2px 8px">&#x1F4C4; Doc</a>
+          </div>
+        </div>
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">WO-2026-0843</span>
+            <span class="status-badge status-generated">Generated</span>
+          </div>
+          <div class="c-card-customer">Bancroft Neurohealth &mdash; Campus North</div>
+          <div class="c-card-meta">
+            <span>$8,200</span>
+            <span>Mar 25, 2026</span>
+          </div>
+        </div>
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">WO-2026-0839</span>
+            <span class="status-badge status-sent">Sent</span>
+          </div>
+          <div class="c-card-customer">Allies Inc. &mdash; Main Campus</div>
+          <div class="c-card-meta">
+            <span>$22,750</span>
+            <span>Mar 22, 2026</span>
+            <a href="#" class="doc-link" style="font-size:11px;padding:2px 8px">&#x1F4C4; Doc</a>
+          </div>
+        </div>
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">WO-2026-0835</span>
+            <span class="status-badge status-draft">Draft</span>
+          </div>
+          <div class="c-card-customer">Allies Inc. &mdash; South Wing</div>
+          <div class="c-card-meta">
+            <span>$3,100</span>
+            <span>Mar 20, 2026</span>
+          </div>
+        </div>
+        <div class="c-contract-card">
+          <div class="c-card-top">
+            <span class="c-card-num">WO-2026-0831</span>
+            <span class="status-badge status-generated">Generated</span>
+          </div>
+          <div class="c-card-customer">SERV Behavioral Health &mdash; Community Living</div>
+          <div class="c-card-meta">
+            <span>$11,400</span>
+            <span>Mar 15, 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Search -->
+    <div>
+      <div class="c-section-title"><span class="dot" style="background:var(--navy)"></span> Search All Contracts</div>
+      <div class="card" style="padding:20px">
+        <input class="search-bar" placeholder="Search by customer, contract #, program..." style="margin-bottom:16px">
+        <div class="c-empty">
+          Type a customer name or contract number to search.<br>
+          <span style="font-size:11px;color:var(--text3);margin-top:8px;display:block">Searches across all contracts including signed, closed, and voided.</span>
+        </div>
+        <!-- Search results would appear here as cards -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.mockup-switcher button').forEach(b => b.classList.remove('active'));
+  document.getElementById('mockup-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleRow(tr) {
+  const detail = tr.closest('table')?.nextElementSibling;
+  if (detail && detail.classList.contains('a-row-detail')) {
+    detail.style.display = detail.style.display === 'none' ? 'grid' : 'none';
+    tr.classList.toggle('expanded');
+  }
+}
+</script>
+</body>
+</html>

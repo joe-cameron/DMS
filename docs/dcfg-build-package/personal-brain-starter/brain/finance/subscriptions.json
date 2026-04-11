@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "subscriptions-tracker",
+    "version": "1.0",
+    "description": "Active subscriptions and recurring charges. Agent: flag anything renewing within 14 days when asked about upcoming expenses. Calculate monthly and annual totals when asked about subscription spend.",
+    "file": "brain/finance/subscriptions.json"
+  },
+  "entries": []
+}

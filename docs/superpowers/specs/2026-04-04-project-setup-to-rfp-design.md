@@ -809,53 +809,187 @@ BidComp's `dcfg_proposal` works as designed. Change its `dcfg_rfp` FK to point t
 
 ---
 
-## 15. Build Order
+## 15. Core Design Principle: Spreadsheet as Interface
 
-This spec is large. Recommended build phases:
+The SMEs (Tyler Bamford and predecessors) built the estimate template, the bid comp template, and the project tracker as working tools in Excel. These spreadsheets are NOT data entry forms — they are thinking tools that represent years of accumulated expertise. The people who built them are largely gone. The templates are the institutional knowledge that survived.
 
-### Phase 1: Templates + Project Creation
-- dcfg_template_line_item table
-- dcfg_template_bundle_member table
-- New columns on dcfg_projecttemplate
-- dcfg_project_line_item table
-- New columns on dcfg_project
-- Template Manager screen
-- Project Create screen (quick entry + template-based + bulk)
-- Trade keyword suggestion engine
+### 15.1 The System Does Not Replace Excel
 
-### Phase 2: Project List + Detail
-- Project List screen with filters, sort, search, bulk select
-- Project Detail screen with line items, factors, estimate
-- Factor columns on dcfg_property and dcfg_customer
-- dcfg_project_factor table
-- Estimation engine (base cost x factors)
-- Historical comparison display
+The SME works in Excel because Excel is the tool they know. The system:
 
-### Phase 3: RFP Assembly + Distribution
-- RFP Builder wizard (5 steps)
-- dcfg_rfp_vendor table
-- dcfg_milestone table
-- Vendor discovery engine (trade + proximity query)
-- RFP document generation (Word template + Bill of Quantities Excel)
-- SharePoint artifact deposit
+1. **Produces** a populated xlsx (filled with current Dataverse data, pre-filled from templates)
+2. **SME works** in it (adds lines, changes quantities, enters vendor responses — in Excel)
+3. **System reads** on save (Power Automate watches SharePoint, parses Open XML by known template layout, writes structured data to Dataverse)
 
-### Phase 4: Program Dashboard + Metrics
-- Program Dashboard with real KPIs
-- Project Dashboard (replace placeholder)
-- Closeout metrics columns on dcfg_project
-- Change order classification
-- Factor-adjusted performance comparison
-- Excel round-trip (tracker download/upload/diff)
+The SharePoint project folder is the handoff point. The SME's workflow doesn't change.
+
+### 15.2 Spreadsheet Understanding Engine (Auto-Improving)
+
+Before the system can produce a single xlsx on demand, it must understand every cell, formula, label, merge, style, and cross-sheet reference — perfectly. One wrong column header and the SME loses trust.
+
+**Auto-research loop:**
+
+1. **Deep Parse** — Unzip xlsx as Open XML. Extract every structural element: cell values/types/positions, formulas (with cross-sheet refs), merged ranges, styles, named ranges, data validations, conditional formatting, print areas, column widths, frozen panes. Output: template schema in JSON.
+2. **Produce** — Generate populated xlsx from schema + test data.
+3. **Compare** — Cell-by-cell structural comparison against original. Score mismatches.
+4. **Fix and Re-run** — Update schema for each mismatch. Re-produce, re-compare. Loop until 100% structural match.
+5. **Validate with Real Data** — Produce using actual completed project data. Compare against the real spreadsheet the SME created for that project.
+
+**Continuous improvement:** Every completed project spreadsheet saved to SharePoint becomes another example. The system reads it, compares against its schema understanding, and refines. No special effort from the user — the files they save as part of normal work ARE the training set.
+
+### 15.3 Project Site Provisioning
+
+Each project gets its own SharePoint Teams site: `{JobNumber}{Address}.{CityState}`
+
+Standard folder set (derived from real project 22006 - 41 Huntingdon Way):
+
+```
+Shared Documents/General/
+  ├── Budget/
+  ├── Proposals/
+  ├── Exhibit B Files/
+  ├── Executed Exhibit A/
+  ├── Invoices/
+  ├── Change Orders/
+  ├── Spec Sheets/
+  ├── Submittals/
+  ├── Licensing Paperwork/
+  ├── Permits/
+  ├── Schedule/
+  ├── PL Pictures/
+  ├── Closeout/
+  │     ├── FROL/
+  │     └── Warranty Letters/
+  └── Eagle View/  (if roofing scope)
+```
+
+System auto-provisions on project creation. Human can add project-specific folders.
+
+### 15.4 Source Systems
+
+| System | Role | Integration |
+|--------|------|-------------|
+| **Sage** | System of record for vendors (Vendor#, name, contact, phone, type) | Read — vendor sync to Dataverse |
+| **SharePoint** | System of record for project files (estimates, bid comps, invoices, contracts) | Read on save, write on produce |
+| **Dataverse** | System of record for structured data (projects, line items, proposals, metrics) | Central database |
+| **Excel** | The user interface | Produced by system, read back by system |
+| **SPA** | Management view (dashboards, cross-project analytics, vendor performance) | Reads Dataverse |
 
 ---
 
-## 16. Open Questions
+## 16. Human Process Flow (End-to-End)
 
-1. **Room dimensions on property records** — Do we add room measurement fields to dcfg_property, or are takeoffs always per-project? Answer affects whether the same bathroom measurements get reused across multiple projects at the same unit.
+Work starts small and compounds. A single-trade service call uses the same data model as a $5.8M multi-year program. The phases are opt-in based on scope, not a rigid pipeline.
 
-2. **Template seeding** — Who creates the initial templates? Do we seed from Leon's actual completed projects (reverse-engineer templates from historical data), or does the PM team define them fresh?
+### Scale Spectrum
 
-3. **Factor quantification timeline** — Start with boolean flags only, or pre-seed some known factor percentages (e.g., union labor +17%) based on team knowledge?
+| Scale | Trades | Properties | Process Phases Used |
+|-------|--------|------------|---------------------|
+| Service call | 1 | 1 | Create project → assign vendor → invoice → close |
+| Small repair | 1-2 | 1 | Create → get quotes → pick vendor → invoice → close |
+| Project | 3-5 | 1 | Create → estimate → bid comp → award → execute → close |
+| Bundled projects | 3-5 | 5-15 | Templates → multi-property bid comp → split awards → execute → close |
+| Program | 13+ | 50-200 | Full lifecycle → Sage Budget rollup |
+
+### Phase-by-Phase Process
+
+**Phase 1: Create Project**
+- Human: identify work at a property (description + urgency)
+- System: create project record, suggest template + trades from description
+
+**Phase 2: Estimate** (optional for small jobs)
+- Human: open pre-filled estimate template, do takeoffs, enter quantities
+- System: produce populated xlsx, read back on save
+- Artifact: estimate template (6 tabs) → SharePoint `{Project}/Budget/`
+
+**Phase 3: RFP + Bid Comp** (the first thing to build)
+- Human: identify trades needing subs, select vendors from Sage list
+- System: produce pre-filled bid comp template (19 tabs) with scope items from estimate + vendor columns
+- Human: send RFP to vendors, enter responses into BIDDER columns, compare on Dashboard tab, write recommendation on Bid Req tab
+- System: read back on save, parse vendor responses to Dataverse
+- AI: parse vendor PDF proposals → pre-fill BIDDER columns → flag confidence
+- Artifact: completed bid comp → SharePoint `{Project}/Proposals/`
+
+**Phase 4: Award + Contract Documents**
+- Human: select winning vendor on Bid Req tab, sign recommendation
+- System: produce Exhibit A (DocGen — already built), auto-populate Exhibit B from bid comp's awarded BIDDER column
+- Artifact: Exhibit A → `{Project}/Executed Exhibit A/`, Exhibit B → `{Project}/Exhibit B Files/`
+
+**Phase 5: Execute (Manage Job)**
+- Human: file invoices, document change orders (ADD/DEDUCT with category tag), track material spend, manage submittals + permits
+- System: parse invoices on save → match to project + vendor + CSI → update budget tracking → flag overruns
+- Artifact: invoices, COs, submittals → standard project folders
+
+**Phase 6: Closeout**
+- Human: punch list walk + photos, collect FROL from every sub, collect warranty letters, final permits
+- System: capture closeout metrics (final cost, duration, CO count by category, punch list count)
+- Artifact: closeout docs → `{Project}/Closeout/`
+
+**Phase 7: Program Rollup**
+- System: query all projects for a program → aggregate by CSI code → produce Sage Budget rollup
+- Artifact: the $5.8M Bancroft budget presentation — generated, not manually assembled
+
+---
+
+## 17. Revised Build Order
+
+Build order follows the core loop: **RFP → Bid Comp → Manage Job**. Everything else layers on after the loop works.
+
+### Build 1: Spreadsheet Understanding Engine
+- Deep parse the Multi Trade Bid Template (19 tabs)
+- Deep parse the Estimate Template (6 tabs)
+- Build the auto-research compare loop
+- Produce test copies, validate against originals
+- Output: verified template schemas for both workbooks
+
+### Build 2: RFP + Bid Comp (First thing that works)
+- Schema: dcfg_rfp_package, dcfg_rfp_project, dcfg_rfp_vendor, dcfg_proposal
+- Produce pre-filled bid comp xlsx from Dataverse data (project scope → trade tabs, vendor list → BIDDER columns)
+- Power Automate: watch SharePoint Proposals folder → parse completed bid comp on save → write vendor responses to Dataverse
+- SPA: RFP list, bid comp status view, award capture
+- Test: one real single-trade job end-to-end (RFP out → bids back → comparison → award)
+
+### Build 3: Manage Job
+- Schema: dcfg_invoice, dcfg_change_order (from BidComp spec, used as-is)
+- Power Automate: watch Invoices + Change Orders folders → parse → write to Dataverse
+- SPA: project detail with budget tracking (estimated vs awarded vs actual), invoice list, change order list
+- Exhibit A: already built (DocGen v3)
+- Exhibit B: auto-populate from bid comp award
+- Test: track one job from award through invoicing to closeout
+
+### Build 4: Project + Estimate Pipeline
+- Schema: dcfg_project_line_item, dcfg_template_line_item, new columns on dcfg_project
+- Produce pre-filled estimate template from project templates
+- Power Automate: watch Budget folder → parse estimate on save → write line items to Dataverse
+- SPA: project list, project create (quick entry + template), project detail with line items
+- Sage vendor sync: import vendor list, map Vendor# to dcfg_vendor records
+
+### Build 5: Program Rollup + Dashboards
+- Produce Sage Budget rollup xlsx from Dataverse (all projects for a program → aggregate by CSI → category totals)
+- SPA: Program Dashboard (budget bar, status breakdown, variance)
+- SPA: Project Dashboard (cross-project health, needs attention list)
+- Factor columns on dcfg_property (union, prevailing wage, regulatory tier)
+- Historical comparison: average cost by template type + factor profile
+
+### Build 6: AI Layer
+- Vendor proposal PDF parsing → pre-fill bid comp BIDDER columns
+- Confidence scoring per cell (high/inferred/gap)
+- Trade suggestion from project description
+- Estimate outlier flagging against historical data
+
+---
+
+## 18. Open Questions
+
+1. **Sage vendor sync frequency** — One-time import or recurring sync? Sage is system of record — does the system check for new vendors periodically or on demand?
+
+2. **SharePoint site provisioning** — Can we automate Teams site creation via Graph API, or does this require admin action? Affects whether Phase 3 (project site) is fully automated or semi-manual.
+
+3. **Bid comp template variations** — Is the 19-tab Multi Trade template the only format, or are there trade-specific single-tab templates for simple single-trade RFPs?
+
+4. **Invoice parsing complexity** — Are invoices consistently formatted (standard vendor invoice PDFs) or highly variable? Determines whether the system can auto-parse or needs human mapping.
+
+5. **Change order approval workflow** — Is there a formal approval chain for change orders, or does the PM have authority? Affects whether the system needs an approval flow or just capture + categorize.
 
 4. **Vendor proximity calculation** — Haversine from vendor address to property centroid? Requires geocoding on vendor and property addresses. Google Maps API or manual lat/lng entry?
 

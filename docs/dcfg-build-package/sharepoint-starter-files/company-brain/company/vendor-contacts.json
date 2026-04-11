@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "vendor-contacts",
+    "version": "1.0",
+    "description": "DCFG cross-functional company knowledge. Accessible to all roles.",
+    "file": "company-brain/company/vendor-contacts.json"
+  },
+  "entries": []
+}

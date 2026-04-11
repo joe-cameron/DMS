@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "vendor-knowledge",
+    "version": "1.0",
+    "description": "DCFG operations knowledge. Cross-reference with Dataverse for transactional data.",
+    "file": "company-brain/operations/vendor-knowledge.json"
+  },
+  "entries": []
+}

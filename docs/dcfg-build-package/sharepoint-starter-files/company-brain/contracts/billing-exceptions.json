@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "billing-exceptions",
+    "version": "1.0",
+    "description": "DCFG contracts knowledge. Cross-reference with dcfg_contracts and dcfg_document_templates.",
+    "file": "company-brain/contracts/billing-exceptions.json"
+  },
+  "entries": []
+}

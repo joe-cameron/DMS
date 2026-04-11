@@ -1,0 +1,210 @@
+=== TEMPLATE SCHEMA (dcfg_* columns from first record) ===
+  dcfg_activated_date = 
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Blanket_Work_Order.docx
+  dcfg_exhibit_type = 
+  dcfg_validation_status = 
+  dcfg_document_templateid = 688d3fde-5e21-f111-8341-7ced8d709173
+  dcfg_threshold_type = 100000001
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_deactivated_date = 
+  dcfg_notes = Blanket/MSA-style Bancroft work order. Highlighted fields need conversion to merge fields.
+  dcfg_document_type = 100000002
+  dcfg_name = Bancroft_Blanket_Work_Order
+
+=== ALL TEMPLATE RECORDS ===
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Blanket_Work_Order.docx
+  dcfg_document_templateid = 688d3fde-5e21-f111-8341-7ced8d709173
+  dcfg_threshold_type = 100000001
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Blanket/MSA-style Bancroft work order. Highlighted fields need conversion to merge fields.
+  dcfg_document_type = 100000002
+  dcfg_name = Bancroft_Blanket_Work_Order
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Work_Order.docx
+  dcfg_document_templateid = 7128d85c-9027-f111-8341-7ced8d709173
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Standard Decades work order template.
+  dcfg_document_type = 100000000
+  dcfg_name = Decades_Work_Order
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Vendor_MSA.docx
+  dcfg_document_templateid = dfa50b0b-6c28-f111-8341-7ced8d709173
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Decades Vendor Master Service Agreement.
+  dcfg_document_type = 100000002
+  dcfg_name = Decades_Vendor_MSA
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Exhibit_A_Basic_A.docx
+  dcfg_document_templateid = a22276d4-d628-f111-8341-7ced8d709173
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Bancroft Exhibit A - Basic Platform Package A. Static service description.
+  dcfg_document_type = 100000002
+  dcfg_name = Bancroft_Exhibit_A_Basic_A
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Exhibit_A_Concierge_B.docx
+  dcfg_document_templateid = a32276d4-d628-f111-8341-7ced8d709173
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Bancroft Exhibit A - Concierge Package B. Static service description.
+  dcfg_document_type = 100000002
+  dcfg_name = Bancroft_Exhibit_A_Concierge_B
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = /Decades_Vendor_MSA.docx
+  dcfg_exhibit_type = 100000001
+  dcfg_document_templateid = bc7ad7da-6021-f111-8341-7ced8d7092f6
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Decades MSA proposal template with Exhibit A (Concierge Package B). Main agreement document.
+  dcfg_document_type = 100000002
+  dcfg_name = Decades_Vendor_MSA
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_C_Fee_Schedule.docx
+  dcfg_document_templateid = bd7ad7da-6021-f111-8341-7ced8d7092f6
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Exhibit C fee schedule. Pricing and billing terms.
+  dcfg_document_type = 100000002
+  dcfg_name = Decades_Exhibit_C_Fee_Schedule
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_B_Location_List.docx
+  dcfg_document_templateid = 8506e4a7-4828-f111-8341-7ced8d7092f6
+  dcfg_is_active = False
+  dcfg_name = Decades_Exhibit_B_Location_List
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Work_Order.docx
+  dcfg_document_templateid = e4923cdf-5e21-f111-8341-7ced8d709731
+  dcfg_threshold_type = 100000000
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Standard Bancroft work order. Highlighted fields need conversion to merge fields (content controls).
+  dcfg_document_type = 100000000
+  dcfg_name = Bancroft_Work_Order
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Work_Order_Amendment.docx
+  dcfg_document_templateid = e5923cdf-5e21-f111-8341-7ced8d709731
+  dcfg_threshold_type = 100000000
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Amendment to existing Bancroft work order. Highlighted fields need conversion to merge fields.
+  dcfg_document_type = 100000001
+  dcfg_name = Bancroft_Work_Order_Amendment
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_A_Concierge_B.docx
+  dcfg_document_templateid = 975ba7df-6021-f111-8341-7ced8d709731
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Exhibit A attachment for Concierge Package B. Service descriptions and scope.
+  dcfg_document_type = 100000002
+  dcfg_name = Decades_Exhibit_A_Concierge_B
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Work_Order_Amendment.docx
+  dcfg_document_templateid = 0a869e5e-9027-f111-8341-7ced8d709731
+  dcfg_contract_family = 100000001
+  dcfg_is_active = True
+  dcfg_notes = Standard Decades work order amendment template.
+  dcfg_document_type = 100000001
+  dcfg_name = Decades_Work_Order_Amendment
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Blanket_Work_Order_Amendment.docx
+  dcfg_document_templateid = 0b869e5e-9027-f111-8341-7ced8d709731
+  dcfg_threshold_type = 100000001
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Bancroft over-threshold blanket work order amendment. Same form as standard amendment for now.
+  dcfg_document_type = 100000001
+  dcfg_name = Bancroft_Blanket_Work_Order_Amendment
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_A_Basic_A.docx
+  dcfg_document_templateid = 92f80ea9-4828-f111-8341-7ced8d709731
+  dcfg_is_active = False
+  dcfg_name = Decades_Exhibit_A_Basic_A
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_A_Optimized_C.docx
+  dcfg_document_templateid = a8f80ea9-4828-f111-8341-7ced8d709731
+  dcfg_is_active = False
+  dcfg_name = Decades_Exhibit_A_Optimized_C
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Decades_Exhibit_D_Insurance.docx
+  dcfg_document_templateid = ecf80ea9-4828-f111-8341-7ced8d709731
+  dcfg_is_active = False
+  dcfg_name = Decades_Exhibit_D_Insurance
+---
+  dcfg_version = v1.0
+  dcfg_sharepoint_url = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/Bancroft_Exhibit_A_Optimized_C.docx
+  dcfg_document_templateid = 83561cd3-d628-f111-8341-7ced8d709731
+  dcfg_contract_family = 100000000
+  dcfg_is_active = True
+  dcfg_notes = Bancroft Exhibit A - Optimized Package C. Static service description.
+  dcfg_document_type = 100000002
+  dcfg_name = Bancroft_Exhibit_A_Optimized_C
+
+=== CONFIG SCHEMA ===
+  dcfg_value = https://27b703f6b84beb1dbc539381243ce5.18.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/393405fdfb204d75aca1b211cf5876a7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=XX0H7u4XxtPCRYgm1LJjQlVbt9Ba7obhDsllY4jf-sI
+  dcfg_key = dcfg_flow_docgen_url
+  dcfg_configid = 6ddfbfcc-1724-f111-8341-7ced8d709173
+  dcfg_active = True
+
+=== ALL CONFIGS ===
+  dcfg_value = https://27b703f6b84beb1dbc539381243ce5.18.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/393405fdfb204d75aca1b211cf5876a7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=XX0H7u4XxtPCRYgm1LJjQlVbt9Ba7obhDsllY4jf-sI
+  dcfg_key = dcfg_flow_docgen_url
+  dcfg_configid = 6ddfbfcc-1724-f111-8341-7ced8d709173
+  dcfg_active = True
+---
+  dcfg_value = https://27b703f6b84beb1dbc539381243ce5.18.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/023d969e159a4667bc20d1ce8a911df5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jyLC7D2NfYAYJSzYPxONB2r_0syAimErkKtHY-0TyJ4
+  dcfg_key = dcfg_flow_cert_upload_url
+  dcfg_configid = 6edfbfcc-1724-f111-8341-7ced8d709173
+  dcfg_active = True
+---
+  dcfg_value = https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite
+  dcfg_key = dcfg_sp_site_url
+  dcfg_configid = 6fdfbfcc-1724-f111-8341-7ced8d709173
+  dcfg_active = True
+---
+  dcfg_value = https://27b703f6b84beb1dbc539381243ce5.18.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4b55e85f6a984e5494285dc1d16683da/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1crGn0z3b25jXYHheI4GaD2pG8AGT26Mzh5CAIam6nY
+  dcfg_key = dcfg_flow_send_email_url
+  dcfg_configid = 70dfbfcc-1724-f111-8341-7ced8d709173
+  dcfg_active = True
+---
+  dcfg_value = DCFG_Templates_Test
+  dcfg_key = dcfg_sp_templates_library
+  dcfg_configid = b8673bdb-052a-f111-8341-7ced8d7092f6
+  dcfg_active = True
+---
+  dcfg_value = https://27b703f6b84beb1dbc539381243ce5.18.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4d8cacdc25964084b2fca06e5d8274be/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VCIr9GFZJDTv9ZNDOb2thESiZtyTJF2gKIZttD0O6ro
+  dcfg_key = dcfg_flow_operations_url
+  dcfg_configid = 44654371-1426-f111-8341-7ced8d709731
+  dcfg_active = True
+---
+  dcfg_value = DCFG_Outputs_Test
+  dcfg_key = dcfg_sp_outputs_library
+  dcfg_configid = 8d2b6eda-052a-f111-8341-7ced8d709731
+  dcfg_active = True
+---
+  dcfg_value = DCFG_Attachments_Test
+  dcfg_key = dcfg_sp_attachments_library
+  dcfg_configid = 8e2b6eda-052a-f111-8341-7ced8d709731
+  dcfg_active = True
+---

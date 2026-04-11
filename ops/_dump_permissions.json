@@ -1,0 +1,446 @@
+[
+  {
+    "appendto": true,
+    "table": "dcfg_contract",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "c961a44c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_msa_rate",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "cc61a44c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_location_document",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "00181555-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_vendor",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "86eeee5c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_location_type",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "89eeee5c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_document_template",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "8ceeee5c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_template_field",
+    "write": false,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "8feeee5c-be1b-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_appliance_photo",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "d3c6402e-4221-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_agent_audit_log",
+    "write": false,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "96fa12cb-3f27-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": false,
+    "table": "dcfg_agent_config",
+    "write": false,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": false,
+    "id": "82fa12d1-3f27-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": false
+  },
+  {
+    "appendto": false,
+    "table": "dcfg_agent_config",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": false,
+    "id": "86fa12d1-3f27-f111-8341-7ced8d709173",
+    "scope": 756150000,
+    "create": false
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_document_output",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "4e79ae5a-be1b-f111-8341-7ced8d7092f6",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_appliance",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ec29325c-8516-4033-bdcb-16d653bb8261",
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": false,
+    "table": "dcfg_config",
+    "write": false,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": false,
+    "id": "030c4847-1824-f111-8341-7ced8d7092f6",
+    "scope": 756150000,
+    "create": false
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_document_request",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "99719c12-2324-f111-8341-7ced8d7092f6",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_contract_line",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "9b51874d-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_customer",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "9e51874d-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_msa",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "a151874d-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_property",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "a651874d-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_property_detail",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "c2fc8653-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_onboarding_case",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "d5fc8653-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_onboarding_checklist",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "06fd8653-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_program",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "1dfd8653-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_send_queue",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "0bd6a059-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_audit_log",
+    "write": false,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "0fd6a059-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_ap_cost_code",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "12d6a059-be1b-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_brain_insight",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "cd6db7bc-fb20-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_equipment_benchmark",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "d26db7bc-fb20-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_appliance_type",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352"
+    ],
+    "append": true,
+    "id": "6c4dfe22-4221-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_appliance_photo",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "48b25c2a-4221-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_agent_session_trace",
+    "write": false,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "d9447ecd-3f27-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_agent_diagnostic",
+    "write": true,
+    "read": true,
+    "delete": false,
+    "roles": null,
+    "append": true,
+    "id": "dd447ecd-3f27-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  },
+  {
+    "appendto": true,
+    "table": "dcfg_permtest",
+    "write": true,
+    "read": true,
+    "delete": true,
+    "roles": [
+      "ae785cc2-54bb-400e-b0be-b448ea923352",
+      "32993d47-be1b-f111-8341-7ced8d709731"
+    ],
+    "append": true,
+    "id": "f289ecdb-8f27-f111-8341-7ced8d709731",
+    "scope": 756150000,
+    "create": true
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "market-intelligence",
+    "version": "1.0",
+    "description": "DCFG sales knowledge. Cross-reference with dcfg_customers and dcfg_msas.",
+    "file": "company-brain/sales/market-intelligence.json"
+  },
+  "entries": []
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html><head><title>Create Sample Programs</title>
+<style>
+  body { font-family:system-ui; padding:24px; max-width:800px; margin:0 auto; background:#F5F7FA; }
+  h1 { color:#1B2A4A; }
+  .log { background:#1B2A4A; color:#E2E8F0; padding:16px; border-radius:8px; font-family:monospace; font-size:12px; white-space:pre-wrap; max-height:500px; overflow-y:auto; }
+  .ok { color:#2D8659; } .err { color:#C0392B; } .skip { color:#D4A017; }
+  button { padding:12px 24px; background:#1B2A4A; color:#fff; border:none; border-radius:8px; font-size:14px; cursor:pointer; margin:8px 4px; }
+  button:hover { background:#2E5295; }
+  .info { font-size:13px; color:#64748B; margin:12px 0; }
+</style></head><body>
+<h1>Create Sample Programs</h1>
+<p class="info">Open this page while authenticated to the portal. Click a button to create programs for that environment.</p>
+<p class="info"><strong>Step 1:</strong> Log into <a href="https://dcfg.powerappsportals.com" target="_blank">Test Portal</a> or <a href="https://dmms1.powerappsportals.com" target="_blank">Prod Portal</a> in another tab first.</p>
+
+<button onclick="run('https://dcfg.powerappsportals.com', PROGRAMS_TEST)">Create on TEST (dcfg.powerappsportals.com)</button>
+<button onclick="run('https://dmms1.powerappsportals.com', PROGRAMS_PROD)">Create on PROD (dmms1.powerappsportals.com)</button>
+
+<div id="log" class="log">Ready. Click a button above after authenticating to the portal.</div>
+
+<script>
+const PROGRAMS_TEST = [
+  { customer:'224e7247-fa20-f111-8341-7ced8d709731', customerName:'Albany Capital Partners', name:'HVAC Upgrade 2026', code:'HVAC-2026', total:200000, committed:0, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'f188972b-3e26-f111-8341-7ced8d709731', customerName:'Bancroft', name:'Lakeside Campus Maintenance', code:'LCM-2026', total:340000, committed:125000, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'f188972b-3e26-f111-8341-7ced8d709731', customerName:'Bancroft', name:'Community Residential Upkeep', code:'CRU-2026', total:180000, committed:37500, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'f188972b-3e26-f111-8341-7ced8d709731', customerName:'Bancroft', name:'Flicker Residences Renovation', code:'FRR-2026', total:95000, committed:0, start:'2026-03-01', end:'2026-12-31' },
+  { customer:'87810732-3e26-f111-8341-7ced8d709731', customerName:'Archway Programs', name:'Residential Homes Maintenance', code:'RHM-2026', total:220000, committed:42000, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'87810732-3e26-f111-8341-7ced8d709731', customerName:'Archway Programs', name:"Cooper's Poynt Renovation", code:'CPR-2026', total:65000, committed:0, start:'2026-04-01', end:'2026-12-31' },
+];
+
+const PROGRAMS_PROD = [
+  { customer:'a3429f55-3127-f111-8341-7ced8d3b38cc', customerName:'Bancroft', name:'Lakeside Campus Maintenance', code:'LCM-2026', total:340000, committed:125000, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'a3429f55-3127-f111-8341-7ced8d3b38cc', customerName:'Bancroft', name:'Community Residential Upkeep', code:'CRU-2026', total:180000, committed:37500, start:'2026-01-01', end:'2026-12-31' },
+  { customer:'a3429f55-3127-f111-8341-7ced8d3b38cc', customerName:'Bancroft', name:'Flicker Residences Renovation', code:'FRR-2026', total:95000, committed:0, start:'2026-03-01', end:'2026-12-31' },
+];
+
+const log = document.getElementById('log');
+function out(msg, cls) { log.innerHTML += `<span class="${cls||''}">${msg}</span>\n`; log.scrollTop = log.scrollHeight; }
+
+async function run(baseUrl, programs) {
+  log.innerHTML = '';
+  out(`Target: ${baseUrl}`);
+  out(`Programs to create: ${programs.length}\n`);
+
+  for (const p of programs) {
+    out(`Creating: ${p.name} for ${p.customerName}...`);
+
+    const body = {
+      dcfg_name: p.name,
+      dcfg_program_code: p.code,
+      dcfg_budget_total: p.total,
+      dcfg_budget_committed: p.committed,
+      dcfg_budget_remaining: p.total - p.committed,
+      dcfg_start_date: p.start,
+      dcfg_end_date: p.end,
+      dcfg_active_flag: true,
+      'dcfg_customer_id@odata.bind': `/dcfg_customers(${p.customer})`,
+    };
+
+    try {
+      const resp = await fetch(`${baseUrl}/_api/dcfg_programs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'OData-MaxVersion': '4.0',
+          'OData-Version': '4.0',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (resp.ok || resp.status === 204) {
+        out(`  OK: Created successfully`, 'ok');
+      } else {
+        const err = await resp.text();
+        out(`  FAIL (${resp.status}): ${err.slice(0, 200)}`, 'err');
+      }
+    } catch (e) {
+      out(`  ERROR: ${e.message}`, 'err');
+    }
+  }
+
+  out(`\nDone!`, 'ok');
+}
+</script>
+</body></html>

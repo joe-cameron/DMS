@@ -1,0 +1,1307 @@
+{
+    "properties": {
+        "connectionReferences": {
+            "shared_commondataserviceforapps": {
+                "api": {
+                    "name": "shared_commondataserviceforapps"
+                },
+                "connection": {
+                    "connectionReferenceLogicalName": "msdyn_Dataverse"
+                },
+                "runtimeSource": "embedded"
+            },
+            "shared_sharepointonline": {
+                "api": {
+                    "name": "shared_sharepointonline"
+                },
+                "connection": {
+                    "connectionReferenceLogicalName": "dcfg_sharedsharepointonline_28ed7"
+                },
+                "runtimeSource": "embedded"
+            },
+            "shared_wordonlinebusiness": {
+                "api": {
+                    "name": "shared_wordonlinebusiness"
+                },
+                "connection": {
+                    "connectionReferenceLogicalName": "dcfg_wordonline_connection"
+                },
+                "runtimeSource": "embedded"
+            }
+        },
+        "definition": {
+            "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {
+                "$authentication": {
+                    "defaultValue": {},
+                    "type": "SecureObject"
+                },
+                "$connections": {
+                    "defaultValue": {},
+                    "type": "Object"
+                }
+            },
+            "triggers": {
+                "When_a_row_is_added,_modified_or_deleted": {
+                    "type": "OpenApiConnectionWebhook",
+                    "inputs": {
+                        "parameters": {
+                            "subscriptionRequest/message": 1,
+                            "subscriptionRequest/entityname": "dcfg_document_request",
+                            "subscriptionRequest/scope": 4,
+                            "subscriptionRequest/filterexpression": "dcfg_request_type eq 100000000 and dcfg_status eq 100000000",
+                            "subscriptionRequest/name": "ada6473f-d528-f111-8341-7ced8d709173"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "SubscribeWebhookTrigger",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "metadata": {
+                        "operationMetadataId": "44f1fada-7632-47e4-838b-716b5127ff09"
+                    }
+                }
+            },
+            "actions": {
+                "Read_SP_Outputs_Config": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_configs",
+                            "$select": "dcfg_value",
+                            "$filter": "dcfg_key eq 'dcfg_sp_outputs_library' and dcfg_active eq true",
+                            "$top": 1
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "ListRecords",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {}
+                },
+                "Init_varOutputsLibrary": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varOutputsLibrary",
+                                "type": "String",
+                                "value": "@coalesce(outputs('Read_SP_Outputs_Config')?['body/value']?[0]?['dcfg_value'], 'DCFG_Outputs')"
+                            }
+                        ]
+                    },
+                    "runAfter": {
+                        "Read_SP_Outputs_Config": [
+                            "Succeeded",
+                            "Failed"
+                        ]
+                    }
+                },
+                "Init_varOutputFileUrl": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varOutputFileUrl",
+                                "type": "String",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Init_varMergeStatus": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varMergeStatus",
+                                "type": "Integer",
+                                "value": 100000000
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Init_varMissingFields": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varMissingFields",
+                                "type": "Array",
+                                "value": []
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Init_varOutputVersion": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varOutputVersion",
+                                "type": "Integer",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Set_Status_Processing": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_document_requests",
+                            "recordId": "@triggerOutputs()?['body/dcfg_document_requestid']",
+                            "item/dcfg_status": 100000001
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "UpdateRecord",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {}
+                },
+                "Parse_Request_Notes": {
+                    "type": "Compose",
+                    "inputs": "@json(coalesce(triggerOutputs()?['body/dcfg_notes'], '{}'))",
+                    "runAfter": {
+                        "Set_Status_Processing": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Condition_No_Template": {
+                    "type": "If",
+                    "expression": {
+                        "equals": [
+                            "@triggerOutputs()?['body/_dcfg_template_id_value']",
+                            null
+                        ]
+                    },
+                    "actions": {
+                        "Terminate_No_Template": {
+                            "type": "Terminate",
+                            "inputs": {
+                                "runStatus": "Failed",
+                                "runError": {
+                                    "code": "NoTemplate",
+                                    "message": "No template specified"
+                                }
+                            },
+                            "runAfter": {
+                                "Update_Request_Failed_NoTemplate": [
+                                    "Succeeded"
+                                ]
+                            }
+                        },
+                        "Update_Request_Failed_NoTemplate": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                                "parameters": {
+                                    "entityName": "dcfg_document_requests",
+                                    "recordId": "@triggerOutputs()?['body/dcfg_document_requestid']",
+                                    "item/dcfg_completed_at": "@{utcNow()}",
+                                    "item/dcfg_error_message": "No template specified on the document request",
+                                    "item/dcfg_status": 100000003
+                                },
+                                "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "UpdateRecord",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                }
+                            }
+                        }
+                    },
+                    "else": {
+                        "actions": {}
+                    },
+                    "runAfter": {
+                        "Parse_Request_Notes": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Condition_Is_Contract": {
+                    "type": "If",
+                    "expression": {
+                        "not": {
+                            "equals": [
+                                "@triggerOutputs()?['body/_dcfg_contract_id_value']",
+                                null
+                            ]
+                        }
+                    },
+                    "actions": {
+                        "Get_Contract": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                                "parameters": {
+                                    "entityName": "dcfg_contracts",
+                                    "recordId": "@triggerOutputs()?['body/_dcfg_contract_id_value']"
+                                },
+                                "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "GetItem",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                }
+                            }
+                        },
+                        "Get_Contract_Lines": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                                "parameters": {
+                                    "entityName": "dcfg_contract_lines",
+                                    "$filter": "@concat('_dcfg_contract_id_value eq ', triggerOutputs()?['body/_dcfg_contract_id_value'])"
+                                },
+                                "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "ListRecords",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                }
+                            },
+                            "runAfter": {
+                                "Get_Contract": [
+                                    "Succeeded"
+                                ]
+                            }
+                        }
+                    },
+                    "else": {
+                        "actions": {
+                            "Get_MSA": {
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                    "parameters": {
+                                        "entityName": "dcfg_msas",
+                                        "recordId": "@triggerOutputs()?['body/_dcfg_msa_id_value']"
+                                    },
+                                    "host": {
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                        "operationId": "GetItem",
+                                        "connectionName": "shared_commondataserviceforapps"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "runAfter": {
+                        "Parse_Request_Notes": [
+                            "Succeeded"
+                        ],
+                        "Init_varOutputFileUrl": [
+                            "Succeeded"
+                        ],
+                        "Init_varMergeStatus": [
+                            "Succeeded"
+                        ],
+                        "Init_varOutputVersion": [
+                            "Succeeded"
+                        ],
+                        "Init_varMissingFields": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Get_Customer": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_customers",
+                            "recordId": "@if(not(empty(outputs('Get_Contract')?['body/_dcfg_customer_id_value'])), outputs('Get_Contract')?['body/_dcfg_customer_id_value'], outputs('Get_MSA')?['body/_dcfg_customer_id_value'])"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "GetItem",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Condition_Is_Contract": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Get_Vendor": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_vendors",
+                            "recordId": "@if(not(empty(outputs('Get_Contract')?['body/_dcfg_vendor_id_value'])), outputs('Get_Contract')?['body/_dcfg_vendor_id_value'], outputs('Get_MSA')?['body/_dcfg_vendor_id_value'])"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "GetItem",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Condition_Is_Contract": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Get_Property": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_properties",
+                            "recordId": "@outputs('Get_Contract')?['body/_dcfg_property_id_value']"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "GetItem",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Condition_Is_Contract": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Get_Template_Record": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_document_templates",
+                            "recordId": "@triggerOutputs()?['body/_dcfg_template_id_value']"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "GetItem",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Condition_Is_Contract": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Build_Token_Map": {
+                    "type": "Compose",
+                    "inputs": {
+                        "vendor_address": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_address'], '')}",
+                        "contract_hours_of_operation": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_work_hours']), '')}",
+                        "contract_completed_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_work_completed_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_work_completed_date'], 'MM/dd/yyyy'))}",
+                        "contract_owner_street": "@{coalesce(outputs('Get_Customer')?['body/dcfg_billing_address'], '')}",
+                        "contract_current_properties": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_current_properties_included']), '')}",
+                        "contract_owner_email": "@{coalesce(outputs('Get_Customer')?['body/dcfg_primary_contact_email'], '')}",
+                        "contract_client_name": "@{coalesce(outputs('Get_Customer')?['body/dcfg_name'], '')}",
+                        "contract_main_contract_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_contract_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_contract_date'], 'MM/dd/yyyy'))}",
+                        "contract_end_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_end_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_end_date'], 'MM/dd/yyyy'))}",
+                        "contract_current_expiration_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_end_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_end_date'], 'MM/dd/yyyy'))}",
+                        "contract_owner_city": "@{coalesce(outputs('Get_Customer')?['body/dcfg_billing_city'], '')}",
+                        "contract_owner_state": "@{coalesce(outputs('Get_Customer')?['body/dcfg_billing_state'], '')}",
+                        "contract_owner_title": "@{coalesce(outputs('Get_Customer')?['body/dcfg_primary_contact_title'], '')}",
+                        "contract_start_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_start_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_start_date'], 'MM/dd/yyyy'))}",
+                        "contract_amendment_sequence": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_amendment_sequence']), '')}",
+                        "work_order_number": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_contract_number']), '')}",
+                        "vendor_email": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_email'], '')}",
+                        "contract_owner_contact": "@{coalesce(outputs('Get_Customer')?['body/dcfg_primary_contact_name'], '')}",
+                        "contract_fee": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_fee']), '')}",
+                        "contract_is_budgeted": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_is_budgeted'])), '', if(equals(outputs('Get_Contract')?['body/dcfg_is_budgeted'], true), 'Yes', 'No'))}",
+                        "contract_owner_phone": "@{coalesce(outputs('Get_Customer')?['body/dcfg_primary_contact_phone'], '')}",
+                        "contract_contractor_legal_name": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_legal_name'], '')}",
+                        "contract_po_number": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_po_number']), '')}",
+                        "vendor_signer_title": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_signer_title'], '')}",
+                        "contract_work_category": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_work_category@OData.Community.Display.V1.FormattedValue']), '')}",
+                        "property_name": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Property')?['body/dcfg_name']), '')}",
+                        "contract_type": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_contract_type@OData.Community.Display.V1.FormattedValue']), '')}",
+                        "msa_expiration_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_msa_id_value'], null), empty(outputs('Get_MSA')?['body/dcfg_expiration_date'])), '', formatDateTime(outputs('Get_MSA')?['body/dcfg_expiration_date'], 'MM/dd/yyyy'))}",
+                        "vendor_phone": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_phone'], '')}",
+                        "contract_form_of_payment": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_form_of_payment']), '')}",
+                        "customer_president_name": "@{coalesce(outputs('Get_Customer')?['body/dcfg_president_name'], '')}",
+                        "contract_original_wo_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_contract_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_contract_date'], 'MM/dd/yyyy'))}",
+                        "vendor_primary_contact": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_primary_contact'], '')}",
+                        "contract_service_location": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_service_location_description']), '')}",
+                        "contract_description_of_service": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_description_of_service']), '')}",
+                        "msa_effective_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_msa_id_value'], null), empty(outputs('Get_MSA')?['body/dcfg_effective_date'])), '', formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'], 'MM/dd/yyyy'))}",
+                        "vendor_payment_terms": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_payment_terms']), '')}",
+                        "contract_work_start_date": "@{if(or(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), empty(outputs('Get_Contract')?['body/dcfg_work_start_date'])), '', formatDateTime(outputs('Get_Contract')?['body/dcfg_work_start_date'], 'MM/dd/yyyy'))}",
+                        "contract_contractor_name": "@{coalesce(outputs('Get_Vendor')?['body/dcfg_legal_name'], '')}",
+                        "contract_description_of_work": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_description_of_work']), '')}",
+                        "contract_payment_process": "@{coalesce(if(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null), null, outputs('Get_Contract')?['body/dcfg_payment_process']), '')}",
+                        "msa_effective_day": "@{concat(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),if(or(equals(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'11'),equals(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'12'),equals(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'13')),'th',if(endsWith(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'1'),'st',if(endsWith(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'2'),'nd',if(endsWith(formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'],'d'),'3'),'rd','th')))))}",
+                        "msa_effective_month": "@{if(equals(triggerOutputs()?['body/_dcfg_msa_id_value'], null), '', formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'], 'MMMM'))}",
+                        "msa_effective_year": "@{if(equals(triggerOutputs()?['body/_dcfg_msa_id_value'], null), '', formatDateTime(outputs('Get_MSA')?['body/dcfg_effective_date'], 'yyyy'))}"
+                    },
+                    "runAfter": {
+                        "Get_Property": [
+                            "Succeeded"
+                        ],
+                        "Get_Template_Record": [
+                            "Succeeded"
+                        ],
+                        "Get_Customer": [
+                            "Succeeded"
+                        ],
+                        "Get_Vendor": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Compute_Output_Filename": {
+                    "type": "Compose",
+                    "inputs": "@coalesce(triggerOutputs()?['body/dcfg_name'], concat('DocGen_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss')))",
+                    "runAfter": {
+                        "Switch_Template": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Build_Customer_Display": {
+                    "type": "Compose",
+                    "inputs": "@coalesce(outputs('Get_Customer')?['body/dcfg_display_name'], outputs('Get_Customer')?['body/dcfg_name'], 'Unknown')",
+                    "runAfter": {
+                        "Compute_Output_Filename": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Build_Fiscal_Year": {
+                    "type": "Compose",
+                    "inputs": "@if(not(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null)), coalesce(outputs('Get_Contract')?['body/dcfg_fiscal_year'], formatDateTime(utcNow(), 'yyyy')), formatDateTime(utcNow(), 'yyyy'))",
+                    "runAfter": {
+                        "Compute_Output_Filename": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Build_Doc_Type_Name": {
+                    "type": "Compose",
+                    "inputs": "@if(not(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null)), if(contains(coalesce(outputs('Get_Template_Record')?['body/dcfg_name'], ''), 'Amendment'), 'Amendment', 'Contract'), if(contains(coalesce(outputs('Get_Template_Record')?['body/dcfg_name'], ''), 'Exhibit'), 'Exhibit', 'MSA'))",
+                    "runAfter": {
+                        "Compute_Output_Filename": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Build_Output_Folder": {
+                    "type": "Compose",
+                    "inputs": "@concat('/', variables('varOutputsLibrary'), '/', outputs('Build_Customer_Display'), '/', outputs('Build_Fiscal_Year'), '/', outputs('Build_Doc_Type_Name'))",
+                    "runAfter": {
+                        "Build_Customer_Display": [
+                            "Succeeded"
+                        ],
+                        "Build_Fiscal_Year": [
+                            "Succeeded"
+                        ],
+                        "Build_Doc_Type_Name": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Create_Output_Customer_Folder": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "dataset": "https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite",
+                            "table": "@variables('varOutputsLibrary')",
+                            "parameters/path": "@outputs('Build_Customer_Display')"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "operationId": "CreateNewFolder",
+                            "connectionName": "shared_sharepointonline"
+                        }
+                    },
+                    "runAfter": {
+                        "Build_Output_Folder": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Create_Output_Year_Folder": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "dataset": "https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite",
+                            "table": "@variables('varOutputsLibrary')",
+                            "parameters/path": "@concat(outputs('Build_Customer_Display'), '/', outputs('Build_Fiscal_Year'))"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "operationId": "CreateNewFolder",
+                            "connectionName": "shared_sharepointonline"
+                        }
+                    },
+                    "runAfter": {
+                        "Create_Output_Customer_Folder": [
+                            "Succeeded",
+                            "Failed"
+                        ]
+                    }
+                },
+                "Create_Output_DocType_Folder": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "dataset": "https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite",
+                            "table": "@variables('varOutputsLibrary')",
+                            "parameters/path": "@concat(outputs('Build_Customer_Display'), '/', outputs('Build_Fiscal_Year'), '/', outputs('Build_Doc_Type_Name'))"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "operationId": "CreateNewFolder",
+                            "connectionName": "shared_sharepointonline"
+                        }
+                    },
+                    "runAfter": {
+                        "Create_Output_Year_Folder": [
+                            "Succeeded",
+                            "Failed"
+                        ]
+                    }
+                },
+                "Create_file": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "dataset": "https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite",
+                            "folderPath": "@outputs('Build_Output_Folder')",
+                            "name": "@{outputs('Compute_Output_Filename')}.docx",
+                            "body": "@variables('varPopulatedDoc')"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "operationId": "CreateFile",
+                            "connectionName": "shared_sharepointonline"
+                        }
+                    },
+                    "runAfter": {
+                        "Create_Output_DocType_Folder": [
+                            "Succeeded",
+                            "Failed"
+                        ]
+                    },
+                    "runtimeConfiguration": {
+                        "contentTransfer": {
+                            "transferMode": "Chunked"
+                        }
+                    }
+                },
+                "Set_varOutputFileUrl": {
+                    "type": "SetVariable",
+                    "inputs": {
+                        "name": "varOutputFileUrl",
+                        "value": "@{outputs('Create_file')?['body/{Link}']}"
+                    },
+                    "runAfter": {
+                        "Create_file": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Create_Document_Output_Record": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_document_outputs",
+                            "item/dcfg_name": "@coalesce(outputs('Compute_Output_Filename'), 'unnamed')",
+                            "item/dcfg_source_entity": "@if(not(equals(triggerOutputs()?['body/_dcfg_contract_id_value'], null)), 'dcfg_contract', 'dcfg_msa')",
+                            "item/dcfg_source_record_id": "@coalesce(triggerOutputs()?['body/_dcfg_contract_id_value'], triggerOutputs()?['body/_dcfg_msa_id_value'])",
+                            "item/dcfg_generated_at": "@{utcNow()}",
+                            "item/dcfg_generated_by": "@coalesce(triggerOutputs()?['body/dcfg_requested_by'], 'system')",
+                            "item/dcfg_merge_status": "@variables('varMergeStatus')",
+                            "item/dcfg_missing_field_count": "@length(variables('varMissingFields'))",
+                            "item/dcfg_output_file_url": "@variables('varOutputFileUrl')",
+                            "item/dcfg_template_id@odata.bind": "/dcfg_document_templates(@{triggerOutputs()?['body/_dcfg_template_id_value']})",
+                            "item/dcfg_template_version": "@outputs('Get_Template_Record')?['body/dcfg_version']"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Set_varOutputFileUrl": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Write_Audit_Log": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_audit_logs",
+                            "item/dcfg_target_record_id": "@{triggerOutputs()?['body/dcfg_document_requestid']}",
+                            "item/dcfg_action_type": 100000000,
+                            "item/dcfg_new_value": "@{concat('Document generated: ', coalesce(outputs('Compute_Output_Filename'), ''), '. Output: ', coalesce(variables('varOutputFileUrl'), ''))}",
+                            "item/dcfg_performed_at": "@{utcNow()}",
+                            "item/dcfg_performed_by": "@coalesce(triggerOutputs()?['body/dcfg_requested_by'], 'system')",
+                            "item/dcfg_target_table": "dcfg_document_request"
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Create_Document_Output_Record": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Condition_Update_Contract_Or_MSA": {
+                    "type": "If",
+                    "expression": {
+                        "not": {
+                            "equals": [
+                                "@triggerOutputs()?['body/_dcfg_contract_id_value']",
+                                null
+                            ]
+                        }
+                    },
+                    "actions": {
+                        "Update_Contract_DocUrl": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                                "parameters": {
+                                    "entityName": "dcfg_contracts",
+                                    "recordId": "@triggerOutputs()?['body/_dcfg_contract_id_value']",
+                                    "item/dcfg_document_url": "@variables('varOutputFileUrl')",
+                                    "item/dcfg_generated_date": "@{utcNow()}"
+                                },
+                                "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "UpdateRecord",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                }
+                            }
+                        }
+                    },
+                    "else": {
+                        "actions": {
+                            "Update_MSA_DocUrl": {
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                    "parameters": {
+                                        "entityName": "dcfg_msas",
+                                        "recordId": "@triggerOutputs()?['body/_dcfg_msa_id_value']",
+                                        "item/dcfg_document_url": "@variables('varOutputFileUrl')",
+                                        "item/dcfg_generated_date": "@{utcNow()}"
+                                    },
+                                    "host": {
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                        "operationId": "UpdateRecord",
+                                        "connectionName": "shared_commondataserviceforapps"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "runAfter": {
+                        "Write_Audit_Log": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Update_Request_Complete": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "parameters": {
+                            "entityName": "dcfg_document_requests",
+                            "recordId": "@triggerOutputs()?['body/dcfg_document_requestid']",
+                            "item/dcfg_completed_at": "@{utcNow()}",
+                            "item/dcfg_missing_field_count": "@length(variables('varMissingFields'))",
+                            "item/dcfg_output_file_url": "@variables('varOutputFileUrl')",
+                            "item/dcfg_status": 100000002
+                        },
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "UpdateRecord",
+                            "connectionName": "shared_commondataserviceforapps"
+                        }
+                    },
+                    "runAfter": {
+                        "Condition_Update_Contract_Or_MSA": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Init_varPopulatedDoc": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "varPopulatedDoc",
+                                "type": "Object",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Switch_Template": {
+                    "type": "Switch",
+                    "expression": "@outputs('Get_Template_Record')?['body/dcfg_name']",
+                    "default": {
+                        "actions": {
+                            "Terminate_Unknown_Template": {
+                                "type": "Terminate",
+                                "inputs": {
+                                    "runStatus": "Failed",
+                                    "runError": {
+                                        "code": "UnknownTemplate",
+                                        "message": "No Populate action configured for this template"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "cases": {
+                        "Bancroft_Blanket_WO_Amendment": {
+                            "actions": {
+                                "Set_Doc_Bancroft_Blanket_WO_Amend": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_Blanket_WO_Amend')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_Blanket_WO_Amend": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                },
+                                "Populate_Bancroft_Blanket_WO_Amend": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "01D4QOAQNEO4VCLMH6OJEZK5MFTK36YA46"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    },
+                                    "metadata": {
+                                        "01D4QOAQNEO4VCLMH6OJEZK5MFTK36YA46": "/Bancroft_Blanket_Work_Order_Amendment_CC.docx"
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Blanket_Work_Order_Amendment"
+                        },
+                        "Decades_Exhibit_C_Fee_Schedule": {
+                            "actions": {
+                                "Set_Doc_Decades_Exhibit_C": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_C')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_C": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                },
+                                "Populate_Decades_Exhibit_C": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Decades_Exhibit_C_Fee_Schedule.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_C_Fee_Schedule"
+                        },
+                        "Bancroft_Blanket_Work_Order": {
+                            "actions": {
+                                "Populate_Bancroft_Blanket_WO": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_Blanket_WO": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_Blanket_WO')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_Blanket_WO": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Blanket_Work_Order"
+                        },
+                        "Bancroft_Work_Order": {
+                            "actions": {
+                                "Populate_Bancroft_WO": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_WO": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_WO')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_WO": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Work_Order"
+                        },
+                        "Bancroft_Work_Order_Amendment": {
+                            "actions": {
+                                "Populate_Bancroft_WO_Amendment": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_WO_Amendment": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_WO_Amendment')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_WO_Amendment": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Work_Order_Amendment"
+                        },
+                        "Decades_Work_Order": {
+                            "actions": {
+                                "Populate_Decades_WO": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_WO": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_WO')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_WO": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Work_Order"
+                        },
+                        "Decades_Work_Order_Amendment": {
+                            "actions": {
+                                "Populate_Decades_WO_Amendment": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_WO_Amendment": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_WO_Amendment')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_WO_Amendment": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Work_Order_Amendment"
+                        },
+                        "Decades_MSA": {
+                            "actions": {
+                                "Populate_Decades_MSA": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_MSA": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_MSA')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_MSA": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Vendor_MSA"
+                        },
+                        "Decades_Exhibit_A_Basic_A": {
+                            "actions": {
+                                "Populate_Decades_Exhibit_A_Basic_A": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_Exhibit_A_Basic_A": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_A_Basic_A')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_A_Basic_A": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_A_Basic_A"
+                        },
+                        "Decades_Exhibit_A_Optimized_C": {
+                            "actions": {
+                                "Populate_Decades_Exhibit_A_Optimized_C": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_Exhibit_A_Optimized_C": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_A_Optimized_C')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_A_Optimized_C": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_A_Optimized_C"
+                        },
+                        "Decades_Exhibit_B_Location_List": {
+                            "actions": {
+                                "Populate_Decades_Exhibit_B_Location_List": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_Exhibit_B_Location_List": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_B_Location_List')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_B_Location_List": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_B_Location_List"
+                        },
+                        "Decades_Exhibit_D_Insurance": {
+                            "actions": {
+                                "Populate_Decades_Exhibit_D_Insurance": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_Exhibit_D_Insurance": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_D_Insurance')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_D_Insurance": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_D_Insurance"
+                        },
+                        "Decades_Exhibit_A_Concierge_B": {
+                            "actions": {
+                                "Populate_Decades_Exhibit_A_Concierge_B": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Decades_Exhibit_A_Concierge_B": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Decades_Exhibit_A_Concierge_B')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Decades_Exhibit_A_Concierge_B": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Decades_Exhibit_A_Concierge_B"
+                        },
+                        "Bancroft_Exhibit_A_Basic_A": {
+                            "actions": {
+                                "Populate_Bancroft_Exhibit_A_Basic_A": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_Exhibit_A_Basic_A": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_Exhibit_A_Basic_A')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_Exhibit_A_Basic_A": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Exhibit_A_Basic_A"
+                        },
+                        "Bancroft_Exhibit_A_Concierge_B": {
+                            "actions": {
+                                "Populate_Bancroft_Exhibit_A_Concierge_B": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_Exhibit_A_Concierge_B": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_Exhibit_A_Concierge_B')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_Exhibit_A_Concierge_B": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Exhibit_A_Concierge_B"
+                        },
+                        "Bancroft_Exhibit_A_Optimized_C": {
+                            "actions": {
+                                "Populate_Bancroft_Exhibit_A_Optimized_C": {
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                        "parameters": {
+                                            "source": "sites/decadesconstructiongroup.sharepoint.com,59956094-d818-4896-868e-4ef6cfc77ab3,70178d3c-5878-48ab-a340-5329e696c3e9",
+                                            "drive": "b!lGCVWRjYlkiGjk72z8d6szyNF3B4WKtIo0BTKeaWw-k0gmQTkZA9QKdMLo-aANXH",
+                                            "file": "/Bancroft_Blanket_Work_Order_Amendment.docx",
+                                            "dynamicFileSchema": "@outputs('Build_Token_Map')"
+                                        },
+                                        "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness",
+                                            "operationId": "CreateFileItem",
+                                            "connectionName": "shared_wordonlinebusiness"
+                                        }
+                                    }
+                                },
+                                "Set_Doc_Bancroft_Exhibit_A_Optimized_C": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "varPopulatedDoc",
+                                        "value": "@body('Populate_Bancroft_Exhibit_A_Optimized_C')"
+                                    },
+                                    "runAfter": {
+                                        "Populate_Bancroft_Exhibit_A_Optimized_C": [
+                                            "Succeeded"
+                                        ]
+                                    }
+                                }
+                            },
+                            "case": "Bancroft_Exhibit_A_Optimized_C"
+                        }
+                    },
+                    "runAfter": {
+                        "Build_Token_Map": [
+                            "Succeeded"
+                        ],
+                        "Init_varPopulatedDoc": [
+                            "Succeeded"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "schemaVersion": "1.0.0.0"
+}

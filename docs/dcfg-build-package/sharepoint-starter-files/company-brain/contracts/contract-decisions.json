@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "contract-decisions",
+    "version": "1.0",
+    "description": "DCFG contracts knowledge. Cross-reference with dcfg_contracts and dcfg_document_templates.",
+    "file": "company-brain/contracts/contract-decisions.json"
+  },
+  "entries": []
+}

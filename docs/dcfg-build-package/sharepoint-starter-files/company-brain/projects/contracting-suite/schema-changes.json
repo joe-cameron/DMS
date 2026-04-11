@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "project-schema-changes",
+    "version": "1.0",
+    "description": "DCFG Contracting Suite project tracking.",
+    "file": "company-brain/projects/contracting-suite/schema-changes.json"
+  },
+  "entries": []
+}

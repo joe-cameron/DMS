@@ -1,0 +1,15 @@
+{
+  "name": "dcfg-html-to-pdf",
+  "version": "1.0.0",
+  "description": "Converts HTML to PDF via Puppeteer for DCFG DocGen V4",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start",
+    "test": "node test/test-local.js"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "fast-xml-parser": "^5.5.10",
+    "jszip": "^3.10.1"
+  }
+}

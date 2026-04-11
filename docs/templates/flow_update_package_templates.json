@@ -1,0 +1,168 @@
+{
+  "_description": "Flow update: Add service_fee_pct + location_table to Build_Token_Map for combined package templates",
+  "_instructions": [
+    "Step 1: Add 2 new Init variables (varLocationRows, varMonthlyTotal) at the top of the flow",
+    "Step 2: Add Get_MSA_Locations action (after Get_Customer)",
+    "Step 3: Add Get_MSA_Rates action (after Condition_Is_Contract)",
+    "Step 4: Add Loop_Locations (Apply to Each) with rate matching, HTML row building, total summing",
+    "Step 5: Add Build_Location_Table Compose (after Loop_Locations)",
+    "Step 6: Add service_fee_pct and location_table to Build_Token_Map inputs",
+    "Step 7: Update Build_Token_Map runAfter to include Build_Location_Table",
+    "The 3 Populate actions (Basic A, Concierge B, Optimized C) already use @outputs('Build_Token_Map') - no changes needed there"
+  ],
+
+  "step_1_init_variables": {
+    "_note": "Add these 2 variables next to the existing Init_var* actions at the top of the flow. runAfter: {} (parallel start)",
+
+    "Init_varLocationRows": {
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [{ "name": "varLocationRows", "type": "String", "value": "" }]
+      },
+      "runAfter": {}
+    },
+
+    "Init_varMonthlyTotal": {
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [{ "name": "varMonthlyTotal", "type": "Float", "value": 0 }]
+      },
+      "runAfter": {}
+    }
+  },
+
+  "step_2_get_msa_locations": {
+    "_note": "Add after Get_Customer succeeds. Queries all active locations for the MSA's customer.",
+
+    "Get_MSA_Locations": {
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "entityName": "dcfg_properties",
+          "$select": "dcfg_propertyid,dcfg_name,dcfg_address,dcfg_address_2,dcfg_city,dcfg_state,dcfg_zip,dcfg_is_no_charge",
+          "$expand": "dcfg_location_type_id($select=dcfg_location_typeid,dcfg_name)",
+          "$filter": "_dcfg_customer_id_value eq @{if(not(empty(outputs('Get_Contract')?['body/_dcfg_customer_id_value'])), outputs('Get_Contract')?['body/_dcfg_customer_id_value'], outputs('Get_MSA')?['body/_dcfg_customer_id_value'])} and dcfg_active_flag eq true",
+          "$orderby": "dcfg_name asc"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+          "operationId": "ListRecords",
+          "connectionName": "shared_commondataserviceforapps"
+        },
+        "authentication": "@parameters('$authentication')"
+      },
+      "runAfter": {
+        "Get_Customer": ["Succeeded"]
+      }
+    }
+  },
+
+  "step_3_get_msa_rates": {
+    "_note": "Add after Condition_Is_Contract. Queries MSA rates for rate-per-location-type matching.",
+
+    "Get_MSA_Rates": {
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "entityName": "dcfg_msa_rates",
+          "$select": "dcfg_msa_rateid,dcfg_name,dcfg_membership_rate,dcfg_onboarding_rate,dcfg_is_active,_dcfg_location_type_id_value",
+          "$expand": "dcfg_location_type_id($select=dcfg_location_typeid,dcfg_name)",
+          "$filter": "_dcfg_msa_id_value eq @{coalesce(triggerOutputs()?['body/_dcfg_msa_id_value'], outputs('Get_Contract')?['body/_dcfg_msa_id_value'])} and dcfg_is_active eq true",
+          "$orderby": "dcfg_name asc"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+          "operationId": "ListRecords",
+          "connectionName": "shared_commondataserviceforapps"
+        },
+        "authentication": "@parameters('$authentication')"
+      },
+      "runAfter": {
+        "Condition_Is_Contract": ["Succeeded"]
+      }
+    }
+  },
+
+  "step_4_loop_locations": {
+    "_note": "Apply to Each with concurrency=1 to preserve order. Runs after Get_MSA_Locations + Get_MSA_Rates both succeed.",
+
+    "Loop_Locations": {
+      "type": "Foreach",
+      "foreach": "@outputs('Get_MSA_Locations')?['body/value']",
+      "actions": {
+
+        "Filter_Rate_By_Type": {
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Get_MSA_Rates')?['body/value']",
+            "where": "@equals(item()?['_dcfg_location_type_id_value'], items('Loop_Locations')?['dcfg_location_type_id']?['dcfg_location_typeid'])"
+          }
+        },
+
+        "Compute_Rate": {
+          "type": "Compose",
+          "inputs": "@if(equals(items('Loop_Locations')?['dcfg_is_no_charge'], true), float(0), float(coalesce(first(body('Filter_Rate_By_Type'))?['dcfg_membership_rate'], 0)))",
+          "runAfter": { "Filter_Rate_By_Type": ["Succeeded"] }
+        },
+
+        "Append_Location_Row": {
+          "type": "AppendToStringVariable",
+          "inputs": {
+            "name": "varLocationRows",
+            "value": "@{concat('<tr style=\"border-bottom:1px solid #ccc\"><td style=\"padding:4px 6px;border:1px solid #ccc;text-align:center\">', string(add(iterationIndexes('Loop_Locations'), 1)), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_location_type_id']?['dcfg_name'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_address'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_address_2'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_city'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_state'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc\">', coalesce(items('Loop_Locations')?['dcfg_zip'], ''), '</td><td style=\"padding:4px 6px;border:1px solid #ccc;text-align:right\">', if(equals(items('Loop_Locations')?['dcfg_is_no_charge'], true), 'No Charge', concat('$', formatNumber(outputs('Compute_Rate'), '0,0.00'))), '</td></tr>')}"
+          },
+          "runAfter": { "Compute_Rate": ["Succeeded"] }
+        },
+
+        "Increment_Monthly_Total": {
+          "type": "IncrementVariable",
+          "inputs": {
+            "name": "varMonthlyTotal",
+            "value": "@outputs('Compute_Rate')"
+          },
+          "runAfter": { "Compute_Rate": ["Succeeded"] }
+        }
+      },
+      "runAfter": {
+        "Get_MSA_Locations": ["Succeeded"],
+        "Get_MSA_Rates": ["Succeeded"]
+      },
+      "runtimeConfiguration": {
+        "concurrency": { "repetitions": 1 }
+      }
+    }
+  },
+
+  "step_5_build_location_table": {
+    "_note": "Compose the full HTML table from the accumulated rows and total.",
+
+    "Build_Location_Table": {
+      "type": "Compose",
+      "inputs": "@{if(equals(length(variables('varLocationRows')), 0), '', concat('<table style=\"border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:10pt\"><thead><tr style=\"background:#1B2A4A;color:#fff;font-weight:bold\"><th style=\"padding:4px 6px;border:1px solid #999\">#</th><th style=\"padding:4px 6px;border:1px solid #999\">Type</th><th style=\"padding:4px 6px;border:1px solid #999\">Address 1</th><th style=\"padding:4px 6px;border:1px solid #999\">ADR 2</th><th style=\"padding:4px 6px;border:1px solid #999\">City</th><th style=\"padding:4px 6px;border:1px solid #999\">State</th><th style=\"padding:4px 6px;border:1px solid #999\">ZIP</th><th style=\"padding:4px 6px;border:1px solid #999;text-align:right\">Cost</th></tr></thead><tbody>', variables('varLocationRows'), '</tbody><tfoot><tr style=\"font-weight:bold;border-top:2px solid #1B2A4A\"><td colspan=\"7\" style=\"padding:4px 6px;border:1px solid #999;text-align:right\">MONTHLY TOTAL</td><td style=\"padding:4px 6px;border:1px solid #999;text-align:right\">$', formatNumber(variables('varMonthlyTotal'), '0,0.00'), '</td></tr></tfoot></table>'))}",
+      "runAfter": {
+        "Loop_Locations": ["Succeeded"]
+      }
+    }
+  },
+
+  "step_6_add_to_build_token_map": {
+    "_note": "Add these 2 keys to the existing Build_Token_Map Compose inputs object:",
+
+    "service_fee_pct": "@{coalesce(outputs('Get_MSA')?['body/dcfg_service_fee_pct'], '')}",
+    "location_table": "@{outputs('Build_Location_Table')}"
+  },
+
+  "step_7_update_build_token_map_runafter": {
+    "_note": "Add Build_Location_Table to Build_Token_Map's runAfter dependencies (alongside existing Get_Property, Get_Template_Record, Get_Customer, Get_Vendor):",
+
+    "Build_Location_Table": ["Succeeded"]
+  },
+
+  "_summary": {
+    "new_variables": ["varLocationRows (String)", "varMonthlyTotal (Float)"],
+    "new_dataverse_queries": ["Get_MSA_Locations (dcfg_properties by customer)", "Get_MSA_Rates (dcfg_msa_rates by MSA)"],
+    "new_actions": ["Loop_Locations (Apply to Each)", "Filter_Rate_By_Type", "Compute_Rate", "Append_Location_Row", "Increment_Monthly_Total", "Build_Location_Table"],
+    "token_map_additions": ["service_fee_pct", "location_table"],
+    "populate_actions_unchanged": "All 3 Populate actions (Basic A, Concierge B, Optimized C) already use @outputs('Build_Token_Map') and are connected to the correct templates - no changes needed"
+  }
+}

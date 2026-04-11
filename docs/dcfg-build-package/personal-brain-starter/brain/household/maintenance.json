@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "maintenance-tracker",
+    "version": "1.0",
+    "description": "Appliances, systems, and items requiring periodic maintenance. Each entry tracks the item, maintenance interval, last service date, warranty info, and next action date. Agent: flag anything overdue or expiring within 30 days when asked about home maintenance.",
+    "file": "brain/household/maintenance.json"
+  },
+  "entries": []
+}

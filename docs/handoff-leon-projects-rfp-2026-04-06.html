@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leon — Projects & RFP Process Review</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f0; color: #2c2c2c; line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, #1a3a5c 0%, #2d5a8e 100%); color: white; padding: 40px 0; text-align: center; }
+  .header h1 { font-size: 2.2em; margin-bottom: 8px; }
+  .header p { font-size: 1.1em; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+  .intro-box { background: #fff; border-left: 5px solid #2d5a8e; padding: 25px 30px; margin: 30px 0; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .intro-box h2 { color: #1a3a5c; margin-bottom: 10px; }
+
+  section { background: #fff; margin: 25px 0; padding: 30px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  section h2 { color: #1a3a5c; font-size: 1.5em; margin-bottom: 15px; border-bottom: 2px solid #e8e8e0; padding-bottom: 10px; }
+  section h3 { color: #2d5a8e; font-size: 1.15em; margin: 20px 0 10px 0; }
+
+  p { margin-bottom: 12px; }
+
+  .flow-diagram { background: #f8f8f4; border: 1px solid #ddd; border-radius: 6px; padding: 25px; margin: 20px 0; overflow-x: auto; }
+  .flow-steps { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .flow-step { background: #2d5a8e; color: white; padding: 12px 18px; border-radius: 6px; font-weight: 600; text-align: center; min-width: 120px; font-size: 0.95em; }
+  .flow-step.highlight { background: #c0392b; }
+  .flow-step.green { background: #27ae60; }
+  .flow-step.orange { background: #e67e22; }
+  .flow-arrow { font-size: 1.5em; color: #999; font-weight: bold; }
+
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95em; }
+  th { background: #1a3a5c; color: white; padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid #eee; }
+  tr:nth-child(even) { background: #f9f9f6; }
+  tr:hover { background: #eef3f9; }
+
+  .question-box { background: #fff9e6; border: 2px solid #f0c040; border-radius: 6px; padding: 20px 25px; margin: 15px 0; }
+  .question-box h4 { color: #8a6d00; margin-bottom: 8px; font-size: 1.05em; }
+  .question-box p { margin-bottom: 6px; }
+  .question-box ol, .question-box ul { margin-left: 22px; margin-bottom: 8px; }
+  .question-box li { margin-bottom: 6px; }
+  .answer-line { border: none; border-bottom: 1px dashed #ccc; width: 100%; padding: 6px 0; margin: 4px 0; font-size: 0.95em; color: #555; }
+
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0e8; }
+  .check-mark { color: #27ae60; font-size: 1.2em; min-width: 24px; padding-top: 2px; }
+  .wrong-mark { color: #c0392b; font-size: 1.2em; min-width: 24px; padding-top: 2px; }
+  .unknown-mark { color: #e67e22; font-size: 1.2em; min-width: 24px; padding-top: 2px; }
+
+  .spreadsheet-ref { background: #eef7ee; border: 1px solid #b5d8b5; border-radius: 4px; padding: 15px 20px; margin: 12px 0; }
+  .spreadsheet-ref strong { color: #1a5c1a; }
+
+  .status-flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 15px 0; }
+  .status-badge { padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85em; }
+  .status-badge.grey { background: #e0e0e0; color: #555; }
+  .status-badge.blue { background: #d4e6f9; color: #1a3a5c; }
+  .status-badge.amber { background: #ffecd2; color: #8a5500; }
+  .status-badge.green { background: #d4f0d4; color: #1a5c1a; }
+  .status-badge.red { background: #fdd; color: #900; }
+  .status-arrow { color: #999; font-weight: bold; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  .col-box { background: #f8f8f4; border: 1px solid #ddd; border-radius: 6px; padding: 18px; }
+  .col-box h4 { color: #2d5a8e; margin-bottom: 8px; }
+
+  .divider { height: 3px; background: linear-gradient(90deg, #1a3a5c, #2d5a8e, #1a3a5c); margin: 40px 0; border-radius: 2px; opacity: 0.3; }
+
+  .toc { background: #fff; padding: 25px 30px; margin: 25px 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .toc h2 { color: #1a3a5c; margin-bottom: 15px; }
+  .toc ol { margin-left: 22px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: #2d5a8e; text-decoration: none; font-weight: 500; }
+  .toc a:hover { text-decoration: underline; }
+
+  .folder-tree { font-family: 'Consolas', 'Courier New', monospace; background: #f8f8f4; padding: 18px 22px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9em; line-height: 1.8; margin: 12px 0; white-space: pre; overflow-x: auto; }
+
+  .callout { background: #eef3f9; border-left: 4px solid #2d5a8e; padding: 15px 20px; margin: 15px 0; border-radius: 0 6px 6px 0; }
+  .callout.warn { background: #fff5e6; border-left-color: #e67e22; }
+  .callout.success { background: #eef7ee; border-left-color: #27ae60; }
+
+  footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Projects & RFP — Process Review</h1>
+  <p>Leon, this document shows what the system understands about how you manage projects and RFPs. Your job: tell us what's right, what's wrong, and what's missing.</p>
+</div>
+
+<div class="container">
+
+<!-- INTRO -->
+<div class="intro-box">
+  <h2>What This Is</h2>
+  <p>We're building the <strong>Projects section</strong> of Decades GO — the system that digitizes how Decades manages construction projects from first identification through bidding and execution.</p>
+  <p>Before we write a single line of code, we need <strong>you</strong> to validate that we actually understand your process. This document lays out what we <em>think</em> we know based on your spreadsheets and past conversations.</p>
+  <p><strong>Your role:</strong> Read through each section. For every piece, tell us:</p>
+  <ul style="margin: 10px 0 0 22px;">
+    <li><strong>Right</strong> — yes, that's how it works</li>
+    <li><strong>Wrong</strong> — no, here's how it actually works</li>
+    <li><strong>Missing</strong> — you left out something important</li>
+    <li><strong>Close but...</strong> — the idea is right but the details need adjusting</li>
+  </ul>
+  <p style="margin-top: 12px;">Yellow boxes are <strong>specific questions</strong> we need you to answer. Don't skip these — they're the gaps we can't fill from the spreadsheets alone.</p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>What's In This Document</h2>
+  <ol>
+    <li><a href="#s1">The Spreadsheets We Studied</a></li>
+    <li><a href="#s2">The Big Picture — How a Project Moves Through the System</a></li>
+    <li><a href="#s3">Your Project Tracker — Column by Column</a></li>
+    <li><a href="#s4">Project Statuses — The Lifecycle</a></li>
+    <li><a href="#s5">The 20 Trades</a></li>
+    <li><a href="#s6">How Work Gets Scoped and Estimated</a></li>
+    <li><a href="#s7">The RFP / Bid Process</a></li>
+    <li><a href="#s8">The Multi-Trade Bid Comparison Template (19 Tabs)</a></li>
+    <li><a href="#s9">Award and Contract Documents</a></li>
+    <li><a href="#s10">SharePoint Project Folders</a></li>
+    <li><a href="#s11">Vendors and Subcontractors</a></li>
+    <li><a href="#s12">Programs and Budgets (Bancroft Example)</a></li>
+    <li><a href="#s13">Purchase Orders and Invoicing</a></li>
+    <li><a href="#s14">Monthly Reporting</a></li>
+    <li><a href="#s15">Change Orders</a></li>
+    <li><a href="#s16">Project Closeout</a></li>
+    <li><a href="#s17">What the System Will Do For You</a></li>
+    <li><a href="#s18">All Open Questions for Leon</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: SPREADSHEETS -->
+<!-- ============================================ -->
+<section id="s1">
+  <h2>1. The Spreadsheets We Studied</h2>
+  <p>Everything in this document was built from analyzing real spreadsheets from the Bancroft FY26 GHSP program and the Tyler Drive project. Here's what we looked at:</p>
+
+  <table>
+    <tr><th>Spreadsheet</th><th>What It Told Us</th></tr>
+    <tr>
+      <td><strong>Tracker with Dashboard.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>91 projects, full status tracking, budget columns, PM assignments, cost codes, schedule tracking. <strong>This is the master reference</strong> — your daily working document.</td>
+    </tr>
+    <tr>
+      <td><strong>Sage Budget.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Budget structure — contract number, phases, cost codes, budget breakdowns by category (labor, materials, equipment, sub, other). How the money is organized.</td>
+    </tr>
+    <tr>
+      <td><strong>FY26 Capital List.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Capital project list — what's planned for the fiscal year, budget amounts per property.</td>
+    </tr>
+    <tr>
+      <td><strong>Group Home List.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>All Bancroft properties — addresses, service lines (Adult North, Adult South, Children's), location details.</td>
+    </tr>
+    <tr>
+      <td><strong>Cost Center GL Cross Reference.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Workday cost center codes — how Bancroft categorizes spending for their AP system.</td>
+    </tr>
+    <tr>
+      <td><strong>Workday Chart of Accounts.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Bancroft's full chart of accounts — GL codes for every spending category.</td>
+    </tr>
+    <tr>
+      <td><strong>Standard Material List.xlsx</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Standard materials and pricing — reference rates for common items.</td>
+    </tr>
+    <tr>
+      <td><strong>Master Exhibit B.xlsm</strong><br><em>Bancroft GHSP FY26</em></td>
+      <td>Scope of work template — the document that defines what a subcontractor is agreeing to do.</td>
+    </tr>
+    <tr>
+      <td><strong>DCG Multi Trade Bid Template.xlsx</strong><br><em>(19-tab workbook)</em></td>
+      <td>The bid comparison workbook — 13 trade comparison tabs, Dashboard, Bid Tracker, Bid Req, Exhibit B. <strong>This is the heart of the bid process.</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Directory of Subcontractors.xlsx</strong><br><em>Tyler Drive project</em></td>
+      <td>Vendor list organized by trade — who does what kind of work.</td>
+    </tr>
+    <tr>
+      <td><strong>Budget SOV.xlsm</strong><br><em>Tyler Drive project (22003)</em></td>
+      <td>Estimate template — 6 tabs: Sage Budget, Budget, Buysheet, Takeoff, Door Takeoff, Material Spent. Dual cost model: labor (hours × rate) + materials (qty × price × tax).</td>
+    </tr>
+    <tr>
+      <td><strong>Exhibit B files (4 examples)</strong><br><em>Tyler Drive project</em></td>
+      <td>Real scope of work documents per trade/vendor — HVAC, Alarm, Tree Service, Exterior.</td>
+    </tr>
+    <tr>
+      <td><strong>Vendor proposals (4 PDFs)</strong><br><em>Tyler Drive project</em></td>
+      <td>Actual vendor proposals — naming convention: <code>Job# - Address - Proposal - Vendor - $Amount.pdf</code></td>
+    </tr>
+  </table>
+
+  <div class="question-box">
+    <h4>Questions — Spreadsheets</h4>
+    <ol>
+      <li>Are there other spreadsheets or documents you use regularly that aren't listed here? (Scheduling tools, vendor evaluation forms, inspection checklists, etc.)</li>
+      <li>Is the <strong>Tracker with Dashboard</strong> still your primary daily working document, or has that changed?</li>
+      <li>Who else uses these spreadsheets? (Mike, Nikko, Tyler, Harry — anyone else?)</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 2: BIG PICTURE -->
+<!-- ============================================ -->
+<section id="s2">
+  <h2>2. The Big Picture — How a Project Moves Through the System</h2>
+  <p>Here's what we think the end-to-end process looks like, from the moment someone identifies work that needs to be done through project closeout:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-steps">
+      <div class="flow-step">Identify Work</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Scope & Estimate</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step orange">Send RFP</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step orange">Collect Bids</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step highlight">Compare & Award</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Execute Work</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step green">Closeout</div>
+    </div>
+  </div>
+
+  <h3>Step by Step</h3>
+  <table>
+    <tr><th>Step</th><th>What Happens</th><th>Who Does It</th><th>Documents Produced</th></tr>
+    <tr>
+      <td><strong>1. Identify</strong></td>
+      <td>Work is identified at a property — could be planned (capital budget) or unplanned (emergency repair, inspection finding). Gets a description and urgency level.</td>
+      <td>PM, Field Staff, or Customer Request</td>
+      <td>Row added to Tracker</td>
+    </tr>
+    <tr>
+      <td><strong>2. Scope & Estimate</strong></td>
+      <td>Figure out what trades are needed, what materials, roughly how much it will cost. For bigger jobs, a full estimate with takeoff measurements.</td>
+      <td>PM + Estimator</td>
+      <td>Estimate template (if needed)</td>
+    </tr>
+    <tr>
+      <td><strong>3. Decide: Sub or Self-Perform</strong></td>
+      <td>Is Decades doing this work with their own crew, or sending it out to subs? This decision determines whether you go to bid or go straight to scheduling.</td>
+      <td>PM / Leon</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>4. Send RFP</strong></td>
+      <td>If subbing out: pick vendors by trade, send them the scope, ask for pricing. Might be one trade or multiple trades bundled.</td>
+      <td>PM / Leon</td>
+      <td>RFP package / bid invite</td>
+    </tr>
+    <tr>
+      <td><strong>5. Collect & Compare Bids</strong></td>
+      <td>Vendors send back proposals (usually PDFs with pricing). Enter numbers into the bid comparison template. Compare apples to apples across vendors.</td>
+      <td>PM</td>
+      <td>Completed Bid Comp template</td>
+    </tr>
+    <tr>
+      <td><strong>6. Award</strong></td>
+      <td>Pick the winning vendor (or split across vendors by trade). Document the recommendation and get sign-off.</td>
+      <td>PM → Leon / Bill for approval</td>
+      <td>Bid Req tab, Exhibit A, Exhibit B</td>
+    </tr>
+    <tr>
+      <td><strong>7. Execute</strong></td>
+      <td>Work gets done. Track invoices, handle change orders, manage schedule, deal with surprises.</td>
+      <td>PM + Subs</td>
+      <td>Invoices, Change Orders, Submittals</td>
+    </tr>
+    <tr>
+      <td><strong>8. Closeout</strong></td>
+      <td>Work complete. Punch list, final inspections, collect warranty letters and FROLs, capture final costs.</td>
+      <td>PM</td>
+      <td>Closeout package</td>
+    </tr>
+  </table>
+
+  <div class="callout">
+    <strong>Key insight from your tracker:</strong> Not every project goes through every step. A small single-trade repair might go straight from "Identify" to "Award" (you already know who does this work). A $200K multi-trade renovation goes through all 8 steps. The process scales based on the size and complexity of the job.
+  </div>
+
+  <div class="question-box">
+    <h4>Questions — Big Picture</h4>
+    <ol>
+      <li>Is this flow accurate? Are we missing any steps or does the order change in certain situations?</li>
+      <li>The "Sub or Self-Perform" decision — when does that get made? Before estimating? After seeing bid prices? Is it sometimes decided after bids come back too high?</li>
+      <li>Who has authority to award work? Is there a dollar threshold where it needs different approval (e.g., PM can award under $X, Leon approves up to $Y, Bill above $Z)?</li>
+      <li>For <strong>emergency / unplanned</strong> work — does it skip the bidding process entirely? Do you have go-to vendors for emergencies?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 3: TRACKER COLUMNS -->
+<!-- ============================================ -->
+<section id="s3">
+  <h2>3. Your Project Tracker — Column by Column</h2>
+  <p>From the <strong>Tracker with Dashboard.xlsx</strong>, here's every column we found and what we think it means. Tell us if we got any wrong.</p>
+
+  <table>
+    <tr><th>Column</th><th>What We Think It Means</th><th>Right?</th></tr>
+    <tr><td><strong>Planned / Unplanned</strong></td><td>Whether this project was in the original capital budget (Planned) or came up during the year (Unplanned — emergency, inspection finding, customer request)</td><td></td></tr>
+    <tr><td><strong>Service Line</strong></td><td>Bancroft division: Adult North, Adult South, Children's. Determines which cost center the billing goes to.</td><td></td></tr>
+    <tr><td><strong>PM Assigned</strong></td><td>Which project manager owns this job (Mike, Nikko, etc.)</td><td></td></tr>
+    <tr><td><strong>WO #</strong></td><td>Work Order number — assigned when work is authorized. Not every project has one right away.</td><td></td></tr>
+    <tr><td><strong>Phase</strong></td><td>Job number / phase number combo — the three-part key that ties back to Sage (e.g., 25010 / 85)</td><td></td></tr>
+    <tr><td><strong>Phase Name</strong></td><td>Location identifier — usually property address or shorthand name</td><td></td></tr>
+    <tr><td><strong>Description</strong></td><td>What the work is — natural language: "Replace bathroom," "New Kitchen," "Roof replacement"</td><td></td></tr>
+    <tr><td><strong>Status</strong></td><td>Where the project sits in the lifecycle (see Section 4)</td><td></td></tr>
+    <tr><td><strong>Sub or Self</strong></td><td>Is this work being subcontracted to a vendor or performed by Decades' own crew? Decided after bids come in (or known upfront for certain work).</td><td></td></tr>
+    <tr><td><strong>Cost Code</strong></td><td>Sage cost code — categorizes the type of work (e.g., 70006 = bathroom remodel, 70011 = kitchen)</td><td></td></tr>
+    <tr><td><strong>Hours</strong></td><td>Budgeted labor hours (for self-performed work)</td><td></td></tr>
+    <tr><td><strong>Material</strong></td><td>Budgeted material cost</td><td></td></tr>
+    <tr><td><strong>Labor</strong></td><td>Budgeted labor cost</td><td></td></tr>
+    <tr><td><strong>Equipment</strong></td><td>Budgeted equipment cost</td><td></td></tr>
+    <tr><td><strong>Sub</strong></td><td>Budgeted subcontractor cost</td><td></td></tr>
+    <tr><td><strong>Other</strong></td><td>Budgeted other costs</td><td></td></tr>
+    <tr><td><strong>Actual Cost</strong></td><td>What was actually spent — updated as invoices come in</td><td></td></tr>
+    <tr><td><strong>Over / Under</strong></td><td>Budget variance: Actual minus Budget. Positive = over budget, negative = under.</td><td></td></tr>
+    <tr><td><strong>Est. Days</strong></td><td>Estimated calendar days to complete the work</td><td></td></tr>
+    <tr><td><strong>Actual Days</strong></td><td>How many days it actually took</td><td></td></tr>
+  </table>
+
+  <div class="question-box">
+    <h4>Questions — Tracker Columns</h4>
+    <ol>
+      <li>Are there columns we missed? Anything that's in your current tracker but not listed above?</li>
+      <li>The <strong>Phase / Phase Name</strong> columns — is the "Phase" always a number from Sage, or does it mean something different for some projects?</li>
+      <li>The budget columns (Hours, Material, Labor, Equipment, Sub, Other) — where do these numbers come from? The estimate template? Sage? Manual entry? Do they ever change after the project starts?</li>
+      <li>How does <strong>Actual Cost</strong> get updated? From invoices you enter manually? From Sage? From some other source?</li>
+      <li>Is there a <strong>Dashboard tab</strong> in your tracker? What does it show you? (We saw the file name references it but want to know what KPIs matter to you.)</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 4: STATUSES -->
+<!-- ============================================ -->
+<section id="s4">
+  <h2>4. Project Statuses — The Lifecycle</h2>
+  <p>From your tracker, we identified these statuses and what we think triggers the transition between them:</p>
+
+  <div class="flow-diagram">
+    <div class="status-flow">
+      <span class="status-badge grey">Not Started</span>
+      <span class="status-arrow">→</span>
+      <span class="status-badge blue">Ready to Start</span>
+      <span class="status-arrow">→</span>
+      <span class="status-badge amber">Out to Bid</span>
+      <span class="status-arrow">→</span>
+      <span class="status-badge blue">In Progress</span>
+      <span class="status-arrow">→</span>
+      <span class="status-badge green">Completed</span>
+    </div>
+    <div style="margin-top: 15px; text-align: center;">
+      <span class="status-badge red" style="margin: 4px;">On Hold</span>
+      <span class="status-badge red" style="margin: 4px;">Canceled</span>
+      <span style="color: #888; font-size: 0.9em; margin-left: 8px;">(can happen from any status)</span>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Status</th><th>What We Think It Means</th><th>What Triggers It</th></tr>
+    <tr>
+      <td><span class="status-badge grey">Not Started</span></td>
+      <td>Work has been identified and added to the tracker but nothing has happened yet. Might be waiting on budget approval, scheduling, or just isn't a priority yet.</td>
+      <td>Project created</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge blue">Ready to Start</span></td>
+      <td>Budget is approved, scope is defined enough to move forward. Ready for either self-perform scheduling or going out to bid.</td>
+      <td>Budget approved / scope confirmed</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge amber">Out to Bid</span></td>
+      <td>RFP has been sent to vendors. Waiting for proposals to come back.</td>
+      <td>RFP distributed to vendors</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge blue">In Progress</span></td>
+      <td>Work is actively being performed — either by subs or self-perform crew.</td>
+      <td>Vendor awarded and work begins / crew dispatched</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge green">Completed</span></td>
+      <td>Work is done, final inspection passed, closeout docs collected.</td>
+      <td>Punch list clear, FROLs and warranties received</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge red">On Hold</span></td>
+      <td>Paused — waiting on customer decision, permits, weather, funding, or other blocker.</td>
+      <td>External blocker identified</td>
+    </tr>
+    <tr>
+      <td><span class="status-badge red">Canceled</span></td>
+      <td>Not going to happen — customer pulled the project, budget cut, or scope changed.</td>
+      <td>Decision to not proceed</td>
+    </tr>
+  </table>
+
+  <div class="question-box">
+    <h4>Questions — Statuses</h4>
+    <ol>
+      <li>Are these all the statuses you use? Are there any others (e.g., "Awaiting Approval," "Punch List," "Invoicing")?</li>
+      <li>For self-performed work that doesn't go out to bid, does it jump from "Ready to Start" straight to "In Progress"?</li>
+      <li>Is there a difference between "Completed" (work done) and "Closed" (all paperwork and billing finished)? Or is "Completed" the final status?</li>
+      <li>When a project goes "On Hold" — do you track why? Is the reason important for reporting?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 5: TRADES -->
+<!-- ============================================ -->
+<section id="s5">
+  <h2>5. The 20 Trades</h2>
+  <p>From your Directory of Subcontractors and project descriptions, we compiled this list of construction trades. These are the categories of work that vendors are organized by:</p>
+
+  <div class="two-col">
+    <div class="col-box">
+      <h4>Trade Categories (1-10)</h4>
+      <ol>
+        <li>Alarm</li>
+        <li>Carpentry / Framing</li>
+        <li>Concrete</li>
+        <li>Counter Tops</li>
+        <li>Demolition</li>
+        <li>Drywall</li>
+        <li>Electrical</li>
+        <li>Fencing</li>
+        <li>Flooring / Ceramic Tile</li>
+        <li>General Maintenance</li>
+      </ol>
+    </div>
+    <div class="col-box">
+      <h4>Trade Categories (11-20)</h4>
+      <ol start="11">
+        <li>HVAC</li>
+        <li>Inspections</li>
+        <li>Landscaping / Grounds</li>
+        <li>Masonry</li>
+        <li>Paint</li>
+        <li>Plumbing</li>
+        <li>Roofing</li>
+        <li>Siding / Gutters</li>
+        <li>Sprinkler / Fire Protection</li>
+        <li>Tree Removal</li>
+      </ol>
+    </div>
+  </div>
+
+  <p>A single project often involves <strong>multiple trades</strong>. For example, "Full Bathroom Rehab" requires Demolition + Plumbing + Flooring/Ceramic Tile + Drywall + Paint. The bid comparison template has one tab per trade so you can compare vendors within each trade separately.</p>
+
+  <div class="question-box">
+    <h4>Questions — Trades</h4>
+    <ol>
+      <li>Is this list complete? Are there trades you use that aren't on here? (Abatement/hazmat? Elevator? Fire restoration? Appliance installation?)</li>
+      <li>Are there trades on this list you <strong>never actually use</strong> or that should be combined with another?</li>
+      <li>When a project requires multiple trades, do you always bid each trade separately? Or are there cases where one vendor handles multiple trades as a package?</li>
+      <li>For "General Maintenance" — is that a catch-all, or does it have a specific meaning?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 6: SCOPING & ESTIMATING -->
+<!-- ============================================ -->
+<section id="s6">
+  <h2>6. How Work Gets Scoped and Estimated</h2>
+
+  <h3>What We Think Happens</h3>
+  <p>When a project is identified, the PM figures out what work needs to be done. For a small job, this might be as simple as "replace bathroom fixtures — call the plumber." For a larger job, it involves a full estimate with measurements (takeoffs), material lists, and cost calculations.</p>
+
+  <h3>The Estimate Template (6 Tabs)</h3>
+  <p>From the Tyler Drive budget workbook, we found a 6-tab estimate template:</p>
+
+  <table>
+    <tr><th>Tab</th><th>What It Contains</th></tr>
+    <tr><td><strong>Sage Budget</strong></td><td>Rolls up to the Sage cost code structure — this is what feeds the accounting system</td></tr>
+    <tr><td><strong>Budget</strong></td><td>Detailed budget breakdown: labor hours × rate + materials × price × tax = total per line item</td></tr>
+    <tr><td><strong>Buysheet</strong></td><td>Material purchasing list — what needs to be bought, from where, at what price</td></tr>
+    <tr><td><strong>Takeoff</strong></td><td>Measurements from the field — square footage, counts, linear feet. The raw numbers that drive the budget.</td></tr>
+    <tr><td><strong>Door Takeoff</strong></td><td>Separate takeoff specifically for doors (common enough to warrant its own sheet)</td></tr>
+    <tr><td><strong>Material Spent</strong></td><td>Tracks actual material spend against the buysheet budget as the project progresses</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Two cost models:</strong> The budget has two ways to calculate cost:
+    <ul style="margin: 8px 0 0 20px;">
+      <li><strong>Labor:</strong> hours × hourly rate = labor cost</li>
+      <li><strong>Materials:</strong> quantity × unit price × (1 + tax rate) = material cost</li>
+    </ul>
+    Total project cost = labor + materials + equipment + subcontractor + other.
+  </div>
+
+  <div class="question-box">
+    <h4>Questions — Scoping & Estimating</h4>
+    <ol>
+      <li>Who does the takeoffs (field measurements)? The PM? A dedicated estimator? The field crew?</li>
+      <li>How often do you use the full 6-tab estimate template vs. just working from experience? Is the estimate template mainly for bigger jobs?</li>
+      <li>The <strong>Buysheet</strong> — is this used for self-perform work where Decades is buying materials? Or also for subcontracted work?</li>
+      <li>For <strong>repeat work</strong> (e.g., you've done 30 bathroom rehabs) — do you still estimate each one, or do you have a standard cost per property that you just apply?</li>
+      <li>Tyler Bamford built the estimate template — is he still the person maintaining it, or has that shifted to someone else?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 7: RFP / BID PROCESS -->
+<!-- ============================================ -->
+<section id="s7">
+  <h2>7. The RFP / Bid Process</h2>
+
+  <h3>What We Think Happens</h3>
+
+  <div class="flow-diagram">
+    <div class="flow-steps">
+      <div class="flow-step">Pick Vendors<br><small>by trade</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step orange">Send Scope<br><small>to vendors</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step orange">Wait for<br><small>proposals</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Enter Bids<br><small>into template</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step highlight">Compare &<br><small>recommend</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step green">Award</div>
+    </div>
+  </div>
+
+  <h3>Step 1: Picking Vendors</h3>
+  <p>When work needs to go out to bid, you look for vendors who:</p>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li>Do the trade(s) you need (plumbing, electrical, etc.)</li>
+    <li>Are reasonably close to the property</li>
+    <li>Have an active MSA (Master Service Agreement) with Decades</li>
+    <li>Have done good work before (or are worth trying)</li>
+  </ul>
+
+  <h3>Step 2: Sending the RFP</h3>
+  <p>You send vendors the scope of work and ask for pricing. This might be:</p>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li>A single trade for one property ("bid plumbing at 310 Cranford")</li>
+    <li>A single trade across many properties ("bid bathroom rehabs at these 15 group homes")</li>
+    <li>Multiple trades for a complex project ("bid plumbing + electrical + HVAC for this renovation")</li>
+  </ul>
+
+  <h3>Step 3: Collecting Proposals</h3>
+  <p>Vendors send back proposals — usually PDF documents with their pricing. From the Tyler Drive project, we saw proposals follow this naming pattern:</p>
+  <div class="spreadsheet-ref">
+    <strong>Naming format:</strong> <code>{Job#} - {Address} - Proposal - {Vendor Name} - ${Amount}.pdf</code><br>
+    <strong>Example:</strong> <code>22003 - 153 Tyler - Proposal - Active Environmental - $9882.pdf</code>
+  </div>
+
+  <h3>Step 4: Entering Bids</h3>
+  <p>Someone takes the numbers from the vendor PDF proposals and enters them into the bid comparison template (the 19-tab workbook — see Section 8).</p>
+
+  <h3>Step 5: Comparing</h3>
+  <p>The bid comp template has formulas that compare vendors side by side within each trade. The Dashboard tab rolls up the comparison. The Bid Req tab is where you write the recommendation and capture the award decision.</p>
+
+  <div class="question-box">
+    <h4>Questions — RFP / Bid Process</h4>
+    <ol>
+      <li><strong>How do you send the RFP?</strong> Email with a scope document attached? A phone call? A formal bid package? Is it the same every time or does it depend on the job?</li>
+      <li><strong>What do vendors get?</strong> Just a description of the work? Drawings? The Exhibit B scope document? A property address and "go look at it"?</li>
+      <li><strong>How many vendors</strong> do you typically invite per trade? Is there a minimum (e.g., always get at least 3 bids)?</li>
+      <li><strong>Deadlines:</strong> Do you give vendors a deadline to respond? How long do they typically get? What happens when someone misses it?</li>
+      <li><strong>Who enters bids</strong> into the bid comp template? You? The PM? An admin?</li>
+      <li>When a vendor covers <strong>multiple trades</strong> (e.g., a general contractor who does plumbing and electrical), do they submit one combined proposal or separate proposals per trade?</li>
+      <li>For <strong>Bancroft specifically</strong> — do they have any requirements about the bid process? (Minimum number of bids, preferred vendor lists, required documentation?)</li>
+      <li>Do you ever <strong>re-bid</strong> — send it back out because all prices came in too high? How often does that happen?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 8: BID COMP TEMPLATE -->
+<!-- ============================================ -->
+<section id="s8">
+  <h2>8. The Multi-Trade Bid Comparison Template (19 Tabs)</h2>
+  <p>This is the centerpiece of the bid process. We analyzed the full structure:</p>
+
+  <h3>Tab Layout</h3>
+  <table>
+    <tr><th>#</th><th>Tab Name</th><th>Purpose</th></tr>
+    <tr><td>1</td><td><strong>Dashboard</strong></td><td>Summary view — rolls up all trade comparisons, shows totals, status</td></tr>
+    <tr><td>2</td><td><strong>Bid Tracker</strong></td><td>Tracks which vendors have been invited, who responded, bid amounts, status</td></tr>
+    <tr><td>3</td><td><strong>Bid Req</strong></td><td>The award recommendation — which vendor was selected for each trade and why. This is the decision document.</td></tr>
+    <tr><td>4</td><td><strong>Exhibit B</strong></td><td>Scope of work document that gets attached to the contract</td></tr>
+    <tr><td>5-17</td><td><strong>13 Trade Tabs</strong></td><td>One tab per trade — lists scope items as rows, vendors as columns (up to 5 bidders per trade at columns D, F, H, J, L). Each vendor's pricing entered side by side for apples-to-apples comparison.</td></tr>
+    <tr><td>18-19</td><td><em>(varies)</em></td><td>Additional reference or summary tabs</td></tr>
+  </table>
+
+  <h3>How a Trade Tab Works</h3>
+  <div class="callout">
+    <p><strong>Rows</strong> = scope items (line items of work — e.g., "Floor tile removal," "Tub/shower install," "Fixture rough-in")</p>
+    <p><strong>Columns D, F, H, J, L</strong> = up to 5 different vendor bids</p>
+    <p>Each cell = that vendor's price for that scope item</p>
+    <p>Bottom row = total per vendor</p>
+    <p>Formulas use <strong>CHOOSE/MATCH/INDIRECT</strong> to pull the winning bid into the Bid Req tab automatically.</p>
+  </div>
+
+  <h3>Cross-Sheet Logic</h3>
+  <p>The template uses Excel formulas that connect tabs together:</p>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li>Dashboard pulls totals from each trade tab</li>
+    <li>Bid Req pulls the selected vendor's pricing from each trade tab</li>
+    <li>Exhibit B pulls scope items and awarded pricing</li>
+  </ul>
+
+  <div class="question-box">
+    <h4>Questions — Bid Comp Template</h4>
+    <ol>
+      <li>Is the <strong>19-tab format</strong> always used? Or is there a simpler version for single-trade jobs (e.g., just one comparison tab)?</li>
+      <li>The <strong>13 trade tabs</strong> — are they always the same 13 trades, or do they change per project? Which 13 of the 20 trades have their own tabs?</li>
+      <li>When you have <strong>fewer than 5 bidders</strong> for a trade, the extra columns just stay blank?</li>
+      <li>The <strong>scope items (rows)</strong> — where do they come from? The estimate? A standard list? The PM writes them fresh each time?</li>
+      <li>The <strong>Bid Req tab</strong> — who signs off on it? Is it printed and physically signed, or just noted in the spreadsheet?</li>
+      <li>Do you keep the <strong>completed bid comp</strong> as a permanent record? Where is it filed?</li>
+      <li>Has this template been modified recently, or is it the same version Tyler/Leon/Danielle set up?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 9: AWARD & CONTRACTS -->
+<!-- ============================================ -->
+<section id="s9">
+  <h2>9. Award and Contract Documents</h2>
+
+  <h3>What We Think Happens After Award</h3>
+  <p>Once a vendor is selected on the Bid Req tab, the award triggers contract documents:</p>
+
+  <div class="two-col">
+    <div class="col-box">
+      <h4>Exhibit A (the contract)</h4>
+      <p>This is the actual work order / contract document. Lists the vendor, property, scope summary, pricing, schedule, and terms. Already being generated by the existing Decades GO system.</p>
+    </div>
+    <div class="col-box">
+      <h4>Exhibit B (scope of work)</h4>
+      <p>Detailed scope document per trade — specifies exactly what the subcontractor is responsible for. Generated from the bid comp data (winning vendor's line items and pricing).</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>What the system already builds today:</strong> Exhibit A documents (work orders, MSAs, amendments) are already being generated by Decades GO's contracting module. The project section feeds INTO this — an awarded bid becomes a work order created through the existing contract wizard.
+  </div>
+
+  <div class="question-box">
+    <h4>Questions — Award & Contracts</h4>
+    <ol>
+      <li>After you pick a vendor on the Bid Req tab, what physically happens next? Phone call? Email? Formal letter?</li>
+      <li>Is the <strong>Exhibit B</strong> always a separate document from the Exhibit A, or sometimes combined?</li>
+      <li>Can an award be <strong>split</strong> — e.g., Vendor A gets plumbing and Vendor B gets electrical from the same bid comp?</li>
+      <li>How long between award and work starting? Days? Weeks? Is there usually a "mobilization" period?</li>
+      <li>Do you track <strong>insurance certificates</strong> for subs before they start work? Is that part of the award process?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 10: SHAREPOINT FOLDERS -->
+<!-- ============================================ -->
+<section id="s10">
+  <h2>10. SharePoint Project Folders</h2>
+
+  <p>We found that each project gets its own SharePoint Teams site. The site name follows this pattern:</p>
+  <div class="spreadsheet-ref">
+    <strong>Site name:</strong> <code>{JobNumber}{Address}.{CityState}</code><br>
+    <strong>Example:</strong> <code>22003153TylerDriveWillingboroNJ</code>
+  </div>
+
+  <h3>Standard Folder Structure</h3>
+  <div class="folder-tree">Project Site/
+├── Budget/
+├── Proposals/
+├── Exhibit B Files/
+├── Executed Exhibit A/
+├── Invoices/
+├── Change Orders/
+├── Spec Sheets/
+├── Submittals/
+├── Licensing Paperwork/
+├── Permits/
+├── Schedule/
+├── PL Pictures/
+├── Closeout/
+│   ├── FROL/
+│   └── Warranty Letters/
+└── Eagle View/  (if roofing)</div>
+
+  <div class="question-box">
+    <h4>Questions — SharePoint Folders</h4>
+    <ol>
+      <li>Does <strong>every project</strong> get its own Teams site, or only bigger ones? What's the threshold?</li>
+      <li>Who <strong>creates</strong> the site and folders today? Is it manual or automated?</li>
+      <li>Are there folders on this list you <strong>rarely use</strong>? Are there folders we're <strong>missing</strong>?</li>
+      <li>What are <strong>PL Pictures</strong>? Punch list photos?</li>
+      <li>What is <strong>FROL</strong>? (Final Release of Lien?)</li>
+      <li>Do subcontractors ever put files directly into these folders, or is all file management done by Decades staff?</li>
+      <li><strong>Eagle View</strong> — is this only for roofing jobs, or used for other purposes too?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 11: VENDORS -->
+<!-- ============================================ -->
+<section id="s11">
+  <h2>11. Vendors and Subcontractors</h2>
+
+  <h3>What We Know</h3>
+  <p>From the <strong>Directory of Subcontractors</strong> and Sage export:</p>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li>~130 vendors in the Sage system</li>
+    <li>Two types: <strong>Subcontractors</strong> (they do the work) and <strong>Suppliers</strong> (they provide materials)</li>
+    <li>Each vendor has a Sage Vendor# — the unique ID that ties to the accounting system</li>
+    <li>Vendors are organized by trade — some do one trade, some do several</li>
+    <li>Tyler approves new vendors before they can be used on contracts</li>
+  </ul>
+
+  <h3>How You Pick Vendors for a Bid</h3>
+  <p>We think the process today is mostly mental — you know who does what trade, who's nearby, who you trust. The system would make this a searchable list: filter by trade + location + MSA status and get a list of qualified bidders.</p>
+
+  <div class="question-box">
+    <h4>Questions — Vendors</h4>
+    <ol>
+      <li>When you pick vendors for an RFP, what's your thought process? Trade first, then location, then past performance? Or something different?</li>
+      <li>Do you have <strong>preferred vendors</strong> for certain trades? Ones you always invite?</li>
+      <li>How do <strong>new vendors</strong> get into the system? Do they come to you, or do you go looking?</li>
+      <li>Is the Sage vendor list the <strong>complete</strong> list, or are there vendors you use that aren't in Sage?</li>
+      <li>For <strong>Bancroft work specifically</strong> — are there vendors Bancroft requires or prefers?</li>
+      <li>Do you track vendor <strong>performance</strong> formally? Or is it just "I know who does good work"?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 12: PROGRAMS & BUDGETS -->
+<!-- ============================================ -->
+<section id="s12">
+  <h2>12. Programs and Budgets (Bancroft Example)</h2>
+
+  <h3>The Bancroft FY26 GHSP Program</h3>
+  <p>This is the biggest example we have — and probably the model for how multi-property programs work:</p>
+
+  <table>
+    <tr><td><strong>Customer</strong></td><td>Bancroft</td></tr>
+    <tr><td><strong>Program</strong></td><td>Group Home Stabilization Program (GHSP), FY26</td></tr>
+    <tr><td><strong>Total Budget</strong></td><td>~$5.8M capital</td></tr>
+    <tr><td><strong>Properties</strong></td><td>170+ group homes across NJ</td></tr>
+    <tr><td><strong>Service Lines</strong></td><td>Adult North, Adult South, Children's</td></tr>
+    <tr><td><strong>Projects Tracked</strong></td><td>91 (from current tracker)</td></tr>
+    <tr><td><strong>PMs</strong></td><td>Mike, Nikko (and others?)</td></tr>
+    <tr><td><strong>POs Issued</strong></td><td>22 (from PO Log)</td></tr>
+  </table>
+
+  <h3>How Budget Works</h3>
+  <p>From the Sage Budget spreadsheet, we see the budget broken down as:</p>
+  <div class="flow-diagram">
+    <div class="flow-steps">
+      <div class="flow-step">Total Budget<br><small>~$5.8M</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">By Property<br><small>(Phase)</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">By Cost Code<br><small>(work type)</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">By Category<br><small>Labor/Material/Sub/etc.</small></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Budget columns from Sage:</strong> General Conditions + Contingency + Supervision + Design Fees + individual project budgets = Total. Each project breaks into Labor + Material + Equipment + Sub + Other.
+  </div>
+
+  <h3>Billing Constraints</h3>
+  <p>From conversations with Joe, we understand Bancroft has two simultaneous limits on billing:</p>
+  <ol style="margin-left: 22px; margin-bottom: 12px;">
+    <li><strong>Milestone cap:</strong> Can't bill past a milestone you haven't completed</li>
+    <li><strong>Period cap:</strong> Can't exceed a monthly or quarterly maximum regardless of milestones</li>
+  </ol>
+  <p>The lower of the two wins. If you've completed $400K of milestones but the monthly cap is $300K, you bill $300K.</p>
+
+  <div class="question-box">
+    <h4>Questions — Programs & Budgets</h4>
+    <ol>
+      <li>Is Bancroft GHSP the <strong>only</strong> program-scale engagement, or are there others structured this way?</li>
+      <li>How does the <strong>budget get set</strong> at the start of the year? Does Bancroft tell you "here's $5.8M, figure out what to do with it"? Or do you propose a scope and they approve?</li>
+      <li>When <strong>unplanned work</strong> shows up mid-year, where does the money come from? Contingency? Budget reallocation? Additional funding from Bancroft?</li>
+      <li>The <strong>monthly billing cap</strong> — is this real? How does it work exactly? Is it per service line or for the whole program?</li>
+      <li>Who at Bancroft <strong>approves spending</strong>? Is there a threshold structure?</li>
+      <li>How does the budget connect to <strong>Workday cost centers</strong>? Do you have to tag every invoice with a Workday cost center code?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 13: POs & INVOICING -->
+<!-- ============================================ -->
+<section id="s13">
+  <h2>13. Purchase Orders and Invoicing</h2>
+
+  <h3>PO Log Structure</h3>
+  <p>From the tracker, the Purchase Order log tracks:</p>
+  <table>
+    <tr><th>Field</th><th>What It Means</th></tr>
+    <tr><td><strong>PO #</strong></td><td>Purchase order number — from Sage?</td></tr>
+    <tr><td><strong>Phase</strong></td><td>Which project this PO is for</td></tr>
+    <tr><td><strong>Vendor</strong></td><td>Who the PO was issued to</td></tr>
+    <tr><td><strong>Description</strong></td><td>What the PO covers</td></tr>
+    <tr><td><strong>Quantity</strong></td><td>Number of units (if applicable)</td></tr>
+    <tr><td><strong>Price</strong></td><td>PO amount</td></tr>
+    <tr><td><strong>Status</strong></td><td>Open / Invoiced / Paid?</td></tr>
+    <tr><td><strong>Invoice Received</strong></td><td>Whether the vendor has submitted their invoice</td></tr>
+  </table>
+
+  <div class="question-box">
+    <h4>Questions — POs & Invoicing</h4>
+    <ol>
+      <li>Where do <strong>PO numbers</strong> come from? Sage? Manual? Sequential?</li>
+      <li>Does every awarded vendor get a <strong>PO</strong>, or only for material purchases?</li>
+      <li>How do <strong>invoices</strong> come in? Email? Mail? Uploaded to SharePoint? A mix?</li>
+      <li>Who <strong>approves invoices</strong>? Is there a matching process (invoice vs PO vs contract amount)?</li>
+      <li>What's the <strong>biggest pain point</strong> with invoicing today? Lost invoices? Slow approvals? Matching issues?</li>
+      <li>For Bancroft specifically — do invoices go to <strong>vendors@bancroft.org</strong>? What format do they need?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 14: MONTHLY REPORTING -->
+<!-- ============================================ -->
+<section id="s14">
+  <h2>14. Monthly Reporting</h2>
+  <p>From the BidComp analysis, we know monthly reporting to Bancroft is one of the biggest pain points — a manual, time-consuming process that's incomplete because invoice tracking is incomplete.</p>
+
+  <h3>What We Think the Monthly Report Contains</h3>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li>Budget vs. actual spend by property and cost code</li>
+    <li>Project status updates for all active work</li>
+    <li>Invoices processed during the period</li>
+    <li>Change orders approved/pending</li>
+    <li>Work completed / work remaining</li>
+    <li>Schedule status (on time, behind, ahead)</li>
+  </ul>
+
+  <div class="question-box">
+    <h4>Questions — Monthly Reporting</h4>
+    <ol>
+      <li>What does the <strong>actual monthly report</strong> to Bancroft look like? Is it a spreadsheet? A document? A presentation? Can you share a sample?</li>
+      <li>How long does it take to <strong>put together</strong> the monthly report today?</li>
+      <li>What specific information does <strong>Bancroft require</strong> in the report? Is there a template they give you?</li>
+      <li>Is this report sent to Bancroft, or do you present it in a meeting?</li>
+      <li>Are there other customers who get monthly reports, or just Bancroft?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 15: CHANGE ORDERS -->
+<!-- ============================================ -->
+<section id="s15">
+  <h2>15. Change Orders</h2>
+  <p>During project execution, things change. Surprises behind walls, customer requests, material price increases, planning misses.</p>
+
+  <h3>Change Order Categories (What We Propose)</h3>
+  <table>
+    <tr><th>Category</th><th>Example</th><th>Who's Responsible?</th></tr>
+    <tr><td><strong>Unforeseen Condition</strong></td><td>Opened the wall and found mold, rotten subfloor under tile</td><td>Nobody — couldn't have known</td></tr>
+    <tr><td><strong>Owner Scope Change</strong></td><td>Customer wants upgraded fixtures, added a room to the scope</td><td>Customer — they asked for it</td></tr>
+    <tr><td><strong>Planning Miss</strong></td><td>Didn't account for permit requirements, underestimated scope</td><td>Decades — should have caught it</td></tr>
+    <tr><td><strong>Vendor-Driven</strong></td><td>Material cost increase, sub claims extra work</td><td>Evaluate case by case</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>Why categorization matters:</strong> Over time, tracking WHY change orders happen reveals whether the issue is estimating (planning misses), market conditions (vendor-driven), or just the nature of renovation work (unforeseen conditions). This is how you improve the process.
+  </div>
+
+  <div class="question-box">
+    <h4>Questions — Change Orders</h4>
+    <ol>
+      <li>Do you <strong>formally document</strong> change orders today? Separate document? Note in the tracker? Line item on the budget?</li>
+      <li>Is there an <strong>approval process</strong> for change orders? Dollar threshold?</li>
+      <li>Are change orders typically <strong>ADD</strong> (more money) or <strong>DEDUCT</strong> (scope reduced)? What's the rough split?</li>
+      <li>Do these categories make sense? Would you categorize them differently?</li>
+      <li>For Bancroft work — does Bancroft need to <strong>approve</strong> change orders? Or just be informed?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 16: CLOSEOUT -->
+<!-- ============================================ -->
+<section id="s16">
+  <h2>16. Project Closeout</h2>
+  <p>When work is done, there's a formal process to button up a project.</p>
+
+  <h3>Closeout Checklist (What We Think)</h3>
+  <div style="margin: 15px 0;">
+    <div class="check-item"><span class="unknown-mark">?</span><span>Punch list walk-through — identify remaining items</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Punch list items completed and verified</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Final inspection passed</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>FROL collected from every sub (Final Release of Lien?)</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Warranty letters collected</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>All invoices received and processed</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Final cost captured (actual vs. budget)</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Photos uploaded</span></div>
+    <div class="check-item"><span class="unknown-mark">?</span><span>Permits closed out</span></div>
+  </div>
+
+  <div class="question-box">
+    <h4>Questions — Closeout</h4>
+    <ol>
+      <li>Is this closeout list <strong>accurate</strong>? What's missing? What's wrong?</li>
+      <li>Is FROL = <strong>Final Release of Lien</strong>? Do you get one from every sub?</li>
+      <li>Who does the <strong>punch list walk</strong>? PM? You? Customer?</li>
+      <li>Is there a formal <strong>"project closed"</strong> declaration, or does it just trail off?</li>
+      <li>What <strong>happens to the data</strong> after closeout? Does it feed future estimates? Budget planning for next fiscal year?</li>
+      <li>For Bancroft — do they have their own <strong>closeout requirements</strong>?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 17: WHAT THE SYSTEM DOES -->
+<!-- ============================================ -->
+<section id="s17">
+  <h2>17. What the System Will Do For You</h2>
+  <p>Here's what we're building — explained as what changes for you day to day:</p>
+
+  <h3>What Stays the Same</h3>
+  <div style="margin: 15px 0;">
+    <div class="check-item"><span class="check-mark">✓</span><span><strong>You still work in Excel.</strong> Estimates, bid comps, trackers — they're all Excel. The system fills them in with current data and reads your changes back. Your workflow doesn't change.</span></div>
+    <div class="check-item"><span class="check-mark">✓</span><span><strong>SharePoint project folders work the same way.</strong> Same folder structure, same filing conventions. The system just organizes it automatically.</span></div>
+    <div class="check-item"><span class="check-mark">✓</span><span><strong>Same vocabulary.</strong> Phase, Cost Code, Service Line, Sub or Self, Out to Bid — all the same terms you use today.</span></div>
+    <div class="check-item"><span class="check-mark">✓</span><span><strong>Same decision process.</strong> You still pick vendors, review bids, make recommendations, approve awards. The system helps you see the information — it doesn't make decisions for you.</span></div>
+  </div>
+
+  <h3>What Gets Better</h3>
+  <table>
+    <tr><th>Today (Manual)</th><th>With the System</th></tr>
+    <tr>
+      <td>Type the same project info into the tracker, the estimate, the bid comp, and the contract — four times.</td>
+      <td><strong>Enter it once.</strong> The system fills in every downstream document from the same data.</td>
+    </tr>
+    <tr>
+      <td>Manually look through your contacts to figure out which vendors do plumbing near Cranford.</td>
+      <td><strong>Filter by trade + location.</strong> See every qualified vendor with their MSA status and past performance.</td>
+    </tr>
+    <tr>
+      <td>Build the monthly report by pulling data from the tracker, invoices, and Sage manually.</td>
+      <td><strong>Generated automatically</strong> from tracked data. Populate report, review it, send it.</td>
+    </tr>
+    <tr>
+      <td>Guess whether you're over budget because Actual Cost column hasn't been updated in weeks.</td>
+      <td><strong>Real-time budget status.</strong> Invoices update actuals as they're processed.</td>
+    </tr>
+    <tr>
+      <td>Create 15 project entries one at a time for a bathroom rehab program.</td>
+      <td><strong>Bulk create:</strong> pick "Bathroom Rehab" template + 15 properties = 15 pre-filled projects in 2 minutes.</td>
+    </tr>
+    <tr>
+      <td>Read vendor PDF proposals and manually type numbers into bid comp columns.</td>
+      <td><strong>AI reads the PDFs</strong> and pre-fills the bid comp. You verify the numbers, not type them.</td>
+    </tr>
+    <tr>
+      <td>No easy way to see "how did similar jobs perform?" when estimating.</td>
+      <td><strong>Historical comparison:</strong> "Bathroom rehabs at union sites: average $21K, range $19K-$24K. Your estimate: $22K."</td>
+    </tr>
+  </table>
+
+  <h3>What's New (Additional Capability)</h3>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li><strong>Project dashboard</strong> — see all active work across all programs at a glance: what needs attention, what's on track, what's over budget</li>
+    <li><strong>Program budget view</strong> — budget bar showing allocated vs committed vs spent vs remaining, broken down however you want (by service line, cost code, PM, property)</li>
+    <li><strong>Vendor performance tracking</strong> — over time, see which vendors deliver on time, on budget, with fewest change orders</li>
+    <li><strong>Change order analysis</strong> — categorize why change orders happen, find patterns, improve estimating</li>
+    <li><strong>Audit trail</strong> — every change tracked: who changed what, when, from what value to what value. Required for Bancroft compliance.</li>
+  </ul>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 18: ALL QUESTIONS -->
+<!-- ============================================ -->
+<section id="s18">
+  <h2>18. All Open Questions for Leon</h2>
+  <p>Everything from the yellow boxes above, collected in one place. Work through these at your own pace — even partial answers help.</p>
+
+  <h3>Process Flow</h3>
+  <ol style="margin-left: 22px;">
+    <li>Is the 8-step flow (Identify → Scope → Sub/Self → RFP → Collect → Award → Execute → Closeout) accurate?</li>
+    <li>When does the "Sub or Self-Perform" decision get made?</li>
+    <li>Award authority — who approves at what dollar levels?</li>
+    <li>Emergency work — does it skip bidding? Go-to vendors?</li>
+  </ol>
+
+  <h3>Tracker & Statuses</h3>
+  <ol start="5" style="margin-left: 22px;">
+    <li>Missing tracker columns?</li>
+    <li>Phase column — always a Sage number?</li>
+    <li>Budget numbers — where do they come from?</li>
+    <li>How does Actual Cost get updated?</li>
+    <li>Dashboard tab — what does it show?</li>
+    <li>Missing statuses? Difference between "Completed" and "Closed"?</li>
+  </ol>
+
+  <h3>Trades</h3>
+  <ol start="11" style="margin-left: 22px;">
+    <li>Missing trades? Unused trades?</li>
+    <li>Multi-trade bids — always separate per trade?</li>
+  </ol>
+
+  <h3>Estimating</h3>
+  <ol start="13" style="margin-left: 22px;">
+    <li>Who does takeoffs?</li>
+    <li>Full estimate template vs. experience-based?</li>
+    <li>Buysheet — self-perform only or also subcontracted?</li>
+    <li>Repeat work — standard cost or estimate each time?</li>
+    <li>Who maintains the estimate template now?</li>
+  </ol>
+
+  <h3>RFP & Bidding</h3>
+  <ol start="18" style="margin-left: 22px;">
+    <li>How do you send the RFP? Format?</li>
+    <li>What do vendors receive?</li>
+    <li>Minimum number of bids per trade?</li>
+    <li>Bid deadlines and non-response handling?</li>
+    <li>Who enters bids into the template?</li>
+    <li>Multi-trade vendors — one proposal or per trade?</li>
+    <li>Bancroft bid requirements?</li>
+    <li>How often do you re-bid?</li>
+  </ol>
+
+  <h3>Bid Comp Template</h3>
+  <ol start="26" style="margin-left: 22px;">
+    <li>Simple version for single-trade jobs?</li>
+    <li>Which 13 trades have tabs?</li>
+    <li>Fewer than 5 bidders — blank columns?</li>
+    <li>Where do scope items (rows) come from?</li>
+    <li>Bid Req sign-off process?</li>
+    <li>Where is the completed bid comp filed?</li>
+    <li>Template version — current or modified?</li>
+  </ol>
+
+  <h3>Awards & Contracts</h3>
+  <ol start="33" style="margin-left: 22px;">
+    <li>What happens physically after award?</li>
+    <li>Exhibit B always separate from Exhibit A?</li>
+    <li>Split awards across vendors?</li>
+    <li>Time between award and work start?</li>
+    <li>Insurance cert tracking as part of award?</li>
+  </ol>
+
+  <h3>SharePoint</h3>
+  <ol start="38" style="margin-left: 22px;">
+    <li>Every project gets a site, or only big ones?</li>
+    <li>Who creates sites today?</li>
+    <li>Rarely used or missing folders?</li>
+    <li>PL Pictures = punch list photos?</li>
+    <li>FROL = Final Release of Lien?</li>
+    <li>Do subs upload files directly?</li>
+    <li>Eagle View — roofing only?</li>
+  </ol>
+
+  <h3>Vendors</h3>
+  <ol start="45" style="margin-left: 22px;">
+    <li>How do you pick vendors for a bid?</li>
+    <li>Preferred vendors per trade?</li>
+    <li>How do new vendors enter the system?</li>
+    <li>Sage list = complete list?</li>
+    <li>Bancroft-required vendors?</li>
+    <li>Formal performance tracking?</li>
+  </ol>
+
+  <h3>Programs & Budget</h3>
+  <ol start="51" style="margin-left: 22px;">
+    <li>Other program-scale engagements besides Bancroft?</li>
+    <li>How does annual budget get set?</li>
+    <li>Unplanned work — where does money come from?</li>
+    <li>Monthly billing cap — real? How does it work?</li>
+    <li>Bancroft spending approval structure?</li>
+    <li>Workday cost center tagging on invoices?</li>
+  </ol>
+
+  <h3>POs, Invoicing, Reporting, Change Orders, Closeout</h3>
+  <ol start="57" style="margin-left: 22px;">
+    <li>PO number source?</li>
+    <li>PO for every vendor or materials only?</li>
+    <li>How do invoices arrive?</li>
+    <li>Invoice approval process?</li>
+    <li>Biggest invoicing pain point?</li>
+    <li>Bancroft invoice format requirements?</li>
+    <li>Monthly report format and contents?</li>
+    <li>How long to produce the monthly report?</li>
+    <li>Bancroft-required report content?</li>
+    <li>Change order documentation today?</li>
+    <li>Change order approval process and thresholds?</li>
+    <li>ADD vs DEDUCT split?</li>
+    <li>Closeout checklist — accurate?</li>
+    <li>FROL from every sub?</li>
+    <li>Who does the punch list walk?</li>
+    <li>Formal "project closed" declaration?</li>
+    <li>Does closeout data feed future estimates?</li>
+  </ol>
+</section>
+
+<div class="divider"></div>
+
+<!-- CLOSING -->
+<section style="background: #eef3f9; border: 2px solid #2d5a8e;">
+  <h2>How to Use This Document</h2>
+  <p><strong>Leon</strong> — work through each section. You can:</p>
+  <ul style="margin-left: 22px; margin-bottom: 12px;">
+    <li><strong>Print it</strong> and write notes in the margins</li>
+    <li><strong>Open it on one screen</strong> and type notes in a Word doc on the other</li>
+    <li><strong>Talk through it</strong> with Joe or the AI directly — your verbal answers are fine</li>
+  </ul>
+  <p>The questions in Section 18 are numbered 1-73 so you can reference them easily: "Question 14 — yes, we only use the full estimate for jobs over $25K."</p>
+  <p>Don't worry about being precise or formal. What we need is <strong>how it actually works</strong> — not how it's supposed to work on paper. The messy real version is more valuable than the clean theoretical version.</p>
+  <p style="margin-top: 15px;"><strong>When you're satisfied that we understand your process, tell Joe.</strong> That's the green light to start building.</p>
+</section>
+
+</div>
+
+<footer>
+  <p>Prepared for Leon — DCFG Projects & RFP Process Review — April 6, 2026</p>
+  <p>Source data: Bancroft FY26 GHSP tracker, Tyler Drive project files, DCG Multi Trade Bid Template</p>
+</footer>
+
+</body>
+</html>

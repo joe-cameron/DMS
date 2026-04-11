@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decades GO — User Manual</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans','Segoe UI',sans-serif;background:#f8fafc;color:#1B2A4A;line-height:1.6}
+.page{max-width:1000px;margin:0 auto;padding:24px 20px 80px}
+
+/* Header */
+h1{font-family:'Fraunces',serif;font-size:32px;color:#1B2A4A;margin-bottom:4px}
+.sub{font-size:13px;color:#8695AA;margin-bottom:32px}
+h2{font-family:'Fraunces',serif;font-size:22px;color:#1B2A4A;margin:48px 0 12px;padding-bottom:8px;border-bottom:2px solid #E2E8F0}
+h3{font-size:16px;color:#2E5295;margin:28px 0 10px}
+
+/* TOC */
+.toc{background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px 24px;margin-bottom:36px}
+.toc h2{font-size:15px;color:#2E5295;margin:0 0 10px;border:none;padding:0}
+.toc a{display:block;padding:3px 0;font-size:13px;color:#2E5295;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.toc .indent{padding-left:20px;font-size:12px;color:#8695AA}
+.toc .section{font-weight:700;margin-top:8px}
+
+/* Screenshot */
+.screenshot{margin:16px 0 24px;border:1px solid #D4D9E2;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.screenshot img{width:100%;display:block}
+.screenshot .caption{padding:8px 14px;background:#F8FAFC;font-size:11px;color:#8695AA;border-top:1px solid #E2E8F0}
+
+/* Content cards */
+.card{background:#fff;border:1px solid #D4D9E2;border-radius:10px;padding:20px 24px;margin-bottom:20px}
+.card p{font-size:14px;margin-bottom:8px}
+.card ul{font-size:14px;padding-left:20px;margin-bottom:8px}
+.card li{margin-bottom:4px}
+
+/* Feature list */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.feat{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:12px 16px}
+.feat strong{display:block;font-size:13px;color:#1B2A4A;margin-bottom:2px}
+.feat span{font-size:12px;color:#3D5080}
+
+/* Tips */
+.tip{background:#EDF1F8;border-left:4px solid #2E5295;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:13px;color:#2E5295}
+.warn{background:#FFF8E7;border-left:4px solid #C4A24C;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:13px;color:#8A6B12}
+
+/* Category banner */
+.cat{background:#1B2A4A;color:#fff;padding:14px 24px;border-radius:8px;font-size:18px;font-weight:700;margin:48px 0 16px;letter-spacing:.3px}
+.cat.fac{background:linear-gradient(135deg,#2E5295,#1B2A4A)}
+.cat.proj{background:linear-gradient(135deg,#1d6b3f,#1B2A4A)}
+.cat.mgmt{background:linear-gradient(135deg,#C4A24C,#8A6B12)}
+.cat.admin{background:linear-gradient(135deg,#334155,#1e293b)}
+
+/* Nav map */
+.nav-map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.nav-item{background:#fff;border:1px solid #D4D9E2;border-radius:8px;padding:10px 14px;text-align:center;font-size:12px;font-weight:600;color:#2E5295}
+
+/* Steps — PBJ style */
+.steps{counter-reset:step;padding:16px 0 0}
+.step{position:relative;padding:0 0 16px 48px;border-left:2px solid #D4D9E2;margin-left:15px}
+.step:last-child{border-left-color:transparent;padding-bottom:0}
+.step::before{counter-increment:step;content:counter(step);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:#2E5295;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step-title{font-weight:700;font-size:14px;color:#1B2A4A;margin-bottom:2px}
+.step-detail{font-size:13px;color:#3D5080}
+.step-detail code{background:#EDF1F8;padding:1px 6px;border-radius:3px;font-size:11px;font-family:'IBM Plex Mono','Consolas',monospace;color:#2E5295}
+
+/* How-to box */
+.howto{background:#fff;border:2px solid #2E5295;border-radius:10px;padding:20px 24px;margin:20px 0}
+.howto h4{font-size:15px;color:#2E5295;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid #E2E8F0}
+
+/* Footer */
+.footer{margin-top:60px;padding:20px 0;border-top:2px solid #E2E8F0;text-align:center;font-size:12px;color:#8695AA}
+
+@media print {
+  .screenshot{break-inside:avoid}
+  .cat{break-before:page}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Decades GO</h1>
+<p class="sub">User Manual &mdash; April 2026 &mdash; Decades Construction &amp; Facilities Group</p>
+
+<!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
+<div class="toc">
+<h2>Contents</h2>
+<a href="#overview" class="section">Getting Started</a>
+<a href="#login" class="indent">How To: Log In</a>
+<a href="#navigation" class="indent">How To: Navigate the System</a>
+
+<a href="#sales" class="section">Sales</a>
+<a href="#dashboard" class="indent">Sales Dashboard</a>
+<a href="#customers" class="indent">Customers</a>
+<a href="#howto-new-customer" class="indent">How To: Add a New Customer</a>
+<a href="#msas" class="indent">Client Service Agreements (MSAs)</a>
+<a href="#capital-plan" class="indent">Capital Replacement Plan</a>
+
+<a href="#facilities" class="section">Facilities</a>
+<a href="#operations" class="indent">Operations (Work Orders)</a>
+<a href="#locations" class="indent">Locations</a>
+<a href="#howto-new-location" class="indent">How To: Add a New Location</a>
+<a href="#onboarding" class="indent">Onboarding</a>
+<a href="#howto-new-onboarding" class="indent">How To: Start an Onboarding Case</a>
+<a href="#vendors" class="indent">Vendors</a>
+<a href="#map" class="indent">Location Map</a>
+
+<a href="#contracts-section" class="section">Contracts &amp; Documents</a>
+<a href="#contracts" class="indent">Contracts List</a>
+<a href="#howto-new-wo" class="indent">How To: Create a Work Order</a>
+<a href="#howto-new-amendment" class="indent">How To: Create an Amendment</a>
+<a href="#howto-new-vendor-msa" class="indent">How To: Create a Vendor Agreement</a>
+<a href="#howto-new-proposal" class="indent">How To: Create a Proposal</a>
+<a href="#howto-resume-draft" class="indent">How To: Resume a Saved Draft</a>
+
+<a href="#projects-section" class="section">Projects</a>
+<a href="#project-dashboard" class="indent">Projects Dashboard</a>
+<a href="#programs" class="indent">Programs</a>
+<a href="#howto-new-rfp" class="indent">How To: Create an RFP</a>
+
+<a href="#management" class="section">Management</a>
+<a href="#send-queue" class="indent">Send Queue &amp; Approvals</a>
+<a href="#howto-approve" class="indent">How To: Approve a Document</a>
+
+<a href="#admin-section" class="section">Administration</a>
+<a href="#system-admin" class="indent">System Admin</a>
+</div>
+
+<!-- ═══════════════ GETTING STARTED ═══════════════ -->
+<h2 id="overview">Getting Started</h2>
+
+<div class="card">
+<p>Decades GO is the contracting and facilities management platform for Decades Construction &amp; Facilities Group. It manages customers, contracts, onboarding, locations, vendors, projects, and compliance &mdash; all in one place.</p>
+</div>
+
+<h3 id="login">How To: Log In</h3>
+<div class="screenshot">
+<img src="manual-screenshots/33-Nav-collapsed.png" alt="Sign In Screen">
+<div class="caption">Sign-in screen &mdash; click Sign In, then authenticate with Windows Hello</div>
+</div>
+<div class="howto">
+<h4>Log In (step by step)</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open your browser</div>
+<div class="step-detail">Go to your portal URL (bookmarked or provided by your admin).</div>
+</div>
+<div class="step">
+<div class="step-title">Click "Sign in"</div>
+<div class="step-detail">You'll see a dark blue <strong>Sign in</strong> button in the center of the page.</div>
+</div>
+<div class="step">
+<div class="step-title">Authenticate with Windows Hello</div>
+<div class="step-detail">Your computer will prompt you for a fingerprint, face scan, or PIN. Complete it.</div>
+</div>
+<div class="step">
+<div class="step-title">You're in</div>
+<div class="step-detail">The Sales Dashboard loads automatically. Your name appears at the bottom-left of the sidebar.</div>
+</div>
+</div>
+</div>
+<div class="tip">Your session stays active across browser tabs. Bookmark your portal URL for quick access.</div>
+
+<h3 id="navigation">How To: Navigate the System</h3>
+<div class="screenshot">
+<img src="manual-screenshots/01-SalesDashboard.png" alt="Navigation Sidebar">
+<div class="caption">Left sidebar with CREATE shortcuts, nav groups, and user footer</div>
+</div>
+<div class="howto">
+<h4>Find your way around</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">CREATE shortcuts (top of sidebar)</div>
+<div class="step-detail">Six quick-create buttons: <strong>Proposal</strong>, <strong>Vendor Agreement</strong>, <strong>Work Order</strong>, <strong>Amendment</strong>, <strong>RFP Package</strong>, <strong>Project</strong>. Click any one to jump straight into that wizard.</div>
+</div>
+<div class="step">
+<div class="step-title">Nav groups (middle of sidebar)</div>
+<div class="step-detail">Five collapsible groups: <strong>Sales</strong>, <strong>Facilities</strong>, <strong>Projects</strong>, <strong>Management</strong>, <strong>Admin</strong>. Click the arrow next to a group name to expand it and see the screens inside.</div>
+</div>
+<div class="step">
+<div class="step-title">User Manual link</div>
+<div class="step-detail">Below the CREATE shortcuts, click <strong>User Manual</strong> to open this guide inside the app.</div>
+</div>
+<div class="step">
+<div class="step-title">Your user footer (bottom of sidebar)</div>
+<div class="step-detail">Shows your name and a sign-out button. This confirms who you're logged in as.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ SALES ═══════════════ -->
+<div class="cat" id="sales">SALES</div>
+
+<h3 id="dashboard">Sales Dashboard</h3>
+<div class="card">
+<p>Your home screen. Shows live KPIs, contract pipeline, budget health, and recent activity &mdash; all from real data.</p>
+</div>
+<div class="screenshot">
+<img src="manual-screenshots/01-SalesDashboard.png" alt="Sales Dashboard">
+<div class="caption">Sales Dashboard &mdash; KPI tiles, contract pipeline, budget health, and recent activity log</div>
+</div>
+<div class="features">
+<div class="feat"><strong>KPI Tiles</strong><span>Active Contracts, Pending Signatures, Contracts This Month, Budget Warnings</span></div>
+<div class="feat"><strong>Contract Pipeline</strong><span>Visual breakdown: Draft, Generated, Sent, Signed/Received</span></div>
+<div class="feat"><strong>Budget Health</strong><span>MSAs approaching or exceeding budget (90%+ committed)</span></div>
+<div class="feat"><strong>Recent Activity</strong><span>Last actions across the system with timestamps</span></div>
+</div>
+<div class="tip">Quick action buttons at the top: <strong>+ New Customer</strong>, <strong>+ New Contract</strong>, <strong>+ New Proposal</strong>, <strong>Start Onboarding</strong>.</div>
+
+<!-- Customers -->
+<h3 id="customers">Customers</h3>
+<div class="screenshot">
+<img src="manual-screenshots/02-CustomerList.png" alt="Customer List">
+<div class="caption">Customer List &mdash; searchable, sortable, with active status badges</div>
+</div>
+<div class="card">
+<p>All active customers with name, primary contact, status, and last modified date. Search by name, sort any column, toggle inactive customers.</p>
+</div>
+
+<div class="howto" id="howto-new-customer">
+<h4>How To: Add a New Customer</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Go to Customers</div>
+<div class="step-detail">Click <strong>Sales</strong> in the sidebar, then <strong>Customers</strong>. Or click <strong>+ New Customer</strong> on the Dashboard.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ New Customer"</div>
+<div class="step-detail">Blue button, top-right corner of the Customers screen.</div>
+</div>
+<div class="step">
+<div class="step-title">Fill in the customer name</div>
+<div class="step-detail">Type the legal name of the customer organization.</div>
+</div>
+<div class="step">
+<div class="step-title">Add contact info</div>
+<div class="step-detail">Enter the primary contact name and email.</div>
+</div>
+<div class="step">
+<div class="step-title">Save</div>
+<div class="step-detail">Click <strong>Save</strong>. The new customer appears in the list with an "Active" badge.</div>
+</div>
+</div>
+</div>
+
+<!-- MSAs -->
+<h3 id="msas">Client Service Agreements (MSAs)</h3>
+<div class="screenshot">
+<img src="manual-screenshots/04-MsaList.png" alt="MSA List">
+<div class="caption">Client Service Agreements &mdash; agreement name, customer, family badge, current amendment, trades, and budget</div>
+</div>
+<div class="card">
+<p>All MSAs in one searchable list. MSAs are the umbrella agreements under which contracts (Work Orders and Amendments) are created. Each MSA shows its total budget and family (Decades or TPA Type Clients).</p>
+</div>
+<div class="tip">Click any MSA row to see its detail: budget bar (Total / Committed / Remaining), contracts under this MSA, and document history.</div>
+
+<!-- Capital Plan -->
+<h3 id="capital-plan">Capital Replacement Plan</h3>
+<div class="screenshot">
+<img src="manual-screenshots/05-CapitalPlan.png" alt="Capital Replacement Plan">
+<div class="caption">Capital Replacement Plan &mdash; generate equipment health and service history reports</div>
+</div>
+<div class="card">
+<p>Generate a report on equipment health for a customer. Choose <strong>Snapshot</strong> (single location, point-in-time) or <strong>Renewal</strong> (full customer, fiscal year budget proposal). Select a property or location type, then click <strong>Generate Report</strong>.</p>
+</div>
+
+<!-- ═══════════════ FACILITIES ═══════════════ -->
+<div class="cat fac" id="facilities">FACILITIES</div>
+
+<h3 id="operations">Operations (Work Orders &amp; Requests)</h3>
+<div class="screenshot">
+<img src="manual-screenshots/06-FacilitiesDashboard.png" alt="Operations">
+<div class="caption">Operations &mdash; sensor alerts and work orders/requests with status, priority, and assignment</div>
+</div>
+<div class="card">
+<p>Operations hub showing sensor alerts (top) and UpKeep work orders/requests (bottom). Filter by site (All Sites, Multi, TPA Customers), type (Work Order vs Request), status, and priority. Search across all items.</p>
+</div>
+<div class="features">
+<div class="feat"><strong>Site Filter</strong><span>All Sites, Multi, TPA Customers tabs</span></div>
+<div class="feat"><strong>Type Filter</strong><span>All, Work Order, or Work Request</span></div>
+<div class="feat"><strong>Priority Badges</strong><span>High (red), None (grey) &mdash; visual priority at a glance</span></div>
+<div class="feat"><strong>Sensor Alerts</strong><span>Real-time alerts from connected sensors (water leak, temperature)</span></div>
+</div>
+
+<!-- Locations -->
+<h3 id="locations">Locations</h3>
+<div class="screenshot">
+<img src="manual-screenshots/07-Locations.png" alt="Locations">
+<div class="caption">Locations &mdash; all properties with customer, type, address, compliance status, and UpKeep sync</div>
+</div>
+<div class="card">
+<p>All properties/locations with customer filter, type (Admin, Group Home, Day Program, School, Apartment), address, compliance alerts, and UpKeep sync indicator.</p>
+</div>
+
+<div class="howto" id="howto-new-location">
+<h4>How To: Add a New Location</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Go to Locations</div>
+<div class="step-detail">Click <strong>Facilities</strong> in the sidebar, then <strong>Locations</strong>.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ New Location"</div>
+<div class="step-detail">Blue button, top-right corner.</div>
+</div>
+<div class="step">
+<div class="step-title">Enter the location name</div>
+<div class="step-detail">Use the naming convention: <code>ACP-TownName-Number</code> (e.g., ACP-Burlington-16).</div>
+</div>
+<div class="step">
+<div class="step-title">Pick the customer</div>
+<div class="step-detail">Select the customer this location belongs to from the dropdown.</div>
+</div>
+<div class="step">
+<div class="step-title">Set the type</div>
+<div class="step-detail">Choose: Admin, Apartment, Day Program, Group Home, School, etc.</div>
+</div>
+<div class="step">
+<div class="step-title">Enter the address</div>
+<div class="step-detail">Full street address, city, state, zip.</div>
+</div>
+<div class="step">
+<div class="step-title">Save</div>
+<div class="step-detail">Click <strong>Save</strong>. The location appears in the list and is available for contracts.</div>
+</div>
+</div>
+</div>
+<div class="tip">After creating a location, click into it to fill out the full profile: Facility Profile, Building Systems, Compliance Documents, and Appliances tabs.</div>
+
+<!-- Onboarding -->
+<h3 id="onboarding">Onboarding</h3>
+<div class="screenshot">
+<img src="manual-screenshots/08-Onboarding.png" alt="Onboarding">
+<div class="caption">Onboarding &mdash; cases with case number, customer, MSA, status, progress (e.g., 24/32 steps)</div>
+</div>
+<div class="card">
+<p>Track new customer onboarding through a structured 6-phase, 32-step process. Each case shows its status (Not Started, In Progress, Complete) and progress count.</p>
+</div>
+
+<div class="howto" id="howto-new-onboarding">
+<h4>How To: Start an Onboarding Case</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Go to Onboarding</div>
+<div class="step-detail">Click <strong>Facilities</strong> in the sidebar, then <strong>Onboarding</strong>. Or click <strong>Start Onboarding</strong> on the Dashboard.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ New Case"</div>
+<div class="step-detail">Blue button, top-right corner.</div>
+</div>
+<div class="step">
+<div class="step-title">Select the customer</div>
+<div class="step-detail">Choose the customer from the dropdown.</div>
+</div>
+<div class="step">
+<div class="step-title">Select the MSA</div>
+<div class="step-detail">Choose the MSA this onboarding is for. A case number (OB-2026-XXX) is generated automatically.</div>
+</div>
+<div class="step">
+<div class="step-title">Save</div>
+<div class="step-detail">The case opens to the detail view. You'll see 6 phases: Sales &amp; Proposal, Contract Execution, Account Setup, Site Onboarding, Vendor &amp; Compliance, Go-Live &amp; Monitoring.</div>
+</div>
+<div class="step">
+<div class="step-title">Work through the steps</div>
+<div class="step-detail">Expand each phase. Check off steps as you complete them. Add notes and dates. The progress counter updates automatically.</div>
+</div>
+</div>
+</div>
+
+<!-- Vendors -->
+<h3 id="vendors">Vendors</h3>
+<div class="screenshot">
+<img src="manual-screenshots/09-VendorList.png" alt="Vendors">
+<div class="caption">Vendors &mdash; 271 vendors with name, trade, address, phone, email, and status</div>
+</div>
+<div class="card">
+<p>Searchable vendor directory with trade, address, phone, email, and active/inactive status. Search by name, trade, or address.</p>
+</div>
+
+<!-- Map -->
+<h3 id="map">Location Map</h3>
+<div class="screenshot">
+<img src="manual-screenshots/18-MapView.png" alt="Location Map">
+<div class="caption">Location Map &mdash; all locations plotted with customer color-coding</div>
+</div>
+<div class="card">
+<p>Interactive map showing all locations with customer color-coding. Filter by customer. Uses OpenStreetMap tiles. Click a pin to see location details.</p>
+</div>
+
+<!-- ═══════════════ CONTRACTS & DOCUMENTS ═══════════════ -->
+<div class="cat" id="contracts-section">CONTRACTS &amp; DOCUMENTS</div>
+
+<h3 id="contracts">Contracts List</h3>
+<div class="screenshot">
+<img src="manual-screenshots/03-ContractList.png" alt="Contract List">
+<div class="caption">Contracts &mdash; Smart List view with contract number, customer, location, status badges, fee, and date</div>
+</div>
+<div class="card">
+<p>Three views: <strong>Smart List</strong> (default table), <strong>Customer Groups</strong> (grouped by customer), and <strong>Split View</strong> (click a row to see detail inline). Filter by <strong>Needs Attention</strong> or <strong>All Active</strong>. Search by customer, contract number, or location.</p>
+</div>
+<div class="features">
+<div class="feat"><strong>Status Badges</strong><span>Draft (grey), In Progress (blue), Generated (green), Sent (gold), Signed/Received (dark)</span></div>
+<div class="feat"><strong>Needs Attention</strong><span>Contracts missing fields, unsigned, or requiring action</span></div>
+<div class="feat"><strong>Split View</strong><span>Click a contract row &mdash; detail appears below without leaving the list</span></div>
+<div class="feat"><strong>Expand Arrow</strong><span>Click the arrow on any row to see quick details</span></div>
+</div>
+
+<!-- ══ HOW TO: WORK ORDER ══ -->
+<div class="howto" id="howto-new-wo">
+<h4>How To: Create a New Work Order</h4>
+<div class="screenshot">
+<img src="manual-screenshots/29-NewContractWizard-step1.png" alt="Contract Wizard - Drafts">
+<div class="caption">Contract Wizard &mdash; shows your saved drafts and the "+ Start New Contract" button</div>
+</div>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the Contract Wizard</div>
+<div class="step-detail">Click <strong>Work Order</strong> in the CREATE shortcuts on the left sidebar.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ Start New Contract"</div>
+<div class="step-detail">Gold button below any saved drafts. (If you have drafts, you'll see them listed with Resume/Delete buttons.)</div>
+</div>
+<div class="step">
+<div class="step-title">Step 1 &mdash; Pick the Customer</div>
+<div class="step-detail">Search by name and click to select. The system detects the customer family (Decades vs TPA) and picks the right templates automatically.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 2 &mdash; Document Type &amp; Details</div>
+<div class="step-detail">Choose <strong>Work Order</strong>. Select the <strong>location</strong> from the dropdown, pick the <strong>vendor</strong>, and set <strong>start/end dates</strong>.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 3 &mdash; Contractor &amp; Signer</div>
+<div class="step-detail">Vendor details auto-fill from the vendor record. Enter the <strong>signer name</strong> and <strong>title</strong>, and the <strong>owner contact</strong> info.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 4 &mdash; Exhibit A Line Items</div>
+<div class="step-detail">Click <strong>+ Add Line</strong> to add each line item. For each line: pick a <strong>cost code</strong>, enter a <strong>description</strong>, and type the <strong>amount</strong>. The total calculates automatically at the bottom.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 5 &mdash; Review &amp; Generate</div>
+<div class="step-detail">Review all details. The compliance checklist shows which checks pass or fail (does NOT block you). Click <strong>Generate</strong> to create the document. It goes into the Send Queue for approval.</div>
+</div>
+</div>
+</div>
+<div class="tip">Your draft saves automatically at every step. You can close the browser and come back later &mdash; click <strong>Resume</strong> on the drafts screen to pick up where you left off.</div>
+<div class="warn">You do NOT assign a WO number. Send Queue staff assigns the WO number after reviewing your submission.</div>
+
+<!-- ══ HOW TO: AMENDMENT ══ -->
+<div class="howto" id="howto-new-amendment">
+<h4>How To: Create an Amendment</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the Contract Wizard</div>
+<div class="step-detail">Click <strong>Amendment</strong> in the CREATE shortcuts on the left sidebar.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ Start New Contract"</div>
+<div class="step-detail">Gold button at the bottom of the drafts list.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 1 &mdash; Pick the Customer</div>
+<div class="step-detail">Search and select the customer.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 2 &mdash; Choose "Amendment" and pick the parent Work Order</div>
+<div class="step-detail">Select <strong>Amendment</strong> as the document type. Then select the <strong>parent Work Order</strong> you are amending from the dropdown. This is required &mdash; every amendment must reference an existing WO.</div>
+</div>
+<div class="step">
+<div class="step-title">Steps 3-5 &mdash; Same as Work Order</div>
+<div class="step-detail">Fill in contractor/signer (Step 3), Exhibit A lines (Step 4), review and generate (Step 5). The system uses the amendment template automatically.</div>
+</div>
+</div>
+</div>
+
+<!-- ══ HOW TO: VENDOR MSA ══ -->
+<div class="howto" id="howto-new-vendor-msa">
+<h4>How To: Create a Vendor Agreement</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the Contract Wizard</div>
+<div class="step-detail">Click <strong>Vendor Agreement</strong> in the CREATE shortcuts on the left sidebar.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ Start New Contract"</div>
+<div class="step-detail">Gold button at the bottom.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 1 &mdash; Pick the Customer</div>
+<div class="step-detail">Search and select.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 2 &mdash; Choose "Vendor MSA"</div>
+<div class="step-detail">Select <strong>Vendor MSA</strong> as the document type. Pick the vendor. No parent WO is needed.</div>
+</div>
+<div class="step">
+<div class="step-title">Steps 3-5 &mdash; Complete the wizard</div>
+<div class="step-detail">Fill in contractor/signer details, review, and generate. The Vendor MSA template is selected automatically.</div>
+</div>
+</div>
+</div>
+
+<!-- ══ HOW TO: PROPOSAL ══ -->
+<div class="howto" id="howto-new-proposal">
+<h4>How To: Create a Proposal</h4>
+<div class="screenshot">
+<img src="manual-screenshots/30-NewProposalWizard-step1.png" alt="Proposal Wizard - Drafts">
+<div class="caption">Proposal Wizard &mdash; drafts list and "+ Start New Proposal" button</div>
+</div>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the Proposal Wizard</div>
+<div class="step-detail">Click <strong>Proposal</strong> in the CREATE shortcuts on the left sidebar.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "+ Start New Proposal"</div>
+<div class="step-detail">Gold button below any saved drafts.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 1 &mdash; Service Package</div>
+<div class="step-detail">Choose: <strong>Package A</strong> (Essential), <strong>Package B</strong> (Extended), or <strong>Package C</strong> (Premium). This determines which Exhibit A template is used.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 2 &mdash; Customer &amp; Vendor</div>
+<div class="step-detail">Search for an existing customer or create a new one. Enter MSA details, signer info, and billing address.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 3 &mdash; Pricing &amp; Locations</div>
+<div class="step-detail">Set the monthly membership rate and onboarding fee. Choose uniform or type-based pricing. Add locations.</div>
+</div>
+<div class="step">
+<div class="step-title">Step 4 &mdash; Review &amp; Generate</div>
+<div class="step-detail">Review everything. Click <strong>Generate Proposal</strong>. This creates the MSA record, rate records, and triggers document generation.</div>
+</div>
+</div>
+</div>
+
+<!-- ══ HOW TO: RESUME DRAFT ══ -->
+<div class="howto" id="howto-resume-draft">
+<h4>How To: Resume a Saved Draft</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the wizard for your document type</div>
+<div class="step-detail">Click <strong>Work Order</strong>, <strong>Amendment</strong>, <strong>Vendor Agreement</strong>, or <strong>Proposal</strong> in the CREATE shortcuts.</div>
+</div>
+<div class="step">
+<div class="step-title">Find your draft</div>
+<div class="step-detail">Your saved drafts appear at the top of the wizard screen. Each shows the customer name, document type, location, which step you were on, and when it was last saved.</div>
+</div>
+<div class="step">
+<div class="step-title">Click "Resume"</div>
+<div class="step-detail">The wizard opens to the exact step where you left off. All your data is preserved.</div>
+</div>
+<div class="step">
+<div class="step-title">To delete a draft you don't need</div>
+<div class="step-detail">Click the red <strong>Delete</strong> button next to the draft. It's removed permanently.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<div class="cat proj" id="projects-section">PROJECTS</div>
+
+<h3 id="project-dashboard">Projects Dashboard</h3>
+<div class="screenshot">
+<img src="manual-screenshots/10-ProjectDashboard.png" alt="Projects Dashboard">
+<div class="caption">Projects Dashboard &mdash; Programs, Active Projects, Open RFPs, and Budget Utilization KPIs</div>
+</div>
+<div class="card">
+<p>Overview of all capital project activity. Four KPI cards: Programs count, Active Projects, Open RFPs, and Budget Utilization percentage. Below: Projects by Status and Recent RFPs.</p>
+</div>
+
+<h3 id="programs">Programs</h3>
+<div class="screenshot">
+<img src="manual-screenshots/24-ProgramDetail.png" alt="Program Detail">
+<div class="caption">Program Detail &mdash; Window Replacement Program 2026 with $180K budget, 49% utilized</div>
+</div>
+<div class="card">
+<p>Programs group related projects under a single budget. Each program shows Total / Committed / Remaining budget with a utilization bar, plus a list of linked projects.</p>
+</div>
+
+<!-- ══ HOW TO: RFP ══ -->
+<div class="howto" id="howto-new-rfp">
+<h4>How To: Create an RFP</h4>
+<div class="screenshot">
+<img src="manual-screenshots/31-NewRfpWizard-step1.png" alt="RFP Wizard Step 1">
+<div class="caption">RFP Wizard &mdash; Step 1, enter RFP name</div>
+</div>
+<div class="steps">
+<div class="step">
+<div class="step-title">Open the RFP Wizard</div>
+<div class="step-detail">Click <strong>RFP Package</strong> in the CREATE shortcuts on the left sidebar.</div>
+</div>
+<div class="step">
+<div class="step-title">Enter the RFP name</div>
+<div class="step-detail">Type a descriptive name for the RFP (e.g., "Window Replacement - ACP Locations 2026").</div>
+</div>
+<div class="step">
+<div class="step-title">Click Next</div>
+<div class="step-detail">The wizard advances. Fill in scope, trades, locations, and budget on the following steps.</div>
+</div>
+<div class="step">
+<div class="step-title">Review &amp; Submit</div>
+<div class="step-detail">On the final step, review all details and submit. The RFP appears in the RFP list and is ready for vendor distribution.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ MANAGEMENT ═══════════════ -->
+<div class="cat mgmt" id="management">MANAGEMENT</div>
+
+<h3 id="send-queue">Send Queue &amp; Approvals</h3>
+<div class="screenshot">
+<img src="manual-screenshots/14-SendQueue.png" alt="Send Queue">
+<div class="caption">Send Queue &mdash; document approval queue (screenshot shows loading state)</div>
+</div>
+<div class="card">
+<p>The management dashboard and document approval workflow. Documents generated by the Contract or Proposal wizards land here for review. Tabs: Pending Review, Approved, Needs WO Number.</p>
+</div>
+<div class="features">
+<div class="feat"><strong>Pending Review</strong><span>Documents waiting for someone to review and approve them</span></div>
+<div class="feat"><strong>Approved</strong><span>Approved documents ready for sending to the vendor/customer</span></div>
+<div class="feat"><strong>Needs WO Number</strong><span>Contracts that need a WO number assigned before they can be sent</span></div>
+<div class="feat"><strong>Actions</strong><span>Approve, Request Info, Return, Delete per document</span></div>
+</div>
+
+<div class="howto" id="howto-approve">
+<h4>How To: Approve a Document</h4>
+<div class="steps">
+<div class="step">
+<div class="step-title">Go to Send Queue</div>
+<div class="step-detail">Click <strong>Management</strong> in the sidebar, then <strong>Send Queue</strong>.</div>
+</div>
+<div class="step">
+<div class="step-title">Find the document</div>
+<div class="step-detail">Look in the <strong>Pending Review</strong> tab. Documents show the customer, contract type, and who submitted it.</div>
+</div>
+<div class="step">
+<div class="step-title">Review it</div>
+<div class="step-detail">Click the document row to expand it. Check the details: customer, location, vendor, amounts, dates.</div>
+</div>
+<div class="step">
+<div class="step-title">Take action</div>
+<div class="step-detail">
+<strong>Approve</strong> &mdash; moves it to the Approved tab, ready for sending.<br>
+<strong>Request Info</strong> &mdash; sends it back with a note asking for clarification.<br>
+<strong>Return</strong> &mdash; sends it back to the creator to fix and resubmit.<br>
+<strong>Delete</strong> &mdash; removes the document (soft delete).
+</div>
+</div>
+<div class="step">
+<div class="step-title">Assign WO Number (if needed)</div>
+<div class="step-detail">If the document appears in the <strong>Needs WO Number</strong> tab, enter the WO number and click Save. This is done by Send Queue staff, not the contract creator.</div>
+</div>
+</div>
+</div>
+<div class="warn">WO numbers are assigned by Send Queue staff, not by the person who created the contract.</div>
+
+<!-- ═══════════════ ADMIN ═══════════════ -->
+<div class="cat admin" id="admin-section">ADMINISTRATION</div>
+
+<h3 id="system-admin">System Admin</h3>
+<div class="screenshot">
+<img src="manual-screenshots/16-Admin.png" alt="System Admin">
+<div class="caption">System Administration &mdash; Document Templates tab showing 20 active templates across Decades and TPA families</div>
+</div>
+<div class="card">
+<p>Configuration hub for managing system reference data. Only visible to admin users. Organized into tabs:</p>
+</div>
+<div class="features">
+<div class="feat"><strong>Document Templates</strong><span>Word templates by family, type, exhibit, and version</span></div>
+<div class="feat"><strong>Onboarding Steps</strong><span>Configure the 32-step onboarding checklist</span></div>
+<div class="feat"><strong>Location Types</strong><span>Admin, Apartment, Day Program, Group Home, School, etc.</span></div>
+<div class="feat"><strong>Cost Codes</strong><span>Cost center codes for contract line items</span></div>
+<div class="feat"><strong>Appliance Types</strong><span>Equipment categories with lifecycle expectations</span></div>
+<div class="feat"><strong>Vendors</strong><span>Vendor records with legal name, contact, and insurance</span></div>
+<div class="feat"><strong>Logging</strong><span>System audit log viewer</span></div>
+<div class="feat"><strong>Customer Config</strong><span>Per-customer settings (blanket thresholds, etc.)</span></div>
+<div class="feat"><strong>Navigation</strong><span>Show/hide menu items per environment</span></div>
+<div class="feat"><strong>Intake Fields</strong><span>Configure Concierge data collection portal fields</span></div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div class="footer">
+<p><strong>Decades GO</strong> &mdash; User Manual</p>
+<p>Decades Construction &amp; Facilities Group &mdash; April 2026</p>
+<p style="margin-top:8px;font-style:italic">Our passion is your mission.</p>
+</div>
+
+</div>
+</body></html>

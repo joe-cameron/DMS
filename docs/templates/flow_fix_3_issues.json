@@ -1,0 +1,105 @@
+{
+  "_description": "Three fixes for the DocGen flow",
+  "_instructions": "Apply these changes in the Power Automate designer on Prod",
+
+  "fix_1_get_customer_null_safety": {
+    "_problem": "Get_Customer crashes when the contract has no customer OR when Get_Contract didn't run (MSA-only request). The if() expression doesn't handle null from a non-executed action.",
+    "_solution": "Wrap Get_Customer in a Condition: 'Is Customer ID Available'",
+
+    "Condition_Has_Customer": {
+      "type": "If",
+      "expression": {
+        "or": [
+          { "not": { "equals": ["@coalesce(outputs('Get_Contract')?['body/_dcfg_customer_id_value'], null)", null] } },
+          { "not": { "equals": ["@coalesce(outputs('Get_MSA')?['body/_dcfg_customer_id_value'], null)", null] } }
+        ]
+      },
+      "actions": {
+        "Get_Customer_Safe": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "dcfg_customers",
+              "recordId": "@coalesce(outputs('Get_Contract')?['body/_dcfg_customer_id_value'], outputs('Get_MSA')?['body/_dcfg_customer_id_value'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "else": {
+        "_note": "No customer available — flow continues with empty customer fields"
+      },
+      "runAfter": {
+        "Condition_Is_Contract": ["Succeeded"]
+      }
+    },
+
+    "_update_references": "All references to outputs('Get_Customer') in Build_Token_Map must change to outputs('Get_Customer_Safe') and be wrapped in coalesce(). Example: coalesce(outputs('Get_Customer_Safe')?['body/dcfg_name'], '')"
+  },
+
+  "fix_2_null_safety_all_get_actions": {
+    "_problem": "Get_Property and Get_Vendor crash if contract has no property_id or vendor_id",
+    "_solution": "Same pattern — wrap each in a condition checking the lookup value",
+
+    "Get_Property_condition": "coalesce(outputs('Get_Contract')?['body/_dcfg_property_id_value'], null) ne null",
+    "Get_Vendor_condition": "coalesce(outputs('Get_Contract')?['body/_dcfg_vendor_id_value'], outputs('Get_MSA')?['body/_dcfg_vendor_id_value'], null) ne null",
+
+    "_all_token_map_expressions": "Every expression in Build_Token_Map that references Get_Customer, Get_Vendor, Get_Property, Get_MSA, or Get_Contract must use coalesce() to handle null. The current expressions already use coalesce() for most fields — verify none are missing."
+  },
+
+  "fix_3_error_handler": {
+    "_problem": "When the flow fails at any point, the document request stays in 'Processing' (100000001) forever. The SPA polling times out.",
+    "_solution": "Add a Scope around the main actions, then a Run After → Failed handler that patches the request",
+
+    "Scope_Main": {
+      "_note": "Move ALL actions (Get_Contract/MSA, Get_Customer, Get_Vendor, Get_Property, Build_Token_Map, Switch_Template, Populate, Save to SharePoint, Update doc request to Complete) into this Scope"
+    },
+
+    "Handle_Failure": {
+      "_note": "Runs after Scope_Main with Configure Run After = 'Has failed', 'Has timed out'",
+      "type": "Scope",
+      "actions": {
+        "Get_Error_Details": {
+          "type": "Compose",
+          "inputs": "@{result('Scope_Main')?[0]?['error']?['message']}"
+        },
+        "Patch_Request_Failed": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "dcfg_document_requests",
+              "recordId": "@triggerOutputs()?['body/dcfg_document_requestid']",
+              "item/dcfg_status": 100000003,
+              "item/dcfg_error_message": "@{coalesce(outputs('Get_Error_Details'), 'Flow failed — check run history')}"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "UpdateRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Get_Error_Details": ["Succeeded"]
+          }
+        }
+      },
+      "runAfter": {
+        "Scope_Main": ["Failed", "TimedOut"]
+      }
+    },
+
+    "_important": "The error handler must use result('Scope_Main') not outputs('Scope_Main'). The result() function returns an array of action results within the scope. To get the first error: result('Scope_Main')?[0]?['error']?['message']. For a more detailed error, loop through result('Scope_Main') and find the first item where status is 'Failed'."
+  },
+
+  "_apply_order": [
+    "1. Add the error handler Scope FIRST (so if other changes break, the error is captured)",
+    "2. Rename Get_Customer to Get_Customer_Safe and wrap in condition",
+    "3. Add null checks to Get_Property and Get_Vendor",
+    "4. Test with a new document request from the SPA"
+  ]
+}

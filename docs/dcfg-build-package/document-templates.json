@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "type": "document-template-registry",
+    "version": "1.0",
+    "description": "Registry of document and presentation templates available through Decades Brain. Each template defines its data sources, output format, trigger phrases, and access roles. Add new templates by appending to the templates array. Existing company documents and presentations can be registered here by mapping their data requirements to query patterns.",
+    "file": "company-brain/_config/document-templates.json"
+  },
+  "templates": [
+    {
+      "id": "tmpl-vendor-performance",
+      "name": "Vendor Performance Summary",
+      "description": "Summary of a vendor's contract history, certification status, team notes, and reliability assessment",
+      "output_format": "docx",
+      "trigger_phrases": [
+        "vendor performance summary",
+        "vendor report",
+        "vendor summary for"
+      ],
+      "required_entity": "vendor",
+      "data_sources": [
+        {"system": "dataverse", "query_pattern": "vendor-lookup"},
+        {"system": "sharepoint", "file": "company-brain/operations/vendor-knowledge.json"},
+        {"system": "upkeep", "endpoint": "/vendors/{id}/certifications"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Admin"]
+    },
+    {
+      "id": "tmpl-property-condition",
+      "name": "Property Condition Report",
+      "description": "Property details, tracked assets with lifespan status, recent work history, compliance documents, and site notes",
+      "output_format": "docx",
+      "trigger_phrases": [
+        "property condition report",
+        "property report for",
+        "condition report"
+      ],
+      "required_entity": "property",
+      "data_sources": [
+        {"system": "dataverse", "query_pattern": "property-lookup"},
+        {"system": "dataverse", "entity_set": "dcfg_property_assets"},
+        {"system": "sharepoint", "file": "company-brain/operations/property-knowledge.json"},
+        {"system": "sharepoint", "file": "company-brain/operations/asset-lifespans.json"},
+        {"system": "upkeep", "endpoint": "/assets?propertyId={id}"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Admin"]
+    },
+    {
+      "id": "tmpl-contract-status",
+      "name": "Contract Status Report",
+      "description": "All contracts for a customer or MSA with current status, line items, and audit trail",
+      "output_format": "docx",
+      "trigger_phrases": [
+        "contract status report",
+        "contract report for",
+        "contract summary"
+      ],
+      "required_entity": "customer",
+      "data_sources": [
+        {"system": "dataverse", "query_pattern": "customer-lookup"},
+        {"system": "dataverse", "entity_set": "dcfg_contracts"},
+        {"system": "dataverse", "entity_set": "dcfg_contract_lines"},
+        {"system": "dataverse", "entity_set": "dcfg_audit_logs"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Sales", "DCFG_Admin"]
+    },
+    {
+      "id": "tmpl-quarterly-review",
+      "name": "Program Quarterly Review Presentation",
+      "description": "PowerPoint presentation covering program budget health, contract activity, property status, and vendor performance for a specific program",
+      "output_format": "pptx",
+      "trigger_phrases": [
+        "quarterly review",
+        "program review presentation",
+        "quarterly presentation for"
+      ],
+      "required_entity": "program",
+      "data_sources": [
+        {"system": "dataverse", "entity_set": "dcfg_programs"},
+        {"system": "dataverse", "entity_set": "dcfg_contracts"},
+        {"system": "dataverse", "entity_set": "dcfg_brain_insights"},
+        {"system": "sharepoint", "file": "company-brain/operations/vendor-knowledge.json"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Admin"]
+    },
+    {
+      "id": "tmpl-cert-expiry",
+      "name": "Certification Expiry Report",
+      "description": "All vendor and property certifications with expiry dates, sorted by urgency",
+      "output_format": "docx",
+      "trigger_phrases": [
+        "certification expiry report",
+        "cert report",
+        "expiring certifications report"
+      ],
+      "required_entity": null,
+      "data_sources": [
+        {"system": "sharepoint", "file": "company-brain/operations/certification-status.json"},
+        {"system": "dataverse", "entity_set": "dcfg_vendors"},
+        {"system": "dataverse", "entity_set": "dcfg_propertys"},
+        {"system": "upkeep", "endpoint": "/vendors/certifications"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Admin"]
+    },
+    {
+      "id": "tmpl-onboarding-status",
+      "name": "Onboarding Status Report",
+      "description": "Active onboarding cases with checklist progress, stall detection, and next actions",
+      "output_format": "docx",
+      "trigger_phrases": [
+        "onboarding status report",
+        "onboarding report",
+        "case status report"
+      ],
+      "required_entity": null,
+      "data_sources": [
+        {"system": "dataverse", "entity_set": "dcfg_onboarding_cases"},
+        {"system": "dataverse", "entity_set": "dcfg_onboarding_checklists"},
+        {"system": "dataverse", "entity_set": "dcfg_customers"}
+      ],
+      "roles": ["DCFG_Operations", "DCFG_Sales", "DCFG_Admin"]
+    }
+  ]
+}

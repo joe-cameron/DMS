@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "type": "decisions-log",
+    "version": "1.0",
+    "description": "Architecture and design decisions for the DCFG project with rationale. Once a decision is logged here, it is settled unless explicitly reopened. Agent: never re-litigate a logged decision. Reference it instead.",
+    "file": "brain/projects/dcfg/decisions-log.json"
+  },
+  "entries": []
+}

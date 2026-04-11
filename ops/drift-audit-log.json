@@ -1,0 +1,3330 @@
+{
+  "cycles": [
+    {
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "timestamp": "2026-03-24 15:57:10",
+      "permissionsOk": 32,
+      "errors": [],
+      "flowsActive": 11,
+      "flowIssues": [],
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowsDown": 0,
+      "missingPerms": []
+    },
+    {
+      "flowsActive": 11,
+      "flowIssues": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 16:00:38",
+      "missingPerms": [],
+      "flowsDown": 0,
+      "errors": [],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1
+    },
+    {
+      "flowIssues": [],
+      "errors": [],
+      "permissionsDrifted": 1,
+      "flowsActive": 11,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "flowsDown": 0,
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 16:05:17",
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsOk": 32
+    },
+    {
+      "flowsDown": 0,
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 16:10:39",
+      "permissionsMissing": 0,
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowsActive": 11,
+      "errors": [],
+      "permissionsDrifted": 1,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "flowIssues": []
+    },
+    {
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowsActive": 11,
+      "timestamp": "2026-03-24 16:15:17",
+      "flowIssues": [],
+      "missingPerms": [],
+      "flowsDown": 0,
+      "permissionsOk": 32,
+      "permissionsDrifted": 1,
+      "errors": [],
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsMissing": 0
+    },
+    {
+      "flowsActive": 11,
+      "missingPerms": [],
+      "timestamp": "2026-03-24 16:22:50",
+      "flowIssues": [],
+      "errors": [],
+      "permissionsOk": 32,
+      "flowsDown": 0,
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ]
+    },
+    {
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "flowsActive": 11,
+      "timestamp": "2026-03-24 16:25:18",
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowIssues": [],
+      "errors": [],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "flowsDown": 0
+    },
+    {
+      "timestamp": "2026-03-24 16:30:18",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowsDown": 0,
+      "errors": [],
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "flowsActive": 11,
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsDrifted": 1,
+      "flowIssues": []
+    },
+    {
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "errors": [],
+      "flowsActive": 11,
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "flowsDown": 0,
+      "flowIssues": [],
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 16:35:18"
+    },
+    {
+      "errors": [],
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 16:40:26",
+      "flowsActive": 11,
+      "missingPerms": [],
+      "flowIssues": [],
+      "permissionsMissing": 0,
+      "flowsDown": 0,
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ]
+    },
+    {
+      "permissionsMissing": 0,
+      "drift": [],
+      "errors": [
+        {
+          "error": "A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_msa"
+        },
+        {
+          "error": "An error occurred while sending the request.",
+          "table": "dcfg_msa_rate"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_property"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_property_detail"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_vendor"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_location_type"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_location_document"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_document_template"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_template_field"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_document_output"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_document_request"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_onboarding_case"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_onboarding_checklist"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_program"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_send_queue"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_audit_log"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_ap_cost_code"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_config"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_appliance"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_appliance_type"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_appliance_photo"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_compliance_check"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_compliance_rule"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_brain_insight"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_equipment_benchmark"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_agent_audit_log"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_agent_config"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_agent_session_trace"
+        },
+        {
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)",
+          "table": "dcfg_agent_diagnostic"
+        }
+      ],
+      "permissionsDrifted": 0,
+      "timestamp": "2026-03-24 17:28:24",
+      "flowsActive": 0,
+      "permissionsOk": 4,
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_send_email",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "No such host is known. (org0c17e98d.crm.dynamics.com:443)"
+        }
+      ],
+      "summary": "Perms: 4 OK, 0 drifted, 0 missing | Flows: 0 active, 11 down",
+      "missingPerms": []
+    },
+    {
+      "flowsDown": 0,
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 18:28:41",
+      "flowsActive": 11,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsMissing": 0,
+      "errors": [],
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "flowIssues": []
+    },
+    {
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 18:29:20",
+      "permissionsMissing": 0,
+      "errors": [],
+      "flowsActive": 11,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "missingPerms": [],
+      "flowIssues": [],
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowsDown": 0
+    },
+    {
+      "flowIssues": [],
+      "permissionsMissing": 0,
+      "flowsDown": 0,
+      "timestamp": "2026-03-24 18:30:17",
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "flowsActive": 11,
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsDrifted": 1,
+      "errors": []
+    },
+    {
+      "flowIssues": [],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "missingPerms": [],
+      "permissionsDrifted": 1,
+      "flowsDown": 0,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "flowsActive": 11,
+      "timestamp": "2026-03-24 18:35:23"
+    },
+    {
+      "flowIssues": [],
+      "flowsActive": 11,
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 18:40:23",
+      "flowsDown": 0,
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "errors": []
+    },
+    {
+      "flowIssues": [],
+      "flowsActive": 11,
+      "flowsDown": 0,
+      "errors": [],
+      "permissionsOk": 32,
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 18:45:57",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ]
+    },
+    {
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsDrifted": 1,
+      "errors": [],
+      "permissionsMissing": 0,
+      "flowIssues": [],
+      "timestamp": "2026-03-24 18:50:31",
+      "flowsDown": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "flowsActive": 11
+    },
+    {
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowsActive": 11,
+      "timestamp": "2026-03-24 18:57:48",
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "errors": [],
+      "flowIssues": [],
+      "missingPerms": [],
+      "flowsDown": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down"
+    },
+    {
+      "flowsActive": 11,
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "timestamp": "2026-03-24 19:00:47",
+      "flowIssues": [],
+      "permissionsMissing": 0,
+      "errors": [],
+      "flowsDown": 0,
+      "missingPerms": [],
+      "permissionsDrifted": 1,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ]
+    },
+    {
+      "flowsDown": 0,
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 19:05:18",
+      "permissionsMissing": 0,
+      "errors": [],
+      "flowsActive": 11,
+      "flowIssues": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down"
+    },
+    {
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 19:10:16",
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowsActive": 11,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowIssues": [],
+      "flowsDown": 0,
+      "errors": [],
+      "missingPerms": []
+    },
+    {
+      "permissionsOk": 32,
+      "flowsActive": 11,
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "missingPerms": [],
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "timestamp": "2026-03-24 19:15:17",
+      "flowsDown": 0,
+      "errors": [],
+      "flowIssues": []
+    },
+    {
+      "permissionsMissing": 0,
+      "missingPerms": [],
+      "flowsDown": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "timestamp": "2026-03-24 19:22:12",
+      "permissionsDrifted": 1,
+      "flowIssues": [],
+      "flowsActive": 11,
+      "errors": [],
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ]
+    },
+    {
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 19:25:16",
+      "flowIssues": [],
+      "errors": [],
+      "flowsActive": 11,
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "flowsDown": 0
+    },
+    {
+      "permissionsOk": 32,
+      "flowsActive": 11,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowIssues": [],
+      "flowsDown": 0,
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "errors": [],
+      "timestamp": "2026-03-24 19:30:17",
+      "permissionsDrifted": 1
+    },
+    {
+      "missingPerms": [],
+      "errors": [],
+      "timestamp": "2026-03-24 19:35:41",
+      "flowIssues": [],
+      "flowsActive": 11,
+      "permissionsDrifted": 1,
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowsDown": 0,
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down"
+    },
+    {
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "missingPerms": [],
+      "timestamp": "2026-03-24 19:41:08",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsOk": 32,
+      "flowsActive": 11,
+      "permissionsDrifted": 1,
+      "errors": [],
+      "flowsDown": 0,
+      "permissionsMissing": 0,
+      "flowIssues": []
+    },
+    {
+      "flowIssues": [],
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "errors": [],
+      "flowsActive": 11,
+      "timestamp": "2026-03-24 19:45:17",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "missingPerms": [],
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsDrifted": 1,
+      "flowsDown": 0
+    },
+    {
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "actual": 0,
+          "name": "flow_docgen - Document Generation Engine",
+          "expected": 1
+        }
+      ],
+      "flowsActive": 10,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 10 active, 1 down",
+      "flowsDown": 1,
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "errors": [],
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 19:50:17"
+    },
+    {
+      "flowsDown": 0,
+      "flowIssues": [],
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 19:55:19",
+      "missingPerms": [],
+      "errors": [],
+      "flowsActive": 11,
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ]
+    },
+    {
+      "flowsActive": 11,
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "flowIssues": [],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 20:00:19",
+      "permissionsDrifted": 1,
+      "flowsDown": 0,
+      "permissionsOk": 32,
+      "errors": []
+    },
+    {
+      "flowsActive": 11,
+      "missingPerms": [],
+      "permissionsDrifted": 1,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "errors": [],
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 11 active, 0 down",
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 20:05:26",
+      "flowsDown": 0,
+      "flowIssues": []
+    },
+    {
+      "missingPerms": [],
+      "flowsActive": 10,
+      "timestamp": "2026-03-24 20:13:51",
+      "errors": [],
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "flowIssues": [
+        {
+          "expected": 1,
+          "name": "flow_docgen - Document Generation Engine",
+          "actual": 0
+        }
+      ],
+      "flowsDown": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 10 active, 1 down",
+      "permissionsOk": 32
+    },
+    {
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "flowIssues": [
+        {
+          "expected": 1,
+          "name": "flow_docgen - Document Generation Engine",
+          "actual": 0
+        }
+      ],
+      "flowsActive": 10,
+      "timestamp": "2026-03-24 20:15:17",
+      "errors": [],
+      "flowsDown": 1,
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 10 active, 1 down"
+    },
+    {
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "flowsActive": 5,
+      "flowIssues": [
+        {
+          "actual": 0,
+          "name": "flow_send_email",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_cert_upload",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_docgen - Document Generation Engine",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_template_validate - Template Upload Validation",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_cert_alert",
+          "expected": 1
+        }
+      ],
+      "timestamp": "2026-03-24 20:24:12",
+      "errors": [],
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 5 active, 6 down",
+      "missingPerms": [],
+      "flowsDown": 6
+    },
+    {
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "permissionsOk": 32,
+      "flowsDown": 7,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 4 active, 7 down",
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "errors": [],
+      "flowsActive": 4,
+      "flowIssues": [
+        {
+          "actual": 0,
+          "name": "flow_send_email",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_cert_upload",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_docgen - Document Generation Engine",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_template_validate - Template Upload Validation",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_cert_alert",
+          "expected": 1
+        },
+        {
+          "actual": 0,
+          "name": "flow_onboarding_init",
+          "expected": 1
+        }
+      ],
+      "missingPerms": [],
+      "timestamp": "2026-03-24 20:25:17"
+    },
+    {
+      "permissionsDrifted": 1,
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsActive": 0,
+      "missingPerms": [],
+      "errors": [],
+      "timestamp": "2026-03-24 20:30:18",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    },
+    {
+      "missingPerms": [],
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "permissionsOk": 32,
+      "flowsActive": 0,
+      "permissionsMissing": 0,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 20:35:21"
+    },
+    {
+      "errors": [],
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "timestamp": "2026-03-24 20:40:17",
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsOk": 32,
+      "missingPerms": [],
+      "flowsActive": 0,
+      "permissionsMissing": 0,
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ]
+    },
+    {
+      "permissionsOk": 32,
+      "errors": [],
+      "missingPerms": [],
+      "timestamp": "2026-03-24 20:45:19",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsDrifted": 1,
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowsActive": 0
+    },
+    {
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "errors": [],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "flowsActive": 0,
+      "timestamp": "2026-03-24 20:50:24",
+      "permissionsOk": 32,
+      "flowsDown": 11
+    },
+    {
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "flowsActive": 0,
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "permissionsOk": 32,
+      "errors": [],
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsDown": 11,
+      "timestamp": "2026-03-24 20:55:17"
+    },
+    {
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "errors": [],
+      "missingPerms": [],
+      "flowsDown": 11,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsActive": 0,
+      "timestamp": "2026-03-24 21:00:18",
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "permissionsOk": 32
+    },
+    {
+      "flowsActive": 0,
+      "errors": [],
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "missingPerms": [],
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 21:05:23",
+      "flowsDown": 11
+    },
+    {
+      "flowsActive": 0,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "permissionsDrifted": 1,
+      "timestamp": "2026-03-24 21:10:18",
+      "flowsDown": 11,
+      "permissionsMissing": 0
+    },
+    {
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "errors": [],
+      "flowsDown": 11,
+      "flowsActive": 0,
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 21:15:18"
+    },
+    {
+      "permissionsDrifted": 1,
+      "flowsActive": 0,
+      "flowsDown": 11,
+      "permissionsMissing": 0,
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "timestamp": "2026-03-24 21:20:18",
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "missingPerms": []
+    },
+    {
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsActive": 0,
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 21:25:17",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowsDown": 11,
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsMissing": 0,
+      "errors": [],
+      "permissionsDrifted": 1
+    },
+    {
+      "missingPerms": [],
+      "flowsDown": 11,
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 21:30:19",
+      "flowsActive": 0,
+      "errors": [],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ]
+    },
+    {
+      "permissionsMissing": 0,
+      "timestamp": "2026-03-24 21:35:18",
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsActive": 0,
+      "permissionsDrifted": 1,
+      "permissionsOk": 32,
+      "missingPerms": [],
+      "errors": [],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "flowsDown": 11,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    },
+    {
+      "timestamp": "2026-03-24 21:40:29",
+      "flowsDown": 11,
+      "missingPerms": [],
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "errors": [],
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsActive": 0
+    },
+    {
+      "permissionsDrifted": 1,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsOk": 32,
+      "flowsActive": 0,
+      "permissionsMissing": 0,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "timestamp": "2026-03-24 21:45:37",
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsDown": 11,
+      "missingPerms": []
+    },
+    {
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsActive": 0,
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "missingPerms": [],
+      "timestamp": "2026-03-24 21:52:28",
+      "flowsDown": 11,
+      "errors": [],
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsDrifted": 1
+    },
+    {
+      "flowsActive": 0,
+      "flowsDown": 11,
+      "errors": [],
+      "timestamp": "2026-03-24 21:55:42",
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "missingPerms": [],
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "permissionsOk": 32,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    },
+    {
+      "errors": [],
+      "flowsActive": 0,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "flowsDown": 11,
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsOk": 32,
+      "missingPerms": [],
+      "timestamp": "2026-03-24 22:00:19",
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ]
+    },
+    {
+      "flowsActive": 0,
+      "timestamp": "2026-03-24 22:05:26",
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "errors": [],
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsDown": 11,
+      "permissionsMissing": 0,
+      "permissionsOk": 32,
+      "missingPerms": []
+    },
+    {
+      "permissionsOk": 32,
+      "permissionsDrifted": 1,
+      "flowsActive": 0,
+      "errors": [],
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "missingPerms": [],
+      "timestamp": "2026-03-24 22:11:46",
+      "flowsDown": 11
+    },
+    {
+      "flowsActive": 0,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "flowsDown": 11,
+      "permissionsDrifted": 1,
+      "missingPerms": [],
+      "timestamp": "2026-03-24 22:15:18",
+      "permissionsOk": 32,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsMissing": 0
+    },
+    {
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "missingPerms": [],
+      "flowsDown": 11,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ]
+        }
+      ],
+      "permissionsOk": 32,
+      "flowsActive": 0,
+      "errors": [],
+      "timestamp": "2026-03-24 22:20:44",
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    },
+    {
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "permissionsOk": 32,
+      "flowsDown": 11,
+      "permissionsMissing": 0,
+      "flowsActive": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "errors": [],
+      "timestamp": "2026-03-24 22:25:18",
+      "missingPerms": [],
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-03-24 22:30:20",
+      "permissionsOk": 32,
+      "permissionsMissing": 0,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsDown": 11,
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "flowsActive": 0,
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "missingPerms": []
+    },
+    {
+      "errors": [],
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "timestamp": "2026-03-24 22:35:21",
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "missingPerms": [],
+      "permissionsOk": 32,
+      "flowsActive": 0,
+      "flowsDown": 11,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ]
+    },
+    {
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsOk": 32,
+      "timestamp": "2026-03-24 22:40:17",
+      "flowsDown": 11,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "missingPerms": [],
+      "permissionsMissing": 0,
+      "flowsActive": 0,
+      "permissionsDrifted": 1
+    },
+    {
+      "permissionsOk": 32,
+      "missingPerms": [],
+      "errors": [],
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowsActive": 0,
+      "permissionsDrifted": 1,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "timestamp": "2026-03-24 22:45:24",
+      "flowsDown": 11,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    },
+    {
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "permissionsDrifted": 1,
+      "errors": [],
+      "timestamp": "2026-03-24 22:50:18",
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "flowsDown": 11,
+      "missingPerms": [],
+      "flowsActive": 0,
+      "permissionsOk": 32,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ]
+    },
+    {
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "missingPerms": [],
+      "errors": [],
+      "drift": [
+        {
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance"
+        }
+      ],
+      "permissionsMissing": 0,
+      "flowsActive": 0,
+      "flowsDown": 11,
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "timestamp": "2026-03-24 22:55:23",
+      "permissionsOk": 32,
+      "permissionsDrifted": 1
+    },
+    {
+      "missingPerms": [],
+      "errors": [],
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "timestamp": "2026-03-24 23:00:18",
+      "permissionsOk": 32,
+      "flowsDown": 11,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsActive": 0,
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0
+    },
+    {
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "table": "dcfg_appliance",
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "missingPerms": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "timestamp": "2026-03-24 23:05:23",
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "permissionsOk": 32,
+      "errors": [],
+      "permissionsMissing": 0,
+      "flowsDown": 11,
+      "permissionsDrifted": 1,
+      "flowsActive": 0
+    },
+    {
+      "permissionsDrifted": 1,
+      "flowsDown": 11,
+      "permissionsMissing": 0,
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "permissionsOk": 32,
+      "errors": [],
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "flowsActive": 0,
+      "missingPerms": [],
+      "timestamp": "2026-03-24 23:10:17",
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ]
+    },
+    {
+      "flowIssues": [
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - SharePoint Write Cache"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - HTTP Bridge Query Active Portfolio"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Compute Metrics"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_send_email"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "DCFG - Error Reporter"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_upload"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_commit - Budget Commit on Signed/Received"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_docgen - Document Generation Engine"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_template_validate - Template Upload Validation"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_cert_alert"
+        },
+        {
+          "error": "Response status code does not indicate success: 404 (Not Found).",
+          "name": "flow_onboarding_init"
+        }
+      ],
+      "drift": [
+        {
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6",
+          "table": "dcfg_appliance"
+        }
+      ],
+      "missingPerms": [],
+      "errors": [],
+      "permissionsOk": 32,
+      "flowsActive": 0,
+      "permissionsDrifted": 1,
+      "permissionsMissing": 0,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down",
+      "timestamp": "2026-03-24 23:15:19",
+      "flowsDown": 11
+    },
+    {
+      "permissionsOk": 32,
+      "missingPerms": [],
+      "timestamp": "2026-03-24 23:20:18",
+      "errors": [],
+      "permissionsMissing": 0,
+      "flowsActive": 0,
+      "flowsDown": 11,
+      "drift": [
+        {
+          "table": "dcfg_appliance",
+          "issues": [
+            "EXTRA_ROLES: ec29325c-8516-4033-bdcb-16d653bb8261"
+          ],
+          "id": "74a5a272-fc20-f111-8341-7ced8d7092f6"
+        }
+      ],
+      "flowIssues": [
+        {
+          "name": "DCFG - SharePoint Write Cache",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - HTTP Bridge Query Active Portfolio",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Compute Metrics",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_send_email",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "DCFG - Error Reporter",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_upload",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_commit - Budget Commit on Signed/Received",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_docgen - Document Generation Engine",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_template_validate - Template Upload Validation",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_cert_alert",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        },
+        {
+          "name": "flow_onboarding_init",
+          "error": "Response status code does not indicate success: 404 (Not Found)."
+        }
+      ],
+      "permissionsDrifted": 1,
+      "summary": "Perms: 32 OK, 1 drifted, 0 missing | Flows: 0 active, 11 down"
+    }
+  ]
+}

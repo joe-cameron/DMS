@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "type": "company-brain-config",
+    "version": "1.0",
+    "description": "Root configuration for the DCFG Company Brain. Agent: read this first.",
+    "company": "Decades Construction & Facilities Group",
+    "created": "2026-03-15T00:00:00Z",
+    "last_modified": "2026-03-15T00:00:00Z"
+  },
+  "connected_systems": [
+    {
+      "id": "dataverse",
+      "name": "Dataverse - DCFGContractingSuite",
+      "url": "https://org0c17e98d.crm.dynamics.com"
+    },
+    {
+      "id": "sharepoint",
+      "name": "SharePoint - DCFG Site"
+    },
+    {
+      "id": "outlook",
+      "name": "Outlook / Exchange"
+    },
+    {
+      "id": "upkeep",
+      "name": "UpKeep (deferred - OI-06)"
+    },
+    {
+      "id": "accounting",
+      "name": "Accounting System (TBD)"
+    }
+  ],
+  "domains": [
+    "operations",
+    "sales",
+    "contracts",
+    "company",
+    "projects"
+  ],
+  "agent_rules": {
+    "path_format": "All lowercase, kebab-case, no spaces, forward slashes only.",
+    "id_format": "UUIDv4 for all entry IDs.",
+    "timestamp_format": "ISO 8601 UTC",
+    "update_protocol": "Read file, find entry by ID, update in place, write full file back.",
+    "never_delete": "Set status to archived. Never remove entries.",
+    "attribution": "Every entry must have created_by and last_modified_by.",
+    "cross_reference": "Include dataverse_ref with entity_set and record_id when entry relates to a Dataverse record."
+  }
+}
