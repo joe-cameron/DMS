@@ -67,7 +67,25 @@
 
 Creates the two new Dataverse tables, option sets, site settings, and table permissions in DCFGSystems-Test. Verified via direct Dataverse query. No SPA code yet.
 
-### Task 1.1: Pin OptionSet integer codes
+### Task 1.0: Verify database bible preconditions
+
+**Files:** none (read-only verification)
+
+- [ ] **Step 1: Confirm `dcfg_intake_session` exists and has `dcfg_intake_sessionid` as PK**
+
+```bash
+pwsh -Command "Invoke-RestMethod -Uri '$env:ORG_URL/api/data/v9.2/EntityDefinitions(LogicalName=''dcfg_intake_session'')?\$select=LogicalName,PrimaryIdAttribute,PrimaryNameAttribute' -Headers @{Authorization=\"Bearer \$env:TOKEN\"}"
+```
+Expected: `PrimaryIdAttribute = dcfg_intake_sessionid`. Abort plan and file an issue if the schema has drifted.
+
+- [ ] **Step 2: Confirm `dcfg_audit_logs` has `dcfg_action`, `dcfg_context`, and `dcfg_actor` columns (used by feedback submit in Task 6.3)**
+
+```bash
+pwsh -Command "Invoke-RestMethod -Uri '$env:ORG_URL/api/data/v9.2/EntityDefinitions(LogicalName=''dcfg_audit_logs'')/Attributes?\$select=LogicalName&\$filter=LogicalName eq ''dcfg_action'' or LogicalName eq ''dcfg_context'' or LogicalName eq ''dcfg_actor''' -Headers @{Authorization=\"Bearer \$env:TOKEN\"}"
+```
+Expected: three rows. If any column is missing, replace `submitFeedback()` in Task 6.3 with the actual column names the bible shows.
+
+### Task 1.1: Pin OptionSet integer codes and spreadsheet template source
 
 **Files:**
 - Modify: `docs/superpowers/specs/2026-04-11-onboarding-concierge-vendor-dates-docs-design.md` (inline note only)
@@ -90,6 +108,12 @@ dcfg_intake_delegation.dcfg_card_scope:
   100000002 = Locations
   100000003 = Documents
   100000004 = All
+
+Spreadsheet template origin:
+  The reusable generator script at scripts/concierge/gen-fixture-sheets.mjs
+  (created in Task 4.2) also emits the production template to
+  spa/dcfg-property-intake/public/templates/decades-vendor-intake.xlsx.
+  One generator, three fixtures + one production template.
 ```
 
 - [ ] **Step 2: Commit**
@@ -115,78 +139,142 @@ Expected output: `Connected to...` with `org0c17e98d.crm.dynamics.com`. If not i
 
 - [ ] **Step 2: Write the PowerShell script**
 
-```powershell
-# Create-IntakeDateTable.ps1 — creates dcfg_intake_date in DCFGSystemTest
-# Load the database bible approach: create table, primary name, columns, lookup, optionset
+The bearer token is obtained via `pac auth create-token --resource` — no hardcoded credentials. This pattern is already used by `scripts/concierge/Create-IntakeTables.ps1` from the 2026-03-26 plan; reuse the same helper.
 
+```powershell
+# scripts/concierge/Create-IntakeDateTable.ps1
 $ErrorActionPreference = 'Stop'
-$tokenResp = pac auth list --output json | ConvertFrom-Json
-$token = (pac org who --output json | ConvertFrom-Json).token  # TODO: use pac command to get bearer token
 $orgUrl = 'https://org0c17e98d.crm.dynamics.com'
 $solution = 'DCFGSystemTest'
+
+# Bearer token via pac (already authed to Test on index [1])
+$token = (pac auth create-token --resource $orgUrl --output json | ConvertFrom-Json).AccessToken
+if (-not $token) { throw 'Failed to obtain bearer token via pac auth create-token' }
+
 $headers = @{
-  'Authorization'           = "Bearer $token"
-  'Content-Type'            = 'application/json'
-  'OData-MaxVersion'        = '4.0'
-  'OData-Version'           = '4.0'
-  'Accept'                  = 'application/json'
+  'Authorization'            = "Bearer $token"
+  'Content-Type'             = 'application/json'
+  'OData-MaxVersion'         = '4.0'
+  'OData-Version'            = '4.0'
+  'Accept'                   = 'application/json'
   'MSCRM.SolutionUniqueName' = $solution
 }
 
-# 1. Create the table with primary name column
+# 1. Create the table with primary name column (dcfg_name)
 $tableBody = @{
-  '@odata.type'        = 'Microsoft.Dynamics.CRM.EntityMetadata'
-  SchemaName           = 'dcfg_intake_date'
-  DisplayName          = @{ LocalizedLabels = @(@{ Label = 'Intake Date'; LanguageCode = 1033 }) }
-  DisplayCollectionName= @{ LocalizedLabels = @(@{ Label = 'Intake Dates'; LanguageCode = 1033 }) }
-  Description          = @{ LocalizedLabels = @(@{ Label = 'Customer-entered important date from onboarding concierge'; LanguageCode = 1033 }) }
-  HasActivities        = $false
-  HasNotes             = $true   # enable annotations for file attachments
-  OwnershipType        = 'UserOwned'
-  PrimaryNameAttribute = 'dcfg_name'
-  Attributes           = @(
+  '@odata.type'         = '#Microsoft.Dynamics.CRM.EntityMetadata'
+  SchemaName            = 'dcfg_intake_date'
+  DisplayName           = @{ LocalizedLabels = @(@{ Label = 'Intake Date'; LanguageCode = 1033 }) }
+  DisplayCollectionName = @{ LocalizedLabels = @(@{ Label = 'Intake Dates'; LanguageCode = 1033 }) }
+  Description           = @{ LocalizedLabels = @(@{ Label = 'Customer-entered important date from onboarding concierge'; LanguageCode = 1033 }) }
+  HasActivities         = $false
+  HasNotes              = $true   # enables annotations for file attachments
+  OwnershipType         = 'UserOwned'
+  PrimaryNameAttribute  = 'dcfg_name'
+  Attributes            = @(
     @{
-      '@odata.type' = 'Microsoft.Dynamics.CRM.StringAttributeMetadata'
-      SchemaName    = 'dcfg_name'
-      DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Label'; LanguageCode = 1033 }) }
-      RequiredLevel = @{ Value = 'ApplicationRequired' }
-      MaxLength     = 200
-      FormatName    = @{ Value = 'Text' }
-      IsPrimaryName = $true
+      '@odata.type'  = '#Microsoft.Dynamics.CRM.StringAttributeMetadata'
+      SchemaName     = 'dcfg_name'
+      DisplayName    = @{ LocalizedLabels = @(@{ Label = 'Label'; LanguageCode = 1033 }) }
+      RequiredLevel  = @{ Value = 'ApplicationRequired' }
+      MaxLength      = 200
+      FormatName     = @{ Value = 'Text' }
+      IsPrimaryName  = $true
     }
   )
-} | ConvertTo-Json -Depth 20
-
+} | ConvertTo-Json -Depth 20 -Compress
 Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/EntityDefinitions" -Method POST -Headers $headers -Body $tableBody
-Write-Host 'Table created. Waiting 10s for metadata cache...' ; Start-Sleep 10
+Write-Host 'Table created. Waiting 10s for metadata cache...'; Start-Sleep 10
 
 # 2. Add lookup to dcfg_intake_session (one-to-many relationship)
 $lookupBody = @{
-  '@odata.type'           = 'Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata'
-  SchemaName              = 'dcfg_intake_session_dcfg_intake_date'
-  ReferencedEntity        = 'dcfg_intake_session'
-  ReferencingEntity       = 'dcfg_intake_date'
-  ReferencingAttribute    = 'dcfg_sessionid'
+  '@odata.type'               = '#Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata'
+  SchemaName                  = 'dcfg_dcfg_intake_session_dcfg_intake_date'
+  ReferencedEntity            = 'dcfg_intake_session'
+  ReferencingEntity           = 'dcfg_intake_date'
   Lookup = @{
-    '@odata.type' = 'Microsoft.Dynamics.CRM.LookupAttributeMetadata'
+    '@odata.type' = '#Microsoft.Dynamics.CRM.LookupAttributeMetadata'
     SchemaName    = 'dcfg_sessionid'
     DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Session'; LanguageCode = 1033 }) }
     RequiredLevel = @{ Value = 'ApplicationRequired' }
   }
   AssociatedMenuConfiguration = @{ Behavior='UseCollectionName'; Group='Details'; Order=10000 }
-  CascadeConfiguration        = @{ Assign='NoCascade'; Delete='RemoveLink'; Merge='NoCascade'; Reparent='NoCascade'; Share='NoCascade'; Unshare='NoCascade' }
-} | ConvertTo-Json -Depth 20
-
+  CascadeConfiguration        = @{ Assign='NoCascade'; Delete='Cascade'; Merge='NoCascade'; Reparent='NoCascade'; Share='NoCascade'; Unshare='NoCascade' }
+} | ConvertTo-Json -Depth 20 -Compress
 Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/RelationshipDefinitions" -Method POST -Headers $headers -Body $lookupBody
 Start-Sleep 5
 
-# 3. Add remaining columns: due_date (DateOnly), category (OptionSet), notes (Memo), location_ref (String), active_flag (Boolean)
-# ... (one Invoke-RestMethod per column, see full script)
+function Add-Column($body) {
+  Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/EntityDefinitions(LogicalName='dcfg_intake_date')/Attributes" -Method POST -Headers $headers -Body ($body | ConvertTo-Json -Depth 20 -Compress)
+  Start-Sleep 2
+}
 
-Write-Host 'dcfg_intake_date created in DCFGSystemTest'
+# 3. dcfg_due_date — DateTime with DateOnly format
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata'
+  SchemaName    = 'dcfg_due_date'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Due Date'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  Format        = 'DateOnly'
+  DateTimeBehavior = @{ Value = 'DateOnly' }
+}
+
+# 4. dcfg_category — Picklist with pinned option codes from Task 1.1
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.PicklistAttributeMetadata'
+  SchemaName    = 'dcfg_category'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Category'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  OptionSet     = @{
+    '@odata.type' = '#Microsoft.Dynamics.CRM.OptionSetMetadata'
+    IsGlobal      = $false
+    OptionSetType = 'Picklist'
+    Options       = @(
+      @{ Value = 100000000; Label = @{ LocalizedLabels = @(@{ Label = 'Inspection';           LanguageCode = 1033 }) } },
+      @{ Value = 100000001; Label = @{ LocalizedLabels = @(@{ Label = 'Cert Expiration';      LanguageCode = 1033 }) } },
+      @{ Value = 100000002; Label = @{ LocalizedLabels = @(@{ Label = 'Contract Anniversary'; LanguageCode = 1033 }) } },
+      @{ Value = 100000003; Label = @{ LocalizedLabels = @(@{ Label = 'Insurance';            LanguageCode = 1033 }) } },
+      @{ Value = 100000004; Label = @{ LocalizedLabels = @(@{ Label = 'Other';                LanguageCode = 1033 }) } }
+    )
+  }
+}
+
+# 5. dcfg_notes — Memo 1000
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.MemoAttributeMetadata'
+  SchemaName    = 'dcfg_notes'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Notes'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  MaxLength     = 1000
+  Format        = 'TextArea'
+}
+
+# 6. dcfg_location_ref — String 100
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.StringAttributeMetadata'
+  SchemaName    = 'dcfg_location_ref'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Location Reference'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  MaxLength     = 100
+  FormatName    = @{ Value = 'Text' }
+}
+
+# 7. dcfg_active_flag — Boolean, default true
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.BooleanAttributeMetadata'
+  SchemaName    = 'dcfg_active_flag'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Active'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  DefaultValue  = $true
+  OptionSet     = @{
+    '@odata.type'  = '#Microsoft.Dynamics.CRM.BooleanOptionSetMetadata'
+    TrueOption     = @{ Value = 1; Label = @{ LocalizedLabels = @(@{ Label = 'Active';  LanguageCode = 1033 }) } }
+    FalseOption    = @{ Value = 0; Label = @{ LocalizedLabels = @(@{ Label = 'Retired'; LanguageCode = 1033 }) } }
+  }
+}
+
+Write-Host 'dcfg_intake_date created in DCFGSystemTest with all columns.'
 ```
-
-**NOTE:** Full script includes each column. Implementation writes the complete script — this is the structure template. Use the `dcfg_customer_vendor` creation script from the Contract Composer work (`scripts/` git history around 2026-04-11) as a reference for syntax — especially for getting the bearer token via `pac` without hardcoding.
 
 - [ ] **Step 3: Run the script**
 
@@ -219,19 +307,93 @@ git commit -m "schema: create dcfg_intake_date table in Test"
 
 - [ ] **Step 1: Write the script**
 
-Same structure as Task 1.2 but for `dcfg_intake_delegation`. Columns:
+Same token + header bootstrap as Task 1.2. Entity body uses `HasNotes = $false` (no file attachments on delegations) and `PrimaryNameAttribute = 'dcfg_name'`. After entity creation, add the lookup to `dcfg_intake_session` using the same relationship pattern as Task 1.2 (schema name `dcfg_dcfg_intake_session_dcfg_intake_delegation`). Then call the `Add-Column` helper for each remaining column:
 
-- `dcfg_name` String(200), primary name, required
-- `dcfg_sessionid` Lookup → `dcfg_intake_session`, required
-- `dcfg_delegate_email` String(200), Email format
-- `dcfg_sender_name` String(200)
-- `dcfg_sender_email` String(200), Email format
-- `dcfg_card_scope` OptionSet (codes per Task 1.1)
-- `dcfg_personal_note` Memo(1000)
-- `dcfg_sent_at` DateTime (DateAndTime)
-- `dcfg_active_flag` Boolean (default true)
+```powershell
+# dcfg_delegate_email — String 200, Email format
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.StringAttributeMetadata'
+  SchemaName    = 'dcfg_delegate_email'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Delegate Email'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'ApplicationRequired' }
+  MaxLength     = 200
+  FormatName    = @{ Value = 'Email' }
+}
 
-`HasNotes = false` (no file attachments on delegations).
+# dcfg_sender_name — String 200
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.StringAttributeMetadata'
+  SchemaName    = 'dcfg_sender_name'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Sender Name'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'ApplicationRequired' }
+  MaxLength     = 200
+  FormatName    = @{ Value = 'Text' }
+}
+
+# dcfg_sender_email — String 200, Email format
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.StringAttributeMetadata'
+  SchemaName    = 'dcfg_sender_email'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Sender Email'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'ApplicationRequired' }
+  MaxLength     = 200
+  FormatName    = @{ Value = 'Email' }
+}
+
+# dcfg_card_scope — Picklist with pinned option codes from Task 1.1
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.PicklistAttributeMetadata'
+  SchemaName    = 'dcfg_card_scope'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Card Scope'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  OptionSet     = @{
+    '@odata.type' = '#Microsoft.Dynamics.CRM.OptionSetMetadata'
+    IsGlobal      = $false
+    OptionSetType = 'Picklist'
+    Options       = @(
+      @{ Value = 100000000; Label = @{ LocalizedLabels = @(@{ Label = 'Vendors';   LanguageCode = 1033 }) } },
+      @{ Value = 100000001; Label = @{ LocalizedLabels = @(@{ Label = 'Dates';     LanguageCode = 1033 }) } },
+      @{ Value = 100000002; Label = @{ LocalizedLabels = @(@{ Label = 'Locations'; LanguageCode = 1033 }) } },
+      @{ Value = 100000003; Label = @{ LocalizedLabels = @(@{ Label = 'Documents'; LanguageCode = 1033 }) } },
+      @{ Value = 100000004; Label = @{ LocalizedLabels = @(@{ Label = 'All';       LanguageCode = 1033 }) } }
+    )
+  }
+}
+
+# dcfg_personal_note — Memo 1000
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.MemoAttributeMetadata'
+  SchemaName    = 'dcfg_personal_note'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Personal Note'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  MaxLength     = 1000
+  Format        = 'TextArea'
+}
+
+# dcfg_sent_at — DateTime (DateAndTime)
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.DateTimeAttributeMetadata'
+  SchemaName    = 'dcfg_sent_at'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Sent At'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  Format        = 'DateAndTime'
+  DateTimeBehavior = @{ Value = 'UserLocal' }
+}
+
+# dcfg_active_flag — Boolean, default true (same pattern as Task 1.2)
+Add-Column @{
+  '@odata.type' = '#Microsoft.Dynamics.CRM.BooleanAttributeMetadata'
+  SchemaName    = 'dcfg_active_flag'
+  DisplayName   = @{ LocalizedLabels = @(@{ Label = 'Active'; LanguageCode = 1033 }) }
+  RequiredLevel = @{ Value = 'None' }
+  DefaultValue  = $true
+  OptionSet     = @{
+    '@odata.type' = '#Microsoft.Dynamics.CRM.BooleanOptionSetMetadata'
+    TrueOption    = @{ Value = 1; Label = @{ LocalizedLabels = @(@{ Label = 'Active';  LanguageCode = 1033 }) } }
+    FalseOption   = @{ Value = 0; Label = @{ LocalizedLabels = @(@{ Label = 'Retired'; LanguageCode = 1033 }) } }
+  }
+}
+```
 
 - [ ] **Step 2: Run it**
 
@@ -239,13 +401,26 @@ Same structure as Task 1.2 but for `dcfg_intake_delegation`. Columns:
 pwsh -File scripts/concierge/Create-IntakeDelegationTable.ps1
 ```
 
-- [ ] **Step 3: Verify via direct query**
+- [ ] **Step 3: Verify entity was created**
 
 ```powershell
-Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/EntityDefinitions(LogicalName='dcfg_intake_delegation')?`$select=LogicalName,PrimaryNameAttribute" -Headers $h
+Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/EntityDefinitions(LogicalName='dcfg_intake_delegation')?`$select=LogicalName,PrimaryNameAttribute,HasNotes" -Headers $headers
+```
+Expected: `PrimaryNameAttribute = dcfg_name`, `HasNotes = false`.
+
+- [ ] **Step 4: Verify OptionSet codes match the Task 1.1 pin**
+
+```powershell
+$opts = Invoke-RestMethod -Uri "$orgUrl/api/data/v9.2/EntityDefinitions(LogicalName='dcfg_intake_delegation')/Attributes(LogicalName='dcfg_card_scope')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?`$expand=OptionSet" -Headers $headers
+$codes = $opts.OptionSet.Options | ForEach-Object { $_.Value }
+$expected = @(100000000,100000001,100000002,100000003,100000004)
+if (Compare-Object $codes $expected) { throw 'dcfg_card_scope OptionSet codes do not match Task 1.1 pin' }
+Write-Host 'OptionSet codes verified against Task 1.1 pin.'
 ```
 
-- [ ] **Step 4: Commit**
+Repeat the same verification for `dcfg_intake_date.dcfg_category`.
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add scripts/concierge/Create-IntakeDelegationTable.ps1
@@ -306,13 +481,30 @@ Expected: Both tables linked to the anonymous intake web role.
 
 Visit `https://decadeswelcomesyou.powerappsportals.com/_services/about` → Clear Cache button. Record the timestamp in a terminal comment.
 
-- [ ] **Step 6: Smoke test via unauth fetch**
+- [ ] **Step 6a: Smoke GET via unauth fetch**
 
 ```bash
 pwsh -Command "Invoke-RestMethod -Uri 'https://decadeswelcomesyou.powerappsportals.com/_api/dcfg_intake_dates?`$select=dcfg_name&`$top=1' -Method GET"
 ```
-
 Expected: 200 with empty value array (no rows yet). **401 or 403 means permissions not wired** — re-run Task 1.4 steps 2–3.
+
+- [ ] **Step 6b: Smoke POST via unauth fetch (Create permission probe)**
+
+Because an empty-table GET passes even with read-only perms, probe Create by POSTing a throwaway row against an existing session ID, then soft-delete it immediately. This requires the portal's `__RequestVerificationToken` — run this from an open browser session on the portal (devtools console) rather than server-side pwsh:
+
+```js
+// Run in browser devtools after opening the portal with a valid access code
+const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+const sid   = '<paste a known dcfg_intake_sessionid GUID here>';
+const r = await fetch('/_api/dcfg_intake_dates', {
+  method: 'POST',
+  headers: { 'Content-Type':'application/json', 'Accept':'application/json', '__RequestVerificationToken': token },
+  credentials: 'same-origin',
+  body: JSON.stringify({ dcfg_name:'probe', dcfg_active_flag:true, 'dcfg_sessionid@odata.bind': `/dcfg_intake_sessions(${sid})` }),
+});
+console.log(r.status); // expect 204 (success)
+```
+Then PATCH the row `dcfg_active_flag=false` to clean up. Expected: 204 on POST, 204 on PATCH. A 403 on POST means Create permission is missing.
 
 - [ ] **Step 7: Commit**
 
@@ -749,9 +941,22 @@ git commit -m "spa: HomeDashboard 4-card landing component"
 
 **Files:**
 - Modify: `spa/dcfg-property-intake/src/App.jsx`
+- Create: `spa/dcfg-property-intake/src/ConciergeHeader.jsx`
+- Create: `scratch/app-before-dashboard-refactor.jsx` (snapshot for Task 6.1)
 - Delete: `spa/dcfg-property-intake/src/AuthorizedUsers.jsx`
 
-- [ ] **Step 1: Remove the `TABS` array and tab state**
+**File size note:** `App.jsx` is already large and after this refactor will add hash routing, modal state, dates/delegations loading, and screen switching. Split `ConciergeHeader` out to its own file (below) to keep `App.jsx` reviewable. If `App.jsx` still exceeds ~600 lines after the refactor, factor additional pieces (e.g. the session-load useEffect) into a hook in a follow-up — out of scope for this task.
+
+- [ ] **Step 1: Snapshot pre-refactor `App.jsx` for Task 6.1 reuse**
+
+```bash
+mkdir -p scratch
+git show HEAD:spa/dcfg-property-intake/src/App.jsx > scratch/app-before-dashboard-refactor.jsx
+```
+
+Task 6.1 copies the mobile/desktop location list/detail rendering from this snapshot into `LocationsScreen.jsx`.
+
+- [ ] **Step 2: Remove the `TABS` array and tab state**
 
 Delete the `const [tab, setTab] = useState('locations');` line and the `TABS` const.
 
@@ -775,7 +980,7 @@ Remove:
 import AuthorizedUsers from './AuthorizedUsers.jsx';
 ```
 
-- [ ] **Step 3: Add route state + delegation/feedback modal state**
+- [ ] **Step 3: Renumber this step** — now labelled Step 3 relative to the snapshot step above. Add route state + delegation/feedback modal state:
 
 ```jsx
 const { path, navigate } = useHashRoute();
@@ -784,9 +989,38 @@ const [delegateScope, setDelegateScope] = useState(null); // null = global
 const [feedbackOpen, setFeedbackOpen] = useState(false);
 ```
 
-- [ ] **Step 4: Extend session-load to include dates + delegations**
+- [ ] **Step 4: Extend session-load to parallel-load dates and delegations**
 
-In `handleLogin`, where properties and vendors are loaded, parallel-load dates and delegations and add them to the data object.
+In `handleLogin`, replace the sequential `loadProperties`/`loadVendors`/`loadAuthUsers` calls with a `Promise.all` block:
+
+```jsx
+const [props, vendors, dates, delegations] = await Promise.all([
+  loadProperties(session.dcfg_intake_sessionid),
+  loadVendors(session.dcfg_intake_sessionid),
+  loadDates(session.dcfg_intake_sessionid),
+  loadDelegations(session.dcfg_intake_sessionid),
+]);
+if (props) {
+  const formProps = props.map(dataverseToForm);
+  setCode(upper);
+  setProviderName(session.dcfg_provider_name);
+  setData({
+    properties:   formProps,
+    vendors:      vendors || [],
+    dates:        dates || [],
+    delegations:  delegations || [],
+    expiresAt:    session.dcfg_expires_at,
+    lastModified: new Date().toISOString(),
+    _sessionId:   session.dcfg_intake_sessionid,
+    _source:      'dataverse',
+    documents:    [],
+  });
+  setShowWelcome(true);
+  return;
+}
+```
+
+The old `loadAuthUsers` call is dropped — `AuthorizedUsers.jsx` is retired.
 
 - [ ] **Step 5: Replace the tab shell JSX with route-driven JSX**
 
@@ -869,17 +1103,70 @@ git rm spa/dcfg-property-intake/src/AuthorizedUsers.jsx
 git commit -m "spa: swap tab shell for hash-routed 4-card dashboard (stubbed screens)"
 ```
 
-### Task 3.5: `ConciergeHeader` component (inline in App.jsx or separate)
+### Task 3.5: `ConciergeHeader.jsx` — dedicated file
 
-Either define `ConciergeHeader` as a local component at the bottom of `App.jsx` or as `src/ConciergeHeader.jsx`. Prefer separate file if App.jsx is already large.
+**Files:**
+- Create: `spa/dcfg-property-intake/src/ConciergeHeader.jsx`
 
-Responsibilities:
-- Left: customer name + back-to-home button (conditional on `showBack`)
-- Right: `💬 Give Feedback` button + `📧 Invite Helpers` button
-- Props: `providerName`, `onHome`, `onGlobalDelegate`, `onFeedback`, `showBack`
-- No state of its own
+- [ ] **Step 1: Write the component**
 
-- [ ] Ship it in the same commit as Task 3.4 or as a separate task depending on file size
+```jsx
+import React, { useState } from 'react';
+import { T } from './tokens.js';
+
+export default function ConciergeHeader({ providerName, onHome, onGlobalDelegate, onFeedback, showBack, delegations = [], onRevoke }) {
+  const [helpersOpen, setHelpersOpen] = useState(false);
+  const activeDelegations = (delegations || []).filter(d => d.dcfg_active_flag !== false);
+
+  return (
+    <div style={{ background: T.blue, color: 'white', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
+      {showBack && (
+        <button data-testid="header-back" onClick={onHome} style={backBtn}>← Home</button>
+      )}
+      <div>
+        <div style={{ fontSize: 15, fontWeight: 700 }}>{providerName}</div>
+        <div style={{ fontSize: 11, opacity: 0.7 }}>Onboarding Concierge</div>
+      </div>
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, position: 'relative' }}>
+        <button data-testid="header-feedback" onClick={onFeedback} style={pill}>💬 Give Feedback</button>
+        <button data-testid="header-invite" onClick={() => { onGlobalDelegate(); }} style={pill}>📧 Invite Helpers</button>
+        {activeDelegations.length > 0 && (
+          <button data-testid="header-helpers-toggle" onClick={() => setHelpersOpen(!helpersOpen)} style={pill}>
+            {activeDelegations.length} helper{activeDelegations.length === 1 ? '' : 's'}
+          </button>
+        )}
+        {helpersOpen && (
+          <div data-testid="helpers-dropdown" style={dropdown}>
+            {activeDelegations.map(d => (
+              <div key={d.dcfg_intake_delegationid} style={helperRow}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: T.blue }}>{d.dcfg_name}</div>
+                  <div style={{ fontSize: 11, color: T.textLight }}>{d.dcfg_delegate_email}</div>
+                </div>
+                <button data-testid={`revoke-${d.dcfg_intake_delegationid}`} onClick={() => onRevoke(d.dcfg_intake_delegationid)} style={{ background: 'none', border: 'none', color: T.red, fontSize: 11, cursor: 'pointer' }}>Revoke</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const pill      = { background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: 'white', padding: '6px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer' };
+const backBtn   = { background: 'none', border: 'none', color: 'white', fontSize: 13, cursor: 'pointer', padding: 0, marginRight: 6 };
+const dropdown  = { position: 'absolute', top: 40, right: 0, background: 'white', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', borderRadius: 8, width: 280, maxHeight: 320, overflow: 'auto', zIndex: 50 };
+const helperRow = { display: 'flex', alignItems: 'center', padding: '10px 14px', borderBottom: '1px solid #f1f5f9' };
+```
+
+The component takes `delegations` and `onRevoke` props so the header owns the "Invited helpers" dropdown — there's no separate revoke UI task. Wire `onRevoke` in `App.jsx` to call `softDeleteDelegation(id)` from `intakeApi.js` and update local state.
+
+- [ ] **Step 2: Commit in same commit as Task 3.4**
+
+```bash
+git add spa/dcfg-property-intake/src/ConciergeHeader.jsx
+git commit -m "spa: ConciergeHeader with feedback, invite helpers, revoke dropdown"
+```
 
 ### Chunk 3 complete
 
@@ -1024,12 +1311,13 @@ git commit -m "spa: DatesScreen with file attachment per row"
 - Create: `spa/dcfg-property-intake/test/vendorSpreadsheetParser.test.js`
 - Create fixtures: `test/fixtures/vendor-template-happy.xlsx`, `test/fixtures/vendor-template-bad-headers.xlsx`, `test/fixtures/vendor-template-bad-rows.xlsx`
 
-- [ ] **Step 1: Install `xlsx`**
+- [ ] **Step 1: Install `xlsx` with exact version pin**
 
 ```bash
 cd spa/dcfg-property-intake
-npm install xlsx@^0.20.1
+npm install --save-exact xlsx@0.20.1
 ```
+Exact pin (no caret) — matches spec intent.
 
 - [ ] **Step 2: Generate fixture files**
 
@@ -1070,6 +1358,15 @@ XLSX.utils.book_append_sheet(bad2, XLSX.utils.aoa_to_sheet([
   ['OK Co', 'HVAC', 'Pat', '555', 'p@x.com', '', '', ''], // ok
 ]), 'Vendors');
 XLSX.writeFile(bad2, `${outDir}/vendor-template-bad-rows.xlsx`);
+
+// Production template — headers only, no data rows — the file users download
+const templateDir = 'spa/dcfg-property-intake/public/templates';
+mkdirSync(templateDir, { recursive: true });
+const tpl = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(tpl, XLSX.utils.aoa_to_sheet([
+  ['Vendor Name','Trade','Contact Name','Contact Phone','Contact Email','Contract Start','Contract End','Notes'],
+]), 'Vendors');
+XLSX.writeFile(tpl, `${templateDir}/decades-vendor-intake.xlsx`);
 ```
 
 Run: `node scripts/concierge/gen-fixture-sheets.mjs`
@@ -1106,10 +1403,17 @@ describe('parseVendorWorkbook', () => {
     expect(result.rows.filter(r => r.status === 'ok')).toHaveLength(1);
   });
 
-  it('enforces the 500-row cap after parse', () => {
-    // Build a synthetic sheet in-memory
-    // ... use xlsx to create 501 rows and convert to ArrayBuffer
-    // Expect result.error to match /too large/i
+  it('enforces the 500-row cap after parse', async () => {
+    const XLSX = await import('xlsx');
+    const headers = ['Vendor Name','Trade','Contact Name','Contact Phone','Contact Email','Contract Start','Contract End','Notes'];
+    const rows = [headers];
+    for (let i = 0; i < 501; i++) rows.push([`Vendor ${i}`, 'HVAC', '', '', '', '', '', '']);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'Vendors');
+    const buf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+    const result = parseVendorWorkbook(new Uint8Array(buf));
+    expect(result.error).toMatch(/too large/i);
+    expect(result.rows).toHaveLength(0);
   });
 });
 ```
@@ -1199,22 +1503,159 @@ git commit -m "spa: xlsx parser for vendor intake spreadsheet + tests"
 
 - [ ] **Step 1: Write the component**
 
-Component responsibilities:
-- File picker (restricted to `.xlsx,.xls`)
-- On file select: read as ArrayBuffer → `parseVendorWorkbook()`
-- If `error`: show error banner with message, re-template link
-- Else: render preview table (rowNum / name / trade / status badge / errors / warnings / select checkbox)
-- Bulk actions: Select all / Deselect all / Select only OK
-- Commit button: for each checked row, call `createVendor(sessionId, vendorObj)` sequentially; show progress ("Adding 12 of 22…"); on failure mark row as Retry
-- Close button: resets state
+```jsx
+import React, { useState } from 'react';
+import { T } from './tokens.js';
+import { parseVendorWorkbook } from './vendorSpreadsheetParser.js';
+import { createVendor, USE_DATAVERSE } from './intakeApi.js';
 
-Keep the component under ~250 lines. If it creeps past that, split preview table into a sub-component.
+export default function VendorSpreadsheetModal({ sessionId, onClose, onCommitted }) {
+  const [rows, setRows] = useState([]);
+  const [error, setError] = useState('');
+  const [selected, setSelected] = useState({}); // rowNum -> bool
+  const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(null); // { done, total }
+  const [retry, setRetry] = useState({}); // rowNum -> true if committed, failed
+
+  const onFile = async (file) => {
+    if (!file) return;
+    setError(''); setRows([]); setSelected({}); setRetry({});
+    const buf = await file.arrayBuffer();
+    const result = parseVendorWorkbook(new Uint8Array(buf));
+    if (result.error) { setError(result.error); return; }
+    setRows(result.rows);
+    const preselect = {};
+    for (const r of result.rows) if (r.status !== 'error') preselect[r.rowNum] = true;
+    setSelected(preselect);
+  };
+
+  const selectAll    = () => setSelected(Object.fromEntries(rows.filter(r => r.status !== 'error').map(r => [r.rowNum, true])));
+  const selectOkOnly = () => setSelected(Object.fromEntries(rows.filter(r => r.status === 'ok').map(r => [r.rowNum, true])));
+  const deselectAll  = () => setSelected({});
+
+  const commit = async () => {
+    const toAdd = rows.filter(r => selected[r.rowNum] && r.status !== 'error');
+    if (toAdd.length === 0) return;
+    setBusy(true);
+    setProgress({ done: 0, total: toAdd.length });
+    const committed = [];
+    const failed = { ...retry };
+    for (let i = 0; i < toAdd.length; i++) {
+      const r = toAdd[i];
+      const vendor = {
+        id: crypto.randomUUID(),
+        vendorName:    r.vendorName,
+        serviceProvided: r.trade,
+        contactName:   r.contactName,
+        contactPhone:  r.contactPhone,
+        contactEmail:  r.contactEmail,
+        contractStart: r.contractStart,
+        contractEnd:   r.contractEnd,
+        requiresReBid: '',
+      };
+      let ok = true;
+      if (USE_DATAVERSE && sessionId) {
+        const created = await createVendor(sessionId, vendor);
+        ok = !!created;
+      }
+      if (ok) committed.push(vendor);
+      else    failed[r.rowNum] = true;
+      setProgress({ done: i + 1, total: toAdd.length });
+    }
+    setRetry(failed);
+    setBusy(false);
+    if (committed.length > 0) onCommitted(committed);
+    if (Object.keys(failed).length === 0) onClose();
+  };
+
+  return (
+    <div role="dialog" aria-modal="true" style={backdrop} onClick={onClose}>
+      <div data-testid="spreadsheet-modal" style={modal} onClick={e => e.stopPropagation()}>
+        <h3 style={{ fontFamily: T.fDisplay, color: T.blue, margin: '0 0 4px' }}>Upload a vendor spreadsheet</h3>
+        <p style={{ color: T.textLight, fontSize: 13, margin: '0 0 14px' }}>Use the Decades template. Extra columns are ignored. Max 500 rows per file.</p>
+
+        {rows.length === 0 && !error && (
+          <label data-testid="file-picker" style={dropzone}>
+            <input type="file" accept=".xlsx,.xls" onChange={e => onFile(e.target.files[0])} style={{ display: 'none' }} />
+            Click to choose an .xlsx file
+          </label>
+        )}
+        {error && (
+          <div data-testid="parse-error" style={errorBox}>
+            <div style={{ color: T.red, fontSize: 13 }}>{error}</div>
+            <a href="/templates/decades-vendor-intake.xlsx" download style={{ color: T.blue, fontSize: 12, marginTop: 8, display: 'inline-block' }}>Download template</a>
+          </div>
+        )}
+
+        {rows.length > 0 && (
+          <>
+            <div style={{ display: 'flex', gap: 8, margin: '10px 0', fontSize: 12 }}>
+              <span>Found {rows.length}. OK: {rows.filter(r => r.status==='ok').length} · Warning: {rows.filter(r => r.status==='warning').length} · Error: {rows.filter(r => r.status==='error').length}</span>
+              <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                <button data-testid="select-all" onClick={selectAll} style={miniBtn}>Select all</button>
+                <button data-testid="select-ok" onClick={selectOkOnly} style={miniBtn}>Only OK</button>
+                <button data-testid="deselect-all" onClick={deselectAll} style={miniBtn}>Deselect</button>
+              </div>
+            </div>
+            <div style={{ maxHeight: 320, overflow: 'auto', border: `1px solid ${T.border}`, borderRadius: 6 }}>
+              <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+                <thead style={{ background: '#f8fafc', position: 'sticky', top: 0 }}>
+                  <tr><th style={th}></th><th style={th}>Row</th><th style={th}>Vendor</th><th style={th}>Trade</th><th style={th}>Status</th></tr>
+                </thead>
+                <tbody>
+                  {rows.map(r => (
+                    <tr key={r.rowNum} data-testid={`preview-row-${r.rowNum}`} style={{ background: retry[r.rowNum] ? '#FEF3C7' : 'white' }}>
+                      <td style={td}><input type="checkbox" disabled={r.status === 'error'} checked={!!selected[r.rowNum]} onChange={e => setSelected({ ...selected, [r.rowNum]: e.target.checked })} /></td>
+                      <td style={td}>{r.rowNum}</td>
+                      <td style={td}>{r.vendorName || <em style={{ color: T.textLight }}>(blank)</em>}</td>
+                      <td style={td}>{r.trade || <em style={{ color: T.textLight }}>(blank)</em>}</td>
+                      <td style={td}>
+                        {retry[r.rowNum] && <span style={{ color: '#92400E' }}>Retry</span>}
+                        {!retry[r.rowNum] && r.status === 'ok' && <span style={{ color: '#059669' }}>OK</span>}
+                        {!retry[r.rowNum] && r.status === 'warning' && <span title={r.warnings.join('; ')} style={{ color: '#d97706' }}>Warning</span>}
+                        {!retry[r.rowNum] && r.status === 'error' && <span title={r.errors.join('; ')} style={{ color: T.red }}>Error</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {progress && <div style={{ marginTop: 10, fontSize: 12, color: T.textLight }}>Adding {progress.done} of {progress.total}…</div>}
+          </>
+        )}
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+          <button data-testid="cancel-upload" onClick={onClose} disabled={busy} style={btnSecondary}>Cancel</button>
+          <button data-testid="commit-upload" onClick={commit} disabled={busy || rows.length === 0 || Object.keys(selected).length === 0} style={btnPrimary}>
+            {busy ? 'Adding…' : `Add selected to my vendor list`}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const backdrop     = { position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 };
+const modal        = { background: 'white', borderRadius: 12, padding: 24, width: '100%', maxWidth: 720, maxHeight: '90vh', overflow: 'auto' };
+const dropzone     = { display: 'block', padding: 32, border: '2px dashed #cbd5e1', borderRadius: 10, textAlign: 'center', cursor: 'pointer', color: '#64748b', fontSize: 14 };
+const errorBox     = { padding: 12, background: '#FEF2F2', borderRadius: 8 };
+const miniBtn      = { background: 'white', border: '1px solid #cbd5e1', borderRadius: 6, padding: '4px 10px', fontSize: 11, cursor: 'pointer' };
+const th           = { textAlign: 'left', padding: '8px 10px', fontWeight: 600, borderBottom: '1px solid #e2e8f0' };
+const td           = { padding: '6px 10px', borderBottom: '1px solid #f1f5f9' };
+const btnPrimary   = { flex: 1, padding: 10, background: '#2563eb', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' };
+const btnSecondary = { flex: 1, padding: 10, background: 'white', color: '#2563eb', border: '1px solid #cbd5e1', borderRadius: 8, fontWeight: 600, cursor: 'pointer' };
+```
 
 - [ ] **Step 2: Smoke by hand**
 
-Upload the happy fixture → preview shows 2 OK rows → commit → Vendor list grows by 2.
-Upload the bad-headers fixture → error banner.
-Upload the bad-rows fixture → preview shows 3 errors + 1 OK, only OK row is committable.
+```bash
+cd spa/dcfg-property-intake && npm run dev
+```
+
+- Log in → Vendors card → Upload spreadsheet
+- Upload `test/fixtures/vendor-template-happy.xlsx` → preview shows 2 OK rows → Commit → vendor list grows by 2
+- Upload `test/fixtures/vendor-template-bad-headers.xlsx` → error banner with re-template link
+- Upload `test/fixtures/vendor-template-bad-rows.xlsx` → preview shows 3 errors (non-committable) + 1 OK → Commit → vendor list grows by 1 only
 
 - [ ] **Step 3: Commit**
 
@@ -1263,9 +1704,12 @@ export default function VendorsScreen({ data, updateData, sessionId }) {
 }
 ```
 
-- [ ] **Step 2: Template file placeholder**
+- [ ] **Step 2: Verify the production template was emitted by Task 4.2 Step 2**
 
-Create `spa/dcfg-property-intake/public/templates/decades-vendor-intake.xlsx` by running the fixture generator's happy template against the `public/templates/` directory (or hand-generate via Excel and drop it in). The file must exist at build time so the "Download template" link resolves.
+```bash
+ls spa/dcfg-property-intake/public/templates/decades-vendor-intake.xlsx
+```
+Expected: file exists. If not, re-run `node scripts/concierge/gen-fixture-sheets.mjs`.
 
 - [ ] **Step 3: Commit**
 
@@ -1393,21 +1837,31 @@ git commit -m "spa: DelegateModal — sender + delegate capture, localStorage pr
 **Files:**
 - Create: `scripts/concierge/flow-delegate-invite-v1-placeholder.json`
 - Create: `scripts/concierge/flow-delegate-invite-v3-final.json`
+- Reuse existing: `scripts/flows/Push-FlowDefinition.ps1`, `scripts/flows/Read-FlowDefinition.ps1` (if present) — otherwise fall back to the pac CLI path shown in Step 2
 
-**This follows the DCFG three-step flow pattern per `feedback_flow_build_process.md`:**
+**This follows the DCFG three-step flow pattern per `feedback_flow_build_process.md`.** If `Push-FlowDefinition.ps1` / `Read-FlowDefinition.ps1` don't exist in the repo, use `pac flow export` / manual `Invoke-RestMethod` against the Dataverse `workflows` table as the fallback. Verify existence first:
+
+```bash
+ls scripts/flows/Push-FlowDefinition.ps1 scripts/flows/Read-FlowDefinition.ps1 2>/dev/null && echo "helpers present" || echo "helpers missing — use fallback"
+```
 
 - [ ] **Step 1: Write the v1 placeholder definition**
 
-Placeholder-only Compose actions where the Outlook Send-Email action will eventually go. Trigger: `When a row is added` on `dcfg_intake_delegation`.
+Base template — copy the structure from an existing placeholder flow in `scripts/_backups/` (the 2026-04-10 Option B backup `_optionb-4-flow-backup-20260410-145648.json` is a good reference for the Dataverse trigger + scope + retry shape). Trigger: Dataverse "When a row is added" on `dcfg_intake_delegation`.
 
-Key actions in the placeholder:
-- `Get_session` — "List rows" on `dcfg_intake_session` filtered by the triggering delegation's session lookup
-- `Get_config_from` — "List rows" on `dcfg_configs` for `intake_delegation_from_address`
-- `Get_config_url` — "List rows" on `dcfg_configs` for `concierge_portal_url`
-- `Build_email_html` — Compose action with body template
-- `Send_email` — Compose placeholder (will become Send-Email-V2 after manual step)
-- `Patch_sent_at` — Update row on `dcfg_intake_delegation` setting `dcfg_sent_at = utcNow()`
-- Scope + run-after for failure → log to `dcfg_audit_logs`
+Key actions in the placeholder (all Compose except the Dataverse ones):
+
+| Action name | Type | Purpose |
+|---|---|---|
+| `Get_session` | Dataverse List rows | Filter `dcfg_intake_session` by `dcfg_intake_sessionid eq @{triggerOutputs()?['body/_dcfg_sessionid_value']}` |
+| `Get_config_from` | Dataverse List rows | Filter `dcfg_configs` by `dcfg_name eq 'intake_delegation_from_address'` |
+| `Get_config_url` | Dataverse List rows | Filter `dcfg_configs` by `dcfg_name eq 'concierge_portal_url'` |
+| `Build_email_html` | Compose | HTML body template with dynamic tokens for `{senderName}`, `{providerName}`, `{personalNote}`, `{portalUrl}?code={accessCode}`, `{cardScopeLabel}` |
+| `Send_email` | Compose (placeholder) | Static object `{ "to": "...", "subject": "...", "body": "..." }` — will be replaced by "Send an email (V2)" action in the manual step |
+| `Patch_sent_at` | Dataverse Update row | On `dcfg_intake_delegation`, set `dcfg_sent_at = @{utcNow()}` |
+| Outer `Try_scope` / `Catch_scope` | Scope | Run-after `Try_scope` on failure; inside Catch, write a row to `dcfg_audit_logs` with the error |
+
+The v1 JSON file is produced by taking a copy of the backup flow, stripping its actions, and adding the seven steps above as Compose placeholders with the schema names configured. Save as `scripts/concierge/flow-delegate-invite-v1-placeholder.json`.
 
 - [ ] **Step 2: Push v1 to Test (placeholder) — triggers and scaffold only**
 
@@ -1446,12 +1900,50 @@ git add scripts/concierge/flow-delegate-invite-v1-placeholder.json scripts/conci
 git commit -m "flow: dcfg_SendIntakeDelegationInvite — placeholder + final definitions"
 ```
 
-### Task 5.3: Revoke UI in the header dropdown
+### Task 5.3: Wire the header revoke dropdown to `softDeleteDelegation`
 
-Add an "Invited helpers" list in a header dropdown (or in a small inline panel). Each row shows name + email + sent date + Revoke button. Revoke calls `softDeleteDelegation(id)` and removes from local state.
+The Revoke dropdown UI is already built into `ConciergeHeader.jsx` from Task 3.5. This task wires the `onRevoke` callback to actually soft-delete.
 
-- [ ] Implement as a small component and wire it into `ConciergeHeader` or `App.jsx`
-- [ ] Commit
+**Files:**
+- Modify: `spa/dcfg-property-intake/src/App.jsx`
+
+- [ ] **Step 1: Add `onRevoke` handler to `App.jsx` and pass it to `ConciergeHeader`**
+
+```jsx
+const handleRevoke = async (delegationId) => {
+  const ok = await softDeleteDelegation(delegationId);
+  if (ok) {
+    updateData(prev => ({
+      ...prev,
+      delegations: (prev.delegations || []).filter(d => d.dcfg_intake_delegationid !== delegationId),
+    }));
+  }
+};
+
+// in JSX:
+<ConciergeHeader
+  providerName={providerName}
+  onHome={() => navigate('/home')}
+  onGlobalDelegate={() => { setDelegateScope(null); setDelegateOpen(true); }}
+  onFeedback={() => setFeedbackOpen(true)}
+  showBack={path !== '/home' && path !== '/'}
+  delegations={data?.delegations || []}
+  onRevoke={handleRevoke}
+/>
+```
+
+Don't forget to add `softDeleteDelegation` to the `intakeApi.js` import list at the top of `App.jsx`.
+
+- [ ] **Step 2: Smoke by hand**
+
+Log in → Invite a helper via the modal → helper appears in the header dropdown → click Revoke → helper disappears → reload page → still gone (confirms Dataverse soft-delete persisted).
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add spa/dcfg-property-intake/src/App.jsx
+git commit -m "spa: wire header revoke dropdown to softDeleteDelegation"
+```
 
 ### Chunk 5 complete
 
@@ -1465,34 +1957,188 @@ Delegation flow end-to-end: customer clicks → row written → email sent → d
 
 **Files:**
 - Modify: `spa/dcfg-property-intake/src/LocationsScreen.jsx` (replace stub)
+- Reference: `scratch/app-before-dashboard-refactor.jsx` (snapshot from Task 3.4 Step 1)
 
-Wraps the existing `PropertyForm.jsx` selection/list UX from the old tab shell. Copy the list-rendering logic from the deleted mobile/desktop branches of `App.jsx` (via git show of the pre-refactor commit) and paste into `LocationsScreen.jsx`. No new behavior — just scoping the locations view to a dedicated screen.
+- [ ] **Step 1: Locate source logic in the snapshot**
 
-- [ ] Write the component, render location cards list + PropertyForm detail pane
-- [ ] Ensure `fieldConfig` and `locationTypes` props flow through
-- [ ] Smoke in dev
-- [ ] Commit
+Open `scratch/app-before-dashboard-refactor.jsx` and find the two branches that render locations:
+- Mobile: inside `if (mobile)` block, the `tab === 'locations' && !selectedPropId` list rendering and the `selectedPropId && prop` detail rendering
+- Desktop: the left rail (location list) + right pane (PropertyForm) inside the `else` block
+
+- [ ] **Step 2: Write the screen**
+
+```jsx
+import React from 'react';
+import { T } from './tokens.js';
+import PropertyForm from './PropertyForm.jsx';
+
+export default function LocationsScreen({ data, selectedPropId, selectProperty, updateProperty, fieldConfig, locationTypes }) {
+  const properties = data?.properties || [];
+  const selectedProp = properties.find(p => p.id === selectedPropId);
+
+  if (!selectedProp) {
+    return (
+      <div style={{ padding: '24px 20px', maxWidth: 780, margin: '0 auto' }}>
+        <h2 style={{ fontFamily: T.fDisplay, color: T.blue, fontSize: 22, margin: '0 0 16px' }}>Locations</h2>
+        {properties.length === 0 && <div style={{ color: T.textLight }}>No locations on file yet.</div>}
+        {properties.map(p => (
+          <div key={p.id} data-testid={`location-card-${p.id}`} onClick={() => selectProperty(p.id)} style={{ background: 'white', borderRadius: 10, padding: 14, marginBottom: 8, border: `1px solid ${T.border}`, cursor: 'pointer' }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: T.blue }}>{p.upkeepName || p.streetAddress || 'New Location'}</div>
+            <div style={{ fontSize: 12, color: T.textLight, marginTop: 2 }}>{p.city ? `${p.city}, ${p.state}` : 'No address yet'}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: '24px 20px', maxWidth: 900, margin: '0 auto' }}>
+      <button data-testid="back-to-list" onClick={() => selectProperty(null)} style={{ background: 'none', border: 'none', color: T.blue, cursor: 'pointer', fontSize: 13, marginBottom: 10 }}>← All locations</button>
+      <PropertyForm
+        property={selectedProp}
+        onChange={(field, value) => updateProperty(selectedProp.id, field, value)}
+        fieldConfig={fieldConfig}
+        locationTypes={locationTypes}
+      />
+    </div>
+  );
+}
+```
+
+- [ ] **Step 3: Build check**
+
+```bash
+cd spa/dcfg-property-intake && npm run build
+```
+
+- [ ] **Step 4: Smoke in dev**
+
+Log in → Location Details card → click a location → edit a visible field → verify save → back to list → navigate back via header → return.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add spa/dcfg-property-intake/src/LocationsScreen.jsx
+git commit -m "spa: LocationsScreen wrapper — list + PropertyForm detail"
+```
 
 ### Task 6.2: `DocumentsScreen.jsx` wrapper
 
 **Files:**
 - Modify: `spa/dcfg-property-intake/src/DocumentsScreen.jsx` (replace stub)
 
-Thin wrapper over `DocumentCapture.jsx`. Adds the screen header and "Delegate" link. That's it.
+- [ ] **Step 1: Write the wrapper**
 
-- [ ] Write the wrapper
-- [ ] Commit
+```jsx
+import React from 'react';
+import { T } from './tokens.js';
+import DocumentCapture from './DocumentCapture.jsx';
+
+export default function DocumentsScreen({ data, addDocument }) {
+  return (
+    <div style={{ padding: '24px 20px', maxWidth: 780, margin: '0 auto' }}>
+      <h2 style={{ fontFamily: T.fDisplay, color: T.blue, fontSize: 22, margin: '0 0 4px' }}>Documents</h2>
+      <p style={{ color: T.textLight, fontSize: 14, margin: '0 0 20px' }}>Floor plans, insurance COI, W-9s, manuals — anything that isn't tied to a specific date.</p>
+      <DocumentCapture documents={data?.documents || []} onAdd={addDocument} />
+    </div>
+  );
+}
+```
+
+- [ ] **Step 2: Build + smoke**
+
+```bash
+cd spa/dcfg-property-intake && npm run build
+```
+Then `npm run dev`, log in, click the Documents card, upload a file, reload, verify persistence.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add spa/dcfg-property-intake/src/DocumentsScreen.jsx
+git commit -m "spa: DocumentsScreen wrapper"
+```
 
 ### Task 6.3: `FeedbackModal.jsx`
 
 **Files:**
+- Modify: `spa/dcfg-property-intake/src/intakeApi.js`
 - Modify: `spa/dcfg-property-intake/src/FeedbackModal.jsx` (replace stub)
 
-Simple modal: one textarea, one Send button. On submit, writes to `dcfg_audit_logs` via a new `submitFeedback(sessionId, text)` function in `intakeApi.js`. The audit log row has `dcfg_action = "Feedback"`, `dcfg_context = text`, `dcfg_actor = "Anonymous (session {sessionId})"`.
+- [ ] **Step 1: Verify column names in the database bible**
 
-- [ ] Add `submitFeedback` to `intakeApi.js`
-- [ ] Write the modal
-- [ ] Commit
+The actual column names for `dcfg_audit_logs` may differ from the assumed `dcfg_action`/`dcfg_context`/`dcfg_actor`. Task 1.0 already validates the three columns exist. If the bible shows different names (e.g. `dcfg_audit_action`, `dcfg_audit_detail`), update the code below to match.
+
+- [ ] **Step 2: Add `submitFeedback` to `intakeApi.js`**
+
+```js
+export async function submitFeedback(sessionId, text) {
+  if (!USE_DATAVERSE) return false;
+  try {
+    await apiPost(`/dcfg_audit_logs`, {
+      dcfg_action:  'Feedback',
+      dcfg_context: text,
+      dcfg_actor:   `Anonymous (session ${sessionId})`,
+    });
+    return true;
+  } catch (e) { console.warn('submitFeedback failed:', e); return false; }
+}
+```
+
+- [ ] **Step 3: Write the modal**
+
+```jsx
+import React, { useState } from 'react';
+import { T } from './tokens.js';
+import { submitFeedback } from './intakeApi.js';
+
+export default function FeedbackModal({ sessionId, onClose }) {
+  const [text, setText] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const send = async () => {
+    if (!text.trim()) return;
+    setBusy(true);
+    const ok = await submitFeedback(sessionId, text.trim());
+    setBusy(false);
+    if (ok) { setSent(true); setTimeout(onClose, 1200); }
+    else    { alert('Could not send feedback. Please try again.'); }
+  };
+
+  return (
+    <div role="dialog" aria-modal="true" style={backdrop} onClick={onClose}>
+      <div data-testid="feedback-modal" style={modal} onClick={e => e.stopPropagation()}>
+        <h3 style={{ fontFamily: T.fDisplay, color: T.blue, margin: '0 0 4px' }}>Give feedback</h3>
+        <p style={{ color: T.textLight, fontSize: 13, margin: '0 0 14px' }}>What's working, what isn't, what's missing. Anything.</p>
+        {sent ? (
+          <div style={{ padding: 20, textAlign: 'center', color: T.textLight, fontSize: 14 }}>Thanks — we got it.</div>
+        ) : (
+          <>
+            <textarea data-testid="feedback-text" value={text} onChange={e => setText(e.target.value)} rows={6} style={{ width: '100%', padding: 10, border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 14, fontFamily: T.fBody, resize: 'vertical', boxSizing: 'border-box' }} />
+            <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+              <button data-testid="feedback-cancel" onClick={onClose} disabled={busy} style={btnSecondary}>Cancel</button>
+              <button data-testid="feedback-send" onClick={send} disabled={busy || !text.trim()} style={btnPrimary}>{busy ? 'Sending…' : 'Send'}</button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const backdrop     = { position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 };
+const modal        = { background: 'white', borderRadius: 12, padding: 24, width: '100%', maxWidth: 460 };
+const btnPrimary   = { flex: 1, padding: 10, background: '#2563eb', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' };
+const btnSecondary = { flex: 1, padding: 10, background: 'white', color: '#2563eb', border: '1px solid #cbd5e1', borderRadius: 8, fontWeight: 600, cursor: 'pointer' };
+```
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add spa/dcfg-property-intake/src/FeedbackModal.jsx spa/dcfg-property-intake/src/intakeApi.js
+git commit -m "spa: FeedbackModal + submitFeedback audit log writer"
+```
 
 ### Task 6.4: Seed `dcfg_intake_field_configs` C-cut defaults
 
@@ -1560,10 +2206,64 @@ Tests:
 6. `delegate uses same code in a fresh context` — open a second browser context with the same access code, verify the same data renders
 7. `orphan document upload` — navigate to Documents card, upload a file, reload, confirm persistence
 
-- [ ] Write fixtures + suite
-- [ ] Run via `npm run test:prod` or whatever the existing concierge E2E entry point is
-- [ ] All 7 tests green
-- [ ] Commit
+- [ ] **Step 1: Testid audit**
+
+```bash
+pwsh -Command "Get-ChildItem spa/dcfg-property-intake/src -Recurse -Include *.jsx | Select-String 'data-testid' | ForEach-Object { \$_.Matches.Value } | Sort-Object -Unique"
+```
+Compare the output against the selectors the test suite uses. Any mismatch fixes before writing tests.
+
+- [ ] **Step 2: Write the suite**
+
+Use the existing Playwright config in `nora/` as the base. Auth model: the concierge uses access-code login (not Entra), so the suite uses the demo access code `demo1234` against the dev/test site — no `.msal_cache.bin` involvement. Add a `concierge` project to `nora/playwright.config.ts` targeting `https://decadeswelcomesyou.powerappsportals.com/` with no storageState (anonymous).
+
+Test file outline:
+
+```ts
+import { test, expect } from '@playwright/test';
+
+const CODE = process.env.CONCIERGE_CODE || 'demo1234';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('/');
+  await page.getByPlaceholder('Access Code').fill(CODE);
+  await page.getByRole('button', { name: 'Get Started' }).click();
+  await page.getByRole('button', { name: /Start/i }).click(); // Welcome screen
+});
+
+test('renders 4 cards', async ({ page }) => {
+  await expect(page.getByTestId('card-vendors')).toBeVisible();
+  await expect(page.getByTestId('card-dates')).toBeVisible();
+  await expect(page.getByTestId('card-locations')).toBeVisible();
+  await expect(page.getByTestId('card-documents')).toBeVisible();
+});
+
+// ... 6 more tests per spec Testing section
+```
+
+- [ ] **Step 3: Add a Dataverse read helper for delegation verification**
+
+```ts
+// nora/tests/concierge/_dataverse-helper.ts
+export async function readDelegationsForSession(sessionId: string) {
+  // Uses pac auth create-token + Invoke-RestMethod shelled out, or direct fetch with OAuth
+  // Returns the rows for $filter=_dcfg_sessionid_value eq {sessionId}
+}
+```
+
+- [ ] **Step 4: Run**
+
+```bash
+cd nora && npx playwright test --project=concierge
+```
+Expected: all 7 tests green.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add nora/tests/concierge/
+git commit -m "e2e: concierge dashboard playwright suite"
+```
 
 ### Task 7.2: Test env deploy
 
@@ -1602,13 +2302,13 @@ Follow `feedback_handoff_links.md` and `feedback_build_summary_and_audit.md`. Pr
 
 ### Task 7.3: Portal env mirror (`orgf625b080`, PAC `[6]`)
 
-- [ ] **Step 1: Switch PAC auth**
+- [ ] **Step 1: Switch PAC auth to Portal env**
 
 ```bash
 pac auth select --index 6
 pac org who
 ```
-Expected: `org06f5de0b... ` — wait, this should be `orgf625b080`. Fix if incorrect. **Do not proceed if the wrong env is selected.**
+Expected: `Connected to... orgf625b080.crm.dynamics.com`. **Do not proceed if the wrong env is selected.** If a different org is shown, re-run `pac auth list` to find the correct index, then re-try.
 
 - [ ] **Step 2: Create tables in Portal env**
 
@@ -1626,13 +2326,19 @@ Repeat the three-step flow pattern for `dcfg_SendIntakeDelegationInvite` against
 
 Re-run `Seed-IntakeFieldConfigDefaults.ps1` against the Portal env.
 
-- [ ] **Step 6: Deploy build to Portal env**
+- [ ] **Step 6: Deploy build to Portal env concierge site**
 
 ```bash
 cd spa/dcfg-property-intake
-# Point pac at the Portal env concierge site first
+# Verify PAC auth still on Portal env
+pac org who
+# List pages sites visible to this env and confirm the target
+pac pages list
+# Deploy — pac pages upload-code-site reads the manifest from the project root
 pac pages upload-code-site --rootPath . --compiledPath dist
 ```
+
+If `pac pages list` shows multiple sites, confirm the upload target is `decades-concierge.powerappsportals.com` before proceeding. If the upload goes to the wrong site, the rollback is `git revert` + redeploy to the correct site — empty new tables can stay in place.
 
 - [ ] **Step 7: Clear portal cache**
 
@@ -1653,7 +2359,8 @@ Expected: Back on `org0c17e98d`. **Required per `feedback_verify_pac_auth_before
 ### Task 7.4: Close-out
 
 - [ ] Update `project_onboarding_concierge.md` memory — status = "deployed to Test + Portal" with deploy date
-- [ ] Write handoff doc `docs/handoff-concierge-vendors-dates-docs-2026-XX-XX.md` with launch URLs, open issues, and follow-up items
+- [ ] Write handoff doc `docs/handoff-concierge-vendors-dates-docs-<YYYY-MM-DD>.md` — replace `<YYYY-MM-DD>` with the actual deploy date at authoring time — with launch URLs, open issues, and follow-up items
+- [ ] File a tracking item for Stage-env parity (spec Open Question): memory `project_onboarding_concierge.md` or a new GitHub issue. Stage is deliberately skipped for this build but needs to be tracked.
 - [ ] Run one more full Playwright suite against both envs
 - [ ] Commit
 
