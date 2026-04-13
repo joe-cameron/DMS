@@ -50,6 +50,19 @@ async function apiPost(path, body) {
   if (!resp.ok) throw new Error(`POST ${path}: ${resp.status}`);
 }
 
+async function apiPostReturn(path, body) {
+  const token = await getToken();
+  const resp = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: { ...HEADERS_READ, 'Content-Type': 'application/json', '__RequestVerificationToken': token, 'Prefer': 'return=representation' },
+    credentials: 'same-origin',
+    body: JSON.stringify(body),
+  });
+  if (resp.status === 401 || resp.status === 403) invalidateToken();
+  if (!resp.ok) throw new Error(`POST ${path}: ${resp.status}`);
+  return resp.json();
+}
+
 async function apiPatch(path, body) {
   const token = await getToken();
   const resp = await fetch(`${API_BASE}${path}`, {
@@ -85,6 +98,8 @@ const ES = {
   vendors:      'dcfg_intake_vendors',
   authUsers:    'dcfg_intake_authorized_users',
   locationTypes:'dcfg_location_types',
+  dates:        'dcfg_intake_dates',
+  delegations:  'dcfg_intake_delegations',
 };
 
 // ─── Record Locking ───
@@ -306,6 +321,125 @@ export async function createDocumentRequest(propertyId, category, fileName, base
     console.warn('createDocumentRequest failed:', e);
     return false;
   }
+}
+
+// ─── Dates CRUD ───
+
+export async function loadDates(sessionId) {
+  if (!USE_DATAVERSE) return [];
+  try {
+    const r = await apiGet(`/${ES.dates}?$filter=_dcfg_sessionid_value eq ${sessionId} and dcfg_active_flag eq true&$select=dcfg_intake_dateid,dcfg_name,dcfg_due_date,dcfg_category,dcfg_notes,dcfg_location_ref,createdon&$orderby=dcfg_due_date asc`);
+    return r.value || [];
+  } catch (e) { console.warn('loadDates failed:', e); return []; }
+}
+
+export async function createDate(sessionId, d) {
+  if (!USE_DATAVERSE) return null;
+  const body = {
+    dcfg_name:         d.label || 'Untitled date',
+    dcfg_due_date:     d.dueDate || null,
+    dcfg_category:     d.category ?? 100000004,
+    dcfg_notes:        d.notes || '',
+    dcfg_location_ref: d.locationRef || '',
+    dcfg_active_flag:  true,
+    [`dcfg_sessionid@odata.bind`]: `/${ES.sessions}(${sessionId})`,
+  };
+  try {
+    const created = await apiPostReturn(`/${ES.dates}`, body);
+    return created;
+  } catch (e) { console.warn('createDate failed:', e); return null; }
+}
+
+export async function updateDate(dateId, patch) {
+  if (!USE_DATAVERSE || !dateId) return false;
+  try {
+    await apiPatch(`/${ES.dates}(${dateId})`, patch);
+    return true;
+  } catch (e) { console.warn('updateDate failed:', e); return false; }
+}
+
+export async function softDeleteDate(dateId) {
+  return updateDate(dateId, { dcfg_active_flag: false });
+}
+
+export async function uploadDateAttachment(dateId, file) {
+  if (!USE_DATAVERSE || !file || !dateId) return false;
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result.split(',')[1];
+      try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        const r = await fetch('/_api/annotations', {
+          method: 'POST',
+          headers: {
+            'Content-Type':             'application/json',
+            'Accept':                   'application/json',
+            '__RequestVerificationToken': token || '',
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            subject:      file.name,
+            filename:     file.name,
+            mimetype:     file.type,
+            documentbody: base64,
+            [`objectid_dcfg_intake_date@odata.bind`]: `/${ES.dates}(${dateId})`,
+          }),
+        });
+        resolve(r.ok);
+      } catch (e) { console.warn('uploadDateAttachment failed:', e); resolve(false); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ─── Delegations CRUD ───
+
+export async function loadDelegations(sessionId) {
+  if (!USE_DATAVERSE) return [];
+  try {
+    const r = await apiGet(`/${ES.delegations}?$filter=_dcfg_sessionid_value eq ${sessionId} and dcfg_active_flag eq true&$select=dcfg_intake_delegationid,dcfg_name,dcfg_delegate_email,dcfg_sender_name,dcfg_sender_email,dcfg_card_scope,dcfg_personal_note,dcfg_sent_at,createdon&$orderby=createdon desc`);
+    return r.value || [];
+  } catch (e) { console.warn('loadDelegations failed:', e); return []; }
+}
+
+export async function createDelegation(sessionId, d) {
+  if (!USE_DATAVERSE) return null;
+  const body = {
+    dcfg_name:           d.delegateName,
+    dcfg_delegate_email: d.delegateEmail,
+    dcfg_sender_name:    d.senderName,
+    dcfg_sender_email:   d.senderEmail,
+    dcfg_card_scope:     d.cardScope ?? 100000004,
+    dcfg_personal_note:  d.personalNote || '',
+    dcfg_active_flag:    true,
+    [`dcfg_sessionid@odata.bind`]: `/${ES.sessions}(${sessionId})`,
+  };
+  try {
+    return await apiPostReturn(`/${ES.delegations}`, body);
+  } catch (e) { console.warn('createDelegation failed:', e); return null; }
+}
+
+export async function softDeleteDelegation(delegationId) {
+  if (!USE_DATAVERSE || !delegationId) return false;
+  try {
+    await apiPatch(`/${ES.delegations}(${delegationId})`, { dcfg_active_flag: false });
+    return true;
+  } catch (e) { console.warn('softDeleteDelegation failed:', e); return false; }
+}
+
+// ─── Feedback ───
+
+export async function submitFeedback(sessionId, text) {
+  if (!USE_DATAVERSE) return false;
+  try {
+    await apiPost(`/dcfg_audit_logs`, {
+      dcfg_action:  'Feedback',
+      dcfg_context: text,
+      dcfg_actor:   `Anonymous (session ${sessionId})`,
+    });
+    return true;
+  } catch (e) { console.warn('submitFeedback failed:', e); return false; }
 }
 
 export async function isOnline() {
