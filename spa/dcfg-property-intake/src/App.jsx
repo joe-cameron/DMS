@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { T } from './tokens.js';
-import { loadProviderData, saveProviderData, createEmptyProvider, createEmptyProperty, dataverseToForm, formFieldToDataverse, FIELD_MAP } from './storage.js';
+import { loadProviderData, saveProviderData, dataverseToForm, formFieldToDataverse, FIELD_MAP } from './storage.js';
 import { loadFieldConfig, loadLocationTypes, USE_DATAVERSE, loadSession, loadProperties, loadVendors, loadDates, loadDelegations, savePropertyBatch, isOnline, acquireLock, forceAcquireLock, releaseLock, releaseLockSync, refreshLock, softDeleteDelegation } from './intakeApi.js';
 import WelcomeScreen from './WelcomeScreen.jsx';
 import HomeDashboard from './HomeDashboard.jsx';
