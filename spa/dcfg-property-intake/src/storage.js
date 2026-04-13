@@ -30,9 +30,37 @@ export function createEmptyProvider() {
     properties: [],
     vendors: [],
     authorizedUsers: [],
+    dates: [],
+    delegations: [],
     expiresAt: expires.toISOString(),
     lastModified: new Date().toISOString(),
   };
+}
+
+export function createEmptyDate() {
+  return {
+    id: crypto.randomUUID(),
+    label: '',
+    dueDate: '',
+    category: 100000004,
+    notes: '',
+    locationRef: '',
+    _dataverseId: null,
+    _attachmentName: null,
+  };
+}
+
+const SENDER_KEY = 'concierge_sender_identity';
+
+export function loadSenderIdentity() {
+  try {
+    const raw = localStorage.getItem(SENDER_KEY);
+    return raw ? JSON.parse(raw) : { senderName: '', senderEmail: '' };
+  } catch { return { senderName: '', senderEmail: '' }; }
+}
+
+export function saveSenderIdentity({ senderName, senderEmail }) {
+  try { localStorage.setItem(SENDER_KEY, JSON.stringify({ senderName, senderEmail })); } catch {}
 }
 
 export function createEmptyUser() {
