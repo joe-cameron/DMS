@@ -45,6 +45,7 @@ export default function VendorSpreadsheetModal({ sessionId, onClose, onCommitted
         contactEmail:  r.contactEmail,
         contractStart: r.contractStart,
         contractEnd:   r.contractEnd,
+        notes:         r.notes || '',
         requiresReBid: '',
       };
       let ok = true;

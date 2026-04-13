@@ -30,9 +30,13 @@ export default function DatesScreen({ data, updateData, sessionId }) {
   };
 
   const updateField = async (id, field, value) => {
-    const next = dates.map(x => x.id === id ? { ...x, [field]: value } : x);
-    updateData(prev => ({ ...prev, dates: next }));
-    const row = next.find(x => x.id === id);
+    let updatedRow = null;
+    updateData(prev => {
+      const next = (prev.dates || []).map(x => x.id === id ? { ...x, [field]: value } : x);
+      updatedRow = next.find(x => x.id === id);
+      return { ...prev, dates: next };
+    });
+    const row = updatedRow;
     if (USE_DATAVERSE && row?._dataverseId) {
       const dvPatch = {};
       if (field === 'label')       dvPatch.dcfg_name         = value;
