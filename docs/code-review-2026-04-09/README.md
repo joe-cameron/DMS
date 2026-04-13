@@ -35,7 +35,7 @@
 ## Phase Status
 
 - [x] Phase 0 — Parity sweep + Playwright scaffolding decision — **PARTIAL** (Part A complete, Gate 0a resolved per operator pivot, Test/Stage SPA bundle redeploys + cache clears DEFERRED — see Session 2 log)
-- [ ] Phase 1 — Shared modules audit — NOT STARTED
+- [x] Phase 1 — Shared modules audit — **complete 2026-04-12** (100 fixed, 8 rejected, 5 deferred, 2 open, 2 approved-pending)
 - [ ] Phase 2 — Auto-fix pass (dead code / console / testids) — NOT STARTED
 - [ ] Phase 3 — Screen audit (9 waves) — NOT STARTED
 - [ ] Phase 4 — Consolidation — NOT STARTED
@@ -60,7 +60,7 @@
 | 1b (round 6, batch 06) | 2026-04-10 | **approved batch** | 14 active (mix: 2 schema + 4 unused imports + 4 err-handling + 3 perf + 1 data-integrity quick fix) + 1 P3 (0239) = 15 edits. Housekeeping: 0293 rejected schema-verified, 0298 deferred-future schema-blocked. Doc: approvals/2026-04-09-batch-06-phase1-schema-p3-cleanup.md |
 | 1b (round 7, batch 07) | 2026-04-10 | **approved batch** | 14 active P3 findings (3 unused imports + 3 perf incl pause-on-hidden + 4 err-handling + 4 handoff narrow-fixes + 1 auth); Housekeeping: 0310 reject (schema-verified), 0288 reject (drift — isManager IS used). Doc: approvals/2026-04-09-batch-07-phase1-p3-cleanup.md |
 | 1b (round 8, batch 08) | 2026-04-10 | **approved batch** | 7 final findings: 2 P1 destructive deletes (CR-0002 AppRouter dupe, CR-0003 ContractList dupe — both with zero-import verification evidence) + 5 P3 final cleanups. Housekeeping: CR-0309 rejection prose corrected. Closes out Phase 1 except CR-0268 (flow-deploy dep) and CR-0299 (resolver drift). Doc: approvals/2026-04-09-batch-08-phase1-final-cleanup.md |
-| 1c | — | pending | Phase 1 smoke |
+| 1c | 2026-04-12 | **build-check-only green** | Operator chose Option B (build-check, no deploy). `npm run build` clean — no errors, no new warnings. Stray `)}` warning (CR-0001) confirmed gone. Deploy deferred to end of review. |
 | 2a | — | pending | Phase 2a dead-code batch preview |
 | 2b | — | pending | Phase 2b console batch preview |
 | 2c | — | pending | Phase 2c testid batch preview |
