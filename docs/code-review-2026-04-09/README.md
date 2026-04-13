@@ -62,7 +62,7 @@
 | 1b (round 8, batch 08) | 2026-04-10 | **approved batch** | 7 final findings: 2 P1 destructive deletes (CR-0002 AppRouter dupe, CR-0003 ContractList dupe — both with zero-import verification evidence) + 5 P3 final cleanups. Housekeeping: CR-0309 rejection prose corrected. Closes out Phase 1 except CR-0268 (flow-deploy dep) and CR-0299 (resolver drift). Doc: approvals/2026-04-09-batch-08-phase1-final-cleanup.md |
 | 1c | 2026-04-12 | **build-check-only green** | Operator chose Option B (build-check, no deploy). `npm run build` clean — no errors, no new warnings. Stray `)}` warning (CR-0001) confirmed gone. Deploy deferred to end of review. |
 | 2a | 2026-04-12 | **approved + applied** | 14 findings (2 batch + 12 auto-fix). NewContractWizard.jsx deleted (1673 lines), dead import removed, 9 dead portalApi exports removed, 1 dead projectConstants export, 1 dead ContractsList token. Build green (122 modules, down from 123). |
-| 2b | — | pending | Phase 2b console batch preview |
+| 2b | 2026-04-13 | **approved + applied** | 35 findings: 4 deleted, 20 replaced with toast, 5 keep-gated, 3 keep-intentional, 1 subsumed (NWC deleted), 2 dead-block deletes. 6 Admin tabs + 2 other components gained useToast(). Build green. |
 | 2c | — | pending | Phase 2c testid batch preview |
 | 2d | — | pending | Phase 2 smoke |
 | 3.1–3.9 | — | pending | 9 screen-audit waves |
