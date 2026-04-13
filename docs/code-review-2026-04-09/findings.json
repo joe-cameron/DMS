@@ -2820,7 +2820,7 @@
     "tier": "batch",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "AppRouter imports NewContractWizard but never renders it — dead import",
     "detail": "Line 53: `import NewContractWizard from './NewContractWizard.jsx';` is imported with a TODO comment ('// TODO retire after composer cutover') but is never referenced in any <Route> element. The /contracts/new route at line 74 renders <ContractComposer />, not <NewContractWizard />. This dead import pulls in a 1673-line file (plus its own dependency tree: CompliancePanel, etc.) into the bundle for zero runtime benefit. The entire NewContractWizard.jsx file is effectively dead code since ContractComposer replaced it.",
     "evidence": "AppRouter.jsx:53 imports NewContractWizard. Grep for '<NewContractWizard' or 'NewContractWizard />' in AppRouter.jsx returns zero matches. Route at line 74: `<Route path=\"contracts/new\" element={<ContractComposer />} />`.",
@@ -2828,7 +2828,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0312"
     ],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0312",
@@ -2840,7 +2843,7 @@
     "tier": "batch",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "NewContractWizard.jsx is dead code — replaced by ContractComposer.jsx",
     "detail": "DESTRUCTIVE. The entire 1673-line NewContractWizard.jsx file is dead code. It was the original 5-step contract wizard but has been fully replaced by ContractComposer.jsx (single-screen composer, route /contracts/new). The AppRouter imports it at line 53 with '// TODO retire after composer cutover' but never renders it in any route. No other file in the SPA imports NewContractWizard. Removing the import (CR-0311) and deleting this file removes 1673 lines of dead code from the bundle.",
     "evidence": "Grep for 'import.*NewContractWizard' across src/ returns only AppRouter.jsx:53. Grep for '<NewContractWizard' across src/ returns zero matches. ContractComposer.jsx header: 'Replaces NewContractWizard.jsx'. AppRouter line 74 uses ContractComposer for /contracts/new.",
@@ -2849,7 +2852,10 @@
       "CR-2026-04-09-0311",
       "CR-2026-04-09-0001"
     ],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0313",
@@ -2861,7 +2867,7 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "vendorMSAList state value is never read — setter called but value unused",
     "detail": "Line 120: `const [vendorMSAList, setVendorMSAList] = useState(null);`. The setter setVendorMSAList is called at lines 229, 239, and 240 (in a useEffect that fetches vendor MSAs), but the state value vendorMSAList is never read anywhere in the component body or JSX. The data is fetched and stored but never displayed or used in any computation. Note: this entire file is dead code per CR-0312, so this finding is subordinate — would only matter if the wizard is retained.",
     "evidence": "Grep for 'vendorMSAList' in NewContractWizard.jsx returns only line 120 (the declaration). No JSX or logic references the value.",
@@ -2869,7 +2875,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0312"
     ],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0314",
@@ -2881,13 +2890,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "apiPostReturnRecord backward-compat alias is never imported — dead export",
     "detail": "Line 860: `export const apiPostReturnRecord = apiPostReturn;` is a backward-compatibility alias that is never imported by any file in the SPA. Grep for 'apiPostReturnRecord' across src/ returns only the definition line in portalApi.js. It was likely created when apiPostReturn was renamed from apiPostReturnRecord, but all consumers have already migrated to the new name.",
     "evidence": "Grep 'apiPostReturnRecord' in src/**/*.{jsx,js} returns only portalApi.js:860.",
     "recommendedFix": "Remove line 860. Verify build succeeds.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0315",
@@ -2899,13 +2911,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "Urgency enum is exported but never imported anywhere in the SPA",
     "detail": "Line 97: `export const Urgency = { Emergency:100000000, Planned:100000001, Deferred:100000002 };` is never imported by any file. ProjectList.jsx has a local URGENCY_OPTIONS array with the same values hardcoded inline (lines 19-23) rather than referencing this enum. The enum exists in portalApi.js but has zero consumers.",
     "evidence": "Grep 'import.*Urgency' in src/**/*.{jsx,js} returns zero matches. ProjectList.jsx:19-23 defines URGENCY_OPTIONS independently.",
     "recommendedFix": "Either (a) remove the dead export from portalApi.js, or (b) refactor ProjectList.jsx URGENCY_OPTIONS to reference the Urgency enum from portalApi.js (preferred for DRY). Option (b) is a better long-term fix but requires a consumer edit.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0316",
@@ -2917,13 +2932,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "ReplaceByStatus enum is exported but never imported anywhere in the SPA",
     "detail": "Line 99: `export const ReplaceByStatus = { Current:100000000, Approaching:100000001, Past:100000002 };` is never imported by any file. LocationManager.jsx mentions dcfg_replace_by_status as a 'FLOW-ONLY column — never written from UI. Read-only here' but reads the raw integer values directly without referencing this enum.",
     "evidence": "Grep 'import.*ReplaceByStatus' in src/**/*.{jsx,js} returns zero matches. Grep 'ReplaceByStatus' returns only portalApi.js:99.",
     "recommendedFix": "Remove the dead export. If LocationManager or another component later needs to interpret dcfg_replace_by_status values, it can import this enum then — but currently no one does.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0317",
@@ -2935,13 +2953,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "AlertStatusLabel is exported but never imported — consumers use ALERT_STATUS_MAP instead",
     "detail": "Line 113: `export const AlertStatusLabel = { ... };` is never imported by any file. The SPA's location screens (Locations.jsx, LocationDetail.jsx) import and use ALERT_STATUS_MAP (line 863) instead, which has richer shape (label + CSS class). AlertStatusLabel is a plain label-only map that duplicates the label data in ALERT_STATUS_MAP.",
     "evidence": "Grep 'import.*AlertStatusLabel' in src/**/*.{jsx,js} returns zero matches. Grep 'AlertStatusLabel' returns only portalApi.js:113.",
     "recommendedFix": "Remove the dead export. ALERT_STATUS_MAP (line 863) already covers the label mapping with additional CSS class info.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0318",
@@ -2953,13 +2974,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "invalidateToken() is exported but never called anywhere in the SPA",
     "detail": "Line 130: `export function invalidateToken() { _cachedToken = null; _tokenPromise = null; }` is never imported or called by any file in the SPA. The token is cached module-scoped and self-manages via getToken(). invalidateToken was presumably intended for logout or error-recovery flows but is unused.",
     "evidence": "Grep 'invalidateToken' in src/**/*.{jsx,js} returns only portalApi.js:130.",
     "recommendedFix": "Remove the dead export. If a logout or CSRF-recovery path is added later, it can be re-introduced then.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0319",
@@ -2971,13 +2995,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "fetchDocumentRequests() is exported but never imported anywhere in the SPA",
     "detail": "Line 853: `export function fetchDocumentRequests(sourceId) { ... }` is never imported by any file. ContractDetail.jsx and MsaDetail.jsx fetch document requests via their own inline apiGet calls rather than using this shared function.",
     "evidence": "Grep 'import.*fetchDocumentRequests' in src/**/*.{jsx,js} returns zero matches. Grep 'fetchDocumentRequests' returns only portalApi.js:853.",
     "recommendedFix": "Either (a) remove the dead export, or (b) refactor ContractDetail.jsx and MsaDetail.jsx to use this function instead of inline apiGet calls (preferred for DRY). The function already has the correct $select and $orderby.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0320",
@@ -2989,13 +3016,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "fetchTemplateLines() is exported but never imported — template-to-project line copy not yet wired",
     "detail": "Line 906: `export function fetchTemplateLines(templateId) { ... }` is never imported by any file. This function was presumably built for the 'copy template line items into a project' feature, which has not been wired up yet in ProjectDetail or ProjectList.",
     "evidence": "Grep 'import.*fetchTemplateLines' in src/**/*.{jsx,js} returns zero matches.",
     "recommendedFix": "Keep the function if the template-to-project copy feature is planned soon. Otherwise, remove and re-introduce when the feature is built. Mark with a // KEEP comment if retaining intentionally.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0321",
@@ -3007,13 +3037,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "updateProject() is exported but never imported — ProjectDetail uses apiPatch directly",
     "detail": "Line 895: `export function updateProject(id, payload) { ... }` is never imported by any file. ProjectDetail.jsx (line 8) imports apiPatch from portalApi and uses it directly for project updates rather than calling this wrapper.",
     "evidence": "Grep 'updateProject[^L]' (excluding updateProjectLine) in src/**/*.{jsx,js} returns only portalApi.js:895.",
     "recommendedFix": "Either (a) remove the dead export, or (b) refactor ProjectDetail.jsx to use updateProject() instead of inline apiPatch calls. Option (b) is the DRY approach and matches the pattern used by updateRfpPackage, updateProposal, etc.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0322",
@@ -3025,13 +3058,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "Three RFP/Proposal API functions exported but never imported — pre-built for unfinished UI",
     "detail": "Lines 923, 926, 927: createRfpVendor(), createProposal(), updateProposal() are all exported but never imported by any file in the SPA. These were likely pre-built for RFP vendor management and proposal entry UI that has not been implemented yet. The RfpDetail screen reads proposals and vendors but doesn't yet create or update them through these functions.",
     "evidence": "Grep 'createRfpVendor[^s]' returns only portalApi.js:923. Grep 'createProposal[^s]' returns only portalApi.js:926. Grep 'updateProposal' returns only portalApi.js:927.",
     "recommendedFix": "Keep with // KEEP comment if the RFP vendor/proposal management UI is planned for near-term. Otherwise remove dead exports to reduce API surface area. These are simple one-line wrappers easily re-created when needed.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0323",
@@ -3043,13 +3079,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "fmtDate export is never imported by any file in the SPA",
     "detail": "Line 12: `export const fmtDate = v => v ? new Date(v).toLocaleDateString('en-US', ...) : '—';` is never imported by any file. Screens that format dates either use inline toLocaleDateString calls or the toIsoDate helper (ProgramDetail.jsx:18). The function exists but has zero consumers.",
     "evidence": "Grep 'import.*fmtDate' in src/**/*.{jsx,js} returns zero matches.",
     "recommendedFix": "Either (a) remove the dead export, or (b) refactor date-formatting consumers to use fmtDate for consistency (preferred for DRY + unified date locale). Option (b) would touch multiple screen files.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0324",
@@ -3061,13 +3100,16 @@
     "tier": "auto-fix",
     "phase": "phase-2a",
     "agent": "phase-2a-dead-code",
-    "status": "open",
+    "status": "fixed",
     "title": "NAVY_MID design token declared but never used",
     "detail": "Line 23: `var NAVY_MID = '#1a3a5c';` is declared but never referenced anywhere in ContractsList.jsx. The other tokens (NAVY, NAVY_PALE, BORDER, AMBER, TEXT2, TEXT3) are all used in style objects, but NAVY_MID has zero references.",
     "evidence": "Grep 'NAVY_MID' in ContractsList.jsx returns only line 23 (the declaration).",
     "recommendedFix": "Remove the unused variable declaration.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T19:00:00Z"
+    "foundAt": "2026-04-12T19:00:00Z",
+    "approvedAt": "2026-04-13T02:59:44.961804+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-09-phase2a-deadcode.md",
+    "fixedAt": "2026-04-13T02:59:44.961804+00:00"
   },
   {
     "id": "CR-2026-04-09-0400",

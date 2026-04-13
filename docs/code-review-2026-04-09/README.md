@@ -61,7 +61,7 @@
 | 1b (round 7, batch 07) | 2026-04-10 | **approved batch** | 14 active P3 findings (3 unused imports + 3 perf incl pause-on-hidden + 4 err-handling + 4 handoff narrow-fixes + 1 auth); Housekeeping: 0310 reject (schema-verified), 0288 reject (drift — isManager IS used). Doc: approvals/2026-04-09-batch-07-phase1-p3-cleanup.md |
 | 1b (round 8, batch 08) | 2026-04-10 | **approved batch** | 7 final findings: 2 P1 destructive deletes (CR-0002 AppRouter dupe, CR-0003 ContractList dupe — both with zero-import verification evidence) + 5 P3 final cleanups. Housekeeping: CR-0309 rejection prose corrected. Closes out Phase 1 except CR-0268 (flow-deploy dep) and CR-0299 (resolver drift). Doc: approvals/2026-04-09-batch-08-phase1-final-cleanup.md |
 | 1c | 2026-04-12 | **build-check-only green** | Operator chose Option B (build-check, no deploy). `npm run build` clean — no errors, no new warnings. Stray `)}` warning (CR-0001) confirmed gone. Deploy deferred to end of review. |
-| 2a | — | pending | Phase 2a dead-code batch preview |
+| 2a | 2026-04-12 | **approved + applied** | 14 findings (2 batch + 12 auto-fix). NewContractWizard.jsx deleted (1673 lines), dead import removed, 9 dead portalApi exports removed, 1 dead projectConstants export, 1 dead ContractsList token. Build green (122 modules, down from 123). |
 | 2b | — | pending | Phase 2b console batch preview |
 | 2c | — | pending | Phase 2c testid batch preview |
 | 2d | — | pending | Phase 2 smoke |
