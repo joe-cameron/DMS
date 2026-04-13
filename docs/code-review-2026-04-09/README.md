@@ -65,7 +65,10 @@
 | 2b | 2026-04-13 | **approved + applied** | 35 findings: 4 deleted, 20 replaced with toast, 5 keep-gated, 3 keep-intentional, 1 subsumed (NWC deleted), 2 dead-block deletes. 6 Admin tabs + 2 other components gained useToast(). Build green. |
 | 2c | 2026-04-13 | **approved + applied** | 35 findings, ~80 data-testid attributes added across 14 files. 2 findings already present (0526, 0532). Build green. |
 | 2d | 2026-04-13 | **build-check green** | `npm run build` clean, 122 modules, no errors. Phase 2 complete. |
-| 3.1–3.9 | — | pending | 9 screen-audit waves |
+| 3.1 | 2026-04-13 | **complete** | Wave 1 Sales: 26 findings (5 files). 15 P2, 11 P3. Top: href→navigate, dup-check-after-write, missing try/catch on saves. |
+| 3.2 | 2026-04-13 | **complete** | Wave 2 Contracts: 18 findings (7 files). Focus trap, hardcoded name, silent search errors. |
+| 3.3 | 2026-04-13 | **complete** | Wave 3 Wizards: 23 findings (3 files). 1 P1 (hardcoded SP URL), rest P2. Silent catches, a11y, submit-stuck. |
+| 3.4–3.9 | — | pending | Waves 4-9 remaining |
 | 4 | — | pending | Phase 4 consolidation |
 | 5.N | — | pending | Phase 5 fix batches (~10-20 expected) |
 | 5.N-smoke | — | pending | Phase 5 per-batch smoke |

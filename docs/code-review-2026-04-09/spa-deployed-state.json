@@ -1,60 +1,60 @@
 {
-  "portals": {
-    "Prod": {
-      "status": "ok",
-      "signatures": {
-        "change-4-templateDetail-select": true,
-        "change-3-useTemplateFields-select": true
-      },
-      "scriptUrls": [
-        "https://dmms1.powerappsportals.com/assets/index-DuCmYLU1.js",
-        "https://content.powerapps.com/resource/powerappsportal/controls/host/main.b1a931c657.chunk.js"
-      ]
+  "drift": [
+    {
+      "kind": "spa-bundle-drift",
+      "env": "Test",
+      "signature": "change-3-useTemplateFields-select"
     },
+    {
+      "kind": "spa-bundle-drift",
+      "env": "Test",
+      "signature": "change-4-templateDetail-select"
+    },
+    {
+      "kind": "spa-bundle-drift",
+      "env": "Stage",
+      "signature": "change-3-useTemplateFields-select"
+    },
+    {
+      "kind": "spa-bundle-drift",
+      "env": "Stage",
+      "signature": "change-4-templateDetail-select"
+    }
+  ],
+  "portals": {
     "Test": {
-      "status": "ok",
       "signatures": {
-        "change-4-templateDetail-select": false,
-        "change-3-useTemplateFields-select": false
+        "change-3-useTemplateFields-select": false,
+        "change-4-templateDetail-select": false
       },
+      "status": "ok",
       "scriptUrls": [
-        "https://aadcdn.msftauth.net/shared/1.0/content/js/ConvergedLogin_PCore_iXvvVEAQxmEXtWhahp1L2Q2.js",
-        "https://aadcdn.msftauth.net/ests/2.1/content/cdnbundles/ux.converged.login.strings-en.min_cbb9wf1-2b8knjgxpc5-rg2.js"
+        "https://aadcdn.msauth.net/shared/1.0/content/js/ConvergedLogin_PCore_iXvvVEAQxmEXtWhahp1L2Q2.js",
+        "https://aadcdn.msauth.net/ests/2.1/content/cdnbundles/ux.converged.login.strings-en.min_cbb9wf1-2b8knjgxpc5-rg2.js"
       ]
     },
     "Stage": {
-      "status": "ok",
       "signatures": {
-        "change-4-templateDetail-select": false,
-        "change-3-useTemplateFields-select": false
+        "change-3-useTemplateFields-select": false,
+        "change-4-templateDetail-select": false
       },
+      "status": "ok",
       "scriptUrls": [
         "https://holding.powerappsportals.com/assets/index-CzEx0ksV.js",
         "https://content.powerapps.com/resource/powerappsportal/controls/host/main.b1a931c657.chunk.js"
       ]
+    },
+    "Prod": {
+      "signatures": {
+        "change-3-useTemplateFields-select": true,
+        "change-4-templateDetail-select": true
+      },
+      "status": "ok",
+      "scriptUrls": [
+        "https://dmms1.powerappsportals.com/assets/index-Dvrpo2AE.js",
+        "https://content.powerapps.com/resource/powerappsportal/controls/host/main.b1a931c657.chunk.js"
+      ]
     }
   },
-  "generatedAt": "2026-04-09T23:49:21.2442121Z",
-  "drift": [
-    {
-      "kind": "spa-bundle-drift",
-      "signature": "change-4-templateDetail-select",
-      "env": "Test"
-    },
-    {
-      "kind": "spa-bundle-drift",
-      "signature": "change-3-useTemplateFields-select",
-      "env": "Test"
-    },
-    {
-      "kind": "spa-bundle-drift",
-      "signature": "change-4-templateDetail-select",
-      "env": "Stage"
-    },
-    {
-      "kind": "spa-bundle-drift",
-      "signature": "change-3-useTemplateFields-select",
-      "env": "Stage"
-    }
-  ]
+  "generatedAt": "2026-04-10T13:47:59.6750753Z"
 }
