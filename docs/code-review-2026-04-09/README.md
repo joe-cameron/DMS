@@ -36,7 +36,7 @@
 
 - [x] Phase 0 — Parity sweep + Playwright scaffolding decision — **PARTIAL** (Part A complete, Gate 0a resolved per operator pivot, Test/Stage SPA bundle redeploys + cache clears DEFERRED — see Session 2 log)
 - [x] Phase 1 — Shared modules audit — **complete 2026-04-12** (100 fixed, 8 rejected, 5 deferred, 2 open, 2 approved-pending)
-- [ ] Phase 2 — Auto-fix pass (dead code / console / testids) — NOT STARTED
+- [x] Phase 2 — Auto-fix pass (dead code / console / testids) — **complete 2026-04-13** (84 findings: 14 dead-code, 35 console, 35 testid)
 - [ ] Phase 3 — Screen audit (9 waves) — NOT STARTED
 - [ ] Phase 4 — Consolidation — NOT STARTED
 - [ ] Phase 5 — Fix batches — NOT STARTED
@@ -63,8 +63,8 @@
 | 1c | 2026-04-12 | **build-check-only green** | Operator chose Option B (build-check, no deploy). `npm run build` clean — no errors, no new warnings. Stray `)}` warning (CR-0001) confirmed gone. Deploy deferred to end of review. |
 | 2a | 2026-04-12 | **approved + applied** | 14 findings (2 batch + 12 auto-fix). NewContractWizard.jsx deleted (1673 lines), dead import removed, 9 dead portalApi exports removed, 1 dead projectConstants export, 1 dead ContractsList token. Build green (122 modules, down from 123). |
 | 2b | 2026-04-13 | **approved + applied** | 35 findings: 4 deleted, 20 replaced with toast, 5 keep-gated, 3 keep-intentional, 1 subsumed (NWC deleted), 2 dead-block deletes. 6 Admin tabs + 2 other components gained useToast(). Build green. |
-| 2c | — | pending | Phase 2c testid batch preview |
-| 2d | — | pending | Phase 2 smoke |
+| 2c | 2026-04-13 | **approved + applied** | 35 findings, ~80 data-testid attributes added across 14 files. 2 findings already present (0526, 0532). Build green. |
+| 2d | 2026-04-13 | **build-check green** | `npm run build` clean, 122 modules, no errors. Phase 2 complete. |
 | 3.1–3.9 | — | pending | 9 screen-audit waves |
 | 4 | — | pending | Phase 4 consolidation |
 | 5.N | — | pending | Phase 5 fix batches (~10-20 expected) |

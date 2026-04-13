@@ -3893,13 +3893,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "Admin content-area close button missing data-testid",
     "detail": "The close button for the admin content panel (X button in the active-tab header) lacks a data-testid. This button is used to collapse the active admin sub-tab.",
     "evidence": "<button onClick={() => setActiveTab(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#94A3B8', padding: '2px 6px' }}>{'\\u2715'}</button>",
     "recommendedFix": "<button data-testid=\"admin-btn-close-tab\" onClick={() => setActiveTab(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#94A3B8', padding: '2px 6px' }}>{'\\u2715'}</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0501",
@@ -3911,7 +3914,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "StepForm close button missing data-testid",
     "detail": "The close button (X) in the StepForm overlay panel lacks data-testid. Pattern repeats across 6 admin form close buttons (StepForm, LocationTypeForm, CostCodeForm, ApplianceTypeForm, VendorForm, BenchmarkForm).",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -3923,7 +3926,10 @@
       "CR-2026-04-09-0505",
       "CR-2026-04-09-0506"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0502",
@@ -3935,7 +3941,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "LocationTypeForm close button missing data-testid",
     "detail": "Close button (X) in the LocationTypeForm overlay panel.",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -3943,7 +3949,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0501"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0503",
@@ -3955,7 +3964,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CostCodeForm close button missing data-testid",
     "detail": "Close button (X) in the CostCodeForm overlay panel.",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -3963,7 +3972,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0501"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0504",
@@ -3975,7 +3987,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ApplianceTypeForm close button missing data-testid",
     "detail": "Close button (X) in the ApplianceTypeForm overlay panel.",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -3983,7 +3995,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0501"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0505",
@@ -3995,7 +4010,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "VendorForm close button missing data-testid",
     "detail": "Close button (X) in the VendorForm overlay panel.",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -4003,7 +4018,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0501"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0506",
@@ -4015,7 +4033,7 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "BenchmarkForm close button missing data-testid",
     "detail": "Close button (X) in the BenchmarkForm overlay panel.",
     "evidence": "<button onClick={onClose} style={btnClose}>&#x2715;</button>",
@@ -4023,7 +4041,10 @@
     "relatedFindings": [
       "CR-2026-04-09-0501"
     ],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0507",
@@ -4035,13 +4056,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "StepForm — 6 inputs/selects/textarea missing data-testid",
     "detail": "StepForm has inputs for step_number (line 407), step_name (line 423), assigned_email (line 428), responsible_role select (line 410), action_type select (line 437), predecessor_step select (line 454), dependency_type select (line 464), and notes textarea (line 474). None have data-testid.",
     "evidence": "<input type=\"number\" value={form.dcfg_step_number} onChange={...} style={{ ...inputFull, width: '80px' }} min=\"1\" />",
     "recommendedFix": "Add data-testid to each: admin-step-dcfg_step_number, admin-step-dcfg_step_name, admin-step-dcfg_assigned_email, admin-step-dcfg_responsible_role, admin-step-dcfg_action_type, admin-step-dcfg_predecessor_step, admin-step-dcfg_dependency_type, admin-step-dcfg_notes",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0508",
@@ -4053,13 +4077,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "LocationTypeForm — 3 inputs missing data-testid",
     "detail": "LocationTypeForm has name input (line 603), description textarea (line 606), and is_active checkbox (line 609). None have data-testid.",
     "evidence": "<input type=\"text\" value={form.dcfg_name} onChange={e => upd('dcfg_name', e.target.value)} style={inputFull} autoFocus />",
     "recommendedFix": "Add data-testid: admin-loctype-dcfg_name, admin-loctype-dcfg_description, admin-loctype-dcfg_is_active",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0509",
@@ -4071,13 +4098,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CostCodeForm — 5 inputs missing data-testid",
     "detail": "CostCodeForm: cost_code input (line 758), customer_ap_code input (line 761), description input (line 765), trade_category select (line 768), active_flag checkbox (line 773). None have data-testid.",
     "evidence": "<input type=\"text\" value={form.dcfg_dcfg_cost_code} onChange={...} style={inputFull} autoFocus />",
     "recommendedFix": "Add data-testid: admin-costcode-dcfg_cost_code, admin-costcode-dcfg_customer_ap_code, admin-costcode-dcfg_description, admin-costcode-dcfg_trade_category, admin-costcode-dcfg_active_flag",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0510",
@@ -4089,13 +4119,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ApplianceTypeForm — 5 inputs missing data-testid",
     "detail": "ApplianceTypeForm: name input (line 910), icon input (line 914), lifespan input (line 917), category select (line 921), is_active checkbox (line 932). None have data-testid.",
     "evidence": "<input type=\"text\" value={form.dcfg_name} onChange={e => upd('dcfg_name', e.target.value)} style={inputFull} autoFocus />",
     "recommendedFix": "Add data-testid: admin-appltype-dcfg_name, admin-appltype-dcfg_icon, admin-appltype-dcfg_expected_lifespan_years, admin-appltype-dcfg_category, admin-appltype-dcfg_is_active",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0511",
@@ -4107,13 +4140,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "Benchmark Edit button missing data-testid",
     "detail": "The Edit button in the benchmarks table row lacks data-testid. All other admin table Edit buttons have them.",
     "evidence": "<button onClick={() => setEditing(r)} style={btnLink}>Edit</button>",
     "recommendedFix": "<button data-testid=\"admin-btn-edit-benchmark\" onClick={() => setEditing(r)} style={btnLink}>Edit</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0512",
@@ -4125,13 +4161,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CustomerConfig BlanketWO section — 9 buttons missing data-testid",
     "detail": "BlanketWorkorderSection has interactive buttons without testids: Add Blanket (line 1725), Show/Hide History (lines 1728, 1773), Edit (line 1761), New Year (line 1762), Save (line 1766), Cancel (line 1767). Also 3 inputs: threshold (line 1741), jobNumber (line 1747), year (line 1753).",
     "evidence": "<button onClick={() => setEditing(true)} style={btnPrimary}>Add Blanket</button>",
     "recommendedFix": "Add data-testid to all: admin-blanket-btn-add, admin-blanket-btn-history, admin-blanket-btn-edit, admin-blanket-btn-new-year, admin-blanket-btn-save, admin-blanket-btn-cancel, admin-blanket-dcfg_dollar_threshold, admin-blanket-dcfg_job_number, admin-blanket-dcfg_effective_year",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0513",
@@ -4143,13 +4182,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "APMappingSection — inputs and buttons missing data-testid",
     "detail": "AP Code Mapping inline edit: AP code input (line 1873), Save button (line 1882), Remove button (line 1888). None have data-testid.",
     "evidence": "<input type=\"text\" value={currentValue} onChange={...} placeholder={...} style={{...}} />",
     "recommendedFix": "Add data-testid: admin-apmapping-input-${ccId}, admin-apmapping-btn-save, admin-apmapping-btn-remove",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0514",
@@ -4161,13 +4203,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "TemplateAssignmentSection — buttons missing data-testid",
     "detail": "Template Assignment section: toggle picker button (line 1940), remove template button (line 1962), assign template button (line 1982). None have data-testid.",
     "evidence": "<button onClick={() => setShowPicker(!showPicker)} style={btnSecondary}>",
     "recommendedFix": "Add data-testid: admin-tplassign-btn-toggle, admin-tplassign-btn-remove-${id}, admin-tplassign-btn-assign-${id}",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0515",
@@ -4179,13 +4224,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "MsaDetail edit form — 3 inputs/selects/textarea missing data-testid",
     "detail": "MsaDetail inline edit form: MSA name input (line 163), pricing select (line 165), notes textarea (line 170). None have data-testid.",
     "evidence": "<input type=\"text\" value={editForm.name} onChange={e => setEditForm(p => ({...p, name:e.target.value}))} style={{...inputStyle,width:'100%'}} />",
     "recommendedFix": "Add data-testid: msa-edit-dcfg_name, msa-edit-dcfg_pricing_alternative, msa-edit-dcfg_notes",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0516",
@@ -4197,13 +4245,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "OnboardingDetail intake session buttons missing data-testid",
     "detail": "Two buttons in the intake session section lack data-testid: 'Copy Link + Code' (line 587) and 'Create Intake Session' (line 594).",
     "evidence": "<button onClick={copyIntakeLink} style={{...}}>Copy Link + Code</button>",
     "recommendedFix": "Add data-testid: onbd-btn-copy-intake-link, onbd-btn-create-intake",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0517",
@@ -4215,13 +4266,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "OnboardingDetail AssigneeCell — 4 interactive elements missing data-testid",
     "detail": "AssigneeCell component: reassign input (line 1099), Save button (line 1105), Cancel button (line 1106), 'reassign' link button (line 1113). None have data-testid.",
     "evidence": "<input value={draft} onChange={...} style={{...}} autoFocus />",
     "recommendedFix": "Add data-testid: onbd-reassign-input, onbd-reassign-btn-save, onbd-reassign-btn-cancel, onbd-btn-reassign",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0518",
@@ -4233,13 +4287,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "SendQueue DetailStrip toggle button missing data-testid",
     "detail": "The collapse toggle button in the DetailStrip header lacks data-testid.",
     "evidence": "<button onClick={onToggle} style={{ background:'none', border:'none', fontSize:12, cursor:'pointer', color:MUTED }}>{'\\u25BC'}</button>",
     "recommendedFix": "<button data-testid=\"sq-strip-toggle\" onClick={onToggle} style={{ background:'none', border:'none', fontSize:12, cursor:'pointer', color:MUTED }}>{'\\u25BC'}</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0519",
@@ -4251,13 +4308,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "SendQueue MSA renewal alert email button missing data-testid",
     "detail": "The email button on each expiring MSA alert item in the DetailStrip lacks data-testid.",
     "evidence": "<button onClick={() => onAlertEmail(m, 'msa')} style={{ background:GREEN, color:'#fff', ...}}>Renew</button>",
     "recommendedFix": "<button data-testid=\"sq-alert-btn-email-msa\" onClick={() => onAlertEmail(m, 'msa')} style={{...}}>Renew</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0520",
@@ -4269,13 +4329,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "FlowMonitor — refresh button and auto-refresh checkbox missing data-testid",
     "detail": "FlowMonitor has a Refresh button (line 131) and an auto-refresh checkbox (line 128). Neither has data-testid.",
     "evidence": "<button style={styles.refreshBtn} onClick={() => { setLoading(true); fetchRequests(); }}>Refresh</button>",
     "recommendedFix": "Add data-testid: flow-btn-refresh, flow-chk-auto-refresh",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0521",
@@ -4287,13 +4350,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CustomerList NewCustomerPanel close button missing data-testid",
     "detail": "The close (X) button on the New Customer slide-out panel lacks data-testid.",
     "evidence": "<button onClick={onClose} style={btnClose}>\\u2715</button>",
     "recommendedFix": "<button data-testid=\"cust-btn-close-panel\" onClick={onClose} style={btnClose}>\\u2715</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0522",
@@ -4305,13 +4371,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "Locations NewLocationPanel close button missing data-testid",
     "detail": "The close (X) button on the New Location slide-out panel lacks data-testid.",
     "evidence": "<button onClick={onClose} style={{ background:'none', border:'none', fontSize:'18px', cursor:'pointer', color:'#94A3B8' }}>\\u2715</button>",
     "recommendedFix": "<button data-testid=\"loc-btn-close-panel\" onClick={onClose} style={{ background:'none', border:'none', fontSize:'18px', cursor:'pointer', color:'#94A3B8' }}>\\u2715</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0523",
@@ -4323,13 +4392,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "Onboarding NewCasePanel close button missing data-testid",
     "detail": "The close (X) button on the New Case slide-out panel lacks data-testid.",
     "evidence": "<button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#94A3B8' }}>{'\\u2715'}</button>",
     "recommendedFix": "<button data-testid=\"new-case-btn-close\" onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#94A3B8' }}>{'\\u2715'}</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0524",
@@ -4341,13 +4413,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "LocationDetail ApplianceForm close button missing data-testid",
     "detail": "The close (X) button on the Appliance form slide-out panel lacks data-testid.",
     "evidence": "<button onClick={onClose} style={{ background:'none', border:'none', fontSize:'18px', cursor:'pointer', color:'#94A3B8' }}>&#x2715;</button>",
     "recommendedFix": "<button data-testid=\"locd-appl-btn-close\" onClick={onClose} style={{ background:'none', border:'none', fontSize:'18px', cursor:'pointer', color:'#94A3B8' }}>&#x2715;</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0525",
@@ -4359,13 +4434,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ProjectList new project panel close button missing data-testid",
     "detail": "The close (X) button on the new project side panel lacks data-testid.",
     "evidence": "<button onClick={() => setShowNew(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#94A3B8' }}>\\u2715</button>",
     "recommendedFix": "<button data-testid=\"projects-btn-close-panel\" onClick={() => setShowNew(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#94A3B8' }}>\\u2715</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0526",
@@ -4377,13 +4455,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ProjectList new project form — 5 selects and 1 textarea missing data-testid",
     "detail": "New project form selects: category (line 268), urgency (line 277), template (line 287), customer (line 317), property (line 325), program (line 337). Textarea: description (line 399). None have data-testid.",
     "evidence": "<select value={form.category} onChange={...}>\n<select value={form.urgency} onChange={...}>",
     "recommendedFix": "Add data-testid: projects-new-category, projects-new-urgency, projects-new-template, projects-new-customer, projects-new-property, projects-new-program, projects-new-description",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0527",
@@ -4395,13 +4476,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ProjectList new project cancel button missing data-testid",
     "detail": "The Cancel button in the new project form lacks data-testid. The Save button (line 429) already has data-testid=\"projects-new-save\".",
     "evidence": "<button onClick={() => { setShowNew(false); setForm({ ...emptyForm }); }}>Cancel</button>",
     "recommendedFix": "<button data-testid=\"projects-new-cancel\" onClick={() => { setShowNew(false); setForm({ ...emptyForm }); }}>Cancel</button>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0528",
@@ -4413,13 +4497,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "VendorsTab Add and Cancel buttons missing data-testid",
     "detail": "VendorsTab (customer/location vendor assignment): Add button (line 193) and Cancel button (line 201) in the add-vendor section lack data-testid.",
     "evidence": "<button onClick={handleAdd} disabled={saving || !pickedVendorId}>Add</button>",
     "recommendedFix": "Add data-testid: vendors-btn-add, vendors-btn-cancel-add",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0529",
@@ -4431,13 +4518,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "OnboardingDetail IntakeField select missing data-testid",
     "detail": "The IntakeField dropdown (select element at line 1231) renders a dynamic field but lacks data-testid. Tests would need stable selectors to fill intake forms.",
     "evidence": "<select value={value} onChange={e => onChange(e.target.value)} style={fieldInputStyle}>",
     "recommendedFix": "Add dynamic data-testid: data-testid={`onbd-intake-${fieldKey}`}",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0530",
@@ -4449,13 +4539,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "ContractComposer — multiple interactive elements missing data-testid",
     "detail": "ContractComposer has many interactive elements without data-testid. Key ones: Back button (line 777), Done buttons for date-pick (line 807) and signers (line 824), customer picker buttons (line 960), Add Item (line 986), remove item (line 1023), add another item (line 1029), view contract record link (line 1120), drawer close (line 1163), filter controls in the vendor drawer. This is a single-screen composer with high interactivity.",
     "evidence": "<button style={S.btnGhost} onClick={() => navigate('/contracts')}>\\u2190 Back to contracts</button>",
     "recommendedFix": "Add data-testid to all interactive elements with cc- prefix: cc-btn-back, cc-btn-date-done, cc-btn-signers-done, cc-btn-customer-${id}, cc-btn-add-item, cc-btn-remove-item-${idx}, cc-btn-add-another, cc-link-view-contract, cc-btn-close-drawer, etc.",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0531",
@@ -4467,13 +4560,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "MsaComposer — 6 buttons missing data-testid",
     "detail": "MsaComposer: Save Draft (line 427), Search existing customer (line 522), New customer (line 523), Uniform pricing (line 599), Type-based pricing (line 600), Remove location (line 837). Some buttons (btn-download-msa, btn-import-csv, btn-add-loc, btn-cancel-csv, btn-confirm-csv) already have testids.",
     "evidence": "<button onClick={saveDraft} disabled={draftSaving} style={btnStyle(false)}>Save Draft</button>",
     "recommendedFix": "Add data-testid: msa-btn-save-draft, msa-btn-cust-search, msa-btn-cust-new, msa-btn-price-uniform, msa-btn-price-typebased, msa-btn-remove-loc-${i}",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0532",
@@ -4485,13 +4581,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CustomerDetail LocationsMapTab — table rows with click handlers missing data-testid",
     "detail": "LocationsMapTab renders a table of locations. Each row has an onClick handler to navigate to the location detail, but the rows lack data-testid.",
     "evidence": "<tr key={l.dcfg_propertyid} onClick={() => navigate(`/locations/${l.dcfg_propertyid}`)} style={{cursor:'pointer'}}>",
     "recommendedFix": "Add data-testid: <tr key={l.dcfg_propertyid} data-testid=\"custd-location-row\" onClick={...}>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0533",
@@ -4503,13 +4602,16 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "MsaDetail contracts table rows missing data-testid",
     "detail": "MsaDetail Contracts tab: each contract row has an onClick handler but lacks data-testid.",
     "evidence": "<tr key={c.dcfg_contractid} onClick={() => navigate(`/contracts/${c.dcfg_contractid}`)} style={{cursor:'pointer'}}>",
     "recommendedFix": "<tr key={c.dcfg_contractid} data-testid=\"msa-contract-row\" onClick={() => navigate(`/contracts/${c.dcfg_contractid}`)} style={{cursor:'pointer'}}>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   },
   {
     "id": "CR-2026-04-09-0534",
@@ -4521,12 +4623,15 @@
     "tier": "auto-fix",
     "phase": "phase-2c",
     "agent": "phase-2c-testid",
-    "status": "open",
+    "status": "fixed",
     "title": "CustomerDetail OverviewTab locations card missing data-testid",
     "detail": "OverviewTab has a clickable Locations card (line 178) with onClick but no data-testid. The other two summary cards (MSAs, Contracts) are not clickable, only Locations navigates.",
     "evidence": "<div className=\"card\" style={{ textAlign:'center', cursor:'pointer' }} onClick={() => navigate(`/locations?customer=${customerId}`)}>",
     "recommendedFix": "<div className=\"card\" data-testid=\"custd-overview-locations-card\" style={{ textAlign:'center', cursor:'pointer' }} onClick={() => navigate(`/locations?customer=${customerId}`)}>",
     "relatedFindings": [],
-    "foundAt": "2026-04-12T12:00:00Z"
+    "foundAt": "2026-04-12T12:00:00Z",
+    "approvedAt": "2026-04-13T12:49:47.457110+00:00",
+    "approvedIn": "approvals/2026-04-09-batch-11-phase2c-testid.md",
+    "fixedAt": "2026-04-13T12:49:47.457110+00:00"
   }
 ]
