@@ -1,0 +1,797 @@
+{
+  "Exhibit A - Automated": {
+    "fields": [
+      {
+        "path": "dcfg_wo_number",
+        "order": 1,
+        "source_text": "_____________"
+      },
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 2,
+        "source_text": "Today’s Date"
+      },
+      {
+        "path": "dcfg_msa.createdon",
+        "order": 3,
+        "source_text": "MSA Date"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_legal_name",
+        "order": 4,
+        "source_text": "LEGAL VENDOR NAME"
+      },
+      {
+        "path": "[COMPOSITE:vendor_address_block]",
+        "order": 5,
+        "source_text": "Vendor Address"
+      },
+      {
+        "path": "dcfg_schedule_description",
+        "order": 6,
+        "source_text": "Days, Times"
+      },
+      {
+        "path": "dcfg_start_date",
+        "order": 7,
+        "source_text": "Contract Start Date"
+      },
+      {
+        "path": "dcfg_end_date",
+        "order": 8,
+        "source_text": "Contract End Date"
+      },
+      {
+        "path": "dcfg_contract_fee",
+        "order": 9,
+        "source_text": "Contract Value Dollars ($X.XX)"
+      },
+      {
+        "path": "[COMPOSITE:vendor_contact]",
+        "order": 10,
+        "source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)"
+      },
+      {
+        "path": "[COMPOSITE:decades_handler]",
+        "order": 11,
+        "source_text": "Account Handler Name, # Tele, Email (Decades)"
+      },
+      {
+        "path": null,
+        "order": 12,
+        "source_text": "This Exhibit A is assigned for contracts on an AUTOMATED ACH payment schedule determined by Bancroft AP department, and no invoices should be submitted against the contract."
+      },
+      {
+        "path": null,
+        "order": 13,
+        "source_text": "Fixed payments for all defined services on a regular recurring schedule will be made according to a Payment Schedule created by Bancroft’s Finance Department."
+      },
+      {
+        "path": "[DOCUSIGN:\\Vendor_Signature\\]",
+        "order": 14,
+        "source_text": "____"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 15,
+        "source_text": "______"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 16,
+        "source_text": "___________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 17,
+        "source_text": "______________________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 18,
+        "source_text": "___________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 19,
+        "source_text": "_________________________"
+      },
+      {
+        "path": "dcfg_wo_number",
+        "order": 20,
+        "source_text": "_____________"
+      },
+      {
+        "path": "dcfg_wo_number",
+        "order": 21,
+        "source_text": "_____________"
+      }
+    ],
+    "type": 100000002
+  },
+  "Blanket Work Order": {
+    "fields": [
+      {
+        "path": "dcfg_wo_number",
+        "order": 1,
+        "source_text": "_________"
+      },
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 2,
+        "source_text": "Today’s Date"
+      },
+      {
+        "path": "dcfg_msa.createdon",
+        "order": 3,
+        "source_text": "MSA Date"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_legal_name",
+        "order": 4,
+        "source_text": "VENDOR NAME"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_address",
+        "order": 5,
+        "source_text": "Vendor Street Address"
+      },
+      {
+        "path": "[COMPOSITE:vendor_address_block]",
+        "order": 6,
+        "source_text": "City, State, Zip Code"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 7,
+        "source_text": "Contact Name,"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_phone",
+        "order": 8,
+        "source_text": "Tele#"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_email",
+        "order": 9,
+        "source_text": "email address (Vendor)"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_phone",
+        "order": 10,
+        "source_text": "Tele#"
+      },
+      {
+        "path": "[DOCUSIGN:\\Vendor_Signature\\]",
+        "order": 11,
+        "source_text": "___"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 12,
+        "source_text": "__________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 13,
+        "source_text": "___________________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 14,
+        "source_text": "___________________________"
+      }
+    ],
+    "type": 100000001
+  },
+  "Work Order Amendment": {
+    "fields": [
+      {
+        "path": "dcfg_amendment_sequence",
+        "order": 1,
+        "source_text": "Amendment Number"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_legal_name",
+        "order": 2,
+        "source_text": "Vendor Name"
+      },
+      {
+        "path": "dcfg_po_number",
+        "order": 3,
+        "source_text": "Purchase Order"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 4,
+        "source_text": "Customer Printed Name"
+      },
+      {
+        "path": "[BLOCK:amendment_lines]",
+        "order": 5,
+        "source_text": "Amendment Lines"
+      },
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 6,
+        "source_text": "Work Order Date"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 7,
+        "source_text": "Client Name"
+      },
+      {
+        "path": "dcfg_msa.createdon",
+        "order": 8,
+        "source_text": "Main Contract Date"
+      },
+      {
+        "path": "dcfg_service_description",
+        "order": 9,
+        "source_text": "Service Location Description"
+      },
+      {
+        "path": "dcfg_schedule_description",
+        "order": 10,
+        "source_text": "Hour of Operations"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_state",
+        "order": 11,
+        "source_text": "Work State Date"
+      },
+      {
+        "path": "dcfg_wo.createdon",
+        "order": 12,
+        "source_text": "Work Complete Date"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 13,
+        "source_text": "Contractor Contact Name"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_phone",
+        "order": 14,
+        "source_text": "Vendor Phone"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_email",
+        "order": 15,
+        "source_text": "Vendor Email"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 16,
+        "source_text": "Customer Contact"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_phone",
+        "order": 17,
+        "source_text": "Customer Phone"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_email",
+        "order": 18,
+        "source_text": "Customer EMail"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 19,
+        "source_text": "Contractor Printed Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 20,
+        "source_text": "Customer Contact Name"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 21,
+        "source_text": "Contractor Title"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 22,
+        "source_text": "Customer Title"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_address",
+        "order": 23,
+        "source_text": "Customer Street"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_city",
+        "order": 24,
+        "source_text": "Customer City"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_state",
+        "order": 25,
+        "source_text": "Customer State"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 26,
+        "source_text": "Contractor Title"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 27,
+        "source_text": "Owner/Decades Printed Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 28,
+        "source_text": "Owner/Decades Printed Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 29,
+        "source_text": "Owner/Decades Title"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 30,
+        "source_text": "Owner/Decades Title"
+      }
+    ],
+    "type": 100000004
+  },
+  "Exhibit A - Variable": {
+    "fields": [
+      {
+        "path": "dcfg_wo_number",
+        "order": 1,
+        "source_text": "_____________"
+      },
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 2,
+        "source_text": "Today’s Date"
+      },
+      {
+        "path": "dcfg_msa.createdon",
+        "order": 3,
+        "source_text": "MSA Date"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_legal_name",
+        "order": 4,
+        "source_text": "LEGAL VENDOR NAME"
+      },
+      {
+        "path": "[COMPOSITE:vendor_address_block]",
+        "order": 5,
+        "source_text": "Vendor Address"
+      },
+      {
+        "path": "dcfg_schedule_description",
+        "order": 6,
+        "source_text": "Days, Times"
+      },
+      {
+        "path": "dcfg_start_date",
+        "order": 7,
+        "source_text": "Contract Start Date"
+      },
+      {
+        "path": "dcfg_end_date",
+        "order": 8,
+        "source_text": "Contract End Date"
+      },
+      {
+        "path": "dcfg_contract_fee",
+        "order": 9,
+        "source_text": "Contract Value Dollars ($X.XX)"
+      },
+      {
+        "path": "[COMPOSITE:vendor_contact]",
+        "order": 10,
+        "source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)"
+      },
+      {
+        "path": "[COMPOSITE:decades_handler]",
+        "order": 11,
+        "source_text": "Account Handler Name, # Tele, Email (Decades)"
+      },
+      {
+        "path": null,
+        "order": 12,
+        "source_text": "Invoices for all work defined by the Scope of Work contained herein are to be submitted to ap@bancroft.org.  Please reference the WO Number and Cost Center Code(s) specified in this document."
+      },
+      {
+        "path": "[DOCUSIGN:\\Vendor_Signature\\]",
+        "order": 13,
+        "source_text": "___"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 14,
+        "source_text": "_____"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 15,
+        "source_text": "___________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 16,
+        "source_text": "______________________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 17,
+        "source_text": "___________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 18,
+        "source_text": "_________________________"
+      },
+      {
+        "path": "dcfg_wo_number",
+        "order": 19,
+        "source_text": "_____________"
+      },
+      {
+        "path": "dcfg_wo_number",
+        "order": 20,
+        "source_text": "_____________"
+      }
+    ],
+    "type": 100000003
+  },
+  "Bancroft (MSA)": {
+    "fields": [
+      {
+        "path": "dcfg_msa.dcfg_msa_number",
+        "order": 1,
+        "source_text": "__________"
+      },
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 2,
+        "source_text": "Today’s Date"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_legal_name",
+        "order": 3,
+        "source_text": "Vendor’s Legal Name"
+      },
+      {
+        "path": "[DOCUSIGN:\\Vendor_Signature\\]",
+        "order": 4,
+        "source_text": "__"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 5,
+        "source_text": "__"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_name",
+        "order": 6,
+        "source_text": "___________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 7,
+        "source_text": "__________________________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 8,
+        "source_text": "___________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 9,
+        "source_text": "___________________________"
+      },
+      {
+        "path": "[COMPOSITE:vendor_address_block]",
+        "order": 10,
+        "source_text": "________________________"
+      },
+      {
+        "path": "dcfg_vendor.dcfg_signer_title",
+        "order": 11,
+        "source_text": "Contractor Title"
+      }
+    ],
+    "type": 100000005
+  },
+  "Basic Platform Package A": {
+    "fields": [
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 1,
+        "source_text": "March 27, 2026"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 2,
+        "source_text": "Customer Legal Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 3,
+        "source_text": "Customer Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 4,
+        "source_text": "CustomerContact"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_address",
+        "order": 5,
+        "source_text": "CustomerStreetAddress"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_city",
+        "order": 6,
+        "source_text": "City"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_state",
+        "order": 7,
+        "source_text": "State"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_zip",
+        "order": 8,
+        "source_text": "Zipcode"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 9,
+        "source_text": "________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 10,
+        "source_text": "Owner Name Printed"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 11,
+        "source_text": "Owner Title"
+      },
+      {
+        "path": "[BLOCK:location_list]",
+        "order": 12,
+        "source_text": "Location List"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 13,
+        "source_text": "_Qty_Loc_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_onboarding_rate",
+        "order": 14,
+        "source_text": "_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_onboarding",
+        "order": 15,
+        "source_text": "Total_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 16,
+        "source_text": "_Qty_Loc_____"
+      },
+      {
+        "path": "dcfg_msa.dcfg_monthly_rate",
+        "order": 17,
+        "source_text": "_Membership_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_monthly",
+        "order": 18,
+        "source_text": "_Total Monthly Membership_"
+      }
+    ],
+    "type": 100000000
+  },
+  "Concierge Platform Package": {
+    "fields": [
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 1,
+        "source_text": "March 27, 2026"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 2,
+        "source_text": "PCDI – Princeton Child Development Institute"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 3,
+        "source_text": "Customer Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 4,
+        "source_text": "CustomerContact"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_address",
+        "order": 5,
+        "source_text": "CustomerStreetAddress"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_city",
+        "order": 6,
+        "source_text": "City"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_state",
+        "order": 7,
+        "source_text": "State"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_zip",
+        "order": 8,
+        "source_text": "Zipcode"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 9,
+        "source_text": "________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 10,
+        "source_text": "Owner Name Printed"
+      },
+      {
+        "path": "[SIGNATURE:OWNER_TITLE]",
+        "order": 11,
+        "source_text": "Owner Title"
+      },
+      {
+        "path": "[BLOCK:location_list]",
+        "order": 12,
+        "source_text": "Location List"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 13,
+        "source_text": "_Qty_Loc_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_onboarding_rate",
+        "order": 14,
+        "source_text": "_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_onboarding",
+        "order": 15,
+        "source_text": "Total_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 16,
+        "source_text": "_Qty_Loc_____"
+      },
+      {
+        "path": "dcfg_msa.dcfg_monthly_rate",
+        "order": 17,
+        "source_text": "_Membership_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_monthly",
+        "order": 18,
+        "source_text": "_Total Monthly Membership_"
+      }
+    ],
+    "type": 100000000
+  },
+  "Optimized Platform Package": {
+    "fields": [
+      {
+        "path": "[SYSTEM:TODAY]",
+        "order": 1,
+        "source_text": "March 27, 2026"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 2,
+        "source_text": "PCDI – Princeton Child Development Institute"
+      },
+      {
+        "path": "dcfg_customer.dcfg_name",
+        "order": 3,
+        "source_text": "Customer Name"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 4,
+        "source_text": "CustomerContact"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_address",
+        "order": 5,
+        "source_text": "CustomerStreetAddress"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_city",
+        "order": 6,
+        "source_text": "City"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_state",
+        "order": 7,
+        "source_text": "State"
+      },
+      {
+        "path": "dcfg_customer.dcfg_billing_zip",
+        "order": 8,
+        "source_text": "Zipcode"
+      },
+      {
+        "path": "[DOCUSIGN:\\Customer_Signature\\]",
+        "order": 9,
+        "source_text": "________________________"
+      },
+      {
+        "path": "[DOCUSIGN:\\Decades_Signature\\]",
+        "order": 10,
+        "source_text": "_________________________"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_name",
+        "order": 11,
+        "source_text": "Owner Name Printed"
+      },
+      {
+        "path": "dcfg_customer.dcfg_primary_contact_title",
+        "order": 12,
+        "source_text": "Owner Title"
+      },
+      {
+        "path": "[BLOCK:location_list]",
+        "order": 13,
+        "source_text": "Location List"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 14,
+        "source_text": "_Qty_Loc_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_onboarding_rate",
+        "order": 15,
+        "source_text": "_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_onboarding",
+        "order": 16,
+        "source_text": "Total_Onboarding_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_location_count",
+        "order": 17,
+        "source_text": "_Qty_Loc_____"
+      },
+      {
+        "path": "dcfg_msa.dcfg_monthly_rate",
+        "order": 18,
+        "source_text": "_Membership_Fee_"
+      },
+      {
+        "path": "dcfg_msa.dcfg_total_monthly",
+        "order": 19,
+        "source_text": "_Total Monthly Membership_"
+      }
+    ],
+    "type": 100000000
+  }
+}
