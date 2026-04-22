@@ -55,7 +55,7 @@ app.http('html-to-pdf', {
           }
         }
 
-        zip.file(part, xml);
+        zip.file(part, xml, { createFolders: false });
       }
 
       // Generate output .docx
@@ -142,10 +142,21 @@ function injectContentControl(xml, field, opts) {
     count++;
     // Extract the first run's formatting (w:rPr) to preserve it
     const rPrMatch = content.match(/<w:rPr>([\s\S]*?)<\/w:rPr>/);
-    const rPr = rPrMatch ? `<w:rPr>${rPrMatch[1]}</w:rPr>` : '';
+    let rPrInner = rPrMatch ? rPrMatch[1] : '';
+    // Add bold to all injected values so filled-in data stands out
+    if (!/<w:b[\s/>]/.test(rPrInner)) rPrInner = '<w:b/>' + rPrInner;
+    const rPr = `<w:rPr>${rPrInner}</w:rPr>`;
 
-    // Build a single run with the injected value
-    const newContent = `<w:r>${rPr}<w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`;
+    // Detect block-level SDT (sdtContent contains w:p) vs inline
+    // Block-level MUST wrap run in <w:p> per OOXML spec 17.5.2.34
+    const isBlockLevel = /<w:p[\s>]/.test(content);
+
+    // Preserve paragraph properties (alignment, spacing, etc.)
+    const pPrMatch = content.match(/<w:pPr>([\s\S]*?)<\/w:pPr>/);
+    const pPr = pPrMatch ? `<w:pPr>${pPrMatch[1]}</w:pPr>` : '';
+
+    const run = `<w:r>${rPr}<w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`;
+    const newContent = isBlockLevel ? `<w:p>${pPr}${run}</w:p>` : run;
     return before + newContent + after;
   });
 
@@ -174,7 +185,7 @@ function injectMergeField(xml, field, opts) {
 
   const newXml = xml.replace(pattern, () => {
     count++;
-    return `<w:r><w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`;
+    return `<w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`;
   });
 
   return { xml: newXml, injected: count > 0, count };
@@ -255,7 +266,10 @@ function injectHighlight(xml, field, opts) {
           if (!opts.clean_highlights) {
             cleanRPr = firstRPr; // keep highlight
           }
-          const rPrTag = cleanRPr.trim() ? `<w:rPr>${cleanRPr}</w:rPr>` : '';
+          // Add bold to all injected values
+          if (cleanRPr && !/<w:b[\s/>]/.test(cleanRPr)) cleanRPr = '<w:b/>' + cleanRPr;
+          else if (!cleanRPr) cleanRPr = '<w:b/>';
+          const rPrTag = `<w:rPr>${cleanRPr}</w:rPr>`;
           newSegments.push({
             type: 'raw',
             text: `<w:r>${rPrTag}<w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`
@@ -366,8 +380,9 @@ function escapeXml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+    .replace(/"/g, '&quot;');
+  // Single quotes don't need escaping in <w:t> text content
+  // and &apos; is not recognized by some OOXML parsers
 }
 
 function escapeRegex(str) {
