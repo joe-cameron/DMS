@@ -1,0 +1,1211 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>DCFG System Architecture</title><style>body{font-family:Segoe UI,system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;color:#1E293B;line-height:1.6}h1{color:#1B2A4A;border-bottom:2px solid #D4A017;padding-bottom:8px}h2{color:#1B2A4A;margin-top:32px}h3{color:#475569}h4{color:#1B2A4A;margin-top:20px}table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border:1px solid #E2E8F0;padding:8px 12px;text-align:left;font-size:14px}th{background:#F1F5F9;font-weight:600}tr:hover td{background:#F8FAFC}code{background:#F1F5F9;padding:2px 6px;border-radius:3px;font-size:13px}pre{background:#1B2A4A;color:#F8FAFC;padding:16px;border-radius:6px;overflow-x:auto;font-size:13px}pre code{background:none;color:inherit}strong{color:#1B2A4A}p{margin:8px 0}</style></head><body><h1>DCFG Contracting Suite — System Architecture</h1>
+<p><strong>Prepared for:</strong> Audit / Compliance Review
+<strong>Date:</strong> April 27, 2026
+<strong>Organization:</strong> Decades Construction &amp; Facilities Group
+<strong>Tenant:</strong> decades-cg.com</p>
+<hr />
+<h2>1. System Overview</h2>
+<p>The DCFG Contracting Suite is a facilities management platform that supports the full lifecycle of contract management, inspection scheduling, document generation, and vendor operations. The system spans four Microsoft Power Platform environments, an Azure Functions compute layer, and integrations with UpKeep (CMMS), SharePoint (DMS), and Google Maps.</p>
+<h3>1.1 Architecture Diagram (Logical)</h3>
+<pre><code>                        +--------------------------+
+                        |     End Users (Browser)  |
+                        +--------+---------+-------+
+                                 |         |
+                    HTTPS/TLS 1.2|         |HTTPS/TLS 1.2
+                                 v         v
+              +------------------+--+   +--+------------------+
+              | Power Pages SPA     |   | Power Pages SPA     |
+              | Contracting Suite   |   | Inspection Scheduler|
+              | dmms1.powerapps     |   | dcfgscheduler.      |
+              | portals.com         |   | powerappsportals.com|
+              +--------+--------+--+   +--+--------+---------+
+                       |        |         |        |
+                       v        v         v        v
+              +--------+--------+---------+--------+---------+
+              |           Microsoft Dataverse                 |
+              |           (Power Platform)                    |
+              |  Prod | Test | Stage | Portal environments    |
+              +--------+--------+---------+--------+---------+
+                       |                  |
+                       v                  v
+              +--------+--------+  +------+--------+
+              | Azure Functions |  | SharePoint     |
+              | (Document Gen,  |  | Online         |
+              |  Inspection     |  | (DCFG_Templates|
+              |  Sync)          |  |  DCFG_Outputs) |
+              +--------+--------+  +---------------+
+                       |
+                       v
+              +--------+--------+
+              | UpKeep CMMS     |
+              | (Read-Only      |
+              |  Integration)   |
+              +-----------------+
+</code></pre>
+<hr />
+<h2>2. Environments</h2>
+<h3>2.1 Microsoft Power Platform</h3>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Purpose</th>
+<th>Org URL</th>
+<th>Power Pages Sites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DCFGSystems-Prod</strong></td>
+<td>Production</td>
+<td>org06f5de0b.crm.dynamics.com</td>
+<td>dmms1.powerappsportals.com (Contracting Suite), dcfgscheduler.powerappsportals.com (Inspection Scheduler)</td>
+</tr>
+<tr>
+<td><strong>DCFGSystems-Test</strong></td>
+<td>Development/Testing (Sandbox)</td>
+<td>org0c17e98d.crm.dynamics.com</td>
+<td>dcfg.powerappsportals.com</td>
+</tr>
+<tr>
+<td><strong>DCFGSystems-Stage</strong></td>
+<td>Staging/UAT</td>
+<td>org88778bb0.crm.dynamics.com</td>
+<td>holding.powerappsportals.com</td>
+</tr>
+<tr>
+<td><strong>DCFGSystems-Portal</strong></td>
+<td>Customer Portal &amp; Onboarding</td>
+<td>orgf625b080.crm.dynamics.com</td>
+<td>decades.powerappsportals.com (Customer Portal), decades-concierge.powerappsportals.com (Onboarding Concierge SPA)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Deployment Order:</strong> Test -&gt; Stage -&gt; Prod
+<strong>Solution Name:</strong> DCFGSystemTest (all environments)
+<strong>Data Model:</strong> Enhanced Data Model (EDM) for all Power Pages sites</p>
+<h3>2.2 Azure</h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Type</th>
+<th>Location</th>
+<th>Resource Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dcfg-html-to-pdf</strong></td>
+<td>Function App (Linux, Node.js)</td>
+<td>East US</td>
+<td>dcfg-docgen</td>
+</tr>
+<tr>
+<td><strong>ASP-dcfgdocgen-a01b</strong></td>
+<td>App Service Plan</td>
+<td>East US</td>
+<td>dcfg-docgen</td>
+</tr>
+<tr>
+<td><strong>dcfgdocgen930b</strong></td>
+<td>Storage Account</td>
+<td>East US</td>
+<td>dcfg-docgen</td>
+</tr>
+<tr>
+<td><strong>Application Insights</strong></td>
+<td>Monitoring</td>
+<td>Global</td>
+<td>dcfg-docgen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Subscription:</strong> Decades Contracting System (<code>4599db3e-dd92-4a8d-8f32-df6ed6c422bf</code>)</p>
+<h3>2.3 External Services</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+<th>Access Level</th>
+<th>Auth Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UpKeep CMMS</strong></td>
+<td>Work order management, inspection scheduling</td>
+<td>READ-ONLY</td>
+<td>Email/password session token</td>
+</tr>
+<tr>
+<td><strong>SharePoint Online</strong></td>
+<td>Document storage (templates, outputs, attachments)</td>
+<td>Read/Write</td>
+<td>MSAL client credentials</td>
+</tr>
+<tr>
+<td><strong>Google Maps Platform</strong></td>
+<td>Route optimization, drive time calculation</td>
+<td>Read-Only</td>
+<td>API key (referrer-restricted)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. Azure Functions</h2>
+<h3>3.1 Function App: dcfg-html-to-pdf</h3>
+<p><strong>Runtime:</strong> Node.js on Linux
+<strong>Framework:</strong> Azure Functions v4
+<strong>TLS:</strong> Minimum 1.2 enforced
+<strong>FTP:</strong> FTPS-only (plain FTP disabled)
+<strong>Host:</strong> dcfg-html-to-pdf-d9bwchakhgduf4gc.eastus-01.azurewebsites.net</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Trigger</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>html-to-pdf</strong></td>
+<td>HTTP</td>
+<td>Document generation — OOXML injection into Word templates via jszip</td>
+</tr>
+<tr>
+<td><strong>sharepoint-upload</strong></td>
+<td>HTTP</td>
+<td>Upload generated documents to SharePoint DCFG_Outputs</td>
+</tr>
+<tr>
+<td><strong>docusign-send</strong></td>
+<td>HTTP</td>
+<td>Send documents for electronic signature via DocuSign</td>
+</tr>
+<tr>
+<td><strong>inspectionSync</strong></td>
+<td>Timer (every 30 min)</td>
+<td>Sync inspection work orders from UpKeep to Dataverse</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2 Function Security</h3>
+<ul>
+<li>All HTTP-triggered functions require a function key in the request</li>
+<li>Timer-triggered functions (inspectionSync) run automatically with no external trigger surface</li>
+<li>Secrets stored in Azure Function App Configuration (Application Settings), not in code</li>
+<li>No secrets in source control</li>
+</ul>
+<hr />
+<h2>4. Identity &amp; Authentication</h2>
+<h3>4.1 Azure AD Tenant</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tenant ID</strong></td>
+<td>71ccf1ec-8b0a-4419-9a45-a617aa1a66d6</td>
+</tr>
+<tr>
+<td><strong>Domain</strong></td>
+<td>decades-cg.com</td>
+</tr>
+<tr>
+<td><strong>Display Name</strong></td>
+<td>Decades Construction Group</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 App Registration: Decades Management System</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Application (Client) ID</strong></td>
+<td>327ac710-2d2a-4912-a5ee-9b7f51ee7a7b</td>
+</tr>
+<tr>
+<td><strong>Sign-in Audience</strong></td>
+<td>AzureADMyOrg (single tenant)</td>
+</tr>
+<tr>
+<td><strong>Client Secret</strong></td>
+<td>Configured (expires 2028)</td>
+</tr>
+<tr>
+<td><strong>Dataverse Application User</strong></td>
+<td>Registered on Prod (ID: 3587027f-4c42-f111-88b4-000d3a31ac1d)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>API Permissions:</strong>
+- Dynamics CRM — user_impersonation (Delegated)
+- SharePoint — AllSites.Write (Delegated)
+- Microsoft Graph — User.Read (Delegated)</p>
+<h3>4.3 Authentication Flows</h3>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>Used By</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Browser SSO</strong></td>
+<td>Power Pages SPA users</td>
+<td>Microsoft Entra ID via Power Pages built-in auth</td>
+</tr>
+<tr>
+<td><strong>Client Credentials</strong></td>
+<td>Azure Function (inspectionSync)</td>
+<td>App registration + client secret → Dataverse token</td>
+</tr>
+<tr>
+<td><strong>Session Token</strong></td>
+<td>Azure Function (inspectionSync)</td>
+<td>UpKeep email/password → session token (API-level)</td>
+</tr>
+<tr>
+<td><strong>Anti-Forgery Token</strong></td>
+<td>SPA Dataverse API calls</td>
+<td>Power Pages fetchAntiForgeryToken → __RequestVerificationToken header</td>
+</tr>
+<tr>
+<td><strong>PAC CLI</strong></td>
+<td>Developer deployment</td>
+<td>pac auth (interactive, per-environment)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5. Data Architecture</h2>
+<h3>5.1 Dataverse Tables (Primary)</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Logical Name</th>
+<th>Purpose</th>
+<th>Record Estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Properties</td>
+<td>dcfg_property</td>
+<td>Managed locations</td>
+<td>~983</td>
+</tr>
+<tr>
+<td>Customers</td>
+<td>dcfg_customer</td>
+<td>Client organizations</td>
+<td>~8</td>
+</tr>
+<tr>
+<td>Contracts</td>
+<td>dcfg_contract</td>
+<td>Work orders, amendments</td>
+<td>~200+</td>
+</tr>
+<tr>
+<td>MSAs</td>
+<td>dcfg_msa</td>
+<td>Master service agreements</td>
+<td>~50+</td>
+</tr>
+<tr>
+<td>Vendors</td>
+<td>dcfg_vendor</td>
+<td>Service providers</td>
+<td>~100+</td>
+</tr>
+<tr>
+<td>Document Requests</td>
+<td>dcfg_document_request</td>
+<td>DocGen transaction table</td>
+<td>~500+</td>
+</tr>
+<tr>
+<td>Send Queue</td>
+<td>dcfg_send_queue</td>
+<td>Contract delivery workflow</td>
+<td>~100+</td>
+</tr>
+<tr>
+<td>Inspectors</td>
+<td>dcfg_im_inspector</td>
+<td>Inspection staff profiles</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Inspection Scenarios</td>
+<td>dcfg_im_scenario</td>
+<td>What-if scheduling parameters</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Inspection Schedule</td>
+<td>dcfg_im_schedule</td>
+<td>Scheduled/completed inspections</td>
+<td>~2,500+</td>
+</tr>
+<tr>
+<td>Audit Logs</td>
+<td>dcfg_audit_log</td>
+<td>System audit trail</td>
+<td>Growing</td>
+</tr>
+<tr>
+<td>Configs</td>
+<td>dcfg_config</td>
+<td>Runtime configuration</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>Knowledge</td>
+<td>dcfg_knowledge</td>
+<td>System knowledge base</td>
+<td>~230</td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 SharePoint Document Libraries</h3>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Purpose</th>
+<th>Structure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DCFG_Templates</strong></td>
+<td>Word document templates</td>
+<td>Flat</td>
+</tr>
+<tr>
+<td><strong>DCFG_Outputs</strong></td>
+<td>Generated documents</td>
+<td>Customer/Year/DocType</td>
+</tr>
+<tr>
+<td><strong>DCFG_Attachments</strong></td>
+<td>Uploaded attachments</td>
+<td>Customer/Location/Year</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SharePoint Site:</strong> decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite</p>
+<h3>5.3 Data Flow — Document Generation</h3>
+<pre><code>User clicks Generate
+  -&gt; SPA creates dcfg_document_request record (Dataverse)
+  -&gt; Power Automate flow triggers on create
+  -&gt; Flow reads template from SharePoint DCFG_Templates
+  -&gt; Flow calls Azure Function (html-to-pdf) for OOXML injection
+  -&gt; Azure Function returns populated document
+  -&gt; Flow saves to SharePoint DCFG_Outputs
+  -&gt; Flow updates dcfg_document_request with result URL
+  -&gt; SPA polls for completion, shows link
+</code></pre>
+<h3>5.4 Data Flow — Inspection Sync</h3>
+<pre><code>UpKeep (source of truth for scheduled work)
+  -&gt; Azure Function inspectionSync (every 30 min, timer trigger)
+  -&gt; Authenticates to UpKeep (session token)
+  -&gt; Pulls all inspection WOs (paginated)
+  -&gt; Authenticates to Dataverse (client credentials)
+  -&gt; Compares against dcfg_im_schedule records
+  -&gt; Creates new records / updates changed records
+  -&gt; Scheduler SPA reads dcfg_im_schedule via Web API
+  -&gt; User clicks Refresh to pull latest
+</code></pre>
+<hr />
+<h2>6. Network &amp; Security</h2>
+<h3>6.1 Transport Security</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Protocol</th>
+<th>TLS Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Power Pages sites</td>
+<td>HTTPS</td>
+<td>1.2+ (enforced by Microsoft)</td>
+</tr>
+<tr>
+<td>Azure Functions</td>
+<td>HTTPS</td>
+<td>1.2 minimum (configured)</td>
+</tr>
+<tr>
+<td>Dataverse API</td>
+<td>HTTPS</td>
+<td>1.2+ (enforced by Microsoft)</td>
+</tr>
+<tr>
+<td>UpKeep API</td>
+<td>HTTPS</td>
+<td>1.2+</td>
+</tr>
+<tr>
+<td>SharePoint API</td>
+<td>HTTPS</td>
+<td>1.2+ (enforced by Microsoft)</td>
+</tr>
+<tr>
+<td>Google Maps API</td>
+<td>HTTPS</td>
+<td>1.2+</td>
+</tr>
+</tbody>
+</table>
+<h3>6.2 Access Controls</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Power Pages</strong></td>
+<td>Microsoft Entra ID SSO, role-based table permissions, CSRF tokens on all API calls</td>
+</tr>
+<tr>
+<td><strong>Dataverse</strong></td>
+<td>Table permissions per web role, field-level site settings, solution-scoped</td>
+</tr>
+<tr>
+<td><strong>Azure Functions</strong></td>
+<td>Function keys for HTTP triggers, App Service authentication available</td>
+</tr>
+<tr>
+<td><strong>SharePoint</strong></td>
+<td>Site-level permissions, app-only access via client credentials</td>
+</tr>
+<tr>
+<td><strong>UpKeep</strong></td>
+<td>Account-level credentials, API session tokens, READ-ONLY policy enforced in code</td>
+</tr>
+<tr>
+<td><strong>Google Maps</strong></td>
+<td>API key restricted to dcfgscheduler.powerappsportals.com referrer</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 Secrets Management</h3>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Storage Location</th>
+<th>Rotation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dataverse client secret</td>
+<td>Azure Function App Settings</td>
+<td>2-year expiry (created April 2026)</td>
+</tr>
+<tr>
+<td>UpKeep credentials</td>
+<td>Azure Function App Settings</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>SharePoint client credentials</td>
+<td>Azure Function App Settings</td>
+<td>Per app registration policy</td>
+</tr>
+<tr>
+<td>Google Maps API key</td>
+<td>Dataverse site setting (Scheduler/GoogleMapsApiKey)</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>PAC CLI auth</td>
+<td>Local developer machine only</td>
+<td>Per-session</td>
+</tr>
+</tbody>
+</table>
+<h3>6.4 Data Residency</h3>
+<p>All data resides in the United States:
+- <strong>Dataverse:</strong> US region (crm.dynamics.com)
+- <strong>Azure Functions:</strong> East US
+- <strong>SharePoint:</strong> US geography (per Microsoft 365 tenant)
+- <strong>UpKeep:</strong> US-hosted SaaS</p>
+<hr />
+<h2>7. SPA Architecture</h2>
+<h3>7.1 Contracting Suite SPA (dmms1.powerappsportals.com)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React 16.14</td>
+</tr>
+<tr>
+<td><strong>Build Tool</strong></td>
+<td>Vite 5.x (IIFE bundle)</td>
+</tr>
+<tr>
+<td><strong>Hosting</strong></td>
+<td>Power Pages Enhanced Data Model code-site</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>Dataverse Web API via Power Pages proxy (/_api/)</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Power Pages built-in (Entra ID SSO)</td>
+</tr>
+<tr>
+<td><strong>Bundle Size</strong></td>
+<td>~200 KB</td>
+</tr>
+</tbody>
+</table>
+<h4>Functional Modules</h4>
+<p><strong>MSA Composer</strong> — Master Service Agreement creation wizard. The MSA defines the management fee relationship between Decades and the customer. Produces a multi-exhibit contract package (MSA, Exhibit A service plan, Exhibit B location list, Exhibit C fee schedule, Exhibit D insurance requirements). Customer signer auto-populated from customer record. Supports two contract families: Bancroft (TPA — third party administrator) and Decades (direct management). Generated documents are OOXML-injected Word files saved to SharePoint.</p>
+<p><strong>Contract Composer</strong> — Work order and vendor agreement creation. Generates the service income side: work orders, amendments, blanket work orders, and vendor agreements. Each contract carries a vendor assignment from the bid comparison process. Contract types include: Bancroft Work Order, Bancroft Amendment, Bancroft Blanket WO, Decades Work Order, Decades Amendment, Decades Vendor Agreement. All documents flow through the DocGen V4 pipeline (Dataverse trigger → Power Automate → Azure Function OOXML injection → SharePoint).</p>
+<p><strong>Send Queue</strong> — Contract delivery and tracking workflow. Staff assign WO numbers, manage hold/release status, track DocuSign signature status (sent, signed, returned, declined). The Send Queue acknowledgment of a returned signed contract is the <strong>trigger that creates schedulable work</strong> — acknowledged contracts flow into the Inspection Scheduler as contract work items.</p>
+<p><strong>Sales Dashboard</strong> — Customer pipeline overview with KPI cards. Entry point for new proposals and customer onboarding.</p>
+<p><strong>Customer &amp; Vendor Management</strong> — Customer list/detail with contact information, contract family assignment, and property associations. Vendor records with trade qualifications, insurance tracking, and geographic coverage.</p>
+<p><strong>Locations</strong> — Property management with address, compliance fields (fire alarm, sprinkler, DCA, IDD dates), UpKeep integration, and property detail records for equipment/system tracking. Desktop and mobile views.</p>
+<p><strong>Operations</strong> — Facilities operations dashboard combining UpKeep work order data with Dataverse contract and compliance data. Role-switchable views.</p>
+<h4>Document Generation Pipeline (DocGen V4)</h4>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Component</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SPA</td>
+<td>User clicks Generate → creates <code>dcfg_document_request</code> record</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Power Automate</td>
+<td>Flow triggers on Dataverse record creation</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Flow</td>
+<td>Reads template from SharePoint <code>DCFG_Templates</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Flow</td>
+<td>Reads entity data (customer, vendor, contract, properties)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Flow</td>
+<td>Calls Azure Function <code>html-to-pdf</code> with template + field map</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Azure Function</td>
+<td>OOXML injection via jszip — 5 strategies: scalar fields, block fields, amendment blocks, location tables, DocuSign anchors</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Flow</td>
+<td>Saves populated document to SharePoint <code>DCFG_Outputs/{Customer}/{Year}/{DocType}</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Flow</td>
+<td>Updates <code>dcfg_document_request</code> with result URL and status</td>
+</tr>
+<tr>
+<td>9</td>
+<td>SPA</td>
+<td>Polls for completion, displays SharePoint view link</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Template Types:</strong> MSA Package A (Basic), MSA Package B (Concierge), MSA Package C (Optimized), Bancroft Work Order, Bancroft Amendment, Bancroft Blanket WO, Decades Work Order, Decades Amendment, Decades Vendor Agreement, Exhibit A (Automated), Exhibit A (Variable)</p>
+<h4>Revenue Model Context</h4>
+<p>The Contracting Suite supports a management fee business model:
+- <strong>MSA Composer</strong> generates the fee agreement (customer pays Decades 10-15% management fee)
+- <strong>Contract Composer</strong> generates the service contracts (Decades pays vendors or performs work directly)
+- <strong>Send Queue</strong> tracks contract execution lifecycle
+- <strong>Inspection Scheduler</strong> drives the work pipeline: inspections find deficiencies → punch lists → bid comparisons → contracts → management fees</p>
+<h3>7.2 Inspection Scheduler SPA (dcfgscheduler.powerappsportals.com)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React 16.14</td>
+</tr>
+<tr>
+<td><strong>Build Tool</strong></td>
+<td>Vite 5.x (IIFE bundle)</td>
+</tr>
+<tr>
+<td><strong>Hosting</strong></td>
+<td>Power Pages Enhanced Data Model code-site</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>Dataverse Web API via Power Pages proxy (/_api/)</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Power Pages built-in (Entra ID SSO)</td>
+</tr>
+<tr>
+<td><strong>Bundle Size</strong></td>
+<td>~204 KB</td>
+</tr>
+</tbody>
+</table>
+<h4>Functional Modules</h4>
+<p><strong>3-Week Scrolling Calendar</strong> — Interactive weekly planner showing Mon-Fri across 3 visible weeks. Two visual states: solid cells for UpKeep-scheduled work, dashed cells for tool-modeled recommendations. Individual work order stops visible inside each day cell with customer color dots, trade icons, and hours. Mouse wheel scrolls weeks. Navigation includes ◄Week, Week►, +90 Days, Next Inspection, and Today jump buttons.</p>
+<p><strong>Drag-and-Drop Scheduling</strong> — Individual work orders are draggable between calendar days, from the contract work pool to the calendar, and from the "Needs Inspection" countdown to the calendar. Moving an UpKeep-scheduled item triggers a confirmation modal describing the unschedule action. Drag navigation zones appear during drag for time-scrolling while holding an item. Cancel zone restores pre-drag state.</p>
+<p><strong>Compliance Countdown (30/60/90 Days)</strong> — Bottom panel showing properties approaching their next inspection due date, organized by urgency: 30-day (urgent/red), 60-day (warning/amber), 90-day (planning). Each row is draggable to the calendar. Scoreboard ticker shows live 30d/60d/90d counts at all times. Items automatically surface as the time horizon approaches — the list is derived from last inspection date + frequency, not manually maintained.</p>
+<p><strong>Contract Work Pool</strong> — Tabbed section showing two sources of unscheduled work: (1) Contract Work — acknowledged signed contracts from the Send Queue that need trade-specific scheduling, and (2) Unscheduled — work orders removed from existing days via drag. Both are draggable to calendar days.</p>
+<p><strong>Compliance Action Center</strong> — Slide-out panel with progress bar showing % compliant. Lists never-inspected and behind-schedule locations with suggested dates. Schedule/Edit/Accept All buttons for one-click compliance resolution.</p>
+<p><strong>Trade Iconography</strong> — SVG icons for each trade type: inspection, plumbing, painting, electrical, HVAC, general maintenance, safety, door/hardware. Visible in calendar cells, detail panel, and countdown board. Hover shows trade name.</p>
+<p><strong>Delta Refresh</strong> — Refresh button in the ticker bar performs a delta sync from Dataverse, pulling only schedule records modified since the last fetch. Merges changes into existing state without full reload.</p>
+<p><strong>Route Integration</strong> — Google Directions API for real drive times (with haversine fallback). View Route links use full addresses for accurate Google Maps routing. Route planning follows furthest-first strategy (drive to most distant location first, work back toward home base for safety/alertness).</p>
+<h4>Two Classes of Scheduled Work</h4>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Source</th>
+<th>Trigger</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inspections</strong></td>
+<td>Compliance requirements</td>
+<td>4 visits/year per property</td>
+<td>Quarterly facility inspections</td>
+</tr>
+<tr>
+<td><strong>Contract Work</strong></td>
+<td>Send Queue acknowledgment</td>
+<td>Signed contract returned</td>
+<td>Plumbing repair, painting, electrical, HVAC service</td>
+</tr>
+</tbody>
+</table>
+<h4>Resource Model</h4>
+<p>The scheduler manages three resource types simultaneously:
+- <strong>Decades Inspectors</strong> — internal staff performing facility inspections
+- <strong>Decades Trade Crews</strong> — internal teams performing direct maintenance work (painting, general handyman)
+- <strong>Awarded Vendors</strong> — external contractors from the bid comparison process, with trade-specific qualifications and concurrent job capacity constraints</p>
+<h3>7.3 Customer Portal (decades.powerappsportals.com)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Environment</strong></td>
+<td>DCFGSystems-Portal (orgf625b080.crm.dynamics.com)</td>
+</tr>
+<tr>
+<td><strong>Type</strong></td>
+<td>Power Pages HTML site (non-SPA)</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Customer-facing portal for service requests, document access, property information</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Microsoft Entra ID, customer web roles</td>
+</tr>
+<tr>
+<td><strong>Data Model</strong></td>
+<td>Enhanced Data Model</td>
+</tr>
+</tbody>
+</table>
+<h3>7.4 Onboarding Concierge SPA (decades-concierge.powerappsportals.com)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Environment</strong></td>
+<td>DCFGSystems-Portal (orgf625b080.crm.dynamics.com)</td>
+</tr>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React SPA</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>New customer onboarding workflow — vendor setup, document collection, property intake</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Power Pages built-in (Entra ID)</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Built, deployed to Test site (decadeswelcomesyou.powerappsportals.com)</td>
+</tr>
+</tbody>
+</table>
+<h3>7.5 Portal Environment Sites Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Site</th>
+<th>URL</th>
+<th>Purpose</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Portal</td>
+<td>decades.powerappsportals.com</td>
+<td>Customer service access</td>
+<td>HTML</td>
+</tr>
+<tr>
+<td>Onboarding Concierge</td>
+<td>decades-concierge.powerappsportals.com</td>
+<td>New customer onboarding</td>
+<td>React SPA</td>
+</tr>
+<tr>
+<td>BidComp Builder</td>
+<td>dmsbuilder.powerappsportals.com</td>
+<td>Bid comparison module</td>
+<td>React SPA</td>
+</tr>
+<tr>
+<td>DCFG Resources</td>
+<td>(internal)</td>
+<td>Internal team resource site</td>
+<td>Power Pages</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>8. Monitoring &amp; Observability</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Monitoring</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Azure Functions</strong></td>
+<td>Application Insights (built-in), function execution logs</td>
+</tr>
+<tr>
+<td><strong>Power Platform</strong></td>
+<td>Dataverse audit logs (dcfg_audit_log), Power Automate flow run history</td>
+</tr>
+<tr>
+<td><strong>SPA</strong></td>
+<td>Browser console logging, Dataverse error records</td>
+</tr>
+<tr>
+<td><strong>UpKeep Sync</strong></td>
+<td>inspectionSync function logs in Application Insights, delta counts per run</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>9. Backup &amp; Recovery</h2>
+<table>
+<thead>
+<tr>
+<th>Data Store</th>
+<th>Backup Method</th>
+<th>Retention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dataverse</strong></td>
+<td>Microsoft-managed automatic backups</td>
+<td>28 days (system), manual backups available</td>
+</tr>
+<tr>
+<td><strong>SharePoint</strong></td>
+<td>Microsoft-managed, versioning enabled</td>
+<td>Per Microsoft 365 retention policy</td>
+</tr>
+<tr>
+<td><strong>Azure Functions</strong></td>
+<td>Code in source control (git), configuration in App Settings</td>
+<td>Git history + Azure backup</td>
+</tr>
+<tr>
+<td><strong>UpKeep</strong></td>
+<td>Vendor-managed SaaS</td>
+<td>Per UpKeep retention policy</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>10. Change Management</h2>
+<table>
+<thead>
+<tr>
+<th>Activity</th>
+<th>Process</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SPA Code Changes</strong></td>
+<td>Edit source -&gt; Vite build -&gt; pac pages upload -&gt; cache clear</td>
+</tr>
+<tr>
+<td><strong>Dataverse Schema Changes</strong></td>
+<td>Solution-scoped (DCFGSystemTest), deployed via solution import</td>
+</tr>
+<tr>
+<td><strong>Azure Function Changes</strong></td>
+<td>Edit source -&gt; func azure functionapp publish</td>
+</tr>
+<tr>
+<td><strong>Power Automate Flows</strong></td>
+<td>Managed via solution, Dataverse-triggered (not HTTP)</td>
+</tr>
+<tr>
+<td><strong>Environment Promotion</strong></td>
+<td>Test -&gt; Stage -&gt; Prod, manual verification at each stage</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Source Control:</strong> Git repository at C:\DCFG, mirrored to GitHub (github.com/decades-cg)
+<strong>Deploy Authorization:</strong> Operator (Joseph Cameron) approves each deployment</p>
+<hr />
+<h2>11. AI Development &amp; Operations Agents</h2>
+<p>The DCFG system is developed and maintained with the assistance of AI agents operating under human authorization. All agents operate in a read-first, verify-before-write discipline with explicit operator approval for deployments.</p>
+<h3>11.1 Primary Development Agent</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform</strong></td>
+<td>Claude Code (Anthropic CLI)</td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td>Claude Opus 4.6 (1M context)</td>
+</tr>
+<tr>
+<td><strong>Role</strong></td>
+<td>Senior technical admin assistant — code, schema, deployment, troubleshooting</td>
+</tr>
+<tr>
+<td><strong>Authorization</strong></td>
+<td>Operator approves all production writes and deployments</td>
+</tr>
+<tr>
+<td><strong>Project Config</strong></td>
+<td>CLAUDE.md at project root defines mandates, rules, environment table</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>File-based persistent memory at ~/.claude/projects/C--DCFG/memory/</td>
+</tr>
+<tr>
+<td><strong>Skills</strong></td>
+<td>40+ specialized skills for Power Platform, design, testing, monitoring</td>
+</tr>
+</tbody>
+</table>
+<h3>11.2 Specialized Agents (Droid Roster)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Purpose</th>
+<th>Tier</th>
+<th>Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HAL</strong></td>
+<td>Self-learning technical assistant, commander of droid army</td>
+<td>Supervisor</td>
+<td>Opus</td>
+</tr>
+<tr>
+<td><strong>Portal SPA Droid</strong></td>
+<td>React SPA development, pac pages deployment</td>
+<td>2</td>
+<td>Sonnet</td>
+</tr>
+<tr>
+<td><strong>Schema Droid</strong></td>
+<td>Dataverse table/column creation, seed data</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Portal Admin Droid</strong></td>
+<td>Site settings, table permissions, web roles</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Flows Droid</strong></td>
+<td>Power Automate flow design and compilation</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Auth Droid</strong></td>
+<td>Session management, token health, identity verification</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Scout Droid</strong></td>
+<td>Read-only state queries and environment assessment</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Research Droid</strong></td>
+<td>Web research, API documentation, external sources</td>
+<td>2</td>
+<td>Sonnet</td>
+</tr>
+<tr>
+<td><strong>Test Droid</strong></td>
+<td>Playwright E2E tests, path probes, screen captures</td>
+<td>2</td>
+<td>Sonnet</td>
+</tr>
+<tr>
+<td><strong>Design Droid</strong></td>
+<td>UI/UX via Impeccable skill suite (18 sub-skills)</td>
+<td>2</td>
+<td>Sonnet</td>
+</tr>
+<tr>
+<td><strong>Safety Droid</strong></td>
+<td>Environment guards, blast radius assessment</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Monitor Droid (Nora)</strong></td>
+<td>Production monitoring — audit logs, DocGen health, flow status</td>
+<td>2</td>
+<td>Haiku</td>
+</tr>
+<tr>
+<td><strong>Judgment Droid</strong></td>
+<td>Script-vs-manual decisions, classification, trade-offs</td>
+<td>1</td>
+<td>Opus</td>
+</tr>
+</tbody>
+</table>
+<h3>11.3 Monitoring Agent: Nora</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Continuous production monitoring</td>
+</tr>
+<tr>
+<td><strong>Checks</strong></td>
+<td>Audit logs, document request status, flow health</td>
+</tr>
+<tr>
+<td><strong>Auto-Fix</strong></td>
+<td>Verified stuck document requests</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>Writes findings to dcfg_brain_insights table</td>
+</tr>
+<tr>
+<td><strong>Schedule</strong></td>
+<td>On-demand or /loop 5m for continuous monitoring</td>
+</tr>
+</tbody>
+</table>
+<h3>11.4 Inspection Sync Agent (Azure Function)</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Function</strong></td>
+<td>inspectionSync</td>
+</tr>
+<tr>
+<td><strong>Trigger</strong></td>
+<td>Timer — every 30 minutes</td>
+</tr>
+<tr>
+<td><strong>Pipeline</strong></td>
+<td>UpKeep API → compare → Dataverse dcfg_im_schedule</td>
+</tr>
+<tr>
+<td><strong>Operations</strong></td>
+<td>Create new records, update date/status changes, link to properties</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Service principal (client credentials) to Dataverse, session token to UpKeep</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>Application Insights, function execution logs</td>
+</tr>
+</tbody>
+</table>
+<h3>11.5 Agent Safety Controls</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Read Before Write</strong></td>
+<td>All agents must investigate current state before any modification</td>
+</tr>
+<tr>
+<td><strong>Operator Approval</strong></td>
+<td>Production deployments require explicit human authorization</td>
+</tr>
+<tr>
+<td><strong>Environment Isolation</strong></td>
+<td>Test environment is default; Prod requires stated intent + approval</td>
+</tr>
+<tr>
+<td><strong>Soft Delete Only</strong></td>
+<td>No hard deletes — all records use dcfg_active_flag</td>
+</tr>
+<tr>
+<td><strong>Before-State Capture</strong></td>
+<td>Backup scripts save state before bulk changes</td>
+</tr>
+<tr>
+<td><strong>Audit Trail</strong></td>
+<td>All modifications logged to dcfg_audit_log</td>
+</tr>
+<tr>
+<td><strong>Rollback Capability</strong></td>
+<td>Before-state JSON files enable manual rollback</td>
+</tr>
+<tr>
+<td><strong>pac auth Restore</strong></td>
+<td>After any Prod operation, pac auth index restored to Test</td>
+</tr>
+</tbody>
+</table>
+<h3>11.6 Development Skills Library</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Power Platform</strong></td>
+<td>dcfg-project-data, dcfg-spa-reference, power-pages-content-ops, power-automate-flow-design, safety-controls</td>
+</tr>
+<tr>
+<td><strong>Engineering</strong></td>
+<td>auto-research-testing, playwright-syntax-design, script-vs-manual-judgment</td>
+</tr>
+<tr>
+<td><strong>Design (Impeccable)</strong></td>
+<td>shape, adapt, animate, audit, critique, delight, distill, harden, layout, optimize, overdrive, polish, typeset, clarify, colorize, bolder, quieter, impeccable</td>
+</tr>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>dcfg-work-organizer, hybrid-agent-supervisor, nora, resource-site-publish</td>
+</tr>
+<tr>
+<td><strong>Process</strong></td>
+<td>brainstorming, writing-plans, executing-plans, test-driven-development, systematic-debugging, verification-before-completion, code-review</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Document generated from live system state on April 27, 2026.</em></p></body></html>
