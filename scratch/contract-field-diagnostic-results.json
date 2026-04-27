@@ -1,0 +1,167 @@
+{
+  "generated": "2026-04-27",
+  "environment": "Prod (org06f5de0b)",
+  "testContract": "BANC-22004-DH (80ca2b31-4242-f111-88b4-000d3a31a3cc)",
+  "uniqueDataversePaths": 51,
+  "templateFieldMappings": 381,
+  "activeTemplates": 11,
+
+  "summary": {
+    "ok": 13,
+    "empty_data": 17,
+    "broken_schema": 8,
+    "broken_pipeline": 5,
+    "broken_matching": 1,
+    "total_issues": 31
+  },
+
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "P0",
+      "category": "schema",
+      "title": "dcfg_wo_number column does not exist",
+      "path": "dcfg_wo_number",
+      "affectedTemplates": 11,
+      "detail": "Template fields reference dcfg_wo_number but column DOES NOT EXIST on dcfg_contract. Correct column is dcfg_contract_number.",
+      "fix": "Update dcfg_template_field rows: dcfg_wo_number -> dcfg_contract_number"
+    },
+    {
+      "id": "F02",
+      "severity": "P0",
+      "category": "schema",
+      "title": "dcfg_contract_value column does not exist",
+      "path": "dcfg_contract_value",
+      "affectedTemplates": 2,
+      "detail": "Template fields reference dcfg_contract_value but column DOES NOT EXIST. Correct column is dcfg_contract_fee.",
+      "fix": "Update dcfg_template_field rows: dcfg_contract_value -> dcfg_contract_fee"
+    },
+    {
+      "id": "F03",
+      "severity": "P0",
+      "category": "schema",
+      "title": "dcfg_msa.dcfg_msa_number does not exist",
+      "path": "dcfg_msa.dcfg_msa_number",
+      "affectedTemplates": 4,
+      "detail": "dcfg_msa_number DOES NOT EXIST on dcfg_msa. Use dcfg_msa.dcfg_name instead.",
+      "fix": "Remap to dcfg_msa.dcfg_name or create the column"
+    },
+    {
+      "id": "F04",
+      "severity": "P0",
+      "category": "schema",
+      "title": "5 vendor columns from wrong entity model",
+      "paths": ["dcfg_vendor.address1_line1","dcfg_vendor.address1_city_state_zip","dcfg_vendor.fullname","dcfg_vendor.jobtitle","dcfg_vendor.dcfg_address_composite"],
+      "affectedTemplates": "5-8 each",
+      "detail": "These are Contact/Account entity columns, not dcfg_vendor columns.",
+      "fix": {
+        "address1_line1": "-> dcfg_vendor.dcfg_address",
+        "address1_city_state_zip": "-> [COMPOSITE:vendor_address_block]",
+        "fullname": "-> dcfg_vendor.dcfg_primary_contact",
+        "jobtitle": "-> dcfg_vendor.dcfg_signer_title",
+        "dcfg_address_composite": "-> [COMPOSITE:vendor_address_block]"
+      }
+    },
+    {
+      "id": "F05",
+      "severity": "P0",
+      "category": "matching",
+      "title": "Highlight matching uses strict equality",
+      "file": "ooxmlInject.js:101",
+      "detail": "f.sourceText === accText fails when highlighted area has offset text. Azure Function normalizes; SPA does not.",
+      "fix": "Normalize both sides (trim, collapse whitespace) or use contains-check"
+    },
+    {
+      "id": "F06",
+      "severity": "P1",
+      "category": "pipeline",
+      "title": "MSA expand missing from contract re-fetch",
+      "affectedTemplates": 12,
+      "detail": "Contract re-fetch at generate time does not $expand dcfg_msa_id. All dcfg_msa.* paths resolve to null.",
+      "fix": "Add dcfg_msa_id($select=...) to the contract $expand"
+    },
+    {
+      "id": "F07",
+      "severity": "P1",
+      "category": "pipeline",
+      "title": "Vendor signer reads vendor record, user edits go to contract record",
+      "affectedTemplates": 8,
+      "detail": "Template: dcfg_vendor.dcfg_signer_name. Composer writes: dcfg_signer_printed on contract. User edits lost.",
+      "fix": "Remap template to contract columns or write user edits to vendor"
+    },
+    {
+      "id": "F08",
+      "severity": "P1",
+      "category": "pipeline",
+      "title": "Customer signer reads customer record, user edits go to contract record",
+      "affectedTemplates": 7,
+      "detail": "Template: dcfg_customer.dcfg_primary_contact_name. Composer writes: dcfg_owner_contact on contract.",
+      "fix": "Remap template fields to contract columns with fallback"
+    },
+    {
+      "id": "F09",
+      "severity": "P1",
+      "category": "pipeline",
+      "title": "Parent contract expand uses wrong navigation property name",
+      "detail": "RELATION_MAP maps dcfg_wo to dcfg_parent_contract_id. Correct nav prop is dcfg_contract_parent.",
+      "fix": "Change RELATION_MAP + add to $expand"
+    },
+    {
+      "id": "F10",
+      "severity": "P2",
+      "category": "pipeline",
+      "title": "decades_handler composite has empty parts",
+      "affectedTemplates": 7,
+      "detail": "Parts are hardcoded empty strings. Always produces blank.",
+      "fix": "Wire to dcfg_configs or account handler lookup"
+    },
+    {
+      "id": "F11",
+      "severity": "P2",
+      "category": "data",
+      "title": "No UI for start_date, end_date, schedule, service description (WO)",
+      "detail": "ContractComposer has no input fields. Also dcfg_work_hours vs dcfg_schedule_description naming split.",
+      "fix": "Add optional inputs to composer"
+    },
+    {
+      "id": "F12",
+      "severity": "P2",
+      "category": "data",
+      "title": "Duplicate template: Decades Work Order vs Decades Workorder",
+      "detail": "Two active templates with same type 100000006, no customer filter. Auto-resolve picks arbitrarily.",
+      "fix": "Deactivate older Decades Workorder template"
+    }
+  ],
+
+  "schemaVerification": {
+    "MISSING": [
+      "dcfg_contracts.dcfg_wo_number",
+      "dcfg_contracts.dcfg_contract_value",
+      "dcfg_msas.dcfg_msa_number",
+      "dcfg_vendors.dcfg_address_composite",
+      "dcfg_vendors.address1_line1",
+      "dcfg_vendors.address1_city_state_zip",
+      "dcfg_vendors.fullname",
+      "dcfg_vendors.jobtitle"
+    ],
+    "EXISTS_CORRECTLY": [
+      "dcfg_contracts.dcfg_contract_number",
+      "dcfg_contracts.dcfg_contract_fee",
+      "dcfg_contracts.dcfg_service_description",
+      "dcfg_contracts.dcfg_description_of_service",
+      "dcfg_contracts.dcfg_schedule_description",
+      "dcfg_contracts.dcfg_work_hours",
+      "dcfg_contracts.dcfg_blanket_number",
+      "dcfg_msas.dcfg_location_count",
+      "dcfg_msas.dcfg_monthly_rate",
+      "dcfg_msas.dcfg_total_monthly",
+      "dcfg_vendors.dcfg_signer_name",
+      "dcfg_vendors.dcfg_signer_title",
+      "dcfg_vendors.dcfg_primary_contact",
+      "dcfg_vendors.dcfg_address",
+      "dcfg_vendors.dcfg_city",
+      "dcfg_vendors.dcfg_state",
+      "dcfg_vendors.dcfg_zip"
+    ]
+  }
+}

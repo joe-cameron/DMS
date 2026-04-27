@@ -1,0 +1,3431 @@
+[
+  {
+    "@odata.etag": "W/\"5196542\"",
+    "dcfg_source_text": "__________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "87453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_msa_number"
+  },
+  {
+    "@odata.etag": "W/\"5196543\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "89453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5196546\"",
+    "dcfg_source_text": "__",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "90453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5196545\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "91453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5196547\"",
+    "dcfg_source_text": "Vendor’s Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "92453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5294568\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "93453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5196548\"",
+    "dcfg_source_text": "__",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "94453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5294570\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "95453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5294572\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "97453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5196554\"",
+    "dcfg_source_text": "__________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9a453d43-3b38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5294574\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "565f8348-3b38-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"4831302\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6030c3ba-1535-f111-88b3-000d3a308009",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"4831288\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3efec2bb-1535-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"4831287\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8353e9b5-1535-f111-88b3-000d3a3086f2",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4831286\"",
+    "dcfg_source_text": "VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8453e9b5-1535-f111-88b3-000d3a3086f2",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4831289\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8553e9b5-1535-f111-88b3-000d3a3086f2",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"4831297\"",
+    "dcfg_source_text": "Vendor Street Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b355b6b9-1535-f111-88b3-000d3a308bc8",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_line1"
+  },
+  {
+    "@odata.etag": "W/\"4831300\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b455b6b9-1535-f111-88b3-000d3a308bc8",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4831298\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b555b6b9-1535-f111-88b3-000d3a308bc8",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"4831285\"",
+    "dcfg_source_text": "_________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a4ba5abb-1535-f111-88b3-000d3a308c23",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4831292\"",
+    "dcfg_source_text": "City, State, Zip Code",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1feb34b8-1535-f111-88b3-000d3a308e39",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_city_state_zip"
+  },
+  {
+    "@odata.etag": "W/\"4831294\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "20eb34b8-1535-f111-88b3-000d3a308e39",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4831293\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "21eb34b8-1535-f111-88b3-000d3a308e39",
+    "_dcfg_template_id_value": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"5025393\"",
+    "dcfg_source_text": "Tele#,",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a2c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5025394\"",
+    "dcfg_source_text": "VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a6c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5025395\"",
+    "dcfg_source_text": "Vendor Street Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a7c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_line1"
+  },
+  {
+    "@odata.etag": "W/\"5025398\"",
+    "dcfg_source_text": "Tele#,",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a8c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5025396\"",
+    "dcfg_source_text": "email address (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "acc8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "@odata.etag": "W/\"5025397\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "adc8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5025399\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "aec8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"5025400\"",
+    "dcfg_source_text": "City, State, Zip Code",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "afc8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_city_state_zip"
+  },
+  {
+    "@odata.etag": "W/\"5025401\"",
+    "dcfg_source_text": "___",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b0c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5025403\"",
+    "dcfg_source_text": "__________",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b1c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5025402\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b2c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5025404\"",
+    "dcfg_source_text": "_________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b3c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5025405\"",
+    "dcfg_source_text": "Contact Name,",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b4c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"5025407\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b6c8cbc7-b337-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"5194096\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "38cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"5194094\"",
+    "dcfg_source_text": "__________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3acf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_msa_number"
+  },
+  {
+    "@odata.etag": "W/\"5194093\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3bcf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"5194095\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3ccf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5194097\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "40cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5194098\"",
+    "dcfg_source_text": "__",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "41cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5194099\"",
+    "dcfg_source_text": "Vendor’s Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "42cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5194100\"",
+    "dcfg_source_text": "__",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "43cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5194101\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "44cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"5194102\"",
+    "dcfg_source_text": "_______________________________________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "45cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"5194104\"",
+    "dcfg_source_text": "__________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "46cf9034-3a38-f111-88b4-000d3a308009",
+    "_dcfg_template_id_value": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4959869\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "931421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4959870\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "941421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4959872\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "951421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4959871\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9a1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4959878\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9f1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4959885\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a51421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4959886\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a61421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"4959887\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a71421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4959888\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a81421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4959891\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a91421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4959892\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "aa1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4959893\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ab1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4959894\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ac1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4959897\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ad1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4959898\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "af1421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4959899\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b01421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4959902\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b11421a0-5f37-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4967475\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "4ba0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4967477\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "50a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4967476\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "51a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4967478\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "53a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4967479\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "54a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4967481\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "55a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4967480\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "56a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"4967482\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "57a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4967483\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "58a0c7a7-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4967484\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "801cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4967486\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "821cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4967485\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "831cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4967487\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "841cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4967488\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "851cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4967489\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "861cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4967490\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "871cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"4967491\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "881cc0ad-6637-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "55ca1292-5f37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4974054\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8f71757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4974056\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9071757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4974055\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9171757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4974057\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9271757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4974058\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9371757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4974059\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9471757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"4974061\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9571757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4974060\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9671757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4974062\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9771757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"4974064\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9871757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4974063\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9971757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4974066\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9a71757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4974068\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9c71757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4974070\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9d71757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4974071\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9e71757c-6b37-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4974065\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a460777e-6b37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4974067\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a560777e-6b37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "8a71757c-6b37-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977371\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "87661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4977372\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8e661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4977373\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8f661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4977376\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "90661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4977374\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "91661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4977375\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "92661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4977378\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "93661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977377\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "97661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977380\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "98661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977379\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "99661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977381\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9a661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"4977383\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9b661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"4977382\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9c661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4977384\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9e661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977386\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9f661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977385\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a0661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977389\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a8661630-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "6e661630-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977410\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "af117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4977411\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b6117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977412\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b7117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4977413\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bf117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"4977415\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c0117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4977414\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c1117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977416\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c3117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4977417\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c4117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977418\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": 100000008,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c5117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"4977421\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ca117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977420\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cb117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977419\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cc117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"4977422\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cd117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977423\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ce117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4977424\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cf117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977425\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d0117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4977426\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d2117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4977427\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d3117378-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "83117378-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977470\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0e949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4977471\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "14949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"4977472\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "18949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977473\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "19949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977475\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1a949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977474\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1b949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"4977476\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1c949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977477\"",
+    "dcfg_source_text": "Customer Legal Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1e949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"4977478\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1f949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4977479\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "20949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"4977480\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": 100000008,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "21949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"4977481\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "22949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"4977482\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "23949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"4977484\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "24949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"4977483\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "25949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"4977485\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "26949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"4977486\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "27949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"4977487\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "28949884-6d37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "ed939884-6d37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"5025447\"",
+    "dcfg_source_text": "_________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f3cef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5294587\"",
+    "dcfg_source_text": "Vendor Street Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f5cef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "@odata.etag": "W/\"5025449\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "facef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5294589\"",
+    "dcfg_source_text": "City, State, Zip Code",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fbcef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5025451\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fccef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5025452\"",
+    "dcfg_source_text": "email address (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fdcef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "@odata.etag": "W/\"5025453\"",
+    "dcfg_source_text": "Tele#",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fecef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5294591\"",
+    "dcfg_source_text": "Contact Name,",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ffcef28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5025455\"",
+    "dcfg_source_text": "Tele#",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "00cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5294593\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "01cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5294595\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "02cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5025458\"",
+    "dcfg_source_text": "__________",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "03cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5025459\"",
+    "dcfg_source_text": "___",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "04cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5025460\"",
+    "dcfg_source_text": "VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "05cff28d-b437-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5017758\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bea0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5017759\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bfa0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5017760\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c0a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"5017761\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c1a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"5017763\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c3a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5017762\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c4a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"5017764\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c5a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"5017765\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c6a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"5017766\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c7a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"5017767\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c8a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"5017768\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c9a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"5017769\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "caa0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"5017770\"",
+    "dcfg_source_text": "PCDI – Princeton Child Development Institute",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cba0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5017771\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "cca0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"5017772\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d1a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"5017773\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d2a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5017774\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d3a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"5017775\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d4a0fb2d-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b74beb27-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5620046\"",
+    "dcfg_source_text": "WO Number",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "51a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5620047\"",
+    "dcfg_source_text": "Vendor Address Block",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "54a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5620049\"",
+    "dcfg_source_text": "Vendor Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "55a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5620050\"",
+    "dcfg_source_text": "Vendor Email",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "56a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "@odata.etag": "W/\"5620051\"",
+    "dcfg_source_text": "Vendor Signer Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "58a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5620053\"",
+    "dcfg_source_text": "\\Decades_Signature\\ _",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "59a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Decades_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5620052\"",
+    "dcfg_source_text": "Customer Contact Email",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5aa44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_phone"
+  },
+  {
+    "@odata.etag": "W/\"5620054\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5ba44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5620055\"",
+    "dcfg_source_text": "Customer Contact",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5ea44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"5620056\"",
+    "dcfg_source_text": "_ Decades Title __",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "61a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"5620057\"",
+    "dcfg_source_text": "Vendor Signer Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "62a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5620058\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "63a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_contract_date"
+  },
+  {
+    "@odata.etag": "W/\"5620059\"",
+    "dcfg_source_text": "Decades Printed Name",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "64a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"5620060\"",
+    "dcfg_source_text": "Vendor Signature\\",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "65a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5620062\"",
+    "dcfg_source_text": "Vendor Phone",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "66a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5620061\"",
+    "dcfg_source_text": "Phone",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "67a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_phone"
+  },
+  {
+    "@odata.etag": "W/\"5620063\"",
+    "dcfg_source_text": "Vendor Signer Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "68a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5620064\"",
+    "dcfg_source_text": "Decades Printed Name",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "69a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"5642416\"",
+    "dcfg_source_text": "WO Number",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7a1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5642417\"",
+    "dcfg_source_text": "Vendor Signer Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7b1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5642418\"",
+    "dcfg_source_text": "Vendor Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7c1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5642419\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7e1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5642420\"",
+    "dcfg_source_text": "Vendor Address Block",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7f1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5642423\"",
+    "dcfg_source_text": "Vendor Email",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "801a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "@odata.etag": "W/\"5642422\"",
+    "dcfg_source_text": "Vendor Signer Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "811a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5642424\"",
+    "dcfg_source_text": "Customer Contact Email",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "821a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_email"
+  },
+  {
+    "@odata.etag": "W/\"5642428\"",
+    "dcfg_source_text": "Phone",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "831a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_phone"
+  },
+  {
+    "@odata.etag": "W/\"5642426\"",
+    "dcfg_source_text": "_ Decades Title __",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "841a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"5642425\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "851a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5642427\"",
+    "dcfg_source_text": "Vendor Phone",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "861a0a1e-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5642430\"",
+    "dcfg_source_text": "\\Decades_Signature\\ _",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a6fc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Decades_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5642429\"",
+    "dcfg_source_text": "Decades Printed Name",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a7fc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"5642431\"",
+    "dcfg_source_text": "Vendor Signer Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a8fc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5642433\"",
+    "dcfg_source_text": "Decades Printed Name",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a9fc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:DECADES_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"5642432\"",
+    "dcfg_source_text": "Vendor Signature\\",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "aafc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5642439\"",
+    "dcfg_source_text": "Customer Contact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "acfc0424-c43d-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5018347\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "78c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5018348\"",
+    "dcfg_source_text": "LEGAL VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7cc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5018349\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7dc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5018351\"",
+    "dcfg_source_text": "Contract Start Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7ec2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_start_date"
+  },
+  {
+    "@odata.etag": "W/\"5018350\"",
+    "dcfg_source_text": "____",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7fc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5294583\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "81c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5018352\"",
+    "dcfg_source_text": "Contract End Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "82c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_end_date"
+  },
+  {
+    "@odata.etag": "W/\"5018354\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "84c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5018355\"",
+    "dcfg_source_text": "______",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "85c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5294584\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "87c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5294585\"",
+    "dcfg_source_text": "Vendor Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "88c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5018358\"",
+    "dcfg_source_text": "Days, Times",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8bc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_schedule_description"
+  },
+  {
+    "@odata.etag": "W/\"5018360\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8cc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5018361\"",
+    "dcfg_source_text": "Contract Value Dollars ($X.XX)",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8dc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_contract_fee"
+  },
+  {
+    "@odata.etag": "W/\"5018364\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8fc2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5018365\"",
+    "dcfg_source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "90c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "@odata.etag": "W/\"5018367\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "92c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5018369\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "93c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5018370\"",
+    "dcfg_source_text": "Account Handler Name, # Tele, Email (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "95c2b912-aa37-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"5017906\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "4de36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5017907\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "57e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5017908\"",
+    "dcfg_source_text": "Contract Value Dollars ($X.XX)",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5be36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_contract_fee"
+  },
+  {
+    "@odata.etag": "W/\"5017910\"",
+    "dcfg_source_text": "Account Handler Name, # Tele, Email (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5ce36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"5017911\"",
+    "dcfg_source_text": "LEGAL VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5de36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5017912\"",
+    "dcfg_source_text": "Days, Times",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5ee36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_schedule_description"
+  },
+  {
+    "@odata.etag": "W/\"5017914\"",
+    "dcfg_source_text": "Contract Start Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5fe36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_start_date"
+  },
+  {
+    "@odata.etag": "W/\"5017913\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "60e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5017917\"",
+    "dcfg_source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "61e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "@odata.etag": "W/\"5017915\"",
+    "dcfg_source_text": "Contract End Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "62e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_end_date"
+  },
+  {
+    "@odata.etag": "W/\"5017916\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6ae36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5294580\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6be36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5017920\"",
+    "dcfg_source_text": "_____",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6ce36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5017922\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "70e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5017923\"",
+    "dcfg_source_text": "___",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "73e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5017924\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "74e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"5294581\"",
+    "dcfg_source_text": "Vendor Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "75e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "@odata.etag": "W/\"5017926\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "76e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5294582\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "77e36510-a937-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "29e36510-a937-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"4796106\"",
+    "dcfg_source_text": "__________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "591b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_msa_number"
+  },
+  {
+    "@odata.etag": "W/\"4796107\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5b1b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4796108\"",
+    "dcfg_source_text": "Vendor’s Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5e1b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4796109\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "601b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4796110\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "621b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"4796111\"",
+    "dcfg_source_text": "_______________________________________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "651b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_line1"
+  },
+  {
+    "@odata.etag": "W/\"4796112\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "671b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_city_state_zip"
+  },
+  {
+    "@odata.etag": "W/\"4796113\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6b1b60ac-8633-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"5017822\"",
+    "dcfg_source_text": "March 27, 2026",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "d670c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5017823\"",
+    "dcfg_source_text": "Zipcode",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "dc70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "@odata.etag": "W/\"5017825\"",
+    "dcfg_source_text": "Customer Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "dd70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5017824\"",
+    "dcfg_source_text": "CustomerContact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "de70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5017827\"",
+    "dcfg_source_text": "Owner Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "df70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5017826\"",
+    "dcfg_source_text": "PCDI – Princeton Child Development Institute",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e070c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5017828\"",
+    "dcfg_source_text": "Total_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e170c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_onboarding"
+  },
+  {
+    "@odata.etag": "W/\"5017830\"",
+    "dcfg_source_text": "_Qty_Loc_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e270c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"5017829\"",
+    "dcfg_source_text": "_Membership_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e370c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_monthly_rate"
+  },
+  {
+    "@odata.etag": "W/\"5017832\"",
+    "dcfg_source_text": "_Qty_Loc_____",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e470c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_location_count"
+  },
+  {
+    "@odata.etag": "W/\"5017831\"",
+    "dcfg_source_text": "_Onboarding_Fee_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e570c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_onboarding_rate"
+  },
+  {
+    "@odata.etag": "W/\"5017833\"",
+    "dcfg_source_text": "Location List",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e670c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[BLOCK:location_list]"
+  },
+  {
+    "@odata.etag": "W/\"5017834\"",
+    "dcfg_source_text": "Owner Name Printed",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e770c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5017835\"",
+    "dcfg_source_text": "City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e870c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"5017836\"",
+    "dcfg_source_text": "_Total Monthly Membership_",
+    "dcfg_field_category": 100000006,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "e970c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_total_monthly"
+  },
+  {
+    "@odata.etag": "W/\"5017837\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ea70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Decades_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5017838\"",
+    "dcfg_source_text": "State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "eb70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"5017839\"",
+    "dcfg_source_text": "CustomerStreetAddress",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ec70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"5017840\"",
+    "dcfg_source_text": "________________________",
+    "dcfg_field_category": null,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ed70c5b9-a737-f111-88b4-000d3a308e39",
+    "_dcfg_template_id_value": "b470c5b9-a737-f111-88b4-000d3a308e39",
+    "dcfg_dataverse_path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "@odata.etag": "W/\"5660973\"",
+    "dcfg_source_text": "MSA Number",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "b9c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_msa.dcfg_msa_number"
+  },
+  {
+    "@odata.etag": "W/\"5660972\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bac387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5660974\"",
+    "dcfg_source_text": "Vendor’s Legal Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bbc387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5660975\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bcc387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5660977\"",
+    "dcfg_source_text": "Customer Contact Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bdc387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5660976\"",
+    "dcfg_source_text": "Vendor Signer Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bec387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5660978\"",
+    "dcfg_source_text": "Customer Contact Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "bfc387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5660979\"",
+    "dcfg_source_text": "Vendor Signer Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "c0c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "_dcfg_template_id_value": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5121186\"",
+    "dcfg_source_text": "Amendment Number",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8946ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_amendment_sequence"
+  },
+  {
+    "@odata.etag": "W/\"5121187\"",
+    "dcfg_source_text": "Work Order Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8a46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"5121189\"",
+    "dcfg_source_text": "Vendor Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8b46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"5121188\"",
+    "dcfg_source_text": "Main Contract Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8c46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5121191\"",
+    "dcfg_source_text": "Service Location Description",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8d46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_service_description"
+  },
+  {
+    "@odata.etag": "W/\"5121190\"",
+    "dcfg_source_text": "Amendment Lines",
+    "dcfg_field_category": 100000004,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8e46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "[BLOCK:amendment_lines]"
+  },
+  {
+    "@odata.etag": "W/\"5121194\"",
+    "dcfg_source_text": "Vendor Email",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8f46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "@odata.etag": "W/\"5294575\"",
+    "dcfg_source_text": "Contractor Contact Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9046ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5121193\"",
+    "dcfg_source_text": "Customer Phone",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9146ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_phone"
+  },
+  {
+    "@odata.etag": "W/\"5614323\"",
+    "dcfg_source_text": "Work State Date",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9246ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_start_date"
+  },
+  {
+    "@odata.etag": "W/\"5121196\"",
+    "dcfg_source_text": "Hour of Operations",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9346ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_schedule_description"
+  },
+  {
+    "@odata.etag": "W/\"5294576\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9446ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5121197\"",
+    "dcfg_source_text": "Customer City",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9546ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "@odata.etag": "W/\"5121199\"",
+    "dcfg_source_text": "Work Complete Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9646ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo.createdon"
+  },
+  {
+    "@odata.etag": "W/\"5294577\"",
+    "dcfg_source_text": "Contractor Title",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9746ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "@odata.etag": "W/\"5121201\"",
+    "dcfg_source_text": "Customer Contact Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9846ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5121203\"",
+    "dcfg_source_text": "Customer EMail",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9946ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_email"
+  },
+  {
+    "@odata.etag": "W/\"5614325\"",
+    "dcfg_source_text": "Contractor Printed Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9a46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5121205\"",
+    "dcfg_source_text": "Vendor Phone",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9b46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "@odata.etag": "W/\"5121204\"",
+    "dcfg_source_text": "Customer Street",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9c46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "@odata.etag": "W/\"5121206\"",
+    "dcfg_source_text": "Purchase Order",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9d46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_po_number"
+  },
+  {
+    "@odata.etag": "W/\"5121207\"",
+    "dcfg_source_text": "Client Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9e46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5121208\"",
+    "dcfg_source_text": "Owner/Decades Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "9f46ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5121209\"",
+    "dcfg_source_text": "Customer State",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a046ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "@odata.etag": "W/\"5121210\"",
+    "dcfg_source_text": "Customer Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a146ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5121211\"",
+    "dcfg_source_text": "Customer Contact",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a246ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"5121212\"",
+    "dcfg_source_text": "Customer Printed Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a346ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "@odata.etag": "W/\"5294579\"",
+    "dcfg_source_text": "Contractor Printed Name",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a446ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "@odata.etag": "W/\"5121214\"",
+    "dcfg_source_text": "Owner/Decades Title",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a546ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "@odata.etag": "W/\"5121215\"",
+    "dcfg_source_text": "Owner/Decades Printed Name",
+    "dcfg_field_category": 100000007,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "a646ac5e-0538-f111-88b4-000d3a30860b",
+    "_dcfg_template_id_value": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "@odata.etag": "W/\"4795940\"",
+    "dcfg_source_text": "_________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3b4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4795941\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3d4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4795942\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "3e4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"4795943\"",
+    "dcfg_source_text": "VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "444943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4795944\"",
+    "dcfg_source_text": "Vendor Street Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "464943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_line1"
+  },
+  {
+    "@odata.etag": "W/\"4795945\"",
+    "dcfg_source_text": "City, State, Zip Code",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "4f4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_city_state_zip"
+  },
+  {
+    "@odata.etag": "W/\"4795946\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "544943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"4795948\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5a4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"4795950\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5b4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4795951\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "5f4943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"4795952\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "624943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"4795953\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "654943c4-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "314943c4-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4795983\"",
+    "dcfg_source_text": "_________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "69d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4795984\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "6bd29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4795985\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "70d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"4795986\"",
+    "dcfg_source_text": "VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "73d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4795987\"",
+    "dcfg_source_text": "Vendor Street Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "74d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_line1"
+  },
+  {
+    "@odata.etag": "W/\"4795988\"",
+    "dcfg_source_text": "City, State, Zip Code",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "77d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.address1_city_state_zip"
+  },
+  {
+    "@odata.etag": "W/\"4795989\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "7dd29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"4795991\"",
+    "dcfg_source_text": "Contact Name, Tele#, email address (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "85d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"4795993\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8cd29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4795994\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8dd29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"4795995\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "8ed29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"4795996\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "90d29ad0-8533-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4796215\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "eaef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4796216\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f0ef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4796217\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f4ef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"4796218\"",
+    "dcfg_source_text": "LEGAL VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f8ef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4796219\"",
+    "dcfg_source_text": "Vendor Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "faef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"4796220\"",
+    "dcfg_source_text": "Days, Times",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fbef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_schedule_description"
+  },
+  {
+    "@odata.etag": "W/\"4796221\"",
+    "dcfg_source_text": "Contract Start Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "feef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_start_date"
+  },
+  {
+    "@odata.etag": "W/\"4796222\"",
+    "dcfg_source_text": "Contract End Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ffef04c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_end_date"
+  },
+  {
+    "@odata.etag": "W/\"4796223\"",
+    "dcfg_source_text": "Contract Value Dollars ($X.XX)",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "00f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_contract_value"
+  },
+  {
+    "@odata.etag": "W/\"4796225\"",
+    "dcfg_source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "05f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "@odata.etag": "W/\"4796227\"",
+    "dcfg_source_text": "Account Handler Name, # Tele, Email (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0af004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"4796230\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "19f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4796231\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1cf004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"4796232\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "1df004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"4796233\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "21f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4796234\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "22f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4796235\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "23f004c0-8733-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4796275\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f3be7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4796276\"",
+    "dcfg_source_text": "Today’s Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f5be7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SYSTEM:TODAY]"
+  },
+  {
+    "@odata.etag": "W/\"4796277\"",
+    "dcfg_source_text": "MSA Date",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "f7be7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_msa.createdon"
+  },
+  {
+    "@odata.etag": "W/\"4796278\"",
+    "dcfg_source_text": "LEGAL VENDOR NAME",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "fcbe7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "@odata.etag": "W/\"4796279\"",
+    "dcfg_source_text": "Vendor Address",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "ffbe7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor.dcfg_address_composite"
+  },
+  {
+    "@odata.etag": "W/\"4796280\"",
+    "dcfg_source_text": "Days, Times",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "00bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_schedule_description"
+  },
+  {
+    "@odata.etag": "W/\"4796281\"",
+    "dcfg_source_text": "Contract Start Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "05bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_start_date"
+  },
+  {
+    "@odata.etag": "W/\"4796282\"",
+    "dcfg_source_text": "Contract End Date",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "06bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_end_date"
+  },
+  {
+    "@odata.etag": "W/\"4796283\"",
+    "dcfg_source_text": "Contract Value Dollars ($X.XX)",
+    "dcfg_field_category": 100000003,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "08bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_contract_value"
+  },
+  {
+    "@odata.etag": "W/\"4796285\"",
+    "dcfg_source_text": "Contact Name, # Contact Tele, Contact Email (Vendor)",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0abf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "@odata.etag": "W/\"4796287\"",
+    "dcfg_source_text": "Account Handler Name, # Tele, Email (Decades)",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0bbf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[COMPOSITE:decades_handler]"
+  },
+  {
+    "@odata.etag": "W/\"4796289\"",
+    "dcfg_source_text": "___________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0dbf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "@odata.etag": "W/\"4796290\"",
+    "dcfg_source_text": "______________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "0fbf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_NAME]"
+  },
+  {
+    "@odata.etag": "W/\"4796291\"",
+    "dcfg_source_text": "___________________________",
+    "dcfg_field_category": 100000001,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "10bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "@odata.etag": "W/\"4796292\"",
+    "dcfg_source_text": "_________________________",
+    "dcfg_field_category": 100000002,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "11bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "[SIGNATURE:OWNER_TITLE]"
+  },
+  {
+    "@odata.etag": "W/\"4796293\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "12bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  },
+  {
+    "@odata.etag": "W/\"4796294\"",
+    "dcfg_source_text": "_____________",
+    "dcfg_field_category": 100000000,
+    "dcfg_is_mapped": true,
+    "dcfg_template_fieldid": "13bf7244-8833-f111-88b3-000d3a30860b",
+    "_dcfg_template_id_value": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "dcfg_dataverse_path": "dcfg_wo_number"
+  }
+]
