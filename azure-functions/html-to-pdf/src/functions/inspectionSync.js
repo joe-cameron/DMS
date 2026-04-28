@@ -3,15 +3,17 @@ const { app } = require('@azure/functions');
 /**
  * inspectionSync — Timer-triggered Azure Function
  *
- * Pulls inspection WOs from UpKeep, compares against Dataverse dcfg_im_schedule,
- * writes new/changed records. Runs every 30 minutes.
+ * Pulls inspection WOs from BOTH UpKeep accounts, compares against
+ * Dataverse dcfg_im_schedule, writes new/changed records. Runs every 30 minutes.
  *
  * Environment variables:
- *   UPKEEP_EMAIL        — UpKeep login email
- *   UPKEEP_PASSWORD     — UpKeep login password
- *   DATAVERSE_URL       — e.g. https://org06f5de0b.api.crm.dynamics.com
- *   DATAVERSE_TENANT_ID — Azure AD tenant
- *   DATAVERSE_CLIENT_ID — App registration client ID
+ *   UPKEEP_EMAIL            — Multi-site UpKeep login (PennReach, J-ADD, Arc Mercer, PCDI, Newgrange)
+ *   UPKEEP_PASSWORD         — Multi-site UpKeep password
+ *   UPKEEP_EMAIL_2          — Second UpKeep account login (Bancroft)
+ *   UPKEEP_PASSWORD_2       — Second UpKeep account password
+ *   DATAVERSE_URL           — e.g. https://org06f5de0b.api.crm.dynamics.com
+ *   DATAVERSE_TENANT_ID     — Azure AD tenant
+ *   DATAVERSE_CLIENT_ID     — App registration client ID
  *   DATAVERSE_CLIENT_SECRET — App registration client secret
  */
 
@@ -101,56 +103,8 @@ function mapStatus(upkeepStatus) {
     return 100000000; // Scheduled
 }
 
-// ── Main sync logic ──────────────────────────────────
-async function syncInspections(context) {
-    var log = context.log || console.log;
-    var stats = { checked: 0, created: 0, updated: 0, unchanged: 0, errors: 0 };
-
-    // Auth
-    var ukEmail = process.env.UPKEEP_EMAIL;
-    var ukPassword = process.env.UPKEEP_PASSWORD;
-    var dvUrl = process.env.DATAVERSE_URL || 'https://org06f5de0b.api.crm.dynamics.com';
-    var dvTenant = process.env.DATAVERSE_TENANT_ID;
-    var dvClientId = process.env.DATAVERSE_CLIENT_ID;
-    var dvClientSecret = process.env.DATAVERSE_CLIENT_SECRET;
-
-    if (!ukEmail || !ukPassword) {
-        log('[inspection-sync] Missing UPKEEP_EMAIL/UPKEEP_PASSWORD env vars');
-        return stats;
-    }
-    if (!dvTenant || !dvClientId || !dvClientSecret) {
-        log('[inspection-sync] Missing DATAVERSE_TENANT_ID/CLIENT_ID/CLIENT_SECRET env vars');
-        return stats;
-    }
-
-    log('[inspection-sync] Starting sync...');
-
-    var ukToken = await getUpKeepToken(ukEmail, ukPassword);
-    var dvToken = await getDataverseToken(dvTenant, dvClientId, dvClientSecret, dvUrl);
-
-    // Pull data from both sides
-    var wos = await pullUpKeepInspections(ukToken);
-    var existing = await getExistingSchedules(dvUrl, dvToken);
-    stats.checked = wos.length;
-
-    log('[inspection-sync] UpKeep: ' + wos.length + ' inspections, Dataverse: ' + existing.length + ' schedule records');
-
-    // Build lookup by UpKeep WO ID
-    var byWoId = {};
-    for (var i = 0; i < existing.length; i++) {
-        var rec = existing[i];
-        if (rec.dcfg_upkeep_wo_id) byWoId[rec.dcfg_upkeep_wo_id] = rec;
-    }
-
-    var dvHeaders = {
-        'Authorization': 'Bearer ' + dvToken,
-        'Content-Type': 'application/json',
-        'OData-MaxVersion': '4.0',
-        'OData-Version': '4.0',
-        'MSCRM.SolutionUniqueName': 'DCFGSystemTest',
-    };
-    var apiBase = dvUrl + '/api/data/v9.2';
-
+// ── Upsert WOs into Dataverse ────────────────────────
+async function upsertWOs(wos, sourceName, byWoId, dvHeaders, dvToken, apiBase, log, stats) {
     for (var w = 0; w < wos.length; w++) {
         var wo = wos[w];
         var ex = byWoId[wo.id];
@@ -158,7 +112,6 @@ async function syncInspections(context) {
         var newDate = wo.dueDate || null;
 
         if (ex) {
-            // Check if anything changed
             var dateChanged = newDate && ex.dcfg_scheduled_date && !ex.dcfg_scheduled_date.startsWith(newDate.split('T')[0]);
             var statusChanged = ex.dcfg_visit_status !== newStatus;
 
@@ -167,7 +120,6 @@ async function syncInspections(context) {
                 continue;
             }
 
-            // Update
             var patchBody = { dcfg_visit_status: newStatus };
             if (newDate) patchBody.dcfg_scheduled_date = newDate;
             if (wo.status === 'complete' && !ex.dcfg_completed_date) {
@@ -186,10 +138,10 @@ async function syncInspections(context) {
                 stats.errors++;
             }
         } else {
-            // New — create record
             var createBody = {
-                dcfg_name: wo.title || 'Inspection ' + wo.id,
+                dcfg_name: (wo.title || 'Inspection ' + wo.id).substring(0, 200),
                 dcfg_upkeep_wo_id: wo.id,
+                dcfg_upkeep_source: sourceName,
                 dcfg_visit_status: newStatus,
                 dcfg_active_flag: true,
                 dcfg_is_first_inspection: false,
@@ -197,7 +149,6 @@ async function syncInspections(context) {
             if (newDate) createBody.dcfg_scheduled_date = newDate;
             if (wo.status === 'complete') createBody.dcfg_completed_date = new Date().toISOString();
 
-            // Match location to property
             if (wo.location) {
                 try {
                     var propResp = await fetch(apiBase + "/dcfg_properties?$select=dcfg_propertyid&$filter=dcfg_upkeep_location_id eq '" + wo.location + "'&$top=1", {
@@ -223,6 +174,77 @@ async function syncInspections(context) {
                 log('[inspection-sync] Create failed ' + wo.id + ': ' + e.message);
                 stats.errors++;
             }
+        }
+    }
+}
+
+// ── Main sync logic ──────────────────────────────────
+async function syncInspections(context) {
+    var log = context.log || console.log;
+    var stats = { checked: 0, created: 0, updated: 0, unchanged: 0, errors: 0 };
+
+    // Dataverse auth
+    var dvUrl = process.env.DATAVERSE_URL || 'https://org06f5de0b.api.crm.dynamics.com';
+    var dvTenant = process.env.DATAVERSE_TENANT_ID;
+    var dvClientId = process.env.DATAVERSE_CLIENT_ID;
+    var dvClientSecret = process.env.DATAVERSE_CLIENT_SECRET;
+
+    if (!dvTenant || !dvClientId || !dvClientSecret) {
+        log('[inspection-sync] Missing DATAVERSE_TENANT_ID/CLIENT_ID/CLIENT_SECRET env vars');
+        return stats;
+    }
+
+    // Build account list — primary (multi-site) + optional secondary (Bancroft)
+    var accounts = [];
+    if (process.env.UPKEEP_EMAIL && process.env.UPKEEP_PASSWORD) {
+        accounts.push({ name: 'multisite', email: process.env.UPKEEP_EMAIL, password: process.env.UPKEEP_PASSWORD });
+    }
+    if (process.env.UPKEEP_EMAIL_2 && process.env.UPKEEP_PASSWORD_2) {
+        accounts.push({ name: 'bancroft', email: process.env.UPKEEP_EMAIL_2, password: process.env.UPKEEP_PASSWORD_2 });
+    }
+
+    if (accounts.length === 0) {
+        log('[inspection-sync] No UpKeep accounts configured');
+        return stats;
+    }
+
+    log('[inspection-sync] Starting sync for ' + accounts.length + ' UpKeep account(s)...');
+
+    var dvToken = await getDataverseToken(dvTenant, dvClientId, dvClientSecret, dvUrl);
+    var existing = await getExistingSchedules(dvUrl, dvToken);
+
+    var byWoId = {};
+    for (var i = 0; i < existing.length; i++) {
+        var rec = existing[i];
+        if (rec.dcfg_upkeep_wo_id) byWoId[rec.dcfg_upkeep_wo_id] = rec;
+    }
+
+    var dvHeaders = {
+        'Authorization': 'Bearer ' + dvToken,
+        'Content-Type': 'application/json',
+        'OData-MaxVersion': '4.0',
+        'OData-Version': '4.0',
+        'MSCRM.SolutionUniqueName': 'DCFGSystemTest',
+    };
+    var apiBase = dvUrl + '/api/data/v9.2';
+
+    log('[inspection-sync] Dataverse: ' + existing.length + ' existing schedule records');
+
+    // Process each UpKeep account
+    for (var a = 0; a < accounts.length; a++) {
+        var acct = accounts[a];
+        log('[inspection-sync] Processing ' + acct.name + ' (' + acct.email + ')...');
+
+        try {
+            var ukToken = await getUpKeepToken(acct.email, acct.password);
+            var wos = await pullUpKeepInspections(ukToken);
+            stats.checked += wos.length;
+            log('[inspection-sync]   ' + acct.name + ': ' + wos.length + ' inspection WOs');
+
+            await upsertWOs(wos, acct.name, byWoId, dvHeaders, dvToken, apiBase, log, stats);
+        } catch (e) {
+            log('[inspection-sync]   ' + acct.name + ' FAILED: ' + e.message);
+            stats.errors++;
         }
     }
 
