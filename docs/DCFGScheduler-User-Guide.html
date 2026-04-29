@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCFG Scheduler — User Guide</title>
+<style>
+  :root { --bg:#F8FAFC; --surface:#FFFFFF; --border:#E2E8F0; --text-1:#1E293B; --text-2:#475569; --text-3:#94A3B8; --accent:#2E5295; --sched:#2E5295; --model:#0D9488; --warn:#D97706; --danger:#DC2626; --am:#1a8a4a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text-1); line-height:1.6; max-width:960px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:1.8rem; font-weight:700; margin-bottom:4px; }
+  .subtitle { color:var(--text-2); font-size:.95rem; margin-bottom:32px; }
+  h2 { font-size:1.2rem; font-weight:700; margin:32px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--accent); color:var(--accent); }
+  h3 { font-size:1rem; font-weight:600; margin:20px 0 8px; }
+  p, li { font-size:.9rem; margin-bottom:8px; }
+  ul, ol { padding-left:24px; margin-bottom:16px; }
+  .step { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px 20px; margin-bottom:12px; }
+  .step-num { display:inline-flex; width:28px; height:28px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:.82rem; align-items:center; justify-content:center; margin-right:10px; flex-shrink:0; }
+  .step-title { font-weight:600; font-size:.95rem; }
+  .step p { margin-top:6px; color:var(--text-2); }
+  .badge { display:inline-flex; padding:2px 8px; border-radius:3px; font-size:.72rem; font-weight:700; letter-spacing:.03em; vertical-align:middle; }
+  .b-sched { background:var(--sched); color:#fff; }
+  .b-add { background:rgba(13,148,136,0.1); color:var(--model); border:1px solid var(--model); }
+  .b-never { background:#FEE2E2; color:#B91C1C; }
+  .b-type { background:#EEF2FF; color:#4338CA; border:1px solid #C7D2FE; }
+  .b-first { background:#FEE2E2; color:#B91C1C; }
+  .rule { background:#FFFBEB; border-left:4px solid var(--warn); padding:12px 16px; margin:12px 0; border-radius:0 6px 6px 0; font-size:.88rem; }
+  .rule strong { color:var(--warn); }
+  .info { background:#EFF6FF; border-left:4px solid var(--accent); padding:12px 16px; margin:12px 0; border-radius:0 6px 6px 0; font-size:.88rem; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:.85rem; }
+  th { text-align:left; font-weight:600; padding:8px 12px; background:var(--bg); border-bottom:2px solid var(--border); font-size:.75rem; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); }
+  td { padding:8px 12px; border-bottom:1px solid var(--border); }
+  code { background:#F1F5F9; padding:2px 6px; border-radius:3px; font-size:.82rem; }
+  .toc { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px 24px; margin-bottom:24px; }
+  .toc a { color:var(--accent); text-decoration:none; font-size:.88rem; }
+  .toc a:hover { text-decoration:underline; }
+  .toc ol { margin-bottom:0; }
+  .cap-bar { height:6px; background:#E2E8F0; border-radius:3px; margin:4px 0; overflow:hidden; }
+  .cap-fill { height:100%; border-radius:3px; }
+  .screenshot { border:1px solid var(--border); border-radius:6px; margin:12px 0; padding:4px; background:#fff; text-align:center; color:var(--text-3); font-size:.78rem; font-style:italic; }
+</style>
+</head>
+<body>
+
+<h1>DCFG Scheduler — User Guide</h1>
+<p class="subtitle">Inspection capacity planner for Decades Construction Group<br>
+<a href="https://dcfgscheduler.powerappsportals.com/" target="_blank">https://dcfgscheduler.powerappsportals.com/</a></p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+<li><a href="#overview">What This Tool Does</a></li>
+<li><a href="#rules">Business Rules &amp; Assumptions</a></li>
+<li><a href="#layout">Screen Layout</a></li>
+<li><a href="#calendar">Calendar Tab</a></li>
+<li><a href="#planner">Optimization Planner Tab</a></li>
+<li><a href="#issues">Data Issues Tab</a></li>
+<li><a href="#needs">Needs Inspection Grid</a></li>
+<li><a href="#filters">Filters &amp; Parameters</a></li>
+<li><a href="#routes">Viewing Routes in Google Maps</a></li>
+<li><a href="#location-types">Location Types &amp; Inspection Hours</a></li>
+<li><a href="#data">Where the Data Comes From</a></li>
+</ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="overview">1. What This Tool Does</h2>
+
+<p>The DCFG Scheduler reads live inspection data from UpKeep (synced every 30 minutes) and optimizes future inspection schedules across all customers. It answers three questions:</p>
+
+<ol>
+<li><strong>What's already scheduled?</strong> — Calendar tab shows confirmed UpKeep work orders</li>
+<li><strong>What should be scheduled next?</strong> — Optimization Planner suggests efficient routes</li>
+<li><strong>What data needs fixing?</strong> — Data Issues tab flags missing coordinates, customer assignments, etc.</li>
+</ol>
+
+<p>The tool does NOT write back to UpKeep. UpKeep is read-only. The optimizer's suggestions are proposals — a human reviews them and creates the work orders in UpKeep.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="rules">2. Business Rules &amp; Assumptions</h2>
+
+<div class="rule">
+<strong>90-Day Cadence (±5 Days)</strong><br>
+Every location gets inspected 4 times per year. The target interval between inspections is 90 days. The optimizer can schedule within a ±5 day window (85–95 days from last inspection). <strong>85 days is preferred over 95</strong> — schedule early in the window when possible, only push later if geography demands it.
+</div>
+
+<table>
+<tr><th>Rule</th><th>Value</th><th>Notes</th></tr>
+<tr><td>Inspections per year</td><td>4</td><td>Quarterly, ~90 days apart</td></tr>
+<tr><td>Eligible window</td><td>85–95 days from last inspection</td><td>±5 day flex for route efficiency</td></tr>
+<tr><td>First inspection</td><td>4 hours</td><td>New location, never inspected before</td></tr>
+<tr><td>Return inspection</td><td>1 hour</td><td>Previously inspected location</td></tr>
+<tr><td>Large facility / Campus</td><td>4 hours always</td><td>2+ child locations at same address, or Campus/School type</td></tr>
+<tr><td>Max day (combined)</td><td>8 hours</td><td>On-site time + ALL driving = 8h. No overtime.</td></tr>
+<tr><td>Shore traffic blackout</td><td>No shore towns on Fridays</td><td>Memorial Day through Labor Day. Long Branch and shore corridor.</td></tr>
+<tr><td>Weekdays only</td><td>Mon–Fri</td><td>No weekend inspections</td></tr>
+<tr><td>UpKeep is READ-ONLY</td><td>—</td><td>Never modify UpKeep data. Only read.</td></tr>
+</table>
+
+<h3>What counts as a "location"?</h3>
+<ul>
+<li><strong>Schedulable:</strong> Street addresses — houses, apartments, group homes. One visit per address.</li>
+<li><strong>NOT schedulable:</strong> Rooms, closets, dens, hallways, offices, classrooms, storage areas, buildings within a campus. These are sub-units of a property and are covered by the parent visit.</li>
+<li><strong>Campus = one visit:</strong> Lakeside Campus, Welsh Campus School, NewGrange School Campus — one 4-hour inspection covers all buildings at that address.</li>
+</ul>
+
+<h3>Inspector load balancing</h3>
+<p>The optimizer distributes work evenly between inspectors. The inspector with fewer assigned days gets first pick of the nearest cluster each day. Both inspectors should end up with roughly equal total days.</p>
+
+<h3>Piggyback optimization</h3>
+<p>If an inspector already has a scheduled UpKeep day in an area, the optimizer suggests adding nearby eligible locations to that existing trip instead of creating a new day. This reduces total field days.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="layout">3. Screen Layout</h2>
+
+<h3>Ticker Bar (top, dark)</h3>
+<p>Shows at a glance: location count, contracts, value, 30d/60d/90d inspection urgency counts, inspector toggle buttons, customer filter buttons, settings gear.</p>
+
+<h3>Three Tabs</h3>
+<table>
+<tr><th>Tab</th><th>Purpose</th></tr>
+<tr><td><strong>Calendar</strong></td><td>Confirmed UpKeep-scheduled inspections + Needs Inspection countdown</td></tr>
+<tr><td><strong>Optimization Planner</strong> <span class="badge b-add">N</span></td><td>Optimizer's suggested schedule — Calendar or List view</td></tr>
+<tr><td><strong>Data Issues</strong> <span style="background:#DC2626;color:#fff;padding:1px 6px;border-radius:10px;font-size:.68rem;font-weight:700;">N</span></td><td>Data quality problems to investigate</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="calendar">4. Calendar Tab</h2>
+
+<div class="step">
+<span class="step-num">1</span><span class="step-title">View confirmed inspections</span>
+<p>The calendar shows a 3-week view of UpKeep-scheduled inspection days. Solid blue cells = confirmed work. Navigate with ◄ ► arrows or scroll with mouse wheel.</p>
+</div>
+
+<div class="step">
+<span class="step-num">2</span><span class="step-title">Click a day for details</span>
+<p>Click a blue day cell to open the detail panel on the right showing: inspector, stop list, on-site hours, drive time, total hours, and a Route button.</p>
+</div>
+
+<div class="step">
+<span class="step-num">3</span><span class="step-title">Check Needs Inspection below</span>
+<p>Scroll down to the Needs Inspection grid. This shows locations that need a new UpKeep work order created — they have no upcoming scheduled inspection within their 90-day window.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="planner">5. Optimization Planner Tab</h2>
+
+<p>This is where the optimizer's suggested schedule lives. Two view modes:</p>
+
+<h3>Calendar View (default)</h3>
+
+<div class="step">
+<span class="step-num">1</span><span class="step-title">Read the day cards</span>
+<p>Each card shows a proposed day: date, inspector, stop count, on-site hours, drive time, and combined total (X.Xh / 8h). A capacity bar visualizes utilization:</p>
+<div class="cap-bar"><div class="cap-fill" style="width:90%;background:var(--am);"></div></div>
+<p style="font-size:.75rem;color:var(--text-3);">Green ≥90% · Blue ≥70% · Amber &lt;70%</p>
+</div>
+
+<div class="step">
+<span class="step-num">2</span><span class="step-title">Understand the color coding</span>
+<p>Each stop has a colored left border and badge:</p>
+<table>
+<tr><td style="border-left:3px solid var(--sched);padding-left:8px;"><span class="badge b-sched">UPKEEP</span></td><td>Already scheduled in UpKeep — confirmed, respect this</td></tr>
+<tr><td style="border-left:3px solid var(--model);padding-left:8px;"><span class="badge b-add">ADD</span> or <span class="badge b-add">PROPOSED</span></td><td>Optimizer suggests adding this — not yet in UpKeep</td></tr>
+</table>
+<p>On a piggyback day, you'll see both: blue existing stops + teal proposed additions.</p>
+</div>
+
+<div class="step">
+<span class="step-num">3</span><span class="step-title">Click 🗺 Route on any day card</span>
+<p>Opens Google Maps with the full round-trip route: inspector home → all stops → home. Verify the route makes sense before creating work orders.</p>
+</div>
+
+<div class="step">
+<span class="step-num">4</span><span class="step-title">Click a day card for route detail</span>
+<p>The right panel shows numbered stops with: customer, address, location type badge, FIRST/RETURN badge, drive time per leg, eligibility window (85–95 day range), last inspection date, and a View Route in Google Maps button.</p>
+</div>
+
+<div class="step">
+<span class="step-num">5</span><span class="step-title">Toggle inspectors</span>
+<p>Use the Inspector A / Inspector B buttons in the planner header to filter by inspector. Compare their individual schedules.</p>
+</div>
+
+<h3>List View</h3>
+<p>Click "List" to see all suggestions in a flat table: customer, location, address, suggested date, inspector, hours, type. Useful for bulk review or CSV export.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="issues">6. Data Issues Tab</h2>
+
+<p>Shows real data quality problems. Each issue type has a severity badge and a detail table.</p>
+
+<table>
+<tr><th>Issue</th><th>Severity</th><th>What to do</th></tr>
+<tr><td>Locations missing coordinates</td><td style="color:var(--warn);">WARNING</td><td>Update the address in Dataverse so geocoding can set lat/lng. Without coordinates the optimizer can't route.</td></tr>
+<tr><td>Locations with no customer</td><td style="color:var(--warn);">WARNING</td><td>Assign a customer to the property in Dataverse. Without a customer, the location won't appear in customer-filtered views.</td></tr>
+<tr><td>No inspection schedule data</td><td style="color:var(--danger);">CRITICAL</td><td>The UpKeep sync may not be running. Check the inspectionSync Azure Function in the Azure Portal.</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="needs">7. Needs Inspection Grid</h2>
+
+<p>Located at the bottom of the Calendar tab. Shows locations that <strong>do not have an upcoming UpKeep work order</strong> but <strong>need one</strong> based on their 90-day cadence.</p>
+
+<h3>Tabs: 30 Days | 60 Days | 90 Days</h3>
+<p>Locations are bucketed by how soon their next inspection is due. 30 Days = most urgent.</p>
+
+<h3>Row colors</h3>
+<table>
+<tr><td style="background:#FFF1F0;padding:4px 12px;"><span class="badge b-never">NEVER</span></td><td>Never been inspected — highest priority</td></tr>
+<tr><td style="background:#FEF2F2;padding:4px 12px;"><span class="badge b-first">OVERDUE</span></td><td>Past the 95-day window — overdue</td></tr>
+<tr><td style="padding:4px 12px;">Normal row</td><td>Due within the selected window but not yet overdue</td></tr>
+</table>
+
+<p>Rows are sorted: overdue/never first, then by days until due (ascending).</p>
+
+<div class="info">
+<strong>If a location is already scheduled in UpKeep</strong>, it does NOT appear here. This grid only shows locations that need a NEW work order created.
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="filters">8. Filters &amp; Parameters</h2>
+
+<h3>Customer Filter (ticker bar)</h3>
+<p>Colored buttons for each customer. Click to toggle on/off. Filters all views: calendar, planner, needs inspection, data issues.</p>
+
+<h3>Inspector Filter (ticker bar)</h3>
+<p>Inspector A / Inspector B buttons. Toggle to show/hide each inspector's schedule. Also available in the Planner header.</p>
+
+<h3>Scenario Parameters (gear icon ⚙)</h3>
+<p>Click the gear icon in the ticker to open the scenario drawer. Adjust these sliders to see how they impact the schedule:</p>
+
+<table>
+<tr><th>Parameter</th><th>Default</th><th>What it controls</th></tr>
+<tr><td>First Insp</td><td>4h</td><td>Hours for a first-time inspection</td></tr>
+<tr><td>Return</td><td>1h</td><td>Hours for a return inspection</td></tr>
+<tr><td>Max Day</td><td>8h</td><td>Hard cap on combined on-site + drive time</td></tr>
+<tr><td>Visits/Yr</td><td>4x</td><td>Required inspections per year (drives the 90-day cadence)</td></tr>
+<tr><td>Cluster Mi</td><td>15 mi</td><td>How far apart locations can be to group on the same day</td></tr>
+<tr><td>Max Drive/Stop</td><td>45 min</td><td>Maximum drive time between stops (relaxed when day is under 60% full)</td></tr>
+</table>
+
+<p>Changes to parameters instantly recalculate the optimization planner. The calendar (UpKeep data) is not affected — it shows what IS scheduled, not what the optimizer suggests.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="routes">9. Viewing Routes in Google Maps</h2>
+
+<div class="step">
+<span class="step-num">1</span><span class="step-title">From the Planner Calendar</span>
+<p>Every day card has a blue <strong>🗺 Route</strong> chip in the header. Click it — Google Maps opens with the full route. No need to open the detail panel first.</p>
+</div>
+
+<div class="step">
+<span class="step-num">2</span><span class="step-title">From the Route Detail Panel</span>
+<p>Click a day card to select it, then click <strong>View Route in Google Maps</strong> in the detail panel on the right.</p>
+</div>
+
+<div class="step">
+<span class="step-num">3</span><span class="step-title">From the Sticky Mini-Panel</span>
+<p>When a day is selected, a dark bar sticks to the top of the planner. It has a Route button that stays visible as you scroll.</p>
+</div>
+
+<div class="rule">
+<strong>Route order:</strong> The optimizer routes farthest location from inspector home first, then nearest-neighbor back toward home. The inspector ends the day close to where they started.
+</div>
+
+<div class="info">
+<strong>Addresses include the correct state</strong> (NJ, DE, or PA) from Dataverse. If Google Maps routes to the wrong location, check that the property's address and state are correct in Dataverse.
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="location-types">10. Location Types &amp; Inspection Hours</h2>
+
+<p>Each location has a type badge derived from its name:</p>
+
+<table>
+<tr><th>Badge</th><th>Inspection Hours</th><th>Examples</th></tr>
+<tr><td><span class="badge b-type">Home</span></td><td>1h return / 4h first</td><td>127 Florence Ave, 16 Oniontown Rd</td></tr>
+<tr><td><span class="badge b-type">Apartment</span></td><td>1h return / 4h first</td><td>PENN - Main 69 Apt 607</td></tr>
+<tr><td><span class="badge b-type">Group Home</span></td><td>1h return / 4h first</td><td>J-ADD - Glassboro Group Home 2</td></tr>
+<tr><td><span class="badge b-type">Day Program</span></td><td>1h return / 4h first</td><td>Lakeside- Day Program</td></tr>
+<tr><td><span class="badge b-type">Campus</span></td><td><strong>4h always</strong></td><td>Lakeside Campus, NewGrange School Campus</td></tr>
+<tr><td><span class="badge b-type">Large Facility</span></td><td><strong>4h always</strong></td><td>Any address with 2+ child units in UpKeep</td></tr>
+<tr><td><span class="badge b-type">Maintenance</span></td><td>4h always</td><td>Welsh Campus Maintenance</td></tr>
+</table>
+
+<div class="rule">
+<strong>Large Facility detection:</strong> If the same street address has 2 or more UpKeep locations (rooms, dens, storage, etc.), the parent property is automatically marked as a Large Facility with 4-hour inspection time. One visit covers the entire building.
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="data">11. Where the Data Comes From</h2>
+
+<table>
+<tr><th>Data</th><th>Source</th><th>Update Frequency</th></tr>
+<tr><td>Locations (properties)</td><td>Dataverse <code>dcfg_property</code> table</td><td>Real-time via Portal Web API</td></tr>
+<tr><td>Customers</td><td>Dataverse <code>dcfg_customer</code> table</td><td>Real-time</td></tr>
+<tr><td>Inspectors</td><td>Dataverse <code>dcfg_im_inspector</code> table</td><td>Real-time (2 inspectors)</td></tr>
+<tr><td>Inspection history</td><td>Dataverse <code>dcfg_im_schedule</code> table</td><td>Synced from UpKeep every 30 min</td></tr>
+<tr><td>UpKeep work orders</td><td>UpKeep API (2 accounts: multisite + Bancroft)</td><td>Azure Function <code>inspectionSync</code> every 30 min</td></tr>
+</table>
+
+<h3>States covered</h3>
+<table>
+<tr><th>State</th><th>Count</th><th>Customers</th></tr>
+<tr><td>New Jersey</td><td>~800</td><td>PennReach, J-ADD, Arc Mercer, PCDI, Newgrange, Bancroft</td></tr>
+<tr><td>Delaware</td><td>~21</td><td>Bancroft</td></tr>
+<tr><td>Pennsylvania</td><td>~6</td><td>Bancroft</td></tr>
+</table>
+
+<h3>Shore traffic rule</h3>
+<p>Locations in the NJ shore zone (south of 40.5°N latitude, east of -74.2°W longitude — Long Branch, Asbury Park area) are NOT scheduled on Fridays between Memorial Day and Labor Day due to Garden State Parkway traffic.</p>
+
+<p style="margin-top:32px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-3);font-size:.78rem;">
+DCFG Scheduler User Guide · Generated 2026-04-29 · Decades Construction Group
+</p>
+
+</body>
+</html>
