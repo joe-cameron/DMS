@@ -1,37 +1,114 @@
 # DCFG Project — Claude Code Instructions
 
-## MANDATES — Non-Negotiable
-1. **Look before you leap.** READ current state before every write. Query the table before creating a record. Check if the column exists before adding it. Verify which environment you're connected to before running anything. The investigation step is not optional — it IS the work.
-2. **Limit token usage for database activity.** Use the fewest tokens possible for Dataverse operations. One targeted query beats a verbose script. Use known record IDs instead of searching when you have them. Never build a 200-line script when a 5-line inline command does the job. Every API call costs tokens — justify each one.
+## BOOT SEQUENCE — Execute Before ANY Response
 
-## READ FIRST
-Load `~/.claude/projects/C--DCFG/memory/reference_system_snapshot.json` for complete system state.
-Load `~/.claude/projects/C--DCFG/memory/reference_engineering_journal.md` for engineering lessons.
+**This is not optional. Every session, every agent, every skill MUST execute these steps before doing anything else.**
+
+1. **Read `docs/to-be-fixed.md`** — the running SPA issues/todos list. Know what's outstanding.
+2. **Read `~/.claude/projects/C--DCFG/memory/reference_accomplishments.md`** — what's already been built. Don't reinvent.
+3. **Read the most recent `docs/handoff-*.md`** — context from the last session.
+4. **Run `pac auth list`** — verify which environment is active. Indices shift. Never assume.
+5. **Report what you found** — "I see N open items in to-be-fixed, last handoff was X, pac auth is pointing at Y." Then proceed.
+
+If a skill (HAL, Nora, or any other) skips this sequence, it is operating blind.
+
+## MANDATES — Non-Negotiable
+1. **Trace the full path before deploying.** Walk the complete path: user click → API call → data shape → state update → UI render. Compiling is NOT verification. **Deploy once, correctly — not ten times iteratively.**
+2. **Look before you leap.** READ current state before every write. Query before creating. Check before adding. Verify environment before running. The investigation step IS the work.
+3. **Limit token usage for database activity.** One targeted query beats a verbose script. Known record IDs over searches. Never 200 lines when 5 will do.
+4. **Investigate before asking.** Before asking the user for ANY information, search the repo, memory, CLI output, and existing scripts. "I couldn't find it after checking A, B, C" is valid. Skipping the investigation is not.
+5. **Search before creating.** Before proposing any new file, script, tracking list, or mechanism — `Glob` + `Grep` the repo for an existing one. Add to what exists. Don't create duplicates.
+
+## RULES OF THE ROAD — Every Session, Every Agent
+
+### What You Never Do
+- **Never write to Prod without explicit authorization.** No schema changes, no data writes, no flow edits, no solution imports, no deploys to `DCFGSystems-Prod` without the operator saying "do it." Each action is a separate authorization — fixing code does NOT authorize deploying it.
+- **Never hard delete.** `dcfg_active_flag` = soft delete. Always.
+- **Never write to UpKeep.** Read-only integration.
+- **Never use customer names or people names in production code/UI/schema.** No "Bancroft", "PennReach", "Tyler", "Bill" in code, strings, or column names. Generic/role-based terms only. File and folder names are fine.
+- **Never use `curl.exe`.** Blocked by endpoint security. Use `Invoke-RestMethod` in pwsh.
+- **Never trust hardcoded pac auth indices.** They shift. Run `pac auth list` every time.
+- **Never use `callFlow()`.** Use `createDocumentRequest()` — flows trigger from `dcfg_document_requests` table.
+- **Never use `Connect-CrmOnline`.** Use `pac auth` token.
+- **Never overwrite flow triggers.** Three-step flow build: placeholders → manual connections → full definition.
+
+### What You Always Do
+- **SharePoint is always the second save** for any document generation path. `DCFG_Outputs/Customer/Year/DocType`.
+- **Audit logging:** Close/Delete/Restore operations write to `dcfg_audit_logs`.
+- **Table permissions:** Append AND AppendTo on BOTH sides of relationships.
+- **PowerShell:** `Connect()` MUST have trailing slash. Use `pwsh` not `powershell`.
+- **Clear portal cache** after metadata changes (site settings, table permissions, web roles).
+- **Restore pac auth to Test** after any Prod/Stage operation.
+- **All SPA elements:** `data-testid` attributes. Tests use only `data-testid`.
+- **Verbose logging** on all API failures by default. Debug-blind in Prod is too expensive.
+- **Before ANY build:** visual mockup of before/after for impacted screens. Get approval first.
+- **Entity set:** `dcfg_properties` (NOT `dcfg_propertys`).
+
+### How You Work
+- **Investigate → options → approval → act.** Never skip steps.
+- **State assumptions explicitly.** Multiple interpretations? Present them, don't pick silently.
+- **Surgical edits.** Touch only what the task requires. Don't improve adjacent code.
+- **Simplicity.** No features, abstractions, or config beyond what was asked. 200 lines that could be 50? Rewrite.
+- **Script vs Manual:** evaluate manual path first. 5-click manual task doesn't need a 200-line script.
+- **Report findings, not questions.** "I found X in file Y" beats "what is your X?"
+- **Bulk/repeatable work → haiku sub-agents.** Opus stays on decisions.
+
+## KEY PROJECT RESOURCES — Know Where Things Live
+
+| What | Where | Purpose |
+|------|-------|---------|
+| **SPA issues / todos** | **`docs/to-be-fixed.md`** | **Running list. Add here, don't create new files.** |
+| Bug tracking | `docs/bugs.json` | Structured bug records |
+| Design specs | `docs/superpowers/specs/` | Design documents before implementation |
+| Implementation plans | `docs/superpowers/plans/` | Step-by-step build plans |
+| Session handoffs | `docs/handoff-*.md` | Context transfer between sessions |
+| Prod baseline | `docs/baseline-2026-04-16/` | 13 JSON files: tables, columns, picklists, flows, site settings, permissions, scripts |
+| Harvest manifest | `brain/harvest-37-manifest.json` | 37 SharePoint project sites with driveIds, folders, documents |
+| Dataverse brain | `dcfg_knowledge` table (Prod) | 230+ rows of system memory, lessons, baseline data |
+| Brain runtime spec | `brain/decades-brain-runtime-spec.md` | HAL + Compass architecture |
+| PowerShell helpers | `PowerApps-Samples/dataverse/webapi/PS/Core.ps1` | `Connect $orgUrl` then use `$baseHeaders` |
+| Graph auth | `tools/path-probe/graph_auth.py` | MSAL device-code for SharePoint/Graph API |
+| Screen captures | `docs/screen-captures/` | Current SPA screenshots by feature area |
+| Contract composer mockups | `scratch/brook-exhibit-b/mockups/` | Approved UX designs |
+| Engineering lessons | `~/.claude/projects/C--DCFG/memory/reference_engineering_journal.md` | Durable lessons |
+| Accomplishments | `~/.claude/projects/C--DCFG/memory/reference_accomplishments.md` | Proven patterns — read before building |
 
 ## SPA IS READ-ONLY
-**C:\DCFG\spa\ is READ-ONLY. Do not create, edit, or delete any file under spa/.**
+**`C:\DCFG\spa\` is READ-ONLY. Do not create, edit, or delete any file under spa/.**
 Read and search are allowed. All SPA changes require explicit permission from the operator.
+
+**DEPLOY IS A SEPARATE AUTHORIZATION.** Editing, building, and deploying are THREE separate permissions.
+- Finding a bug does NOT authorize fixing it. Report the bug, ask to fix.
+- Fixing code does NOT authorize building it. Ask before `npm run build`.
+- Building does NOT authorize deploying. Ask before `pac pages upload-code-site`.
+- Permission earlier in the session does NOT carry forward. Ask each time.
+- NEVER run `pac pages upload-code-site` without explicit "deploy to {env}" approval.
 
 ## Current Architecture
 - **Flow pattern:** Dataverse transaction table (`dcfg_document_requests`), NOT HTTP triggers
 - **SPA function:** `createDocumentRequest()` — never `callFlow()`
 - **Config:** `dcfg_configs` table read at boot via `loadConfig()` — no hardcoded URLs
 - **Entity set:** `dcfg_properties` (NOT dcfg_propertys)
-- **Solution name:** `DCFGSystemTest` (both environments)
+- **Solution name:** `DCFGSystemTest` (all environments)
 - **Soft delete:** `dcfg_active_flag` — never hard delete
+- **DocGen:** V4 OOXML injection via jszip (Azure Function). V3 is retired.
+- **Document storage:** Templates → SharePoint `DCFG_Templates`. Outputs → `DCFG_Outputs/Customer/Year/DocType`. Attachments → `DCFG_Attachments/Customer/Location/Year`.
 
 ## Environments
 
-| Env | Org URL | pac auth | Sites |
-|-----|---------|----------|-------|
-| **Test** (Sandbox) | org0c17e98d.crm.dynamics.com | `[1]` | dcfg.powerappsportals.com (SPA), decadeswelcomesyou.powerappsportals.com (Concierge SPA) |
-| **Stage** | org88778bb0.crm.dynamics.com | `[2]` | holding.powerappsportals.com (SPA) |
-| **Prod** | org06f5de0b.crm.dynamics.com | `[3]` | dmms1.powerappsportals.com (SPA) |
-| **Portal** (READ-ONLY) | orgf625b080.crm.dynamics.com | `[6]` | decades.powerappsportals.com (legacy, non-SPA), decades-concierge.powerappsportals.com (Concierge SPA) |
+**WARNING: pac auth indices SHIFT. Always run `pac auth list` before any operation.**
+
+| Env | Org URL | Sites |
+|-----|---------|-------|
+| **Prod** | org06f5de0b.crm.dynamics.com | dmms1.powerappsportals.com (SPA) |
+| **Test** (Sandbox) | org0c17e98d.crm.dynamics.com | dcfg.powerappsportals.com (SPA) |
+| **Stage** | org88778bb0.crm.dynamics.com | holding.powerappsportals.com (SPA) |
+| **Portal** (READ-ONLY) | orgf625b080.crm.dynamics.com | decades.powerappsportals.com (legacy) |
 
 - **Deploy order:** Test → Stage → Prod (operator specifies which envs per deploy)
-- **Always restore pac auth to Test (index 1) after deploying**
+- **Always restore pac auth to Test after deploying**
 - **Solution name:** `DCFGSystemTest` (all environments)
+- **Prod is protected.** Every Prod operation requires explicit authorization.
 
 ## Deploy Commands
 ```bash
@@ -46,10 +123,19 @@ After deploy: clear cache + provide launch URLs.
 2. User manually adds one action per connector type in designer
 3. Read back connection format, push full definition — NEVER overwrite triggers
 
-## Rules
-- Script vs Manual: evaluate manual path first (see script-vs-manual-judgment skill)
-- Audit logging: Close/Delete/Restore all write to dcfg_audit_logs
-- Table permissions: Append AND AppendTo on BOTH sides of relationships
-- PowerShell: Connect() MUST have trailing slash, use pwsh not powershell
-- **curl.exe is BLOCKED by endpoint security.** Use `Invoke-RestMethod` in pwsh instead. Never attempt curl.exe.
-- Always clear portal cache after metadata changes
+## Engineering Discipline
+
+### Simplicity
+- No features, abstractions, or configuration beyond what was asked.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+### Surgical edits
+- Touch only what the task requires. Don't "improve" adjacent code.
+- Don't refactor things that aren't broken. Match existing style.
+- Remove imports/variables/functions that YOUR changes orphaned. Leave pre-existing dead code alone.
+
+### Success criteria before execution
+- Transform vague asks into verifiable goals before starting.
+- For multi-step tasks, state a brief plan with verification per step.
+- **Loop verification locally, not the deploy.** The deploy is never the verification mechanism.

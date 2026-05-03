@@ -1,0 +1,10 @@
+# DCFG Codex configuration — project-scoped
+# MCP server gives Codex live read access to the Dataverse brain (dcfg_knowledge table)
+
+[mcp_servers.dcfg-brain]
+  enabled = true
+  required = true
+  command = "C:\\Python314\\python.exe"
+  args = ["C:\\dcfg\\tools\\dcfg-mcp\\server.py", "--env", "prod"]
+  startup_timeout_sec = 30.0
+  tool_timeout_sec = 60.0

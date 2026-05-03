@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Slideout — Before &amp; After</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Fraunces:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F8FAFC; --bg-2:#F1F5F9; --card:#FFFFFF; --card-sub:#FAFBFC;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --text:#0F172A; --text-2:#475569; --text-3:#94A3B8;
+  --navy:#1B2A4A; --navy-deep:#0F1B36; --navy-pale:#EEF2FB;
+  --amber:#D4A017; --amber-pale:#FDF6E3;
+  --green:#16A34A; --green-pale:#DCFCE7;
+  --red:#DC2626; --red-pale:#FEE2E2;
+  --shadow:0 1px 3px rgba(15,23,42,0.08),0 1px 2px rgba(15,23,42,0.04);
+  --shadow-lg:0 8px 24px rgba(15,23,42,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family:'IBM Plex Sans',-apple-system,sans-serif; font-size:14px; line-height:1.5;
+  background:#E2E8F0; color:var(--text); }
+
+/* Page layout — two panels side by side */
+.page-header { text-align:center; padding:32px 20px 12px; }
+.page-header h1 { font-family:'Fraunces',serif; font-size:28px; color:var(--navy); }
+.page-header p { color:var(--text-2); font-size:15px; margin-top:4px; }
+
+.compare { display:flex; gap:40px; justify-content:center; padding:20px 40px 60px; flex-wrap:wrap; }
+.panel { position:relative; }
+.panel-label { text-align:center; margin-bottom:12px; font-size:13px; font-weight:600;
+  text-transform:uppercase; letter-spacing:1px; color:var(--text-3); }
+.panel-label span { display:inline-block; padding:4px 14px; border-radius:20px; }
+.panel-label.before span { background:var(--bg-2); color:var(--text-2); }
+.panel-label.after span  { background:var(--green-pale); color:var(--green); }
+
+/* Drawer chrome */
+.drawer-frame { width:400px; min-height:740px; background:var(--card); border-radius:16px;
+  box-shadow:var(--shadow-lg); overflow:hidden; display:flex; flex-direction:column;
+  border:1px solid var(--border); }
+
+/* Drawer header */
+.drawer-head { padding:16px 22px 14px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:12px; }
+.drawer-head h3 { flex:1; font-size:16px; font-weight:600; color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif; }
+.drawer-close { width:32px; height:32px; border-radius:8px; border:none;
+  background:transparent; color:var(--text-3); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; }
+.drawer-close:hover { background:var(--bg-2); color:var(--text); }
+.back-btn { width:32px; height:32px; border-radius:8px; border:none;
+  background:transparent; color:var(--text-2); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; }
+.back-btn:hover { background:var(--bg-2); color:var(--navy); }
+
+/* Search */
+.drawer-search-wrap { padding:14px 22px 10px; position:relative; }
+.drawer-search { width:100%; padding:10px 14px 10px 38px; font-size:14px;
+  font-family:inherit; color:var(--text); background:var(--bg);
+  border:1px solid var(--border-strong); border-radius:10px; outline:none; }
+.drawer-search-wrap::before { content:''; position:absolute; left:36px; top:50%;
+  transform:translateY(-50%); width:16px; height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat center; }
+
+/* New vendor button */
+.new-vendor-btn { margin:0 22px 10px; padding:10px 16px; border-radius:10px;
+  border:2px dashed var(--navy); background:var(--navy-pale); color:var(--navy);
+  font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;
+  display:flex; align-items:center; gap:8px; transition:all 0.15s; }
+.new-vendor-btn:hover { background:var(--navy); color:#fff; border-style:solid; }
+.new-vendor-btn .plus { font-size:18px; font-weight:700; }
+
+/* Filter pills */
+.drawer-filters { padding:6px 22px 10px; }
+.filter-label { font-size:11px; font-weight:600; text-transform:uppercase;
+  letter-spacing:0.5px; color:var(--text-3); margin-bottom:6px; }
+.filter-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.pill { padding:5px 12px; border-radius:16px; font-size:12px; font-weight:500;
+  border:1px solid var(--border-strong); background:var(--card); color:var(--text-2);
+  cursor:pointer; }
+.pill.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* Vendor rows */
+.drawer-body { flex:1; overflow-y:auto; padding:0 22px 16px; }
+.section-head { font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.7px; color:var(--amber); padding:12px 0 6px; }
+.vendor-row { padding:10px 14px; border:1px solid transparent; border-radius:10px;
+  cursor:pointer; margin-bottom:2px; transition:all 0.12s; }
+.vendor-row:hover { background:var(--bg-2); border-color:var(--border); }
+.vendor-name { font-size:14px; font-weight:600; color:var(--text); }
+.vendor-meta { font-size:12px; color:var(--text-3); margin-top:2px; }
+.vendor-trades { margin-top:4px; display:flex; gap:4px; flex-wrap:wrap; }
+.trade-badge { font-size:10px; padding:2px 8px; border-radius:10px;
+  background:var(--bg-2); color:var(--text-2); font-weight:500; }
+.vendor-dist { font-size:11px; color:var(--text-3); font-family:'IBM Plex Mono',monospace;
+  float:right; margin-top:2px; }
+
+/* Current location vendors card */
+.current-loc-card { margin:0 22px 10px; padding:12px 14px; border-radius:10px;
+  background:var(--amber-pale); border:1px solid #E8D48A; }
+.current-loc-label { font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.5px; color:var(--amber); margin-bottom:6px; }
+
+/* Drawer footer */
+.drawer-footer { padding:12px 22px; border-top:1px solid var(--border);
+  font-size:12px; color:var(--text-3); text-align:center; }
+.drawer-footer kbd { padding:2px 6px; border-radius:4px; background:var(--bg-2);
+  border:1px solid var(--border); font-size:11px; font-family:'IBM Plex Mono',monospace; }
+
+/* ═══ AFTER — New Vendor Form ═══ */
+.form-body { flex:1; overflow-y:auto; padding:0 22px 20px; }
+.form-section { margin-bottom:16px; }
+.form-section-title { font-size:12px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.5px; color:var(--navy); margin-bottom:10px; padding-bottom:6px;
+  border-bottom:1px solid var(--border); }
+
+.form-group { margin-bottom:12px; }
+.form-label { display:block; font-size:12px; font-weight:600; color:var(--text-2);
+  margin-bottom:4px; }
+.form-label .req { color:var(--red); margin-left:2px; }
+.form-input { width:100%; padding:9px 12px; font-size:14px; font-family:inherit;
+  color:var(--text); background:var(--bg); border:1px solid var(--border-strong);
+  border-radius:8px; outline:none; transition:border-color 0.15s; }
+.form-input:focus { border-color:var(--navy); box-shadow:0 0 0 3px var(--navy-pale); }
+.form-input::placeholder { color:var(--text-3); }
+textarea.form-input { resize:vertical; min-height:60px; }
+
+.form-row { display:grid; gap:10px; }
+.form-row-2 { grid-template-columns:1fr 1fr; }
+.form-row-3 { grid-template-columns:2fr 1fr 1fr; }
+
+/* Trade select chips */
+.trade-select { display:flex; flex-wrap:wrap; gap:6px; }
+.trade-chip { padding:5px 12px; border-radius:16px; font-size:12px; font-weight:500;
+  border:1px solid var(--border-strong); background:var(--card); color:var(--text-2);
+  cursor:pointer; transition:all 0.12s; }
+.trade-chip:hover { border-color:var(--navy); color:var(--navy); }
+.trade-chip.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* Optional section toggle */
+.optional-toggle { display:flex; align-items:center; gap:8px; padding:10px 0;
+  cursor:pointer; border:none; background:none; font-family:inherit;
+  font-size:13px; color:var(--text-2); font-weight:500; width:100%; }
+.optional-toggle:hover { color:var(--navy); }
+.optional-toggle .chevron { font-size:10px; transition:transform 0.2s; }
+.optional-toggle .chevron.open { transform:rotate(90deg); }
+.optional-content { display:none; }
+.optional-content.open { display:block; }
+
+/* Alert banner */
+.alert-banner { margin:0 22px 10px; padding:10px 14px; border-radius:8px;
+  background:var(--amber-pale); border:1px solid #E8D48A;
+  font-size:12px; color:#92710C; display:flex; align-items:flex-start; gap:8px; }
+.alert-banner .alert-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+
+/* Upload area */
+.upload-zone { border:2px dashed var(--border-strong); border-radius:10px;
+  padding:16px; text-align:center; color:var(--text-3); font-size:13px;
+  cursor:pointer; transition:all 0.15s; }
+.upload-zone:hover { border-color:var(--navy); color:var(--text-2); background:var(--navy-pale); }
+.upload-zone .upload-icon { font-size:20px; margin-bottom:4px; display:block; }
+.upload-zone .upload-hint { font-size:11px; color:var(--text-3); margin-top:4px; }
+
+/* Create button */
+.create-btn { width:100%; padding:12px; border-radius:10px; border:none;
+  background:var(--navy); color:#fff; font-size:15px; font-weight:600;
+  font-family:inherit; cursor:pointer; transition:all 0.15s; }
+.create-btn:hover { background:var(--navy-deep); }
+.form-footer { padding:14px 22px; border-top:1px solid var(--border); }
+
+/* Annotation callouts */
+.callout { position:absolute; padding:8px 14px; border-radius:8px;
+  font-size:12px; font-weight:500; color:var(--navy); background:#fff;
+  border:2px solid var(--navy); box-shadow:var(--shadow-lg); z-index:10;
+  white-space:nowrap; }
+.callout::before { content:''; position:absolute; width:12px; height:12px;
+  background:#fff; border:2px solid var(--navy); border-right:none; border-top:none;
+  transform:rotate(45deg); }
+.callout.left::before { right:-8px; top:50%; margin-top:-6px; }
+.callout.right::before { left:-8px; top:50%; margin-top:-6px; transform:rotate(225deg); }
+.callout.bottom::before { top:-8px; left:50%; margin-left:-6px; transform:rotate(135deg); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Vendor Slideout &mdash; Before &amp; After</h1>
+  <p>New Vendor creation from the Contract Composer vendor picker drawer</p>
+</div>
+
+<div class="compare">
+
+  <!-- ═══════════════════════════════════ BEFORE ═══════════════════════════════════ -->
+  <div class="panel" style="position:relative;">
+    <div class="panel-label before"><span>Before &mdash; Pick a Vendor</span></div>
+    <div class="drawer-frame">
+
+      <div class="drawer-head">
+        <h3>Pick a vendor</h3>
+        <button class="drawer-close">&times;</button>
+      </div>
+
+      <div class="drawer-search-wrap">
+        <input type="text" class="drawer-search" placeholder="Search vendors by name or trade..." readonly>
+      </div>
+
+      <!-- NEW: + New Vendor button -->
+      <button class="new-vendor-btn">
+        <span class="plus">+</span> New Vendor
+      </button>
+
+      <!-- Callout annotation -->
+      <div class="callout right" style="right:-195px; top:180px;">
+        New button added here
+        <br><span style="font-weight:400; font-size:11px; color:var(--text-3);">Transforms drawer to entry form</span>
+      </div>
+
+      <!-- Trade filters -->
+      <div class="drawer-filters">
+        <div class="filter-label">Filter by trade</div>
+        <div class="filter-pills">
+          <span class="pill active">All</span>
+          <span class="pill">Exterior</span>
+          <span class="pill">Mechanical</span>
+          <span class="pill">Interior</span>
+          <span class="pill">Services</span>
+        </div>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Current location vendors -->
+        <div class="current-loc-card">
+          <div class="current-loc-label">Current Location Vendors</div>
+          <div class="vendor-row" style="padding:6px 0;">
+            <div class="vendor-name">Reliable Plumbing Co</div>
+            <div class="vendor-meta">Last contract: Jan 2026</div>
+            <div class="vendor-trades"><span class="trade-badge">Plumbing</span></div>
+          </div>
+        </div>
+
+        <div class="section-head">Other Vendors for Customer</div>
+        <div class="vendor-row">
+          <div class="vendor-name">All Seasons HVAC <span class="vendor-dist">4.2 mi</span></div>
+          <div class="vendor-meta">Primary: Mike Torres</div>
+          <div class="vendor-trades"><span class="trade-badge">HVAC</span></div>
+        </div>
+        <div class="vendor-row">
+          <div class="vendor-name">Summit Electric LLC <span class="vendor-dist">6.8 mi</span></div>
+          <div class="vendor-meta">Primary: Sarah Chen</div>
+          <div class="vendor-trades"><span class="trade-badge">Electrical</span></div>
+        </div>
+
+        <div class="section-head">All Other Vendors</div>
+        <div class="vendor-row">
+          <div class="vendor-name">Greenscape Landscaping <span class="vendor-dist">2.1 mi</span></div>
+          <div class="vendor-meta">Primary: Dan Ortiz</div>
+          <div class="vendor-trades"><span class="trade-badge">Landscaping</span></div>
+        </div>
+        <div class="vendor-row">
+          <div class="vendor-name">ProCoat Painters <span class="vendor-dist">5.5 mi</span></div>
+          <div class="vendor-meta">Primary: Lisa Park</div>
+          <div class="vendor-trades"><span class="trade-badge">Paint</span></div>
+        </div>
+        <div class="vendor-row">
+          <div class="vendor-name">Apex Roofing Group <span class="vendor-dist">8.3 mi</span></div>
+          <div class="vendor-meta">Primary: James Wolfe</div>
+          <div class="vendor-trades"><span class="trade-badge">Roofing</span></div>
+        </div>
+        <div class="vendor-row">
+          <div class="vendor-name">Guardian Fire Systems <span class="vendor-dist">11.0 mi</span></div>
+          <div class="vendor-meta">Primary: Pat Brennan</div>
+          <div class="vendor-trades">
+            <span class="trade-badge">Sprinkler / Fire</span>
+            <span class="trade-badge">Alarm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <kbd>&uarr;</kbd> <kbd>&darr;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Enter</kbd> select &nbsp;&middot;&nbsp; <kbd>Esc</kbd> close
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ AFTER ═══════════════════════════════════ -->
+  <div class="panel">
+    <div class="panel-label after"><span>After &mdash; New Vendor Form</span></div>
+    <div class="drawer-frame">
+
+      <div class="drawer-head">
+        <button class="back-btn" title="Back to vendor list">&larr;</button>
+        <h3>New Vendor</h3>
+        <button class="drawer-close">&times;</button>
+      </div>
+
+      <div class="alert-banner">
+        <span class="alert-icon">&#9888;</span>
+        <span>New vendors need a signed MSA and proof of insurance. These are not required now &mdash; Send Queue Clearance will flag missing items.</span>
+      </div>
+
+      <div class="form-body">
+
+        <!-- Required fields -->
+        <div class="form-section">
+          <div class="form-section-title">Required</div>
+
+          <div class="form-group">
+            <label class="form-label">Legal Name<span class="req">*</span></label>
+            <input type="text" class="form-input" placeholder="Full legal business name" value="Tri-County Fencing LLC">
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Email<span class="req">*</span></label>
+              <input type="email" class="form-input" placeholder="vendor@email.com" value="info@tricountyfence.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone<span class="req">*</span></label>
+              <input type="tel" class="form-input" placeholder="(555) 555-1234" value="(609) 555-8821">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Address<span class="req">*</span></label>
+            <input type="text" class="form-input" placeholder="Street address" value="440 Industrial Way">
+          </div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" placeholder="City" value="Trenton">
+            </div>
+            <div class="form-group">
+              <label class="form-label">State</label>
+              <input type="text" class="form-input" placeholder="ST" value="NJ" style="text-transform:uppercase;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Zip</label>
+              <input type="text" class="form-input" placeholder="Zip" value="08611">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Trade<span class="req">*</span></label>
+            <div class="trade-select">
+              <span class="trade-chip">Alarm</span>
+              <span class="trade-chip">Carpentry</span>
+              <span class="trade-chip">Concrete</span>
+              <span class="trade-chip">Demolition</span>
+              <span class="trade-chip">Drywall</span>
+              <span class="trade-chip">Electrical</span>
+              <span class="trade-chip selected">Fencing</span>
+              <span class="trade-chip">Flooring</span>
+              <span class="trade-chip">Gen. Maint.</span>
+              <span class="trade-chip">HVAC</span>
+              <span class="trade-chip">Inspections</span>
+              <span class="trade-chip">Landscaping</span>
+              <span class="trade-chip">Masonry</span>
+              <span class="trade-chip">Paint</span>
+              <span class="trade-chip">Plumbing</span>
+              <span class="trade-chip">Roofing</span>
+              <span class="trade-chip">Siding</span>
+              <span class="trade-chip">Sprinkler/Fire</span>
+              <span class="trade-chip">Tree Removal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional section -->
+        <div class="form-section">
+          <button class="optional-toggle" onclick="this.querySelector('.chevron').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            <span class="chevron">&#9654;</span>
+            Additional Details (optional)
+          </button>
+          <div class="optional-content">
+
+            <div class="form-group">
+              <label class="form-label">Display Name</label>
+              <input type="text" class="form-input" placeholder="Short name if different from legal">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Name</label>
+              <input type="text" class="form-input" placeholder="Primary contact person">
+            </div>
+
+            <div style="margin-top:12px; margin-bottom:8px; font-size:12px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.4px;">Signer</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Signer Name</label>
+                <input type="text" class="form-input" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Signer Title</label>
+                <input type="text" class="form-input" placeholder="Title">
+              </div>
+            </div>
+
+            <div style="margin-top:12px; margin-bottom:8px; font-size:12px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.4px;">Payment</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Payment Terms</label>
+                <input type="text" class="form-input" placeholder="e.g. Check">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Net Terms</label>
+                <input type="text" class="form-input" placeholder="e.g. Net 30">
+              </div>
+            </div>
+
+            <div style="margin-top:12px; margin-bottom:8px; font-size:12px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.4px;">Insurance</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Provider</label>
+                <input type="text" class="form-input" placeholder="Insurance company">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Policy #</label>
+                <input type="text" class="form-input" placeholder="Policy number">
+              </div>
+            </div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">Expiration</label>
+                <input type="date" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">GL Expiration</label>
+                <input type="date" class="form-input">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top:12px;">
+              <label class="form-label">Notes</label>
+              <textarea class="form-input" placeholder="Any notes about this vendor..." rows="2"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-top:12px;">
+              <label class="form-label">Attachments</label>
+              <div class="upload-zone">
+                <span class="upload-icon">&#128206;</span>
+                Drop files or click to upload
+                <span class="upload-hint">Insurance certs, W-9, other paperwork</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-footer">
+        <button class="create-btn">Create Vendor &amp; Select</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

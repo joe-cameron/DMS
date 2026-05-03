@@ -66,7 +66,9 @@ async function pullUpKeepInspections(sessionToken) {
         const resp = await fetch(UPKEEP_API + '/work-orders?limit=200&offset=' + (page * 200), { headers });
         const data = await resp.json();
         const inspections = (data.results || []).filter(function(w) {
-            return (w.title && w.title.match(/insp/i)) || (w.category && w.category.match(/inspect/i));
+            // Only sync WOs with "insp" in the title — category alone is too loose
+            // (UpKeep marks "Apartment checks", "Water temperatures" as category "Inspection")
+            return w.title && w.title.match(/insp/i);
         });
         allWOs = allWOs.concat(inspections);
         hasMore = data.results && data.results.length === 200;
@@ -85,7 +87,7 @@ async function getExistingSchedules(dvUrl, dvToken) {
     };
     // Paginate — may have thousands
     var all = [];
-    var nextLink = dvUrl + '/api/data/v9.2/dcfg_im_schedules?$select=dcfg_im_scheduleid,dcfg_upkeep_wo_id,dcfg_visit_status,dcfg_scheduled_date&$filter=dcfg_active_flag eq true&$top=5000';
+    var nextLink = dvUrl + '/api/data/v9.2/dcfg_im_schedules?$select=dcfg_im_scheduleid,dcfg_upkeep_wo_id,dcfg_visit_status,dcfg_scheduled_date,dcfg_assigned_to&$filter=dcfg_active_flag eq true&$top=5000';
 
     while (nextLink) {
         const resp = await fetch(nextLink, { headers });
@@ -111,17 +113,25 @@ async function upsertWOs(wos, sourceName, byWoId, dvHeaders, dvToken, apiBase, l
         var newStatus = mapStatus(wo.status);
         var newDate = wo.dueDate || null;
 
+        // Extract assigned user name from UpKeep WO
+        var assignedTo = '';
+        if (wo.assignedToUser) {
+            assignedTo = typeof wo.assignedToUser === 'string' ? wo.assignedToUser : (wo.assignedToUser.name || wo.assignedToUser.email || '');
+        }
+
         if (ex) {
             var dateChanged = newDate && ex.dcfg_scheduled_date && !ex.dcfg_scheduled_date.startsWith(newDate.split('T')[0]);
             var statusChanged = ex.dcfg_visit_status !== newStatus;
+            var assigneeChanged = assignedTo && ex.dcfg_assigned_to !== assignedTo;
 
-            if (!dateChanged && !statusChanged) {
+            if (!dateChanged && !statusChanged && !assigneeChanged) {
                 stats.unchanged++;
                 continue;
             }
 
             var patchBody = { dcfg_visit_status: newStatus };
             if (newDate) patchBody.dcfg_scheduled_date = newDate;
+            if (assignedTo) patchBody.dcfg_assigned_to = assignedTo;
             if (wo.status === 'complete' && !ex.dcfg_completed_date) {
                 patchBody.dcfg_completed_date = new Date().toISOString();
             }
@@ -145,6 +155,7 @@ async function upsertWOs(wos, sourceName, byWoId, dvHeaders, dvToken, apiBase, l
                 dcfg_visit_status: newStatus,
                 dcfg_active_flag: true,
                 dcfg_is_first_inspection: false,
+                dcfg_assigned_to: assignedTo || '',
             };
             if (newDate) createBody.dcfg_scheduled_date = newDate;
             if (wo.status === 'complete') createBody.dcfg_completed_date = new Date().toISOString();
