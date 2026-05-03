@@ -1,0 +1,554 @@
+{
+  "domain": "portal",
+  "description": "Power Pages (Enhanced Data Model) — table permissions, site settings, web roles, SPA integration, cache, and known traps for the DCFG project",
+  "lastUpdated": "2026-04-18",
+  "nodes": [
+
+    {
+      "id": "pt-001",
+      "label": "Enhanced Data Model",
+      "type": "concept",
+      "summary": "Power Pages EDM stores portal config in powerpagecomponent records as JSON, not in mspp_* tables directly",
+      "detail": "The Enhanced Data Model (EDM) is the current Power Pages architecture. Portal components (permissions, roles, site settings, templates, etc.) are stored as powerpagecomponent rows with a numeric type code and a JSON content column. Virtual tables like mspp_entitypermission expose these for GET but PATCH on the virtual table fails silently or throws 'key not present in dictionary'. All programmatic writes must target powerpagecomponents directly.",
+      "children": ["pt-002", "pt-003", "pt-004"],
+      "links": ["pt-010", "pt-020"],
+      "source": "reference_engineering_journal.md §1, feedback_powerpagecomponent_patch.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-002",
+      "label": "powerpagecomponent Type Table",
+      "type": "concept",
+      "summary": "Numeric type codes identify what each powerpagecomponent record represents",
+      "detail": "Type codes used in DCFG: 1=Publishing State, 2=Web Page, 7=Content Snippet, 8=Web Template, 9=Site Setting, 11=Web Role, 15=Basic Form, 17=List, 18=Table Permission, 28=Column Permission Profile, 29=Column Permission, 33=Cloud Flow. Query: GET /api/data/v9.2/powerpagecomponents?$filter=powerpagecomponenttype eq 18 to get all Table Permission records.",
+      "children": [],
+      "links": ["pt-010", "pt-011"],
+      "source": "reference_engineering_journal.md §8",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-003",
+      "label": "content JSON Keys (No mspp_ Prefix)",
+      "type": "pattern",
+      "summary": "Inside powerpagecomponent.content JSON, permission flag keys have no mspp_ prefix",
+      "detail": "When reading or writing Table Permission content JSON (type=18), the flag keys are: append, appendto, create, read, write, delete — NOT mspp_append, mspp_read, etc. The outer powerpagecomponent record uses standard Dataverse field names, but the content blob uses the bare names. Mixing up the prefix causes silent no-ops on PATCH.",
+      "children": [],
+      "links": ["pt-010", "pt-011"],
+      "source": "reference_engineering_journal.md §1, feedback_powerpagecomponent_patch.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-004",
+      "label": "Role GUIDs in content JSON",
+      "type": "pattern",
+      "summary": "Portal runtime reads role assignments from adx_entitypermission_webrole array in content JSON, not from N:N Dataverse records",
+      "detail": "After creating mspp_entitypermissions and posting $ref N:N links (which DO create intersection records), the portal still returns 403. The portal runtime ignores the Dataverse N:N relationship and reads role GUIDs from the content JSON field of the powerpagecomponent record. Required: PATCH powerpagecomponents({id}) with content JSON containing adx_entitypermission_webrole: [\"role-guid-1\", \"role-guid-2\"]. Proven fix via Playwright E2E 2026-03-24.",
+      "children": [],
+      "links": ["pt-011", "pt-012", "pt-030"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-010",
+      "label": "Table Permissions",
+      "type": "concept",
+      "summary": "Power Pages table permissions control which operations (CRUD + Append/AppendTo) portal users can perform on Dataverse tables",
+      "detail": "Table permissions are stored as mspp_entitypermission records (backed by powerpagecomponent type=18). Each permission record covers one table and one scope. Permissions must be linked to web roles. In EDM, all writes to these records must go through powerpagecomponents — virtual table PATCH is broken.",
+      "children": ["pt-011", "pt-012", "pt-013", "pt-014", "pt-015"],
+      "links": ["pt-001", "pt-030"],
+      "source": "reference_engineering_journal.md §1, §20",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-011",
+      "label": "Append + AppendTo: Both Sides",
+      "type": "pattern",
+      "summary": "Set Append=true AND AppendTo=true on ALL dcfg_ tables — never try to infer directionality",
+      "detail": "Append = source table (the one doing the bind). AppendTo = target table (the one being bound to). Example: creating a contract with dcfg_customer_id@odata.bind requires Append on dcfg_contract AND AppendTo on dcfg_customer. BUT: in practice, inferring which side is which is error-prone. The proven DCFG rule is to set both flags on every table. Power Pages also requires BOTH for associate/disassociate operations regardless of direction.",
+      "children": [],
+      "links": ["pt-010", "pt-060"],
+      "source": "reference_engineering_journal.md §2, §12",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-012",
+      "label": "Role-Link Creation Recipe (E2E Proven)",
+      "type": "proven",
+      "summary": "4-step recipe to create a fully working table permission: New-Record + content PATCH + site settings + cache clear",
+      "detail": "Step 1: New-Record -setName 'mspp_entitypermissions' — creates permission record + powerpagecomponent type=18. Step 2: PATCH powerpagecomponents({id}) content JSON — add adx_entitypermission_webrole array with role GUIDs. Step 3: Create site settings Webapi/{table}/enabled=true and Webapi/{table}/fields=*. Step 4: Clear portal cache. Then verify via GET /_api/{entityset} — should return 200. The $ref N:N linking step (mspp_entitypermission_webrole/$ref) is optional for Dataverse consistency but the portal ignores it — the content JSON is what matters.",
+      "children": [],
+      "links": ["pt-004", "pt-020", "pt-040", "pt-050"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-013",
+      "label": "Permission CRUD Drift Between Envs",
+      "type": "trap",
+      "summary": "Fixing permissions in one environment silently leaves the other broken — always run fixes on both",
+      "detail": "CRUD drift was observed where Stage had correct permissions but Test had R-only on several tables (ap_cost_code, appliance_type, location_type, document_template, template_field). The fix script ran against Stage but was not applied to Test. Rule: permission scripts must run on ALL environments in the same session. Keep the complete CRUD requirements list in the fix script, not just incremental patches.",
+      "children": [],
+      "links": ["pt-010", "pt-015"],
+      "source": "reference_engineering_journal.md §1",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-014",
+      "label": "Delete-One Destroys All Role Links",
+      "type": "trap",
+      "summary": "Deleting and recreating a single permission unlinks ALL 28+ table permissions from their roles",
+      "detail": "Observed after deleting and recreating dcfg_document_request permission: ALL 28 table permissions lost their role links (N:N mspp_entitypermission_webrole records). This caused 403 on every table. Root cause is unclear — may be a cascade or a portal cache invalidation that wipes the N:N intersection. Rule: NEVER delete and recreate a single permission. If you must, immediately re-run the full role-linking script for ALL permissions and clear cache.",
+      "children": [],
+      "links": ["pt-010", "pt-012", "pt-050"],
+      "source": "reference_engineering_journal.md §21",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-015",
+      "label": "Clone/Template Permission Approach",
+      "type": "proven",
+      "summary": "Query an existing permission + its intersection records, serialize to JSON manifest, replay against new table",
+      "detail": "Proven at 100% (15/15 test runs). Steps: GET existing mspp_entitypermissions record, GET /mspp_entitypermission_webroleset?$filter=mspp_entitypermissionid eq {templateId} to get its role GUIDs, serialize to JSON manifest, replay New-Record + content PATCH + $ref posts against the new table. Useful for provisioning new tables with the same permission pattern as an existing table.",
+      "children": [],
+      "links": ["pt-010", "pt-012"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-016",
+      "label": "N:N Navigation Returns 0 Results (Platform Bug)",
+      "type": "trap",
+      "summary": "mspp_entitypermission_webrole navigation property always returns empty — verify via intersection entity set instead",
+      "detail": "Querying GET /mspp_entitypermissions({id})/mspp_entitypermission_webrole always returns 0 results even for working permissions. This is a platform limitation, not a code bug. Correct verification: GET /mspp_entitypermission_webroleset?$filter=mspp_entitypermissionid eq {guid} — returns the actual intersection records. The intersection entity set name is mspp_entitypermission_webroleset (unusual pluralization).",
+      "children": [],
+      "links": ["pt-010", "pt-012"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-020",
+      "label": "Site Settings",
+      "type": "concept",
+      "summary": "Power Pages site settings control Web API access, auth, and feature flags — stored as powerpagecomponent type=9",
+      "detail": "Required site settings per table: Webapi/{logical_name}/enabled = true, Webapi/{logical_name}/fields = * (or comma-separated list). Use the logical name (e.g. dcfg_contract), not the entity set name. Missing 'fields' setting returns error 'No fields defined for this entity.' Site settings are NOT accessible from the portal's own /_api/ — they are admin-side config only. CSRF tokens are required for all write operations (POST/PATCH/DELETE).",
+      "children": ["pt-021", "pt-022", "pt-023"],
+      "links": ["pt-001", "pt-060"],
+      "source": "reference_engineering_journal.md §4",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-021",
+      "label": "Explicit vs Wildcard Fields",
+      "type": "pattern",
+      "summary": "Pick explicit list OR wildcard * for each table's Webapi/fields setting once — never oscillate between the two",
+      "detail": "Oscillating between * and explicit field lists is what breaks the system. The prior session converted 11 tables from * to explicit, which broke consumers making bare GETs (no $select) and @odata.bind writes (which need the bare schema attribute name in the fields list, not just the read form _dcfg_foo_id_value). Rule: pick one lane per table and stay. When an explicit-list table breaks a consumer: add the missing column(s) to the list and fix the consumer to use $select. Do NOT revert to *. Pre-flight checklist before converting: grep SPA for bare apiGet calls, @odata.bind usage, and apiPatch/apiPost column references.",
+      "children": [],
+      "links": ["pt-020", "pt-022", "pt-072"],
+      "source": "feedback_pick_lane_explicit_or_wildcard.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-022",
+      "label": "Lookup Field Dual Forms",
+      "type": "pattern",
+      "summary": "Explicit fields lists need both the read form (_dcfg_foo_id_value) and the bind form (dcfg_foo_id) for each lookup",
+      "detail": "When a table uses explicit field lists and has lookup columns: the read form for display is _dcfg_foo_id_value (OData expanded navigation), the bind form for POST/PATCH is dcfg_foo_id (bare schema attribute used with @odata.bind). If only one is present in the Webapi/fields list, either reads or writes will fail. Both must be included.",
+      "children": [],
+      "links": ["pt-021"],
+      "source": "feedback_pick_lane_explicit_or_wildcard.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-023",
+      "label": "CSRF Token Requirement",
+      "type": "pattern",
+      "summary": "All POST/PATCH/DELETE via Power Pages Web API require __RequestVerificationToken header",
+      "detail": "Obtain via shell.getTokenDeferred(), scraping from page HTML, or finding in a hidden input. Token can expire — re-fetch on 401/403. The portalApi.js apiPostReturn() function handles CSRF automatically. This token is portal-side auth — separate from the Dataverse bearer token used in server-side scripts.",
+      "children": [],
+      "links": ["pt-020", "pt-070"],
+      "source": "reference_engineering_journal.md §4",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-030",
+      "label": "Web Roles",
+      "type": "concept",
+      "summary": "Web roles gate which authenticated users get which table permissions — DCFG uses DCFG_Admin with authenticatedusersrole=true",
+      "detail": "Web roles are stored as mspp_webroles (powerpagecomponent type=11). The DCFG project uses a single DCFG_Admin role with mspp_authenticatedusersrole=true, which means all authenticated portal users automatically get this role without needing explicit contact→role assignment. This is the workaround for the N:N contact-role assignment API failure.",
+      "children": ["pt-031", "pt-032"],
+      "links": ["pt-010", "pt-004"],
+      "source": "reference_engineering_journal.md §2",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-031",
+      "label": "Web Role Assignment API Failure",
+      "type": "trap",
+      "summary": "Cannot assign web roles to contacts via API — all N:N navigation property names fail",
+      "detail": "4+ different N:N navigation property names attempted: mspp_webrole_contact, mspp_contact_webrole, powerpagecomponent_mspp_webrole_contact, etc. All returned errors or 'property not found'. The only working approaches are: (1) set mspp_authenticatedusersrole=true on the role to auto-assign to all authenticated users, or (2) use the Power Pages admin center UI to manually assign roles to specific contacts.",
+      "children": [],
+      "links": ["pt-030"],
+      "source": "reference_engineering_journal.md §2",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-032",
+      "label": "Role GUIDs Shared Between mspp_webroles and powerpagecomponents",
+      "type": "concept",
+      "summary": "Custom web role GUIDs are the same in both mspp_webroles and powerpagecomponents (type=11)",
+      "detail": "When building the adx_entitypermission_webrole array in permission content JSON, use the role GUIDs from mspp_webroles — they are identical to the powerpagecomponent GUIDs for custom roles. No lookup translation needed between the two tables.",
+      "children": [],
+      "links": ["pt-030", "pt-004"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-040",
+      "label": "SPA Integration",
+      "type": "concept",
+      "summary": "Power Pages SPA is a compiled React app deployed via pac pages upload-code-site — C:\\DCFG\\spa\\ is READ-ONLY without explicit permission",
+      "detail": "The SPA lives in C:\\DCFG\\spa\\dcfg-shell\\. Build: npm run build. Deploy: pac pages upload-code-site --rootPath . --compiledPath dist from the dcfg-shell directory. Deploy requires explicit 'deploy to {env}' permission for each environment, each session. The SPA directory is read-only — reads and searches allowed, no edits without explicit operator permission. Deploy order: Test → Stage → Prod.",
+      "children": ["pt-041", "pt-042", "pt-043"],
+      "links": ["pt-050", "pt-060", "pt-073"],
+      "source": "CLAUDE.md, reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-041",
+      "label": "data-testid Golden Rule",
+      "type": "pattern",
+      "summary": "Every SPA interactive element must have data-testid — Playwright tests use only data-testid selectors",
+      "detail": "All inputs, buttons, selects, textareas, and clickable cards must have data-testid. The F component auto-generates testids from the label prop (e.g., 'Signer Name' → data-testid='signer-name'). Buttons get explicit testids like data-testid='btn-generate-proposal'. Playwright page objects use this.page.locator('[data-testid=\"...\"]') exclusively — never placeholder text, label text, CSS classes, or structural selectors. Tests skip if a field can't be found in 2 seconds rather than hanging.",
+      "children": [],
+      "links": ["pt-040"],
+      "source": "feedback_testid_golden_rule.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-042",
+      "label": "204 No Content + OData-EntityId Header",
+      "type": "trap",
+      "summary": "Power Pages POST returns 204 even with Prefer: return=representation — extract GUID from OData-EntityId response header",
+      "detail": "POST to Power Pages Web API returns 204 No Content even when the request includes the Prefer: return=representation header. The created record's GUID is available in the OData-EntityId response header, formatted as: https://org.crm.dynamics.com/api/data/v9.2/entity_set(guid). Parse the GUID with regex, then GET the created record separately. The portalApi.js apiPostReturn() function handles this pattern.",
+      "children": [],
+      "links": ["pt-040", "pt-070"],
+      "source": "reference_engineering_journal.md §4",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-043",
+      "label": "System Tables Not Accessible via /_api/",
+      "type": "trap",
+      "summary": "Only dcfg_* custom tables are accessible from portal Web API — system tables (mspp_sitesettings, environmentvariabledefinitions) return 400",
+      "detail": "/_api/environmentvariabledefinitions returns 400. /_api/mspp_sitesettings also fails. Only custom data tables (dcfg_*) are accessible via the portal Web API. Config is handled via dcfg_configs table (read at boot via loadConfig()). Flow invocation is handled via dcfg_document_requests table (SPA writes row, Dataverse-triggered flow picks it up). No hardcoded flow URLs — the URL-based approach is deprecated.",
+      "children": [],
+      "links": ["pt-040", "pt-044"],
+      "source": "reference_engineering_journal.md §11",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-044",
+      "label": "createDocumentRequest Pattern",
+      "type": "proven",
+      "summary": "SPA invokes flows by writing to dcfg_document_requests table — never callFlow() or HTTP triggers",
+      "detail": "Current flow architecture: SPA calls createDocumentRequest() which writes a row to dcfg_document_requests. Flows trigger on 'When a row is added' Dataverse event. Flow reads from the request row lookups and dcfg_notes. Flow updates status: Pending → Processing → Complete/Failed. No flow URLs stored anywhere. dcfg_configs stores other config but not flow URLs. callFlow() is deprecated.",
+      "children": [],
+      "links": ["pt-043"],
+      "source": "reference_engineering_journal.md §5, §11, CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-050",
+      "label": "Portal Cache",
+      "type": "concept",
+      "summary": "Permission, site setting, web role, and metadata changes are invisible until portal cache is cleared",
+      "detail": "After ANY change to table permissions, site settings, web roles, or other portal metadata, the portal serves stale data until cache is cleared. Clear via: Power Pages admin center → Site Actions → Clear cache. Or programmatically via admin API. Cache clearing is non-negotiable after every permission or site setting change — skipping it causes phantom 403s that appear to be permission bugs but are actually stale cache.",
+      "children": [],
+      "links": ["pt-010", "pt-020", "pt-030"],
+      "source": "reference_engineering_journal.md §6",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-060",
+      "label": "Orphan powerpagesites After Solution Import",
+      "type": "trap",
+      "summary": "Solution import copies ALL powerpagesites records — creates duplicates that break pac pages deploy",
+      "detail": "Importing DCFGSystemTest from one env to another copies all powerpagesites records. The target env ends up with multiple sites (real + orphans from source). pac pages upload-code-site matches by site name and targets the wrong one when duplicates exist. The local manifest.yml locks to whichever site PAC first resolved. Re-linking components from orphan→real site destroys all N:N permission→role links. Fix: after solution import, query powerpagesites, delete all except the real site, delete local manifest, run pac pages download --webSiteId {correct-id} --modelVersion Enhanced to re-initialize, THEN deploy.",
+      "children": [],
+      "links": ["pt-014", "pt-040", "pt-061"],
+      "source": "reference_engineering_journal.md §13, §14, feedback_solution_import_orphans.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-061",
+      "label": "Re-linking Components Destroys Permission Links",
+      "type": "trap",
+      "summary": "PATCHing powerpagesiteid on powerpagecomponents to move them between sites drops all N:N role links",
+      "detail": "When re-linking powerpagecomponents from one site to another via powerpagesiteid@odata.bind, the N:N relationships (mspp_entitypermission_webrole) are NOT preserved. All table permissions lose their role links. After any bulk component migration, immediately re-run the full permission→role linking script for all permissions and clear cache.",
+      "children": [],
+      "links": ["pt-060", "pt-014"],
+      "source": "reference_engineering_journal.md §14",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-062",
+      "label": "Entra ID Redirect URIs",
+      "type": "pattern",
+      "summary": "Do not delete existing redirect URIs from Entra app registration — breaks auth silently",
+      "detail": "The Entra app registration for Decades Management System (client ID 327ac710-2d2a-4912-a5ee-9b7f51ee7a7b) has redirect URIs that must not be deleted. Removing them breaks portal authentication silently. When auth breaks: disable/re-enable external auth in Power Pages admin, redeploy SPA, clear cache. Do NOT touch redirect URIs.",
+      "children": [],
+      "links": ["pt-040"],
+      "source": "reference_engineering_journal.md §6",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-070",
+      "label": "portalApi.js Patterns",
+      "type": "proven",
+      "summary": "portalApi.js is the proven client-side API library — apiPostReturn() handles 204+OData-EntityId, CSRF is wired in",
+      "detail": "C:\\DCFG\\portalApi.js and C:\\DCFG\\spa\\portalApi.js contain the proven Web API wrapper. apiPostReturn() handles: CSRF token injection, POST to /_api/{entityset}, parsing OData-EntityId header to extract GUID, GET of the created record. odataBind() helper has two call signatures — one returning a string (2-arg: entitySet, id) and one returning an object (3-arg: field, entitySet, id). Spreading the 2-arg form produces garbage objects — always use the 3-arg form for lookup binding.",
+      "children": [],
+      "links": ["pt-042", "pt-023", "pt-071"],
+      "source": "reference_engineering_journal.md §4, §10",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-071",
+      "label": "odataBind 3-Arg vs 2-Arg Bug",
+      "type": "trap",
+      "summary": "odataBind(field, table, id) must return an object — the 2-arg form returns a string that when spread produces {0:'/', 1:'d',...} garbage",
+      "detail": "9 call sites in NewContractWizard and CustomerDetail used ...odataBind(field, table, id) (3-arg spread), but the original function signature only accepted 2 args and returned a string. Spreading a string into an object produces character-index keys. Fix: odataBind now checks if maybeId !== undefined — if yes, returns the {field@odata.bind: '/table(id)'} object; if no, returns the string. Every lookup in those files was silently broken before this fix.",
+      "children": [],
+      "links": ["pt-070"],
+      "source": "reference_engineering_journal.md §10",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-072",
+      "label": "Wildcard Fields Miss New Columns",
+      "type": "trap",
+      "summary": "Webapi/fields=* does not automatically pick up new columns added after the setting was created",
+      "detail": "When a new column is added to a table that has Webapi/fields=*, the portal does not automatically include it. The fields list (whether wildcard or explicit) is evaluated at portal boot/cache time. After adding columns, clear portal cache. If using explicit list, add the new column name. This is why wildcard is not a permanent solution — it appears to cover everything but can miss additions between cache clears.",
+      "children": [],
+      "links": ["pt-021", "pt-050"],
+      "source": "CLAUDE.md (feedback_wildcard_site_settings reference)",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-073",
+      "label": "pac auth Index Shift Warning",
+      "type": "trap",
+      "summary": "pac auth indices shift when new auth entries are added — always run pac auth list before any deploy",
+      "detail": "CLAUDE.md lists Test=[1], Stage=[2], Prod=[3], but as of 2026-04-12 the actual indices are Prod=[1], Test=[2], Stage=[3], Portal=[4]. Indices shift as new entries are added or old ones removed. Running pac auth select with a stale index deploys to the wrong environment. Mandatory: always run pac auth list before any deploy command and confirm the target org URL matches intent.",
+      "children": [],
+      "links": ["pt-040"],
+      "source": "feedback_pac_auth_indices_shifted.md (via CLAUDE.md), reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-074",
+      "label": "Prod Environment Setup Order",
+      "type": "proven",
+      "summary": "12-step proven order for provisioning a new Power Pages environment from a solution import",
+      "detail": "1. Import solution (DCFGSystemTest) — creates tables, columns, relationships. 2. Delete orphan powerpagesites records. 3. Create site settings (Webapi/*/enabled + fields, CodeSite/Enabled, auth settings). 4. Create web roles (DCFG_Admin with authenticatedusersrole=true). 5. Create table permissions + link to roles. 6. Seed dcfg_configs records. 7. Add Entra ID redirect URI. 8. pac pages download --webSiteId {correct-id} to initialize manifest. 9. npm run build && pac pages upload-code-site. 10. Clear cache. 11. Seed reference data (location types, document templates). 12. Set up flows (connections + definitions).",
+      "children": [],
+      "links": ["pt-060", "pt-050", "pt-020", "pt-030", "pt-010"],
+      "source": "reference_engineering_journal.md §19",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-075",
+      "label": "pac pages download / upload",
+      "type": "proven",
+      "summary": "pac pages download needs --modelVersion Enhanced flag for EDM sites; upload-code-site from dcfg-shell directory",
+      "detail": "Download: pac pages download --path . --webSiteId {id} --modelVersion Enhanced. Upload: cd C:\\DCFG\\spa\\dcfg-shell && npm run build && pac pages upload-code-site --rootPath . --compiledPath dist. The -mv Enhanced flag is required for EDM sites — omitting it downloads the wrong data model format. After deploy: clear cache + provide launch URLs.",
+      "children": [],
+      "links": ["pt-040", "pt-073"],
+      "source": "reference_engineering_journal.md §13, reference_accomplishments.md, CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-080",
+      "label": "mspp_entitypermission PATCH Failure",
+      "type": "dead-end",
+      "summary": "Raw PATCH to mspp_entitypermissions virtual table fails with 'key not present in dictionary' — do not attempt",
+      "detail": "Error 0x80040224: 'The given key was not present in the dictionary'. The virtual table supports GET but rejects PATCH. Even though MS docs claim PATCH is supported, it is not for EDM. Three alternatives: (1) PATCH powerpagecomponent content JSON directly (preferred), (2) use Update-Record helper from Core.ps1 which handles encoding correctly, (3) DELETE + re-CREATE with new flags (dangerous — see pt-014).",
+      "children": [],
+      "links": ["pt-001", "pt-003", "pt-014"],
+      "source": "reference_engineering_journal.md §1, §20, feedback_powerpagecomponent_patch.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-081",
+      "label": "Power Automate Management API",
+      "type": "dead-end",
+      "summary": "Power Automate Management connector API is unreliable for flow deployment — use Dataverse workflows table instead",
+      "detail": "19 scripts attempted before finding the working approach. The Management API is inconsistent, requires different auth, and often returns 403. Working approach: create/update flow definitions directly in the Dataverse workflows table via API. Do NOT use the Management API for programmatic flow operations.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-082",
+      "label": "Direct POST to mspp_entitypermission_webroleset",
+      "type": "dead-end",
+      "summary": "Cannot POST directly to the intersection entity set — use $ref instead",
+      "detail": "POST to /mspp_entitypermission_webroleset fails: 'Create not supported on intersection entity'. Working approach: POST $ref from either side — POST /mspp_entitypermissions({id})/mspp_entitypermission_webrole/$ref with body { '@odata.id': '/mspp_webroles({roleId})' } — or the reverse from the role side. Both work. But note: the portal runtime ignores $ref links and reads from content JSON (pt-004), so $ref is only for Dataverse-side consistency.",
+      "children": [],
+      "links": ["pt-012", "pt-004"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-090",
+      "label": "dcfg_propertys vs dcfg_properties",
+      "type": "trap",
+      "summary": "Entity set name for dcfg_property is dcfg_properties (English plural) — not dcfg_propertys",
+      "detail": "Dataverse auto-pluralizes entity set names using standard English rules. dcfg_property → dcfg_properties. 26 files had the wrong name dcfg_propertys before the fix in 2026-03-18. Always verify entity set names against Dataverse metadata: GET EntityDefinitions(LogicalName='dcfg_property')?$select=EntitySetName.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §3",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-091",
+      "label": "mspp_sitesettings Not Accessible from Portal",
+      "type": "trap",
+      "summary": "/_api/mspp_sitesettings returns error from portal Web API — site settings are admin-only config",
+      "detail": "The portal's own Web API cannot read its own site settings. This means the SPA cannot dynamically read Webapi/* settings to know which tables are enabled. Config that the SPA needs at runtime must come from dcfg_configs (custom table, accessible via /_api/). Site settings are for Power Pages infrastructure config only.",
+      "children": [],
+      "links": ["pt-043", "pt-020"],
+      "source": "reference_engineering_journal.md §11",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "pt-092",
+      "label": "open-question: Wildcard Cache Behavior After Column Add",
+      "type": "open-question",
+      "summary": "Does clearing portal cache cause wildcard fields=* to re-enumerate new columns, or does it require a site setting update?",
+      "detail": "Observed that wildcard does not pick up new columns automatically (see pt-072), but it's not fully clear whether a cache clear alone is sufficient to pick up new columns vs. whether the site setting itself must be updated (e.g., saved again). This distinction matters for rollout of new schema additions.",
+      "children": [],
+      "links": ["pt-072", "pt-050"],
+      "source": "CLAUDE.md, engineering observation",
+      "confidence": "single-observation",
+      "confirmations": 0,
+      "lastReferenced": "2026-04-18"
+    }
+
+  ]
+}

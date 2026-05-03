@@ -1,0 +1,13 @@
+{
+  "_comment": "OPERATOR-MANAGED — Claude proposes changes, operator approves",
+  "siteUrl": "https://DMS-Support1.powerappsportals.com",
+  "websiteId": "2025a8c6-6538-4581-b590-4c004a379193",
+  "environment": "Prod",
+  "orgUrl": "https://org06f5de0b.crm.dynamics.com",
+  "pacAuthIndex": 3,
+  "pacAuthRestoreIndex": 1,
+  "solutionName": "DCFGSystemTest",
+  "portalDomain": "DMS-Support1.powerappsportals.com",
+  "mode": "base",
+  "copilotEmbedSnippet": null
+}

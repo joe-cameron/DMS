@@ -1,0 +1,17 @@
+{
+  "_meta": { "updated": "2026-03-20", "description": "All Dataverse picklist/choice integer values" },
+  "ContractStatus": { "Draft": 100000000, "Generated": 100000001, "Sent": 100000002, "SignedReceived": 100000003, "Closed": 100000004, "Void": 100000005, "Declined": 100000006 },
+  "ContractFamily": { "Bancroft": 100000000, "Decades": 100000001 },
+  "ContractType": { "WorkOrder": 100000000, "Amendment": 100000001, "ContractorMSA": 100000002 },
+  "SendQueueStatus": { "Pending": 100000000, "Sent": 100000001, "Complete": 100000002, "Cancelled": 100000003 },
+  "MsaStatus": { "Draft": 100000000, "Generated": 100000001, "Sent": 100000002, "Signed": 100000003, "Active": 100000004, "Expired": 100000005, "Void": 100000006, "Declined": 100000007 },
+  "PricingAlternative": { "Uniform": 100000000, "TypeBased": 100000001 },
+  "AuditActionType": { "Generated": 100000000, "Sent": 100000001, "Signed": 100000002, "Void": 100000003, "Declined": 100000004, "Override": 100000005, "StatusChanged": 100000006, "TemplateActivated": 100000007, "TemplateDeactivated": 100000008, "DataUpdated": 100000009, "Other": 100000010 },
+  "OnboardingCaseStatus": { "NotStarted": 100000000, "InProgress": 100000001, "GoLivePending": 100000002, "Live": 100000003, "Complete": 100000004, "Closed": 100000005 },
+  "OnboardingPhase": { "SalesProposal": 100000000, "ContractExecution": 100000001, "AccountSetup": 100000002, "SiteOnboarding": 100000003, "VendorCompliance": 100000004, "GoLive": 100000005 },
+  "DocRequestStatus": { "Pending": 100000000, "Processing": 100000001, "Complete": 100000002, "Failed": 100000003 },
+  "DocRequestType": { "DocGen": 100000000, "Email": 100000001, "CertUpload": 100000002 },
+  "AlertStatus": { "Current": 100000000, "Expiring": 100000001, "Expired": 100000002 },
+  "ReplaceByStatus": { "Current": 100000000, "Approaching": 100000001, "Past": 100000002 },
+  "TablePermissionScope": { "Global": 756150000, "Contact": 756150001, "Account": 756150002, "Parent": 756150003 }
+}

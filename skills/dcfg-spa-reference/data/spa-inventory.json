@@ -1,0 +1,104 @@
+{
+  "_meta": { "updated": "2026-03-20", "description": "Complete SPA inventory — components, routes, API functions, patterns. Source: C:\\DCFG\\spa\\dcfg-shell\\src\\" },
+
+  "framework": {
+    "react": "16.14.0",
+    "jsxRuntime": "classic",
+    "bundler": "Vite 5.4.21",
+    "routing": "HashRouter (/#/path)",
+    "chunkWarningLimit": 700
+  },
+
+  "bootSequence": [
+    "injectFonts() — IBM Plex Sans + Fraunces",
+    "injectBaseStyles() — global CSS, badge classes, table styles",
+    "initDebug() — optional via ?dcfg_debug=1",
+    "loadConfig() — reads dcfg_configs table",
+    "writeAuditLog() — session start with user/roles/URL"
+  ],
+
+  "routes": {
+    "/": "SalesDashboard",
+    "/dashboard": "SalesDashboard",
+    "/customers": "CustomerList",
+    "/customers/:id": "CustomerDetail",
+    "/contracts": "ContractList",
+    "/contracts/:id": "ContractDetail",
+    "/contracts/new": "NewContractWizard",
+    "/proposals/new": "NewProposalWizard",
+    "/msas": "MsaList",
+    "/msas/:id": "MsaDetail",
+    "/locations": "Locations",
+    "/locations/:id": "LocationDetail",
+    "/onboarding": "Onboarding",
+    "/onboarding/:id": "OnboardingDetail",
+    "/send-queue": "SendQueue",
+    "/admin": "Admin",
+    "/compliance": "CompliancePanel"
+  },
+
+  "screens": {
+    "SalesDashboard": { "file": "screens/SalesDashboard.jsx", "features": ["KPI cards", "budget health", "recent activity", "expiring MSAs"], "sorting": false, "search": false },
+    "CustomerList": { "file": "screens/CustomerList.jsx", "features": ["CRUD", "search", "sort", "new customer panel"], "sorting": true, "search": true },
+    "CustomerDetail": { "file": "screens/CustomerDetail.jsx", "features": ["Edit contact", "MSA tab", "contracts tab", "programs tab", "locations map", "onboarding tab"], "sorting": false, "search": false },
+    "ContractList": { "file": "screens/ContractList.jsx", "features": ["Search", "sort", "status badges"], "sorting": true, "search": true },
+    "ContractDetail": { "file": "screens/ContractDetail.jsx", "features": ["Status lifecycle", "Exhibit A lines", "docgen via createDocumentRequest", "audit trail"], "sorting": false, "search": false },
+    "NewContractWizard": { "file": "NewContractWizard.jsx", "features": ["5-step wizard", "family/type", "location/vendor auto-fill", "Exhibit A lines", "docgen"], "sorting": false, "search": false },
+    "NewProposalWizard": { "file": "NewProposalWizard.jsx", "features": ["Interview-style wizard", "customer search/create", "MSA rates", "docgen"], "sorting": false, "search": false },
+    "MsaList": { "file": "screens/MsaList.jsx", "features": ["Search", "sort"], "sorting": true, "search": true },
+    "MsaDetail": { "file": "screens/MsaDetail.jsx", "features": ["Rates table", "contracts tab", "doc history", "docgen"], "sorting": false, "search": false },
+    "Locations": { "file": "screens/Locations.jsx", "features": ["Customer filter", "search", "sort", "compliance badges"], "sorting": true, "search": true },
+    "LocationDetail": { "file": "screens/LocationDetail.jsx", "features": ["Edit fields", "cert upload via createDocumentRequest", "compliance documents", "appliances"], "sorting": false, "search": false },
+    "Onboarding": { "file": "screens/Onboarding.jsx", "features": ["Status filter", "active/deleted toggle", "soft delete/restore", "search", "sort", "new case panel", "N+1 fix (single query for progress)"], "sorting": true, "search": true },
+    "OnboardingDetail": { "file": "screens/OnboardingDetail.jsx", "features": ["Editable case fields", "customer contact", "voice input (SpeechMic)", "phase accordion", "step editing (dates/notes/evidence)", "close/reopen/delete lifecycle", "dirty state guard", "due date auto-calc"], "sorting": false, "search": false },
+    "SendQueue": { "file": "screens/SendQueue.jsx", "features": ["Send tab", "completion tab", "mark sent", "mark complete"], "sorting": false, "search": false },
+    "Admin": { "file": "screens/Admin.jsx", "features": ["Templates", "onboarding steps", "location types", "cost codes", "appliance types", "vendors", "benchmarks"], "sorting": false, "search": false },
+    "CompliancePanel": { "file": "screens/CompliancePanel.jsx", "features": ["Compliance checks", "alerts"], "sorting": false, "search": false }
+  },
+
+  "sharedModules": {
+    "portalApi.js": {
+      "description": "All Dataverse API calls, enums, entity sets, createDocumentRequest, loadConfig",
+      "flowPattern": "createDocumentRequest() — writes to dcfg_document_requests, flow triggers on row creation",
+      "deprecatedPattern": "callFlow() still exists but only used in interview/interviewGenerate.js",
+      "keyExports": ["apiGet", "apiPost", "apiPostReturn", "apiPatch", "apiDelete", "createDocumentRequest", "DocRequestType", "DocRequestStatus", "loadConfig", "getEnvVar", "writeAuditLog", "EntitySets", "all enums"]
+    },
+    "useTableControls.jsx": {
+      "description": "Client-side sort + search hook",
+      "usedIn": ["CustomerList", "ContractList", "Locations", "MsaList", "Onboarding"],
+      "exports": ["useTableControls", "SortIcon", "searchInputStyle", "sortableThStyle"],
+      "note": "searchFields arrays must be hoisted to module-level constants to avoid useMemo cache misses"
+    },
+    "SpeechMic.jsx": {
+      "description": "Voice-to-text button using Web Speech API",
+      "usedIn": ["OnboardingDetail (case notes + step notes)"],
+      "compatibility": "iPad Safari (primary), Chrome desktop (secondary)",
+      "note": "Single-utterance mode, cleanup on unmount"
+    },
+    "Toast.jsx": {
+      "description": "Bottom-right notifications",
+      "types": ["ok", "warn", "err", "info"],
+      "timeouts": { "err": 5500, "others": 4000 }
+    },
+    "usePortalUser.jsx": {
+      "description": "Portal user context + role checks",
+      "roleChecks": ["isAdmin()", "isManager()", "isViewer()", "hasRole(name)"]
+    },
+    "debug/index.js": {
+      "description": "Opt-in debug panel via ?dcfg_debug=1",
+      "features": ["Fetch interception (50 calls)", "Error capture (30)", "Console capture (100)", "Portal user snapshot"],
+      "note": "Hash-routing fix: checks both window.location.search and hash portion for dcfg_debug param"
+    }
+  },
+
+  "staleCode": {
+    "interview/interviewGenerate.js": "Still uses callFlow() — needs migration to createDocumentRequest",
+    "_archive/": "Deprecated files — NewContractForm.jsx, NewContractWizard.jsx, Shell.jsx"
+  },
+
+  "cssPatterns": {
+    "tableCells": "vertical-align: top, word-wrap: break-word, white-space: normal (description fields wrap)",
+    "badges": "badge-grey, badge-blue, badge-amber, badge-green (CSS classes in App.jsx)",
+    "fonts": "IBM Plex Sans (body), Fraunces (headings), IBM Plex Mono (numbers)"
+  }
+}

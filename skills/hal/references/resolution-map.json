@@ -1,0 +1,413 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-18",
+  "description": "Error → fix mapping indexed by (symptom, activity). Success rates drive priority order. Updated after every error encounter.",
+  "entries": [
+    {
+      "id": "ERR-001",
+      "symptom": "Invalid property does not exist on type",
+      "symptomRegex": "Invalid property.*does not exist|0x800048d19",
+      "firstSeen": "2026-02-22",
+      "totalOccurrences": 23,
+      "activities": {
+        "seed_insert": {
+          "localOccurrences": 14,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Omit column with default value from payload — Dataverse auto-fills it",
+              "timesTried": 13,
+              "timesWorked": 12,
+              "successRate": 0.92,
+              "lastWorked": "2026-04-10"
+            },
+            {
+              "id": "R2",
+              "description": "Add 15s sleep for metadata propagation, retry insert",
+              "timesTried": 2,
+              "timesWorked": 1,
+              "successRate": 0.50,
+              "lastWorked": "2026-03-15"
+            }
+          ]
+        },
+        "column_create": {
+          "localOccurrences": 6,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Wait 15s for metadata propagation, retry",
+              "timesTried": 6,
+              "timesWorked": 5,
+              "successRate": 0.83,
+              "lastWorked": "2026-04-08"
+            },
+            {
+              "id": "R2",
+              "description": "Verify @odata.type matches column kind",
+              "timesTried": 1,
+              "timesWorked": 1,
+              "successRate": 1.0,
+              "lastWorked": "2026-03-30"
+            }
+          ]
+        },
+        "lookup_write": {
+          "localOccurrences": 3,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Use @odata.bind syntax instead of plain GUID",
+              "timesTried": 3,
+              "timesWorked": 3,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-12"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-002",
+      "symptom": "403 Forbidden on POST with lookup fields",
+      "symptomRegex": "403.*Forbidden|AccessDenied.*POST",
+      "firstSeen": "2026-03-01",
+      "totalOccurrences": 18,
+      "activities": {
+        "record_create": {
+          "localOccurrences": 12,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Add Append permission on child table AND AppendTo on parent table",
+              "timesTried": 12,
+              "timesWorked": 11,
+              "successRate": 0.92,
+              "lastWorked": "2026-04-16"
+            },
+            {
+              "id": "R2",
+              "description": "Clear portal cache after permission changes",
+              "timesTried": 8,
+              "timesWorked": 8,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        },
+        "permission_create": {
+          "localOccurrences": 6,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "PATCH powerpagecomponent content JSON directly — mspp_entitypermission PATCH silently fails",
+              "timesTried": 6,
+              "timesWorked": 6,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-003",
+      "symptom": "412 Precondition Failed on $ref link",
+      "symptomRegex": "412.*Precondition|already.*associated",
+      "firstSeen": "2026-03-05",
+      "totalOccurrences": 30,
+      "activities": {
+        "role_link": {
+          "localOccurrences": 30,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Idempotent success — 412 means link already exists, proceed",
+              "timesTried": 30,
+              "timesWorked": 30,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-004",
+      "symptom": "ActiveUnpublished flow state blocks API update",
+      "symptomRegex": "0x80040203|ActiveUnpublished",
+      "firstSeen": "2026-03-10",
+      "totalOccurrences": 4,
+      "activities": {
+        "flow_update": {
+          "localOccurrences": 4,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "User must open flow in designer and Save or Discard — no API fix exists",
+              "timesTried": 4,
+              "timesWorked": 4,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-005",
+      "symptom": "204 No Content — cannot read created record",
+      "symptomRegex": "204.*No Content|empty.*response.*POST",
+      "firstSeen": "2026-02-28",
+      "totalOccurrences": 15,
+      "activities": {
+        "record_create": {
+          "localOccurrences": 10,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Extract GUID from OData-EntityId response header, then GET the record",
+              "timesTried": 10,
+              "timesWorked": 10,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        },
+        "spa_api_call": {
+          "localOccurrences": 5,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Use portalApi.js apiPostReturn() which handles 204+header extraction automatically",
+              "timesTried": 5,
+              "timesWorked": 5,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-15"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-006",
+      "symptom": "OData $filter mangled — missing dollar signs",
+      "symptomRegex": "filter.*mangled|Bad Request.*filter|syntax.*error.*filter",
+      "firstSeen": "2026-03-12",
+      "totalOccurrences": 8,
+      "activities": {
+        "powershell_query": {
+          "localOccurrences": 8,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Write to .ps1 file and invoke with pwsh -NoProfile -File — bash eats $ in inline commands",
+              "timesTried": 8,
+              "timesWorked": 8,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-007",
+      "symptom": "401 Unauthorized accessing SharePoint with Dataverse token",
+      "symptomRegex": "401.*Unauthorized.*SharePoint|401.*graph",
+      "firstSeen": "2026-03-20",
+      "totalOccurrences": 5,
+      "activities": {
+        "sharepoint_access": {
+          "localOccurrences": 5,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Use MSAL device-code flow to get Graph token — Dataverse tokens cannot access SharePoint",
+              "timesTried": 5,
+              "timesWorked": 5,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-008",
+      "symptom": "curl.exe blocked by endpoint security",
+      "symptomRegex": "curl.*blocked|curl.*access.*denied|curl.*not recognized",
+      "firstSeen": "2026-02-15",
+      "totalOccurrences": 12,
+      "activities": {
+        "any": {
+          "localOccurrences": 12,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Use Invoke-RestMethod in pwsh instead — curl.exe is permanently blocked",
+              "timesTried": 12,
+              "timesWorked": 12,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-009",
+      "symptom": "Connect-CrmOnline triggers GUI popup",
+      "symptomRegex": "Connect-CrmOnline|GUI.*popup|interactive.*login",
+      "firstSeen": "2026-02-20",
+      "totalOccurrences": 6,
+      "activities": {
+        "auth": {
+          "localOccurrences": 6,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Use Core.ps1 Connect $orgUrl instead — non-interactive, bearer token based",
+              "timesTried": 6,
+              "timesWorked": 6,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-010",
+      "symptom": "Permission changes not visible after creation",
+      "symptomRegex": "permission.*not.*visible|403.*after.*permission|still.*denied",
+      "firstSeen": "2026-03-01",
+      "totalOccurrences": 20,
+      "activities": {
+        "permission_create": {
+          "localOccurrences": 20,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Clear portal cache — changes invisible until cache invalidation",
+              "timesTried": 20,
+              "timesWorked": 20,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-011",
+      "symptom": "N:N navigation property returns empty array",
+      "symptomRegex": "navigation.*empty|\\$expand.*empty|webrole.*empty",
+      "firstSeen": "2026-03-18",
+      "totalOccurrences": 3,
+      "activities": {
+        "permission_verify": {
+          "localOccurrences": 3,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Known platform bug — verify role links via powerpagecomponent content JSON adx_entitypermission_webrole array instead",
+              "timesTried": 3,
+              "timesWorked": 3,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-012",
+      "symptom": "429 Too Many Requests / throttling",
+      "symptomRegex": "429|Too Many Requests|throttl",
+      "firstSeen": "2026-03-05",
+      "totalOccurrences": 10,
+      "activities": {
+        "any": {
+          "localOccurrences": 10,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Retry with exponential backoff — Invoke-ResilientRestMethod handles this automatically",
+              "timesTried": 10,
+              "timesWorked": 9,
+              "successRate": 0.90,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-013",
+      "symptom": "mspp_entitypermission PATCH returns success but changes not applied",
+      "symptomRegex": "mspp_entitypermission.*PATCH|silent.*fail.*permission",
+      "firstSeen": "2026-03-15",
+      "totalOccurrences": 8,
+      "activities": {
+        "permission_update": {
+          "localOccurrences": 8,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "PATCH the underlying powerpagecomponent record instead — mspp_entitypermission is a virtual table in EDM",
+              "timesTried": 8,
+              "timesWorked": 8,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-16"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-014",
+      "symptom": "Solution import fails with table ownership mismatch",
+      "symptomRegex": "ownership.*mismatch|OrganizationOwned.*UserOwned|0x80044150|ownership.*conflict",
+      "firstSeen": "2026-04-17",
+      "totalOccurrences": 1,
+      "activities": {
+        "solution_import": {
+          "localOccurrences": 1,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Accept workaround: create missing columns individually via API instead of solution import. Leaves env in manually-patched state — not true solution parity. Requires operator decision.",
+              "timesTried": 1,
+              "timesWorked": 1,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-17"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ERR-015",
+      "symptom": "MsaComposer fails immediately on load in Test or Stage",
+      "symptomRegex": "pricing_config|MsaComposer.*fail|Cannot read.*pricing|pricing.*undefined",
+      "firstSeen": "2026-04-17",
+      "totalOccurrences": 1,
+      "activities": {
+        "spa_smoke_test": {
+          "localOccurrences": 1,
+          "resolutions": [
+            {
+              "id": "R1",
+              "description": "Seed dcfg_pricing_config rows from Prod to target env — table was empty on Stage/Test after schema sync",
+              "timesTried": 1,
+              "timesWorked": 1,
+              "successRate": 1.0,
+              "lastWorked": "2026-04-17"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

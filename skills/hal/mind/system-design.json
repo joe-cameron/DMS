@@ -1,0 +1,974 @@
+{
+  "domain": "system-design",
+  "description": "Cross-cutting architecture patterns for the DCFG / Decades GO platform",
+  "generatedOn": "2026-04-18",
+  "nodes": [
+
+    {
+      "id": "sd-001",
+      "label": "Architecture Layers",
+      "type": "concept",
+      "summary": "Three-layer Decades GO system: BidComp → Compliance Engine → Billing/Reporting",
+      "detail": "All upstream work (RFPs, bids, awards) feeds the Compliance Engine. The Compliance Engine is master — a contract that passes all 7 checks is billable. Everything downstream flows from a compliant contract.",
+      "children": ["sd-002", "sd-003", "sd-004"],
+      "links": ["sd-030", "sd-031"],
+      "source": "project_decades_go_architecture.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-002",
+      "label": "BidComp Layer",
+      "type": "concept",
+      "summary": "Upstream: RFP build, vendor bid comparison, award decision, Exhibit A/B generation",
+      "detail": "Phase 1 deployed to dmsbuilder.powerappsportals.com. Produces data that feeds into the Compliance Engine.",
+      "children": [],
+      "links": ["sd-003"],
+      "source": "project_decades_go_architecture.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-003",
+      "label": "Compliance Engine",
+      "type": "concept",
+      "summary": "Master layer: auto-validates all 7 Bancroft/Workday checklist points before submission",
+      "detail": "Sits between BidComp and Billing. A contract that passes all 7 checks is billable. Design all data structures from creation to carry the 7-check fields. The SPA captures data; humans verify. Do not over-engineer automated gates unless operator requests.",
+      "children": ["sd-030", "sd-031", "sd-032", "sd-033", "sd-034", "sd-035", "sd-036"],
+      "links": ["sd-002", "sd-004", "sd-025"],
+      "source": "project_decades_go_architecture.md, project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-004",
+      "label": "Billing & Reporting Layer",
+      "type": "concept",
+      "summary": "Downstream: invoice tracking, monthly reporting, spend-down, cash flow",
+      "detail": "Only receives input from contracts that have cleared the Compliance Engine. Nothing flows here that has not passed all 7 checks.",
+      "children": [],
+      "links": ["sd-003"],
+      "source": "project_decades_go_architecture.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-005",
+      "label": "Self-Healing Principles",
+      "type": "concept",
+      "summary": "Systems must never silently fail; always find a path to deliver output",
+      "detail": "Joseph's 30-year production principle: users care THAT output arrives, not HOW. If the primary path fails, try fallbacks, deliver partial output if possible, then report what happened and ask for confirmation. Never leave a request stuck at 'Processing'.",
+      "children": ["sd-006", "sd-007", "sd-008", "sd-009", "sd-010"],
+      "links": ["sd-045", "sd-046"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-006",
+      "label": "Failure Fallback Chain",
+      "type": "pattern",
+      "summary": "Primary → Fallback 1 (retry) → Fallback 2 (partial) → Fallback 3 (raw data) → Notify user",
+      "detail": "Pattern: attempt primary path → on failure do NOT stop → retry with different params → generate partial output + flag missing → send raw data with explanation → if all fallbacks exhausted notify user with full context of what was tried. Log everything at each step.",
+      "children": [],
+      "links": ["sd-007", "sd-046"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-007",
+      "label": "DocGen Self-Healing",
+      "type": "pattern",
+      "summary": "DocGen pipeline fallbacks: cached data → plain-text → Dataverse attachment → retry + email admin",
+      "detail": "Get Contract data fails → use cached data from request notes, flag as partial. Populate Word template fails → generate plain-text, email user. Save to SharePoint fails → attach to Dataverse record directly. Update status fails → retry 3x then email admin. ALWAYS update request status. NEVER leave stuck at Processing.",
+      "children": [],
+      "links": ["sd-006", "sd-046"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-008",
+      "label": "Automation vs Augmentation",
+      "type": "concept",
+      "summary": "Internal ops: automate fully. Human relationships: augment, never automate.",
+      "detail": "Internal operations (data entry, doc gen, status tracking, scheduling) — system is invisible, zero friction. Business-to-business and business-to-customer interactions are too broad, too relationship-dependent for automation. System's role: prepare information, present it clearly, get out of the way. One click to approve, one click to send.",
+      "children": [],
+      "links": ["sd-009", "sd-010"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-009",
+      "label": "Human-Supervised Send Queue",
+      "type": "pattern",
+      "summary": "Documents are queued by the system; a human dispatches — never auto-sent",
+      "detail": "The Send Queue is the gate before any document leaves the system. System prepares and presents; human approves and sends. No autonomous outbound. WO numbers are assigned by Send Queue staff, not users.",
+      "children": [],
+      "links": ["sd-008", "sd-051"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-010",
+      "label": "No Silent Failures Rule",
+      "type": "pattern",
+      "summary": "Every failure produces a visible notification with full context",
+      "detail": "System must never silently fail. Any failure that reaches a human must include: what was tried, what failed, what workaround (if any) was used. User confirms resolution → loop closed.",
+      "children": [],
+      "links": ["sd-006", "sd-007", "sd-046"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-011",
+      "label": "No System Friction Rule",
+      "type": "concept",
+      "summary": "If the user is thinking about the system instead of their work, the system is broken",
+      "detail": "Design test: does this element make the user think about the tool? If yes, it's friction and the design is broken. Internal ops should be invisible. Every extra click, approval, or form field that doesn't serve the user's actual workflow is a defect.",
+      "children": [],
+      "links": ["sd-020", "sd-021"],
+      "source": "project_self_healing_architecture.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-012",
+      "label": "UX Principles",
+      "type": "concept",
+      "summary": "Information in context, actions follow workflow, every element earns its place",
+      "detail": "Five core UX rules from Joseph. Violation = friction = broken design.",
+      "children": ["sd-013", "sd-014", "sd-015", "sd-016", "sd-017"],
+      "links": ["sd-011"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-013",
+      "label": "Information In Context",
+      "type": "pattern",
+      "summary": "Show data WHERE the user is, in the context they are working in",
+      "detail": "If they are reviewing a contract, show contract-relevant data — not onboarding stats. Don't make them navigate to find what they need for their next decision.",
+      "children": [],
+      "links": ["sd-012"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-014",
+      "label": "No Information For Its Own Sake",
+      "type": "pattern",
+      "summary": "Every data element must answer a question the user is about to ask",
+      "detail": "If the user wouldn't miss it, it doesn't belong on the screen. No data for comprehensiveness. Each field must support an imminent decision.",
+      "children": [],
+      "links": ["sd-012"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-015",
+      "label": "Actions Follow Common Workflow",
+      "type": "pattern",
+      "summary": "If a user commonly performs an action after seeing this info, that action belongs here",
+      "detail": "Example: reviewing a generated document → approve/return/request info buttons belong next to the document. Don't hide commonly-chained actions in menus.",
+      "children": [],
+      "links": ["sd-012"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-016",
+      "label": "Uncommon Actions Need Justification",
+      "type": "pattern",
+      "summary": "Non-workflow actions must have a business reason: management, compliance, or safety gate",
+      "detail": "Acceptable reasons for an uncommon action to appear: management decision/preference, regulatory/compliance requirement, safety gate to prevent damage. None of these → belongs on a different screen or in a menu.",
+      "children": [],
+      "links": ["sd-012"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-017",
+      "label": "No Features For Features' Sake",
+      "type": "pattern",
+      "summary": "A feature that exists because it CAN exist is not purposeful engineering",
+      "detail": "Before adding any element: (1) Is the user in context where this helps? (2) Would they commonly act on it now? (3) If uncommon, what is the business reason? (4) If none — remove it.",
+      "children": [],
+      "links": ["sd-012", "sd-011"],
+      "source": "feedback_ux_design_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-018",
+      "label": "Compliance: SOX Principles",
+      "type": "concept",
+      "summary": "Full retrospective trail, rollback capability, before-state capture for all agent actions",
+      "detail": "Not SOX-regulated but SOX principles apply because it's good engineering. Four rules: full retrospective trail, rollback capability, before-state capture, per-session change log. Destructive irreversible changes must be stated and approved before execution.",
+      "children": ["sd-019", "sd-020", "sd-021", "sd-022"],
+      "links": ["sd-025", "sd-046"],
+      "source": "feedback_sox_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-019",
+      "label": "Before-State Capture",
+      "type": "pattern",
+      "summary": "Before modifying any resource, record its current state as the rollback point",
+      "detail": "Read the flow definition, capture current column values, note current config. This is the rollback point. Store it immediately — don't reconstruct it after the fact. Stored in scripts/_backups/ with timestamped filenames.",
+      "children": [],
+      "links": ["sd-018", "sd-020"],
+      "source": "feedback_sox_principles.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-020",
+      "label": "Rollback Capability",
+      "type": "pattern",
+      "summary": "Every change needs a known undo path; irreversible changes require explicit approval",
+      "detail": "Before any destructive action: know how to undo it. If irreversible, state that fact, get approval before executing. Operator can instruct rollback at any time during or after session. Agent must have everything needed to reverse without re-investigating.",
+      "children": [],
+      "links": ["sd-018", "sd-019"],
+      "source": "feedback_sox_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-021",
+      "label": "Per-Session Change Log",
+      "type": "pattern",
+      "summary": "At session close: what was modified, before/after states, how to reverse each change",
+      "detail": "Lives in memory, postmortems, and engineering journal — not just git history. The retrospective trail must be complete enough that any future session can pick up from it and understand what happened.",
+      "children": [],
+      "links": ["sd-018"],
+      "source": "feedback_sox_principles.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-022",
+      "label": "Audit Logging Table",
+      "type": "pattern",
+      "summary": "Close/Delete/Restore all write to dcfg_audit_logs",
+      "detail": "Audit trail is mandatory for any close, delete, or restore operation. dcfg_audit_logs is the canonical destination. Not optional — part of the self-healing architecture and SOX discipline.",
+      "children": [],
+      "links": ["sd-018", "sd-046"],
+      "source": "CLAUDE.md, feedback_sox_principles.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-023",
+      "label": "Bancroft 7-Point Checklist",
+      "type": "concept",
+      "summary": "Seven verification points that must pass before a contract reaches Bancroft/Workday",
+      "detail": "All 7 must pass before submission to vendors@bancroft.org and Workday entry. System's job is to capture the data that makes manual verification fast and accurate — not to enforce automated gates unless explicitly requested.",
+      "children": ["sd-030", "sd-031", "sd-032", "sd-033", "sd-034", "sd-035", "sd-036"],
+      "links": ["sd-003"],
+      "source": "project_bancroft_compliance.md, project_decades_go_architecture.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-030",
+      "label": "Check 1: Line Item Math",
+      "type": "pattern",
+      "summary": "Every line item must sum to exact contract total — no rounding errors",
+      "detail": "Arithmetic validation: sum of all line items == contract total. Rounding errors fail the check. Data must be present from contract creation.",
+      "children": [],
+      "links": ["sd-023"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-031",
+      "label": "Check 2: Active Locations Only",
+      "type": "pattern",
+      "summary": "Contract checked against live location list; closed/inactive locations rejected",
+      "detail": "Soft delete pattern: dcfg_active_flag on locations. Contract lines referencing inactive locations fail this check.",
+      "children": [],
+      "links": ["sd-023", "sd-050"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-032",
+      "label": "Check 3: Cost Center Codes",
+      "type": "pattern",
+      "summary": "Every service line maps to a Bancroft/Workday cost center code",
+      "detail": "Codes must be carried from contract creation through final doc. Reference: Cost Centers-WorkDay.xlsx. Integration point with Workday cost center system.",
+      "children": [],
+      "links": ["sd-023"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-033",
+      "label": "Check 4: Billing Clarity",
+      "type": "pattern",
+      "summary": "Frequency, per-period amounts, and annual total must be calculated and displayed",
+      "detail": "Billing frequency: monthly/quarterly/annually/project. Per-period amounts and annual total must both be present and consistent.",
+      "children": [],
+      "links": ["sd-023"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-034",
+      "label": "Check 5: Date Alignment",
+      "type": "pattern",
+      "summary": "Contract dates must fall within agreed service period, aligned with Bancroft fiscal year",
+      "detail": "Related to 16 risk-alert date fields identified across 8 tables. Key dates: dcfg_msa.dcfg_expiration_date, fire alarm due, sprinkler next due, water treatment due.",
+      "children": [],
+      "links": ["sd-023"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-035",
+      "label": "Check 6: Vendor Insurance On File",
+      "type": "pattern",
+      "summary": "Vendor COI tracked with expiration; expired or missing = flagged before contract prep",
+      "detail": "Key field: dcfg_vendor.dcfg_insurance_expiration_date. Expired insurance blocks contract submission. Must be checked proactively, not at submission time.",
+      "children": [],
+      "links": ["sd-023"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-036",
+      "label": "Check 7: Complete Submission Package",
+      "type": "pattern",
+      "summary": "Executed contract + cover sheet + insurance verification — formatted for Workday",
+      "detail": "The full package: fully executed contract, cover sheet (billing, cost centers, locations), insurance verification. Must be formatted for Workday entry. DocGen pipeline produces this.",
+      "children": [],
+      "links": ["sd-023", "sd-046"],
+      "source": "project_bancroft_compliance.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-040",
+      "label": "Data Patterns",
+      "type": "concept",
+      "summary": "Soft delete, WIP drafts, WO number lifecycle, doc versioning",
+      "detail": "Core Dataverse data discipline patterns that apply across all tables and workflows.",
+      "children": ["sd-050", "sd-051", "sd-052", "sd-053"],
+      "links": [],
+      "source": "CLAUDE.md, project_wip_drafts.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-050",
+      "label": "Soft Delete Only",
+      "type": "pattern",
+      "summary": "Never hard delete — set dcfg_active_flag = false",
+      "detail": "All DCFG tables use dcfg_active_flag for soft deletion. Hard delete is never used. Required for audit trail, rollback capability, and Bancroft active-location check.",
+      "children": [],
+      "links": ["sd-031", "sd-022"],
+      "source": "CLAUDE.md, feedback_soft_delete_only.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-051",
+      "label": "WIP Drafts Queue",
+      "type": "pattern",
+      "summary": "All wizards: Save as Draft to Dataverse + WIP queue for resuming; Sales vs Ops segmented",
+      "detail": "New Proposal wizard → draft dcfg_msa (status=Draft) → Sales WIP queue. New Contract wizard → draft dcfg_contract (status=Draft) → Operations WIP queue. Dashboard shows separate WIP sections. Sales = proposals/MSAs. Operations = contracts, amendments, work orders.",
+      "children": [],
+      "links": ["sd-009", "sd-053"],
+      "source": "project_wip_drafts.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-052",
+      "label": "WO Number Lifecycle",
+      "type": "pattern",
+      "summary": "WO numbers assigned by Send Queue staff, not by users or automation",
+      "detail": "Work order numbers are a human-assigned artifact at the Send Queue stage. The system does not auto-generate WO numbers. Staff assign them during the dispatch step.",
+      "children": [],
+      "links": ["sd-009"],
+      "source": "project_wo_number_lifecycle.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-053",
+      "label": "Submitted Docs Locked",
+      "type": "pattern",
+      "summary": "Submitted documents are locked unless declined; multiple versions allowed, only one submitted",
+      "detail": "Once a document is submitted, it is locked. Only a decline action unlocks it for revision. Multiple document versions may exist on a record but only one can have submitted status.",
+      "children": [],
+      "links": ["sd-051"],
+      "source": "feedback_submitted_docs_locked.md, project_docgen_versioning.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-060",
+      "label": "Logging & Observability",
+      "type": "concept",
+      "summary": "Verbose logging by default; audit logs; dcfg_brain_insights; Dataverse Brain",
+      "detail": "Log full request bodies on all API failures. Audit logs capture all write events. Brain layer surfaces insights from accumulated knowledge.",
+      "children": ["sd-061", "sd-062", "sd-063", "sd-064"],
+      "links": ["sd-022"],
+      "source": "feedback_verbose_logging_default.md, reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-061",
+      "label": "Verbose Logging Default",
+      "type": "pattern",
+      "summary": "Log full request body and response on every API failure — reduce later, not the other way",
+      "detail": "Every POST, PATCH, DELETE should log full request body and response on catch. Debug-blind in Prod is too expensive. Verbosity is cheap to reduce; one-off 400/500 errors without payload info are very expensive to diagnose.",
+      "children": [],
+      "links": ["sd-060"],
+      "source": "feedback_verbose_logging_default.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-062",
+      "label": "dcfg_audit_logs",
+      "type": "proven",
+      "summary": "Canonical table for all close/delete/restore audit events",
+      "detail": "Every close, delete, or restore operation writes a row to dcfg_audit_logs. This is the audit trail required by SOX discipline. Not optional.",
+      "children": [],
+      "links": ["sd-060", "sd-022"],
+      "source": "CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-063",
+      "label": "Dataverse Brain",
+      "type": "proven",
+      "summary": "dcfg_knowledge + dcfg_brain_insight tables; MCP server with 15+ tools for knowledge ops",
+      "detail": "230+ knowledge rows in Prod. dcfg_brain_insight extended with System domain, linked via dcfg_based_on_knowledge. Supersedence chain via dcfg_superseded_by self-lookup. MCP server at C:/DCFG/tools/dcfg-mcp/server.py. Tools: knowledge_get, knowledge_search, knowledge_upsert, brain_write, brain_warm_context.",
+      "children": [],
+      "links": ["sd-060", "sd-064"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-064",
+      "label": "Nora Monitoring Mandate",
+      "type": "pattern",
+      "summary": "Every Nora cycle must check audit logs + DocGen V4 dcfg_document_requests",
+      "detail": "No exceptions. Monitoring loops are silent unless something changed. But the checks themselves are mandatory every cycle.",
+      "children": [],
+      "links": ["sd-060", "sd-062"],
+      "source": "feedback_nora_always_monitors.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-070",
+      "label": "Integration Points",
+      "type": "concept",
+      "summary": "UpKeep (read-only), SharePoint DMS, Workday cost centers, HubSpot, DocuSign",
+      "detail": "External systems the DCFG platform integrates with. Each has a specific access pattern and constraint.",
+      "children": ["sd-071", "sd-072", "sd-073", "sd-074", "sd-075"],
+      "links": [],
+      "source": "MEMORY.md, reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-071",
+      "label": "UpKeep Read-Only",
+      "type": "pattern",
+      "summary": "UpKeep is READ-ONLY — DCFG never writes to UpKeep",
+      "detail": "UpKeep is a facilities management tool. DCFG reads from it for dashboard data (Operations dashboard, Facilities dashboard). No write-back under any circumstances.",
+      "children": [],
+      "links": ["sd-070"],
+      "source": "feedback_upkeep_readonly.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-072",
+      "label": "SharePoint DMS Structure",
+      "type": "pattern",
+      "summary": "DCFG_Templates (flat), DCFG_Outputs (Customer/Year/DocType), DCFG_Attachments (Customer/Location/Year)",
+      "detail": "SharePoint is always the SECOND save — Dataverse record is primary. Templates stored flat in DCFG_Templates. Outputs organized by Customer/Year/DocType. Attachments by Customer/Location/Year. Auth: separate Graph token (Dataverse token cannot access SharePoint — confirmed 401).",
+      "children": [],
+      "links": ["sd-070", "sd-036"],
+      "source": "feedback_sharepoint_dms_structure.md, reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-073",
+      "label": "Workday Cost Centers",
+      "type": "pattern",
+      "summary": "Cost center codes from Workday must map to every contract service line",
+      "detail": "Reference: Cost Centers-WorkDay.xlsx. Codes carried from contract creation through generated document. Required for Bancroft Check 3.",
+      "children": [],
+      "links": ["sd-070", "sd-032"],
+      "source": "project_decades_go_architecture.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-074",
+      "label": "DocuSign Anchors",
+      "type": "pattern",
+      "summary": "OOXML type='docusign' fields rendered as white 1pt invisible text for DocuSign anchor tags",
+      "detail": "In ooxmlInject.js: fields with type='docusign' produce white 1pt text — invisible in the document but detectable by DocuSign for signature placement. Proven in DocGen V4.",
+      "children": [],
+      "links": ["sd-070"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-075",
+      "label": "HubSpot / External CRM",
+      "type": "open-question",
+      "summary": "HubSpot integration discussed in 2026-04-03 meeting — not yet built",
+      "detail": "Mentioned as a follow-up item from the tech demo. Integration path and scope not yet defined.",
+      "children": [],
+      "links": ["sd-070"],
+      "source": "project_meeting_2026_04_03.md (via MEMORY.md)",
+      "confidence": "single-observation",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-080",
+      "label": "Deploy Discipline",
+      "type": "concept",
+      "summary": "Test → Stage → Prod; pac auth verify before every deploy; cache clear; launch URLs",
+      "detail": "Deploy pipeline rules: verify pac auth list before every deploy, restore to Test (index varies — always run pac auth list first), clear cache after metadata changes, provide launch URLs after deploy.",
+      "children": ["sd-081", "sd-082", "sd-083", "sd-084", "sd-085", "sd-086"],
+      "links": [],
+      "source": "CLAUDE.md, feedback_pac_auth_indices_shifted.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-081",
+      "label": "Deploy Order: Test → Stage → Prod",
+      "type": "pattern",
+      "summary": "Deployments always follow Test → Stage → Prod; operator specifies which envs per deploy",
+      "detail": "Never skip environments. Operator specifies which envs apply to a given deploy session. Never deploy to Prod without explicit operator authorization for that specific deploy.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-082",
+      "label": "pac auth Verify Before Deploy",
+      "type": "pattern",
+      "summary": "Always run pac auth list before any deploy — indices shift and cannot be assumed",
+      "detail": "PAC auth indices have shifted in the past. As of 2026-04-16: Prod=[1], Test=[2], Stage=[3], Portal=[4]. But ALWAYS run pac auth list to confirm before any deploy command. Never assume indices from memory.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "feedback_pac_auth_indices_shifted.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-083",
+      "label": "Cache Clear After Metadata Changes",
+      "type": "pattern",
+      "summary": "Portal cache must be cleared after any table permission, site setting, or web role change",
+      "detail": "Changes to table permissions, site settings, web roles, etc. are NOT visible until cache is cleared. Clear via Power Pages admin center → Site Actions → Clear cache, or programmatically via admin API.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-084",
+      "label": "Deploy Permissions Require Both Sides",
+      "type": "trap",
+      "summary": "Append AND AppendTo must be set on BOTH sides of any relationship — never just one side",
+      "detail": "Originally set Append on source, AppendTo on target only. Power Pages requires both flags on both sides for associate operations. Simplest rule: set Append=true AND AppendTo=true on ALL dcfg_ tables. Don't be clever about directionality.",
+      "children": [],
+      "links": ["sd-080", "sd-088"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-085",
+      "label": "Delete Orphan powerpagesites Before Deploy",
+      "type": "pattern",
+      "summary": "After solution import, check for orphan powerpagesites records and delete them before SPA deploy",
+      "detail": "Solution import copies all powerpagesites records from source. Target env ends up with real site + orphans. pac pages upload targets wrong site when duplicates exist. Fix: delete orphans, delete manifest, re-run pac pages download with correct webSiteId.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-086",
+      "label": "Deploy Commands",
+      "type": "proven",
+      "summary": "cd spa/dcfg-shell → npm run build → pac pages upload-code-site --rootPath . --compiledPath dist",
+      "detail": "Standard deploy sequence. Must be preceded by pac auth verify and followed by cache clear + launch URL delivery. Deploy is a separate authorization from building.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-087",
+      "label": "Platform Traps",
+      "type": "concept",
+      "summary": "Known Power Pages / Dataverse / Power Automate platform-specific failure modes",
+      "detail": "Accumulated traps from engineering journal. Each has a proven fix or workaround.",
+      "children": ["sd-088", "sd-089", "sd-090", "sd-091", "sd-092", "sd-093", "sd-094", "sd-095"],
+      "links": [],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-088",
+      "label": "powerpagecomponent PATCH for Permissions",
+      "type": "trap",
+      "summary": "PATCH mspp_entitypermission fails silently; must PATCH powerpagecomponent type=18 content JSON",
+      "detail": "Enhanced Data Model: mspp_entitypermission is a virtual table. PATCH on it rejects permission flag changes silently. Fix: PATCH the underlying powerpagecomponent (type=18) content JSON field. Role links must appear in adx_entitypermission_webrole array inside content JSON or portal returns 403.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-089",
+      "label": "Entity Set Name Trap: dcfg_properties",
+      "type": "trap",
+      "summary": "Dataverse pluralizes dcfg_property → dcfg_properties; dcfg_propertys is wrong",
+      "detail": "26 files historically had dcfg_propertys (wrong). Always verify entity set names against Dataverse metadata: EntityDefinitions(LogicalName='dcfg_property')?$select=EntitySetName",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md, CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-090",
+      "label": "Flow Deployment Via Dataverse workflows Table",
+      "type": "proven",
+      "summary": "Use Dataverse workflows table for flow deployment — Power Automate Management API is unreliable",
+      "detail": "19 scripts attempted before finding reliable approach. Power Automate Management connector API: inconsistent, requires different auth, often 403. Dataverse workflows table: reliable. Rule: never overwrite the trigger when PATCHing flow definitions — only replace actions.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-091",
+      "label": "Flow Trigger Architecture (Dataverse pattern)",
+      "type": "proven",
+      "summary": "SPA writes to dcfg_document_requests; flows trigger on row add — no HTTP triggers, no flow URLs",
+      "detail": "OLD (deprecated): HTTP triggers + flow URL site settings + callFlow() from SPA. NEW (current): SPA uses createDocumentRequest(). Flow triggers on 'When a row is added' to dcfg_document_requests. Flow reads from request row lookups + dcfg_notes. Flow updates status: Pending→Processing→Complete/Failed. No flow URLs stored anywhere.",
+      "children": [],
+      "links": ["sd-087", "sd-092"],
+      "source": "reference_engineering_journal.md, CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-092",
+      "label": "Config via dcfg_configs Table",
+      "type": "proven",
+      "summary": "Runtime config read from dcfg_configs at boot via loadConfig(); no hardcoded URLs",
+      "detail": "Power Pages Web API cannot access system tables (environmentvariabledefinitions, mspp_sitesettings return 400). Only dcfg_* custom tables accessible via /_api/. Solution: dcfg_configs key/value table, read-only from portal, loaded at SPA boot. Old pattern (hardcoded FLOW_URLS map) removed.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md, CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-093",
+      "label": "Three-Step Flow Build Process",
+      "type": "proven",
+      "summary": "Push placeholder → user adds connections in designer → push full definition",
+      "detail": "Step 1: push placeholder definition (Compose actions for connection-dependent actions). Step 2: user manually adds one action per connector type in designer. Step 3: read back connection format, push full definition. NEVER overwrite triggers.",
+      "children": [],
+      "links": ["sd-087", "sd-090"],
+      "source": "CLAUDE.md, reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-094",
+      "label": "Word Online Field Mapping Requires Designer",
+      "type": "trap",
+      "summary": "Word Online content control parameters use dynamicFileSchema/{id} — must be set in designer, not API",
+      "detail": "Field params are not named by content control tag — they use dynamicFileSchema/{contentControlId} where ID is the w:id attribute from docx XML. Cannot be done purely via API. Designer required for initial setup. Template docx MUST be opened and re-saved by Word desktop before Word Online recognizes content controls.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-095",
+      "label": "Deleting One Permission Unlinks ALL",
+      "type": "trap",
+      "summary": "Deleting and recreating any table permission breaks role links on ALL 28+ permissions",
+      "detail": "After delete + recreate of one permission, all permissions lose their role links → 403 on every table. Fix: after ANY permission change (create/delete/modify), re-run the full role-linking script for ALL permissions. Never delete and recreate a single permission without this follow-up.",
+      "children": [],
+      "links": ["sd-087", "sd-083"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-096",
+      "label": "CSRF Token for Power Pages Web API",
+      "type": "proven",
+      "summary": "All POST/PATCH/DELETE need __RequestVerificationToken header from shell.getTokenDeferred()",
+      "detail": "Get from shell.getTokenDeferred(), scrape from page HTML, or find in hidden input. Token can expire — invalidate and re-fetch on 401/403. portalApi.js handles this.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-097",
+      "label": "apiPostReturn and 204 No Content",
+      "type": "proven",
+      "summary": "Power Pages returns 204 on POST — extract GUID from OData-EntityId header, then re-GET",
+      "detail": "Power Pages returns 204 even with Prefer: return=representation. Extract record ID from OData-EntityId response header (format: https://org.crm.dynamics.com/api/data/v9.2/entity_set(guid)). Parse GUID with regex, then GET created record. Handled in portalApi.js apiPostReturn().",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-098",
+      "label": "Site Settings: Explicit Columns Not Wildcard",
+      "type": "trap",
+      "summary": "Webapi/table/fields=* doesn't pick up new columns; switch to explicit list when adding columns",
+      "detail": "Wildcard fields=* and explicit column lists are two different lanes. Pick one lane per table and stay there. Fix the consumer (the site setting), not the config. Never oscillate between wildcard and explicit.",
+      "children": [],
+      "links": ["sd-087"],
+      "source": "feedback_wildcard_site_settings.md, feedback_pick_lane_explicit_or_wildcard.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-099",
+      "label": "DCFG Tech Stack",
+      "type": "concept",
+      "summary": "React 16.14 SPA (Vite), Power Pages Enhanced Data Model, Dataverse Web API, Power Automate flows",
+      "detail": "Single React SPA deployed to Power Pages EDM via pac pages upload-code-site. 22+ custom tables across 6 domains. 8+ active Power Automate flows. Solution name: DCFGSystemTest (all environments). External product name: Decades GO.",
+      "children": [],
+      "links": ["sd-091", "sd-092"],
+      "source": "project_dcfg_overview.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-100",
+      "label": "SPA Is Read-Only",
+      "type": "pattern",
+      "summary": "C:\\DCFG\\spa\\ is READ-ONLY — no create/edit/delete without explicit operator permission",
+      "detail": "Find and read are allowed. All SPA changes require explicit permission. Edit ≠ build ≠ deploy — each is a separate authorization. Permission earlier in session does NOT carry forward.",
+      "children": [],
+      "links": ["sd-080"],
+      "source": "CLAUDE.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-101",
+      "label": "SharePoint Always Second Save",
+      "type": "pattern",
+      "summary": "Any doc generation path: SharePoint is always the second save, never the first",
+      "detail": "Dataverse record is primary. SharePoint is second. Not optional. DCFG_Outputs/Customer/Year/DocType. Template docx must be opened and saved by Word desktop to be recognized by Word Online connector.",
+      "children": [],
+      "links": ["sd-072"],
+      "source": "feedback_sharepoint_always_second_save.md (via MEMORY.md)",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "sd-102",
+      "label": "Prod Environment Setup Order",
+      "type": "proven",
+      "summary": "19-step proven sequence for setting up a new environment from scratch",
+      "detail": "Order: (1) Import DCFGSystemTest solution → (2) delete orphan powerpagesites → (3) create site settings → (4) create web roles → (5) create table permissions + link to roles → (6) seed dcfg_configs → (7) add Entra ID redirect URI → (8) pac pages download with correct webSiteId → (9) npm run build + pac pages upload-code-site → (10) clear cache → (11) seed reference data → (12) set up flows.",
+      "children": [],
+      "links": ["sd-080", "sd-083", "sd-085"],
+      "source": "reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    }
+
+  ]
+}

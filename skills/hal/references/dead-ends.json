@@ -1,0 +1,159 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-18",
+  "description": "Confirmed 'will never work' patterns. Absolute negatives. Do not attempt these — they are structurally impossible, not timing-dependent.",
+  "entries": [
+    {
+      "id": "DE-001",
+      "pattern": "curl.exe for HTTP requests",
+      "reason": "Blocked by endpoint security policy. Permanently unavailable on this machine.",
+      "alternative": "Use Invoke-RestMethod in pwsh",
+      "confirmedDate": "2026-02-15",
+      "confirmations": 12
+    },
+    {
+      "id": "DE-002",
+      "pattern": "Connect-CrmOnline for non-interactive auth",
+      "reason": "Always triggers GUI popup. Cannot be suppressed in non-interactive context.",
+      "alternative": "Use Core.ps1 Connect $orgUrl with bearer token",
+      "confirmedDate": "2026-02-20",
+      "confirmations": 6
+    },
+    {
+      "id": "DE-003",
+      "pattern": "pac auth token command",
+      "reason": "Does not exist in pac CLI v2.4.1. Not a real command.",
+      "alternative": "Use pac auth list to verify, Core.ps1 for tokens",
+      "confirmedDate": "2026-04-16",
+      "confirmations": 3
+    },
+    {
+      "id": "DE-004",
+      "pattern": "PATCH mspp_entitypermission directly",
+      "reason": "Virtual table in Enhanced Data Model. PATCH returns success but changes are not applied.",
+      "alternative": "PATCH the underlying powerpagecomponent (type 18) content JSON",
+      "confirmedDate": "2026-03-15",
+      "confirmations": 8
+    },
+    {
+      "id": "DE-005",
+      "pattern": "Portal Web API for system tables",
+      "reason": "/_api/environmentvariabledefinitions and /_api/mspp_sitesettings return 400. System tables blocked.",
+      "alternative": "Use Dataverse API (Core.ps1) for system table access",
+      "confirmedDate": "2026-04-01",
+      "confirmations": 4
+    },
+    {
+      "id": "DE-006",
+      "pattern": "HTTP-triggered flows for document generation",
+      "reason": "Deprecated pattern. V4 uses Dataverse-triggered flows on dcfg_document_requests table.",
+      "alternative": "Write to dcfg_document_requests with correct dcfg_request_type",
+      "confirmedDate": "2026-03-20",
+      "confirmations": 10
+    },
+    {
+      "id": "DE-007",
+      "pattern": "Power Automate Management API for flow operations",
+      "reason": "Inconsistent behavior, 403 errors, unreliable. Never worked consistently.",
+      "alternative": "Use Dataverse workflows table for flow CRUD",
+      "confirmedDate": "2026-03-25",
+      "confirmations": 5
+    },
+    {
+      "id": "DE-008",
+      "pattern": "Dataverse token for SharePoint access",
+      "reason": "Different token audiences. Dataverse bearer token gets 401 on SharePoint/Graph endpoints.",
+      "alternative": "Use MSAL device-code flow for Graph token",
+      "confirmedDate": "2026-03-20",
+      "confirmations": 5
+    },
+    {
+      "id": "DE-009",
+      "pattern": "adx_* portal table references",
+      "reason": "Classic portal tables do not exist in Enhanced Data Model. DCFG uses EDM exclusively.",
+      "alternative": "Use powerpagesites, powerpagecomponents, mspp_entitypermissions (virtual)",
+      "confirmedDate": "2026-02-25",
+      "confirmations": 15
+    },
+    {
+      "id": "DE-010",
+      "pattern": "$filter on EntityDefinitions/Attributes",
+      "reason": "Unreliable — returns inconsistent results or errors depending on filter shape.",
+      "alternative": "Fetch all attributes, filter client-side",
+      "confirmedDate": "2026-03-10",
+      "confirmations": 4
+    },
+    {
+      "id": "DE-011",
+      "pattern": "Invoke-ResilientRestMethod -Uri parameter",
+      "reason": "Parameter does not exist on this helper. Throws binding error.",
+      "alternative": "Use raw Invoke-RestMethod with $baseHeaders from Core.ps1",
+      "confirmedDate": "2026-03-05",
+      "confirmations": 3
+    },
+    {
+      "id": "DE-012",
+      "pattern": "powershell.exe (5.1) for DCFG scripts",
+      "reason": "Core.ps1 and helpers use PS7-only syntax. powershell.exe is 5.1 and incompatible.",
+      "alternative": "Always use pwsh.exe",
+      "confirmedDate": "2026-02-18",
+      "confirmations": 8
+    },
+    {
+      "id": "DE-013",
+      "pattern": "API fix for ActiveUnpublished flow state",
+      "reason": "No API call clears this state. If someone edited in designer without saving, only designer can resolve.",
+      "alternative": "User opens flow in designer, clicks Save or Discard",
+      "confirmedDate": "2026-03-10",
+      "confirmations": 4
+    },
+    {
+      "id": "DE-014",
+      "pattern": "N:N navigation property $expand for permission-role verification",
+      "reason": "Platform bug — returns empty array regardless of actual links.",
+      "alternative": "Read powerpagecomponent content JSON adx_entitypermission_webrole array",
+      "confirmedDate": "2026-03-18",
+      "confirmations": 3
+    },
+    {
+      "id": "DE-015",
+      "pattern": "V3 DocGen Switch-case flow path",
+      "reason": "V3 retired 2026-04-10. V4 OOXML is sole docgen path. V3 Admin tab, flow, Switch cases all dead.",
+      "alternative": "V4 OOXML injection via Azure Function + jszip",
+      "confirmedDate": "2026-04-10",
+      "confirmations": 5
+    },
+    {
+      "id": "DE-016",
+      "pattern": "az CLI commands",
+      "reason": "az CLI is not installed on this machine.",
+      "alternative": "Use Azure Portal GUI or PowerShell Az module (Az.Accounts only)",
+      "confirmedDate": "2026-04-16",
+      "confirmations": 2
+    },
+    {
+      "id": "DE-017",
+      "pattern": "Inline pwsh -Command with OData $ parameters in bash",
+      "reason": "Bash eats $ signs even in single-quoted strings. OData filters get mangled.",
+      "alternative": "Write .ps1 file, invoke with pwsh -NoProfile -File path.ps1",
+      "confirmedDate": "2026-03-12",
+      "confirmations": 8
+    },
+    {
+      "id": "DE-018",
+      "pattern": "Changing Dataverse table ownership type after creation via API",
+      "reason": "Ownership type (UserOwned vs OrganizationOwned) is set at creation and cannot be changed via any API or admin UI post-creation. This blocks solution import when source and target envs have mismatched ownership on the same table.",
+      "alternative": "DELETE the table (losing all data) and recreate with correct ownership — DESTRUCTIVE, requires data migration. Or accept that solution import is blocked for that table and use column-by-column API sync.",
+      "confirmedDate": "2026-04-17",
+      "confirmations": 1
+    },
+    {
+      "id": "DE-019",
+      "pattern": "Fully automating Power Automate connection reference wiring via API",
+      "reason": "Connection references can only be wired by a human adding an action in the Power Automate designer UI. No API path creates a new live connection and binds it to a connection reference without the designer step. 19 scripts were attempted before this constraint was established (engineering journal §5).",
+      "alternative": "Human opens each flow in Power Automate designer, adds one action per connector type (Dataverse, SharePoint, etc.), saves. After that, scripts can PATCH the full flow definition via the Dataverse workflows table.",
+      "confirmedDate": "2026-04-18",
+      "confirmations": 1
+    }
+  ]
+}

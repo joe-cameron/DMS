@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "updated": "2026-03-24",
+    "description": "Auto-research training log — what was tried, what worked, what failed. Accumulated through experiments. Agents append to this file after each operation."
+  },
+
+  "sessions": [
+    {
+      "date": "2026-03-24",
+      "objective": "Discover all working methods to set table permissions in Power Pages Enhanced Data Model",
+      "environment": "test (org0c17e98d)",
+      "phases": [
+        {
+          "phase": "API CRUD Tests",
+          "attempts": 15,
+          "successes": 15,
+          "successRate": 1.0,
+          "results": [
+            { "test": "New-Record to mspp_entitypermissions", "result": "PASS", "ms": 731, "notes": "Creates both mspp record and powerpagecomponent type=18" },
+            { "test": "Link role via $ref from permission side", "result": "PASS", "ms": 344, "notes": "Creates intersection record but portal ignores it" },
+            { "test": "Link multiple roles", "result": "PASS", "ms": 722, "notes": "2 roles in sequential $ref calls" },
+            { "test": "Verify via intersection query", "result": "PASS", "ms": 269, "notes": "mspp_entitypermission_webroleset entityset" },
+            { "test": "Update-Record PATCH flags", "result": "PASS", "ms": 1469, "notes": "Helper function works where raw PATCH fails" },
+            { "test": "Unlink role via $ref DELETE", "result": "PASS", "ms": 656 },
+            { "test": "Delete permission", "result": "PASS", "ms": 531 },
+            { "test": "Raw REST with Prefer:return=representation", "result": "PASS", "ms": 790, "notes": "Returns full record in response" },
+            { "test": "Link from role side ($ref)", "result": "PASS", "ms": 618 },
+            { "test": "Query template permissions", "result": "PASS", "ms": 385 },
+            { "test": "Get template role links from intersection", "result": "PASS", "ms": 296 },
+            { "test": "Clone permission from template", "result": "PASS", "ms": 748 },
+            { "test": "Clone role links from template", "result": "PASS", "ms": 2004 },
+            { "test": "Serialize to JSON manifest", "result": "PASS", "ms": 351 },
+            { "test": "Replay from JSON manifest", "result": "PASS", "ms": 2744 }
+          ]
+        },
+        {
+          "phase": "Portal E2E Test (FIRST ATTEMPT)",
+          "attempts": 1,
+          "successes": 0,
+          "successRate": 0.0,
+          "results": [
+            { "test": "/_api/dcfg_permtests from authenticated portal session", "result": "FAIL", "status": 403, "error": "You don't have permission to read the dcfg_permtest table.", "notes": "Permission record existed in Dataverse but portal returned 403" }
+          ]
+        },
+        {
+          "phase": "Root Cause Investigation",
+          "discovery": "Portal reads role assignments from powerpagecomponent content JSON 'adx_entitypermission_webrole' array, NOT from mspp_entitypermission_webrole intersection table",
+          "evidence": "Working permission (dcfg_contract) has adx_entitypermission_webrole in content JSON. Failing permission (dcfg_permtest) did not.",
+          "fix": "PATCH powerpagecomponent content JSON to include adx_entitypermission_webrole array with role GUIDs"
+        },
+        {
+          "phase": "Portal E2E Test (AFTER FIX)",
+          "attempts": 1,
+          "successes": 1,
+          "successRate": 1.0,
+          "results": [
+            { "test": "/_api/dcfg_permtests after content JSON PATCH", "result": "PASS", "status": 200, "records": 1, "notes": "Test record 'E2E Test Record' returned successfully" }
+          ]
+        }
+      ],
+      "keyLearnings": [
+        "mspp_entitypermissions POST creates the record but does NOT set role links in the portal-readable format",
+        "$ref N:N links create intersection table records but portal ignores them",
+        "Portal reads adx_entitypermission_webrole from powerpagecomponent (type=18) content JSON",
+        "Update-Record helper works for PATCH on mspp_ tables where raw Invoke-RestMethod fails",
+        "N:N navigation property mspp_entitypermission_webrole always returns 0 — platform bug",
+        "Intersection entityset name is mspp_entitypermission_webroleset (non-standard pluralization)",
+        "Site setting content format is {\"value\":\"true\"} not just 'true'",
+        "Table creation via metadata API requires IsPrimaryName=$true in Attributes array",
+        "Portal URL is dcfg.powerappsportals.com (not dcfg-test)",
+        "E2E validation requires Playwright with manual Windows Hello auth"
+      ],
+      "winningApproach": {
+        "summary": "New-Record to mspp_entitypermissions → PATCH powerpagecomponent content JSON with adx_entitypermission_webrole → create site settings → clear cache → verify via /_api/",
+        "confidence": 1.0,
+        "e2eVerified": true
+      }
+    }
+  ],
+
+  "operationConfidence": {
+    "setTablePermission": { "attempts": 17, "successes": 16, "rate": 0.94, "lastVerified": "2026-03-24", "e2eVerified": true },
+    "updatePermissionFlags": { "attempts": 3, "successes": 3, "rate": 1.0, "lastVerified": "2026-03-24", "e2eVerified": false },
+    "createSiteSetting": { "attempts": 4, "successes": 3, "rate": 0.75, "lastVerified": "2026-03-24", "e2eVerified": true },
+    "linkRoleToPermission": { "attempts": 12, "successes": 12, "rate": 1.0, "lastVerified": "2026-03-24", "e2eVerified": false, "notes": "API succeeds but portal doesn't use intersection records — must also PATCH content JSON" },
+    "createTable": { "attempts": 3, "successes": 1, "rate": 0.33, "lastVerified": "2026-03-24", "e2eVerified": false, "notes": "Two failures before discovering IsPrimaryName requirement" },
+    "deploySPA": { "attempts": 0, "successes": 0, "rate": null, "lastVerified": null, "e2eVerified": false, "notes": "Not tested in this session" },
+    "deployFlow": { "attempts": 0, "successes": 0, "rate": null, "lastVerified": null, "e2eVerified": false, "notes": "Not tested in this session" },
+    "promoteEnvironment": { "attempts": 0, "successes": 0, "rate": null, "lastVerified": null, "e2eVerified": false, "notes": "Not tested in this session" }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "_meta": { "updated": "2026-03-20", "description": "dcfg_audit_log correct column names — using wrong names causes SILENT 400 errors" },
+  "table": "dcfg_audit_logs",
+  "operation": "CREATE ONLY — never PATCH or DELETE",
+  "columns": {
+    "dcfg_target_table": { "required": true, "type": "string", "description": "Dataverse logical table name" },
+    "dcfg_target_record_id": { "required": true, "type": "string", "description": "GUID of affected record" },
+    "dcfg_action_type": { "required": true, "type": "integer", "description": "Picklist int from AuditActionType enum" },
+    "dcfg_performed_by": { "required": true, "type": "string", "description": "Authenticated user email" },
+    "dcfg_performed_at": { "required": true, "type": "datetime", "description": "UTC DateTime" },
+    "dcfg_new_value": { "required": true, "type": "string", "description": "Human-readable description of what happened" },
+    "dcfg_old_value": { "required": false, "type": "string", "description": "Previous state" },
+    "dcfg_reason": { "required": false, "type": "string", "description": "Void/Decline/Override only" },
+    "dcfg_related_contract_id": { "required": false, "type": "lookup", "description": "Contract GUID even when target is another table" }
+  },
+  "COLUMNS_THAT_DO_NOT_EXIST": [
+    "dcfg_entity_type",
+    "dcfg_entity_id",
+    "dcfg_action",
+    "dcfg_details"
+  ]
+}

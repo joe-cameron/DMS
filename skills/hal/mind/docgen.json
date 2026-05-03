@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "domain": "DCFG DocGen",
+    "version": "1.0.0",
+    "created": "2026-04-18",
+    "description": "Mind map for the DCFG document generation system — V4 OOXML pipeline, retired V3, template lifecycle, SharePoint DMS, send pipeline, user visibility rules, and known traps."
+  },
+  "nodes": [
+
+    {
+      "id": "dg-001",
+      "label": "DocGen Domain Root",
+      "type": "concept",
+      "summary": "Top-level entry point for DCFG document generation knowledge",
+      "detail": "DCFG generates legal documents (Vendor Agreements, Work Orders, Amendments, MSAs, Proposals) from Word .docx templates using OOXML injection. V4 is the sole live path as of 2026-04-10. V3 (Switch-case + Word Online) is retired.",
+      "children": ["dg-010", "dg-020", "dg-030", "dg-040", "dg-050", "dg-060", "dg-070", "dg-080"],
+      "links": [],
+      "source": "project_docgen_v4_ooxml.md + project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-010",
+      "label": "V4 OOXML Pipeline",
+      "type": "concept",
+      "summary": "Azure Function that injects field values into .docx OOXML using jszip — the sole live docgen path",
+      "detail": "The V4 pipeline takes a base64-encoded .docx template and a field map, replaces tagged content inside the OOXML XML, and returns a base64-encoded populated .docx. Never converts to HTML or PDF at the injection stage.",
+      "children": ["dg-011", "dg-012", "dg-013", "dg-014", "dg-015", "dg-016"],
+      "links": ["dg-030", "dg-050"],
+      "source": "project_docgen_v4_ooxml.md + feedback_docgen_is_ooxml_not_html.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-011",
+      "label": "Azure Function endpoint",
+      "type": "proven",
+      "summary": "Live V4 OOXML injector at dcfg-docgen resource group",
+      "detail": "URL: https://dcfg-html-to-pdf-d9bwchakhgduf4gc.eastus-01.azurewebsites.net/api/html-to-pdf. Key: REDACTED. Runtime: Node.js 22, Linux, Flex Consumption. Deps: jszip only (1.1 MB deploy). NEVER call it 'html-to-pdf' in conversation — the directory/file names are historical debris.",
+      "children": [],
+      "links": ["dg-013", "dg-080"],
+      "source": "project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-012",
+      "label": "ooxmlInject.js library",
+      "type": "proven",
+      "summary": "Client-side OOXML injection library at spa/dcfg-shell/src/lib/ooxmlInject.js",
+      "detail": "Exports: injectTemplate(templateBinary, fieldMap), injectScalarFields, injectBlockField, buildAmendmentBlock, buildLocationTable. Imports cleanly in Node.js. Used by MSA Composer and Contract Composer client-side (not via Azure Function). DocuSign anchor fields (type='docusign') rendered as white 1pt text — invisible in final doc.",
+      "children": [],
+      "links": ["dg-011", "dg-015"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-013",
+      "label": "5 Injection Strategies",
+      "type": "concept",
+      "summary": "Five strategies the OOXML injector uses to locate and replace field values in a .docx",
+      "detail": "1. content-control (w:sdt tags) — structured content controls, most reliable. 2. merge-field (MERGEFIELD complex field) — legacy Word mail-merge syntax. 3. highlight (yellow consecutive runs) — finds highlighted text spans. 4. placeholder (bracket/brace text replace) — finds {{FieldName}} or [FieldName] patterns. 5. underline-blank (signature lines) — targets underline-blank signature placeholders. Strategies applied in order; first match wins.",
+      "children": [],
+      "links": ["dg-030"],
+      "source": "feedback_docgen_is_ooxml_not_html.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-014",
+      "label": "Azure Function payload shape",
+      "type": "proven",
+      "summary": "Input: { template_base64, field_map[], options }. Output: { document_base64, fields_injected, ... }",
+      "detail": "The function receives a base64 template and an array of field mappings, returns a base64 populated .docx plus metadata about which fields were injected. No HTML, no PDF at this stage.",
+      "children": [],
+      "links": ["dg-011"],
+      "source": "feedback_docgen_is_ooxml_not_html.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-015",
+      "label": "Composers call Azure Function directly",
+      "type": "proven",
+      "summary": "MSA Composer and Contract Composer generate docs client-side — no Dataverse-trigger flow intermediary",
+      "detail": "As of 2026-04-15, both composers (MSA and Contract) call the Azure Function directly for OOXML injection, then upload to SharePoint. The V4 Dataverse-trigger flow (a9b7da25-0c32-f111-88b3-000d3a308e39) is still Active in Prod but effectively unused. dcfg_document_requests rows are created for audit trail only — no flow picks them up.",
+      "children": [],
+      "links": ["dg-040", "dg-060"],
+      "source": "project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-016",
+      "label": "DocuSign anchor injection",
+      "type": "proven",
+      "summary": "Fields with type='docusign' are rendered as white 1pt text — invisible but anchor-ready",
+      "detail": "When the field_map entry has type='docusign', the injector writes the value as white 1pt text into the OOXML. This is invisible in the rendered document but acts as a DocuSign anchor tag for signature placement.",
+      "children": [],
+      "links": ["dg-013"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-020",
+      "label": "V3 Retired",
+      "type": "dead-end",
+      "summary": "V3 DocGen (Switch-case + Word Online + dcfg_document_template legacy columns) is retired as of 2026-04-10",
+      "detail": "V3 used a Power Automate flow with Switch cases per doc type, Word Online 'Populate a Microsoft Word template' connector, and dcfg_document_template legacy columns. Joseph confirmed retirement on 2026-04-10 — V4 OOXML is the sole path.",
+      "children": ["dg-021", "dg-022", "dg-023", "dg-024"],
+      "links": ["dg-010"],
+      "source": "project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-021",
+      "label": "V3 dead code in Admin.jsx",
+      "type": "dead-end",
+      "summary": "DocumentTemplatesTab in Admin.jsx is dead code — the 'Document Templates' card is V3 legacy",
+      "detail": "Admin.jsx > DocumentTemplatesTab (System Admin > Document System > 'Document Templates' card) depends on flow_template_validate which is inactive in Prod. Do NOT reactivate. Pending cleanup: remove the card from SECTIONS (lines 62-68), delete DocumentTemplatesTab component and helpers (fileToBase64, pollDocRequestStatus, TemplateForm, FAMILY_LABELS, DOCTYPE_LABELS, EXHIBIT_LABELS). Requires operator approval before touching SPA.",
+      "children": [],
+      "links": ["dg-020"],
+      "source": "project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-022",
+      "label": "V3 legacy columns on dcfg_document_templates",
+      "type": "dead-end",
+      "summary": "V3 columns on dcfg_document_templates are legacy — do not use for V4 work",
+      "detail": "V3 columns: dcfg_contract_family, dcfg_document_type, dcfg_exhibit_type, dcfg_sharepoint_url, dcfg_validation_status. V4 uses: dcfg_template_type, dcfg_field_count, dcfg_mapped_count, dcfg_source_file_name, dcfg_source_file_url, dcfg_customer_id, dcfg_template_file (Dataverse file column). V3 columns are unused but harmless — not urgent to drop.",
+      "children": [],
+      "links": ["dg-020", "dg-030"],
+      "source": "project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-023",
+      "label": "V3 flows are retired",
+      "type": "dead-end",
+      "summary": "DCFG DocGen v2 (Prod) and ada6473f (Test) flows are retired — inactive state is correct",
+      "detail": "V3 flow IDs: ada6473f-d528-f111-8341-7ced8d709173 (Test), 'DCFG DocGen v2' (Prod). Both are NOT ACTIVE — this is expected and correct, not a bug. Do not reactivate. Nora should not flag these as broken.",
+      "children": [],
+      "links": ["dg-020", "dg-040"],
+      "source": "project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-024",
+      "label": "Word Online binary decode trap",
+      "type": "trap",
+      "summary": "Word Online Populate action returns base64 in $content — must decode with base64ToBinary() before SharePoint write",
+      "detail": "The V3 flow used Word Online 'Populate a Microsoft Word template'. Its output body returns a JSON string, not binary. Using @body(...)?['body'] gives a 4-byte text file in SharePoint. The fix: @base64ToBinary(body('Populate_a_Microsoft_Word_template')?['$content']). This trap is in V3 territory but worth knowing if Word Online is ever used again.",
+      "children": [],
+      "links": ["dg-020", "dg-050"],
+      "source": "reference_engineering_journal.md (section 17)",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-030",
+      "label": "Template Lifecycle",
+      "type": "concept",
+      "summary": "How .docx templates are authored, uploaded, validated, stored, and mapped for injection",
+      "detail": "Templates are Word .docx files with tagged content controls, merge fields, highlighted text, or bracket placeholders. V4 templates stored in SharePoint DCFG_Templates (flat library). Dataverse dcfg_document_templates table tracks metadata. Template must be opened and re-saved by Word desktop to be recognized by Word Online (V3 lesson, still relevant for OOXML authoring).",
+      "children": ["dg-031", "dg-032", "dg-033", "dg-034"],
+      "links": ["dg-010", "dg-050"],
+      "source": "project_docgen_v3_retired.md + feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-031",
+      "label": "Template storage — SharePoint DCFG_Templates",
+      "type": "proven",
+      "summary": "Templates stored flat at /DCFG_Templates/ root — no subfolders, no versioning folders",
+      "detail": "SharePoint library: DCFG_Templates at https://decadesconstructiongroup.sharepoint.com/sites/DCFGContractingSuite/DCFG_Templates/. Structure is flat — all .docx files at root. No customer folders, no type folders. This is the gold standard per 2026-03-27 decision.",
+      "children": [],
+      "links": ["dg-050"],
+      "source": "feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-032",
+      "label": "V4 template schema columns",
+      "type": "concept",
+      "summary": "V4 uses dcfg_template_type, dcfg_field_count, dcfg_mapped_count, dcfg_source_file_name, dcfg_source_file_url, dcfg_customer_id, dcfg_template_file",
+      "detail": "dcfg_template_file is a Dataverse file column — stores the template binary natively. dcfg_source_file_url points to SharePoint if that's the source. dcfg_field_count and dcfg_mapped_count track injection coverage. Do not use V3 columns (dcfg_sharepoint_url, dcfg_validation_status, etc.).",
+      "children": [],
+      "links": ["dg-022"],
+      "source": "project_docgen_v3_retired.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-033",
+      "label": "Word desktop re-save requirement",
+      "type": "trap",
+      "summary": "Programmatically-created content controls are not recognized by Word Online until Word desktop re-saves the file",
+      "detail": "Content controls created via COM automation or Open XML SDK are not recognized by the Word Online 'Populate' connector until a human opens and saves in Word desktop. This was a V3 trap but applies to any workflow that relies on Word Online schema detection. V4 OOXML injection bypasses this entirely.",
+      "children": [],
+      "links": ["dg-024"],
+      "source": "reference_engineering_journal.md (section 15)",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-034",
+      "label": "Tag mapping — 198 renames done",
+      "type": "proven",
+      "summary": "198 template tag renames + 206 flow field mappings completed 2026-04-03 (V3, now retired)",
+      "detail": "Tag rename work was completed for V3 Switch cases. Since V3 is retired, this is historical context. V4 tag mapping is done per-template via ooxmlInject.js field_map. Do not attempt to use old V3 mappings — they matched the Switch case structure which is gone.",
+      "children": [],
+      "links": ["dg-020"],
+      "source": "MEMORY.md project_template_cleanup reference",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-040",
+      "label": "Document Request Flow",
+      "type": "concept",
+      "summary": "dcfg_document_requests table is the transaction log — SPA writes rows, flow status updates are now audit-only",
+      "detail": "Original design: SPA writes a row to dcfg_document_requests, Dataverse-trigger flow picks it up and processes Pending→Processing→Complete/Failed. As of 2026-04-15, composers call the Azure Function directly. The table still exists and rows are created for audit trail — but no active flow processes them. Nora should NOT flag rows stuck at Processing as errors.",
+      "children": ["dg-041", "dg-042", "dg-043", "dg-044"],
+      "links": ["dg-010", "dg-015"],
+      "source": "project_docgen_transaction_pattern.md + project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-041",
+      "label": "createDocumentRequest() — SPA entry point",
+      "type": "proven",
+      "summary": "SPA function in portalApi.js that creates a dcfg_document_requests row — the original flow trigger",
+      "detail": "createDocumentRequest() POSTs to dcfg_document_requests via Power Pages Web API. Creates a row with lookups (contract, template, customer, MSA) + metadata (request_type, status=Pending, notes). 7 call sites originally: NewContractWizard, NewProposalWizard, ContractDetail, MsaDetail, OnboardingDetail (Email), CustomerDetail (Email), LocationDetail (CertUpload). DO NOT use callFlow() — that is the deprecated HTTP trigger pattern.",
+      "children": [],
+      "links": ["dg-040"],
+      "source": "project_docgen_transaction_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-042",
+      "label": "dcfg_document_requests schema",
+      "type": "concept",
+      "summary": "Table schema for the document request transaction table",
+      "detail": "Columns: dcfg_name, dcfg_status (choice: Pending/Processing/Complete/Failed), dcfg_request_type (choice: DocGen=100000000, Email=100000001, CertUpload=100000002), dcfg_requested_by, dcfg_requested_at, dcfg_completed_at, dcfg_output_file_url, dcfg_error_message, dcfg_notes, dcfg_missing_field_count. Lookups: dcfg_contract_id, dcfg_template_id, dcfg_customer_id, dcfg_msa_id.",
+      "children": [],
+      "links": ["dg-041"],
+      "source": "project_docgen_transaction_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-043",
+      "label": "No HTTP triggers",
+      "type": "pattern",
+      "summary": "NEVER use HTTP triggers or callFlow() — Dataverse row creation is the trigger pattern",
+      "detail": "OLD deprecated: HTTP triggers + flow URL site settings + callFlow() from SPA. NEW current: SPA writes to dcfg_document_requests, Dataverse 'When a row is added' trigger. No flow URLs stored anywhere — dcfg_configs table stores other config but flow URLs are eliminated entirely.",
+      "children": [],
+      "links": ["dg-040", "dg-041"],
+      "source": "reference_engineering_journal.md (section 5) + project_docgen_transaction_pattern.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-044",
+      "label": "V4 flow is Active but orphaned",
+      "type": "concept",
+      "summary": "V4 Dataverse-trigger flow (a9b7da25-0c32-f111-88b3-000d3a308e39) is Active in Prod but unused",
+      "detail": "The flow is technically active but the composers bypass it entirely. Document requests stuck at 'Processing' are expected orphans from the audit-trail pattern — not stuck jobs. Do not alert on them. Do not deactivate without operator approval.",
+      "children": [],
+      "links": ["dg-015", "dg-023"],
+      "source": "project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-050",
+      "label": "SharePoint Integration",
+      "type": "concept",
+      "summary": "SharePoint is always the second save — mandatory canonical copy in DCFG_Outputs at Customer/Year/DocType",
+      "detail": "Every document generation path in DCFG must save to SharePoint as the second save. First save is wherever the user/system needs it (browser download, Dataverse file column). SharePoint is the system-of-record for generated documents — Nora and ops tooling look there, audit trails reference paths there.",
+      "children": ["dg-051", "dg-052", "dg-053", "dg-054"],
+      "links": ["dg-060"],
+      "source": "feedback_sharepoint_always_second_save.md + feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-051",
+      "label": "DCFG_Outputs folder structure",
+      "type": "proven",
+      "summary": "Outputs stored at /DCFG_Outputs/{Customer}/{Fiscal Year}/{Document Type}/{filename}.docx",
+      "detail": "Customer = dcfg_customer.dcfg_display_name. Fiscal Year = year from contract/MSA date. Document Type = Contract | Amendment | MSA | Exhibit | Proposal. Written by DocGen flow (flow_docgen). Human-readable paths only — no property IDs, no category subfolders. Gold standard established 2026-03-27.",
+      "children": [],
+      "links": ["dg-050", "dg-031"],
+      "source": "feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-052",
+      "label": "DCFG_Attachments folder structure",
+      "type": "proven",
+      "summary": "Cert uploads stored at /DCFG_Attachments/{Customer}/{Street Address, City}/{Year}/{doc-type-slug}-{date}.{ext}",
+      "detail": "Written by flow_cert_upload. Customer = dcfg_customer.dcfg_display_name (fallback dcfg_name). Location = dcfg_property.dcfg_name (street address + city). Year = calendar year from certification date or upload date. Written by flow_cert_upload.",
+      "children": [],
+      "links": ["dg-050"],
+      "source": "feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-053",
+      "label": "SharePoint auth — separate Graph token",
+      "type": "trap",
+      "summary": "Dataverse token cannot access SharePoint — must use a separate Graph token",
+      "detail": "MSAL device-code with Graph scope 'https://graph.microsoft.com/.default' is required for SharePoint uploads. The Dataverse Bearer token returns 401 on SharePoint Graph API calls. Script at C:/DCFG/tools/path-probe/graph-auth.py handles Graph auth.",
+      "children": [],
+      "links": ["dg-050"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-054",
+      "label": "SharePoint failure should not block primary save",
+      "type": "pattern",
+      "summary": "SharePoint save failure should be surfaced loudly but not block the user's primary document save",
+      "detail": "If the SharePoint upload fails, show a toast/audit log entry — the user still has their primary copy. Do not make the primary save dependent on SharePoint success. Make the failure visible immediately (toast + dcfg_audit_logs). SharePoint is mandatory but its failure is non-blocking for UX.",
+      "children": [],
+      "links": ["dg-050", "dg-060"],
+      "source": "feedback_sharepoint_always_second_save.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-060",
+      "label": "User Visibility Rules",
+      "type": "pattern",
+      "summary": "Users see only the final SharePoint view link — no mid-flight preview, no intermediate render",
+      "detail": "When a user triggers doc generation: Generate button → spinner/progress → toast or card with final SharePoint view link. No iframe, no embed, no preview of in-progress .docx or .pdf. Applies to all doc types: Vendor Agreement, Work Order, Amendment, MSA, Proposal variants. Failure surface: toast with 'Failed to generate, try again or contact support' — still no document view.",
+      "children": ["dg-061", "dg-062"],
+      "links": ["dg-050"],
+      "source": "feedback_docgen_user_visibility.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-061",
+      "label": "Operator-only preview toggle",
+      "type": "pattern",
+      "summary": "Document preview/debug view is gated behind an operator-only toggle — default OFF",
+      "detail": "Joseph controls the preview toggle. Do not expose it in regular user settings, role-based UI, or feature flags users can flip. Default is OFF. The toggle is strictly for operator debugging — not a user feature. Do not add it to user-facing settings screens.",
+      "children": [],
+      "links": ["dg-060"],
+      "source": "feedback_docgen_user_visibility.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-062",
+      "label": "Failure UX — toast only",
+      "type": "pattern",
+      "summary": "On generation failure, surface error via toast — never show a partial document view",
+      "detail": "'Failed to generate, try again or contact support' is the pattern. No document preview on failure, no partial renders. Error details go to dcfg_audit_logs, not user UI. The UX boundary between 'working on a draft' and 'looking at a generated artifact' must stay clean.",
+      "children": [],
+      "links": ["dg-060", "dg-054"],
+      "source": "feedback_docgen_user_visibility.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-070",
+      "label": "Send Pipeline",
+      "type": "concept",
+      "summary": "Submit → Approve → Generate all docs → PDF → Merge → Send — one orchestrated action, not per-doc user requests",
+      "detail": "The proposal send pipeline is a multi-stage orchestration. User submits for approval (not direct send). Approver initiates the document send process. System generates all documents (MSA + relevant Exhibits), converts each to PDF, merges into a single package, sends to customer. The send queue (dcfg_send_queues) monitors status. Architecture decided 2026-03-26, not fully built.",
+      "children": ["dg-071", "dg-072", "dg-073", "dg-074"],
+      "links": ["dg-010", "dg-050"],
+      "source": "project_proposal_send_pipeline.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-071",
+      "label": "Approval gate before generation",
+      "type": "pattern",
+      "summary": "Approver (not user) initiates the send/generate action — quality control gate before docs go out",
+      "detail": "User clicks 'Submit for Approval', not 'Send'. Approver reviews and initiates. This prevents unreviewed proposals from generating and sending automatically. The approval gate is mandatory — do not build a bypass.",
+      "children": [],
+      "links": ["dg-070"],
+      "source": "project_proposal_send_pipeline.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-072",
+      "label": "One send queue entry per package",
+      "type": "pattern",
+      "summary": "One dcfg_send_queues row per proposal package — not one per document inside",
+      "detail": "Do not create 5 user-visible document requests for a 5-doc proposal. Create one send queue entry that orchestrates the package internally. The user sees one action, one status, one outcome. Internal doc generation is invisible.",
+      "children": [],
+      "links": ["dg-070", "dg-060"],
+      "source": "project_proposal_send_pipeline.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-073",
+      "label": "PDF merge step",
+      "type": "open-question",
+      "summary": "PDF conversion likely via Word Online 'Convert to PDF' or SharePoint — implementation not built",
+      "detail": "Architecture calls for: generate .docx per doc type → convert each to PDF → merge into single package. PDF conversion mechanism is noted as 'likely via Word Online Convert to PDF or SharePoint' but not confirmed or built. This is an open design question.",
+      "children": [],
+      "links": ["dg-070", "dg-024"],
+      "source": "project_proposal_send_pipeline.md",
+      "confidence": "single-observation",
+      "confirmations": 0,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-074",
+      "label": "Send queue monitors failures",
+      "type": "pattern",
+      "summary": "dcfg_send_queues grid shows failures immediately — operator surface for pipeline health",
+      "detail": "If any document in the package fails, the send queue row shows it right away. Operators (not end users) monitor this grid. The send queue is the health dashboard for the proposal delivery pipeline.",
+      "children": [],
+      "links": ["dg-070", "dg-062"],
+      "source": "project_proposal_send_pipeline.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-080",
+      "label": "Document Versioning",
+      "type": "concept",
+      "summary": "Multiple versions allowed per contract/MSA — only one can be submitted. Soft delete cleans up old versions.",
+      "detail": "Users iterate on documents — regenerate after fixing data, adjusting terms. Old versions pile up. dcfg_document_output records track each generated version. Soft-delete (statecode=1 or dcfg_is_active=false) hides old versions from UI but preserves audit trail. Only active versions appear in send selection. Generating a new version does NOT auto-delete previous ones.",
+      "children": ["dg-081", "dg-082"],
+      "links": ["dg-040", "dg-060"],
+      "source": "project_docgen_versioning.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-081",
+      "label": "One submitted version per doc",
+      "type": "pattern",
+      "summary": "Only one version of a document can be submitted/sent — enforced by dcfg_is_submitted flag or dcfg_document_url pointer",
+      "detail": "When submitting/sending, only allow selecting from active (non-soft-deleted) versions. The submitted version is flagged via dcfg_is_submitted or linked from the contract/MSA dcfg_document_url. Multiple active versions can exist but only one can be 'the' submitted version.",
+      "children": [],
+      "links": ["dg-080"],
+      "source": "project_docgen_versioning.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-082",
+      "label": "Soft delete — audit preserved",
+      "type": "pattern",
+      "summary": "Soft-deleted document outputs remain queryable for audit but hidden from normal UI",
+      "detail": "Use statecode=1 or dcfg_is_active=false to soft-delete old versions. Never hard delete document outputs. They remain in Dataverse and are queryable for audit/compliance purposes. Default UI query filters to active only.",
+      "children": [],
+      "links": ["dg-080"],
+      "source": "project_docgen_versioning.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-090",
+      "label": "Known Traps",
+      "type": "concept",
+      "summary": "Collection of docgen-specific naming traps, file path confusion, and V3 artifact hazards",
+      "detail": "Cross-cutting traps that don't fit neatly in one category — primarily naming confusion and V3 debris in the active codebase.",
+      "children": ["dg-091", "dg-092", "dg-093", "dg-094", "dg-095"],
+      "links": ["dg-011", "dg-020"],
+      "source": "feedback_docgen_is_ooxml_not_html.md + project_docgen_v3_retired.md + reference_engineering_journal.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-091",
+      "label": "TRAP: html-to-pdf directory name confusion",
+      "type": "trap",
+      "summary": "The Azure Function path contains 'html-to-pdf' but V4 is OOXML injection — never call it that in conversation",
+      "detail": "File path: C:\\dcfg\\azure-functions\\html-to-pdf\\src\\functions\\htmlToPdf.js. Resource group: dcfg-html-to-pdf. These are LEGACY NAMES from abandoned Puppeteer/PDFKit experiments. In conversation always say 'V4 docgen function', 'the OOXML injector', or 'Azure Function'. Never say 'html-to-pdf', 'HTML→PDF', or 'htmlToPdf' to Joseph — it signals architectural misunderstanding.",
+      "children": [],
+      "links": ["dg-011"],
+      "source": "feedback_docgen_is_ooxml_not_html.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-092",
+      "label": "TRAP: V3 flow still exists and confuses monitoring",
+      "type": "trap",
+      "summary": "V3 flows (DCFG DocGen v2 in Prod, ada6473f in Test) are inactive — inactive IS correct, not a bug",
+      "detail": "Nora and any monitoring tool must not flag these flows as broken. They are intentionally inactive. The V4 flow (a9b7da25) is Active but unused. Neither being active nor inactive is an error — they are both in expected states. Only alert if the V4 flow enters a failed/suspended state while composers are actively depending on it.",
+      "children": [],
+      "links": ["dg-023", "dg-044"],
+      "source": "project_docgen_v3_retired.md + project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-093",
+      "label": "TRAP: Processing rows are NOT stuck jobs",
+      "type": "trap",
+      "summary": "dcfg_document_requests rows at status=Processing are expected audit orphans — do not flag as errors",
+      "detail": "Because composers call the Azure Function directly and bypass the Dataverse-trigger flow, request rows may remain at Processing indefinitely. This is expected behavior as of 2026-04-15. Nora should NOT alert on these. Monitor audit logs and SharePoint DCFG_Outputs for actual doc generation health instead.",
+      "children": [],
+      "links": ["dg-015", "dg-044"],
+      "source": "project_docgen_v4_ooxml.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-094",
+      "label": "TRAP: Wildcard site settings miss new columns",
+      "type": "trap",
+      "summary": "Webapi/table/fields=* does not pick up newly added columns — use explicit column lists after schema changes",
+      "detail": "If dcfg_document_requests or dcfg_document_templates get new columns, wildcard field settings will not surface them in Power Pages Web API responses. Must update the site setting to explicit comma-separated column list (or restart portal cache is not enough). Pick explicit OR wildcard per table once — never oscillate.",
+      "children": [],
+      "links": ["dg-040", "dg-030"],
+      "source": "MEMORY.md feedback_wildcard_site_settings reference",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dg-095",
+      "label": "TRAP: ActiveUnpublished flow blocks API updates",
+      "type": "trap",
+      "summary": "Flow in ActiveUnpublished state cannot be PATCH-updated via API — user must open designer and save/discard",
+      "detail": "Error 0x80040203 ('unpublished active row') occurs when someone edited a flow in Power Automate designer without saving. No API call can clear this state. User must open the flow in designer and either Save or Discard. Check for this before any programmatic flow update.",
+      "children": [],
+      "links": ["dg-023", "dg-044"],
+      "source": "reference_engineering_journal.md (section 16)",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    }
+
+  ]
+}

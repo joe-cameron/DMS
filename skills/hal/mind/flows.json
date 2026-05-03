@@ -1,0 +1,635 @@
+{
+  "domain": "flows",
+  "description": "Power Automate flows in the DCFG project — build patterns, active flows, traps, and expression syntax",
+  "generated": "2026-04-18",
+  "sources": [
+    "reference_engineering_journal.md",
+    "reference_accomplishments.md",
+    "reference_lessons_2026_04_16.md",
+    "project_docgen_transaction_pattern.md",
+    "project_flow_lessons.md",
+    "feedback_flow_build_process.md",
+    "feedback_flow_rebuild_pattern.md",
+    "feedback_flows_update_only.md",
+    "docs/baseline-2026-04-16/flows.json",
+    "docs/baseline-2026-04-16/connectionrefs.json"
+  ],
+  "nodes": [
+
+    {
+      "id": "fl-001",
+      "label": "Transaction Pattern",
+      "type": "concept",
+      "summary": "SPA writes to dcfg_document_requests; flows trigger on Dataverse row creation — no HTTP triggers",
+      "detail": "The current (as of 2026-03-20) architecture eliminates HTTP triggers entirely. SPA calls createDocumentRequest() from portalApi.js, which creates a row in dcfg_document_requests with request_type + status=Pending. Flows subscribe to 'When a row is added' filtered by request_type. Flow reads from request row lookups and dcfg_notes, then updates status Pending→Processing→Complete/Failed. No flow URLs stored anywhere. No callFlow() in SPA. Config comes from dcfg_configs table read at boot via loadConfig().",
+      "children": ["fl-002", "fl-003", "fl-004", "fl-005", "fl-006"],
+      "links": ["fl-040", "fl-041"],
+      "source": "project_docgen_transaction_pattern.md + reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-002",
+      "label": "dcfg_document_requests schema",
+      "type": "concept",
+      "summary": "Transaction table schema — columns and lookup fields for all flow invocations",
+      "detail": "Key columns: dcfg_name, dcfg_status (choice: Pending=100000000, Processing, Complete, Failed), dcfg_request_type (choice), dcfg_requested_by, dcfg_requested_at, dcfg_completed_at, dcfg_output_file_url, dcfg_error_message, dcfg_notes (JSON payload for complex args), dcfg_missing_field_count. Lookups: dcfg_contract_id, dcfg_template_id, dcfg_customer_id, dcfg_msa_id.",
+      "children": [],
+      "links": ["fl-003", "fl-010"],
+      "source": "project_docgen_transaction_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-003",
+      "label": "Request Types (dcfg_request_type)",
+      "type": "concept",
+      "summary": "Enum values for dcfg_request_type and which flows subscribe to each",
+      "detail": "Active subscribed values: 100000000 = DocGen (DCFG DocGen v4), 100000002 = CertUpload (flow_cert_upload), 100000004 = TemplateUpload (DCFG Template File Upload), 100000005 = ProposalUpload (flow_proposal_upload). UNSUBSCRIBED: 100000001 = Email (no Dataverse subscriber — flow_send_email is HTTP-triggered), 100000003 = reserved (capital planning, on hold). Writing a request with an unsubscribed type succeeds silently with no flow picking it up.",
+      "children": [],
+      "links": ["fl-041", "fl-020", "fl-021", "fl-022", "fl-023"],
+      "source": "reference_lessons_2026_04_16.md + baseline flows.json",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-004",
+      "label": "SPA call sites",
+      "type": "concept",
+      "summary": "7 SPA locations that call createDocumentRequest() — all migrated from legacy callFlow()",
+      "detail": "Migrated (all use createDocumentRequest): NewContractWizard.jsx (DocGen 100000000), NewProposalWizard.jsx (DocGen), ContractDetail.jsx (DocGen), MsaDetail.jsx (DocGen), OnboardingDetail.jsx (Email 100000001), CustomerDetail.jsx (Email), LocationDetail.jsx (CertUpload 100000002). Still using legacy callFlow(): interview/interviewGenerate.js — not yet migrated as of 2026-03-20.",
+      "children": [],
+      "links": ["fl-001", "fl-041"],
+      "source": "project_docgen_transaction_pattern.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-005",
+      "label": "dcfg_notes field (JSON payload)",
+      "type": "concept",
+      "summary": "dcfg_notes carries complex arguments the flow reads — structured JSON string field",
+      "detail": "For actions requiring more than simple lookups (e.g., cert uploads with file content, filename, expiry date), the SPA serializes arguments as JSON into dcfg_notes. The flow's first step parses this with a Compose (Parse_Notes). This avoids needing a dozen lookup columns on the transaction table.",
+      "children": [],
+      "links": ["fl-002", "fl-022", "fl-023"],
+      "source": "project_docgen_transaction_pattern.md + baseline flows.json actions",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-006",
+      "label": "Status lifecycle",
+      "type": "concept",
+      "summary": "Flow updates request row: Pending (100000000) → Processing → Complete/Failed",
+      "detail": "On trigger, flow immediately PATCHes status to Processing (Set_Status_Processing action). On success: Update_Request_Complete sets status=Complete and dcfg_output_file_url. On failure: Handle_Flow_Failure sets status=Failed and dcfg_error_message. SPA polls or listens to this row to show user feedback.",
+      "children": [],
+      "links": ["fl-002", "fl-030"],
+      "source": "project_docgen_transaction_pattern.md + baseline flows.json",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-010",
+      "label": "Three-Step Build Process",
+      "type": "pattern",
+      "summary": "Placeholder push → user adds connections manually → Claude pushes full definition",
+      "detail": "Step 1: Claude pushes a minimal flow definition using Compose actions as placeholders wherever connection-dependent actions (Dataverse, SharePoint, Word Online, Office 365) are needed. Step 2: User opens the flow in Power Automate designer and manually adds at least one action of each needed connector type — this establishes the connection references in the environment. Step 3: Claude reads back the flow (GET workflows(id)?$select=clientdata), captures exact connection reference format, then PATCHes the full definition using those established connections. NEVER try to build a full definition before Step 2 completes.",
+      "children": ["fl-011", "fl-012", "fl-013"],
+      "links": ["fl-014", "fl-015"],
+      "source": "feedback_flow_build_process.md + feedback_flows_update_only.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-011",
+      "label": "Step 1 — Push Placeholder",
+      "type": "pattern",
+      "summary": "POST to Dataverse workflows table with Compose stubs for connection actions",
+      "detail": "POST to /api/data/v9.2/workflows with category=5, type=1, statecode=0. Include MSCRM-SolutionUniqueName header to bind to solution. clientdata must include schemaVersion: '1.0.0.0'. Use Compose actions as stubs where real connector actions will go. This creates the flow shell without requiring connections to exist yet.",
+      "children": [],
+      "links": ["fl-010", "fl-016"],
+      "source": "project_flow_lessons.md + feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-012",
+      "label": "Step 2 — Manual Connection Setup",
+      "type": "pattern",
+      "summary": "User adds one action per connector type in designer to establish connection references",
+      "detail": "Each environment has different connection IDs and formats. The user's manual action in the designer creates or binds a connectionreference record with a live connectionid. What requires manual setup: changing trigger type (HTTP→Dataverse), adding first action per connector type, Word Online 'Populate a template' (requires interactive file selection), dynamic table names in Dataverse actions (use Condition branches instead).",
+      "children": [],
+      "links": ["fl-010", "fl-015"],
+      "source": "feedback_flow_build_process.md + feedback_flows_update_only.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-013",
+      "label": "Step 3 — Read Back + Push Full Definition",
+      "type": "pattern",
+      "summary": "GET clientdata, capture connection ref format, PATCH full definition — never overwrite trigger",
+      "detail": "GET workflows(id)?$select=clientdata. Parse the connectionReferences block to find the exact logicalNames and connection IDs the designer established. Replace Compose stubs with real actions using those refs. PATCH back with updated clientdata. CRITICAL: Never overwrite the trigger block when PATCHing — only replace actions. Activate with PATCH statecode=1, statuscode=2.",
+      "children": [],
+      "links": ["fl-010", "fl-043"],
+      "source": "feedback_flow_build_process.md + reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-014",
+      "label": "Update Only — Never Create New",
+      "type": "pattern",
+      "summary": "Operator rule: only update existing flows via Dataverse workflows table, never create new flow records",
+      "detail": "Allowable via API: GET to read definitions, PATCH to deactivate (statecode=0 statuscode=1), PATCH to update clientdata actions only, PATCH to reactivate (statecode=1 statuscode=2). Not allowable without manual step: creating new flows from scratch (connections won't bind), changing trigger type programmatically, Word Online file selection.",
+      "children": [],
+      "links": ["fl-010", "fl-011"],
+      "source": "feedback_flows_update_only.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-015",
+      "label": "Connection Reference Discovery",
+      "type": "pattern",
+      "summary": "Before any cross-env deploy, discover target env's connection refs first",
+      "detail": "Query: GET connectionreferences?$select=connectionreferencelogicalname,connectionid,connectorid. The connectionReferenceLogicalName in the flow's connectionReferences must match an existing connectionreference record. The connectionid on that record must match an actual Azure connection. Note: shared_commondataservice (old CDS) is NOT the same as shared_commondataserviceforapps (current Dataverse) — always verify connectorid matches.",
+      "children": [],
+      "links": ["fl-012", "fl-016", "fl-044"],
+      "source": "feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-016",
+      "label": "Dataverse Workflows Table — Primary API",
+      "type": "proven",
+      "summary": "Write flow definitions directly to Dataverse workflows table — proven after 19 failed script attempts",
+      "detail": "19 scripts were tried before this approach was confirmed. Power Automate Management API (api.flow.microsoft.com) is unreliable: inconsistent auth, frequent 403s, can disassociate flows from solutions. Winning approach: POST/PATCH to /api/data/v9.2/workflows. MSCRM-SolutionUniqueName header binds flow to solution at creation. Do NOT add scripted flows to the manually-managed solution — keep them as environment flows. schemaVersion: '1.0.0.0' must be at the top level of clientdata.",
+      "children": [],
+      "links": ["fl-011", "fl-013", "fl-045"],
+      "source": "project_flow_lessons.md + reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-017",
+      "label": "Cross-Env Rebuild Pattern",
+      "type": "proven",
+      "summary": "Copy Prod clientdata, replace connectionReferences only — never reconstruct action definitions",
+      "detail": "Test uses ApiConnection format (method/path/body/headers). Prod uses OpenApiConnection format (parameters/operationId). These are COMPLETELY DIFFERENT structures — never try to build one from the other. Always: 1) GET source environment clientdata, 2) parse connectionReferences block, 3) map each key's connectionReferenceLogicalName to target env value, 4) keep action structure verbatim, 5) POST with category=5 type=1 statecode=0, 6) PATCH to activate. Flow create fields: category=5, type=1, statecode=0.",
+      "children": [],
+      "links": ["fl-015", "fl-016", "fl-044"],
+      "source": "feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-020",
+      "label": "Active Prod Flows",
+      "type": "concept",
+      "summary": "8 active flows in Prod (org06f5de0b) as of 2026-04-16 baseline",
+      "detail": "Active: DCFG DocGen v4, DCFG Template File Upload, flow_cert_alert, flow_cert_upload, flow_onboarding_init, flow_proposal_upload, flow_send_email, flow_vendor_geocode. Draft (12 additional): DCFG-Compute Metrics, DCFG-Error Reporter, DCFG-HTTP Bridge Query, DCFG-SharePoint Write Cache, and several duplicates/alternates. The draft flows are not triggered and serve as templates or future work.",
+      "children": ["fl-021", "fl-022", "fl-023", "fl-024", "fl-025", "fl-026", "fl-027", "fl-028"],
+      "links": ["fl-003"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-021",
+      "label": "DCFG DocGen v4",
+      "type": "proven",
+      "summary": "Primary doc generation flow — request_type 100000000, Dataverse webhook trigger, calls Azure OOXML engine",
+      "detail": "flowId: a9b7da25-0c32-f111-88b3-000d3a308e39. Trigger: OpenApiConnectionWebhook on dcfg_document_request where request_type eq 100000000 and status eq 100000000 (Pending). Key actions: Set_Status_Processing, Get_Template_Record, Get_Customer, Get_Vendor, Build_Token_Map (Compose), Download_Template (SharePoint), Encode_Template_Base64, Call_OOXML_Engine (Http action to Azure Function), Compute_Output_Path, Create_Output_File (SharePoint), Update_Request_Complete, Handle_Flow_Failure. Conditions: Condition_Has_MSA, Condition_Update_MSA_DocUrl, Check_Template_Id_Missing. ConnectionRefs: shared_commondataserviceforapps (x2), shared_sharepointonline.",
+      "children": [],
+      "links": ["fl-003", "fl-035", "fl-036"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-022",
+      "label": "flow_cert_upload",
+      "type": "proven",
+      "summary": "Compliance certificate upload — request_type 100000002, creates SharePoint file + Dataverse location_document record",
+      "detail": "flowId: a3b1db4d-9929-f111-8341-7ced8d3b31a4. Trigger: OpenApiConnectionWebhook on dcfg_document_request where request_type eq 100000002. Reads dcfg_notes JSON for file content, filename, expiry date. Key actions: Read_SP_Config, Set_Status_Processing, Parse_Notes, Lookup_Property, Lookup_Customer, Build_Folder_Path, Doc_Type_Slug, Create_Customer_Folder, Create_Location_Folder, Create_Year_Folder, Upload_File, Get_File_URL, Find_Previous_Active (soft-deactivates old certs), Deactivate_Previous (foreach), Create_Location_Document, Write_Audit, Update_Request_Complete. ConnectionRefs: shared_commondataserviceforapps (x2 — one portal variant), shared_sharepointonline.",
+      "children": [],
+      "links": ["fl-003", "fl-005"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-023",
+      "label": "flow_proposal_upload",
+      "type": "proven",
+      "summary": "Proposal file upload to SharePoint — request_type 100000005",
+      "detail": "flowId: 874b456b-c635-f111-88b4-000d3a30860b. Trigger: OpenApiConnectionWebhook on dcfg_document_request where request_type eq 100000005. Reads dcfg_notes for fileName, fileContent (base64), uploadedBy. Creates SharePoint folder structure Customer/Year/DocType, uploads file, gets URL, writes audit, marks request complete. ConnectionRefs: shared_commondataserviceforapps (x2), shared_sharepointonline.",
+      "children": [],
+      "links": ["fl-003", "fl-005"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-024",
+      "label": "DCFG Template File Upload",
+      "type": "proven",
+      "summary": "Template file upload — request_type 100000004, guard validates it is a template",
+      "detail": "flowId: 71c2aef7-fd34-f111-88b3-000d3a308bc8. Trigger: OpenApiConnectionWebhook on dcfg_document_request where request_type eq 100000004. Actions: Parse_Notes (Compose), Guard_Is_Template (If condition). ConnectionRefs: shared_commondataserviceforapps, shared_sharepointonline.",
+      "children": [],
+      "links": ["fl-003"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-025",
+      "label": "flow_cert_alert",
+      "type": "proven",
+      "summary": "Recurrence-triggered nightly certificate expiry checker — has cross-env URL contamination",
+      "detail": "flowId: 7694ebaa-8d22-f111-8341-7ced8d709bdc. Trigger: Recurrence (nightly schedule). Actions: Get_All_Active_Documents (ApiConnection), Process_Each_Document (Foreach). ENVIRONMENT WARNING: Test URL (org0c17e98d) found in clientdata — solution-import leakage. Uses ApiConnection format (older), not OpenApiConnection. ConnectionRef: shared_commondataserviceforapps.",
+      "children": [],
+      "links": ["fl-044", "fl-045"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-026",
+      "label": "flow_onboarding_init",
+      "type": "proven",
+      "summary": "Triggered on case creation — copies onboarding steps, has cross-env URL contamination",
+      "detail": "flowId: a28d59c2-c722-f111-8341-7ced8d709430. Trigger: ApiConnectionWebhook 'When_a_case_is_created'. Uses try/catch Scope pattern (Scope_Try, Scope_Catch). Actions: Init_varFlowFailed, Init_varErrorMessage, Init_varStepsCopied, Terminate_Failed, Terminate_Success. ENVIRONMENT WARNING: Stage URL (org88778bb0) found in clientdata — solution-import leakage. ConnectionRef: shared_commondataserviceforapps.",
+      "children": [],
+      "links": ["fl-030", "fl-044", "fl-045"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-027",
+      "label": "flow_send_email",
+      "type": "proven",
+      "summary": "HTTP-triggered email sender for onboarding only — NOT a Dataverse subscriber",
+      "detail": "flowId: f5b480b1-8d22-f111-8341-7ced8d70989e. Trigger: Request (HTTP / manual) — triggerKind: Http. Schema keys: to, subject, body_html, sent_by, case_id, step_number. This is the ONLY active flow that uses HTTP trigger. Actions: Response_Success, Add_a_new_row_to_selected_environment (ApiConnection), Send_an_email_notification_V3 (ApiConnection). ENVIRONMENT WARNING: Test URL in clientdata. ConnectionRefs: shared_commondataserviceforapps, shared_sendmail. Do NOT assume this flow subscribes to dcfg_document_requests — it does not.",
+      "children": [],
+      "links": ["fl-041", "fl-044", "fl-045"],
+      "source": "docs/baseline-2026-04-16/flows.json + reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-028",
+      "label": "flow_vendor_geocode",
+      "type": "proven",
+      "summary": "Triggered on dcfg_vendor row add/modify — geocodes vendor address",
+      "detail": "flowId: ad5e2253-e9f8-470b-a0a1-f11d0b463ee6. Trigger: OpenApiConnectionWebhook 'When a row is added, modified or deleted' on dcfg_vendor (no filter — all changes). Actions: Guard_has_address (If), Init_AddressQuery, Init_VendorId. No environment contamination warnings. ConnectionRef: shared_commondataserviceforapps.",
+      "children": [],
+      "links": [],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-030",
+      "label": "Error Handling — Try/Catch Scope",
+      "type": "pattern",
+      "summary": "Wrap business logic in Scope_Try, catch in Scope_Catch with run-after HasFailed/TimedOut/Skipped",
+      "detail": "Proven pattern in flow_onboarding_init: Scope_Try contains the main work. Scope_Catch has runAfter set to Scope_Try with statuses [HasFailed, TimedOut, Skipped]. Inside Scope_Catch: set varFlowFailed=true, set varErrorMessage, Terminate_Failed. The success Terminate_Success runs after Scope_Try (status Succeeded only). This ensures errors are captured and the flow terminates cleanly with a meaningful status either way.",
+      "children": [],
+      "links": ["fl-026", "fl-031"],
+      "source": "reference_engineering_journal.md §5 + baseline flows.json (flow_onboarding_init)",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-031",
+      "label": "ActiveUnpublished State Blocker",
+      "type": "trap",
+      "summary": "If a flow has unsaved designer edits, ALL API PATCHes fail with error 0x80040203",
+      "detail": "Error: '0x80040203: unpublished active row'. Occurs when someone edited the flow in the designer without saving or discarding. No API call can clear this — not PublishAllXml, not RemoveActiveCustomizations, not any bypass header. The error blocks all programmatic updates. Fix: user must open the flow in Power Automate designer and either Save or Discard changes. Always check for this before attempting a flow update.",
+      "children": [],
+      "links": ["fl-013", "fl-016"],
+      "source": "reference_engineering_journal.md §16",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-032",
+      "label": "Word Online — base64ToBinary required",
+      "type": "trap",
+      "summary": "Word Online Populate action returns base64 in $content, not binary — must decode before SharePoint write",
+      "detail": "The 'Populate a Microsoft Word template' action returns base64-encoded content in the $content property. Using @body('Populate_a_Microsoft_Word_template')?['body'] returns a JSON string, producing a 4-byte corrupt file in SharePoint. Correct expression: @base64ToBinary(body('Populate_a_Microsoft_Word_template')?['$content']). SharePoint Create File must receive binary, not the raw body.",
+      "children": [],
+      "links": ["fl-033"],
+      "source": "reference_engineering_journal.md §17",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-033",
+      "label": "Word Online — Dynamic Schema Parameters",
+      "type": "trap",
+      "summary": "Content control fields use dynamicFileSchema/{id} — not tag names — and require designer setup",
+      "detail": "Word Online 'Populate a Microsoft Word template' action uses DYNAMIC parameters. Field params are named dynamicFileSchema/{contentControlId} where the ID is the w:id attribute from the .docx XML — NOT the content control tag name. The API validates by calling GetFileSchema at save time. Bypass headers do NOT skip this. Template .docx files MUST be opened and saved by Word desktop to be recognized by Word Online. Pure programmatic content control creation is not recognized until Word desktop re-saves. Implication: initial Word Online template mapping requires the three-step build process with designer.",
+      "children": [],
+      "links": ["fl-012", "fl-032"],
+      "source": "reference_engineering_journal.md §15",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-034",
+      "label": "Connection Authorization (shared_sendmail)",
+      "type": "trap",
+      "summary": "User-scoped connectors (sendmail) require connection owner to activate the flow",
+      "detail": "Flows using shared_sendmail or other user-scoped connectors require the connection owner to activate the flow via the designer. If activation via API fails with ConnectionAuthorizationFailed, the user must open the flow in the designer and authorize the connection. This is a manual step that cannot be bypassed programmatically.",
+      "children": [],
+      "links": ["fl-015", "fl-027"],
+      "source": "feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-035",
+      "label": "OOXML Engine — Azure Function",
+      "type": "concept",
+      "summary": "DocGen V4 calls an Azure Function via Http action — named html-to-pdf but is OOXML injection via jszip",
+      "detail": "The Azure Function directory is C:/DCFG/azure-functions/html-to-pdf/ — the name is misleading. It does NOT do HTML-to-PDF. It is the V4 OOXML injection engine using jszip. The DCFG DocGen v4 flow calls it via an Http action named Call_OOXML_Engine. The flow encodes the template as base64 (Encode_Template_Base64 Compose), sends it to the function, which injects field values and returns the modified document. File/folder names lie; the code is the truth.",
+      "children": [],
+      "links": ["fl-021"],
+      "source": "reference_lessons_2026_04_16.md + reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-036",
+      "label": "SharePoint Output Path Convention",
+      "type": "concept",
+      "summary": "Flow writes output to DCFG_Outputs/Customer/Year/DocType in SharePoint — second save always",
+      "detail": "SharePoint is always the second save in any doc generation path. Structure: DCFG_Outputs/{CustomerName}/{Year}/{DocType}. The flow computes this path via Compute_Customer_Name, Compute_Output_Path, Compute_Filename Compose actions before calling Create_Output_File. Templates are stored flat in DCFG_Templates. Attachments go to DCFG_Attachments/Customer/Location/Year. Library names come from dcfg_configs (Read_SP_Config action) — never hardcoded.",
+      "children": [],
+      "links": ["fl-021", "fl-022", "fl-023"],
+      "source": "reference_accomplishments.md + feedback_sharepoint_dms_structure.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-040",
+      "label": "Deprecated: HTTP Trigger Pattern",
+      "type": "dead-end",
+      "summary": "Old architecture used HTTP triggers + flow URL site settings + callFlow() — fully replaced",
+      "detail": "Before 2026-03-20: flows had HTTP triggers, their URLs were stored as site settings in Power Pages, and the SPA called them via callFlow() from portalApi.js. This is fully replaced by the Dataverse transaction pattern (dcfg_document_requests). The hardcoded FLOW_URLS map in portalApi.js has been removed. No flow URLs should be stored anywhere. If you encounter callFlow() or flow URL site settings, they are legacy artifacts.",
+      "children": [],
+      "links": ["fl-001", "fl-027"],
+      "source": "reference_engineering_journal.md §5 + project_docgen_transaction_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-041",
+      "label": "Trap: Silent No-Subscriber",
+      "type": "trap",
+      "summary": "Writing a document request with an unsubscribed request_type succeeds silently — no flow triggers",
+      "detail": "Dataverse does not return an error when you create a dcfg_document_request row with a request_type that no active flow subscribes to. The row sits at status=Pending forever. Affected unsubscribed values: 100000001 (Email — flow_send_email is HTTP-triggered, not a subscriber), 100000003 (reserved for capital planning, no flow built). Guard the UX against this: validate request_type maps to a known active flow before creating the request row.",
+      "children": [],
+      "links": ["fl-003", "fl-027"],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-042",
+      "label": "Trap: Management API Unreliable",
+      "type": "dead-end",
+      "summary": "Power Automate Management API (api.flow.microsoft.com) fails consistently — do not use",
+      "detail": "19 scripts were tried using the PA Management API before the Dataverse workflows table approach was proven. Management API issues: inconsistent auth requirements, frequent 403s, PATCHes can silently disassociate flows from solutions. The Management API is unreliable for programmatic flow deployment in this environment. Always use the Dataverse workflows table path instead.",
+      "children": [],
+      "links": ["fl-016"],
+      "source": "project_flow_lessons.md + reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-043",
+      "label": "Trap: Never Overwrite Trigger",
+      "type": "trap",
+      "summary": "When PATCHing flow clientdata, replace only actions — never replace the trigger block",
+      "detail": "The trigger block in a flow's clientdata definition controls how the flow is invoked (Dataverse webhook, HTTP, Recurrence). If you overwrite it during a PATCH, the flow may lose its trigger or revert to an incorrect type. Always: read the current clientdata, preserve the trigger block verbatim, update only the actions section. This is especially important when migrating action formats or updating business logic.",
+      "children": [],
+      "links": ["fl-013", "fl-016"],
+      "source": "reference_engineering_journal.md §5 + feedback_flows_update_only.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-044",
+      "label": "Cross-Env URL Contamination",
+      "type": "trap",
+      "summary": "3 Prod flows contain Test/Stage org URLs in clientdata — solution-import leakage",
+      "detail": "Prod flows with contamination: flow_cert_alert (Test URL org0c17e98d in clientdata), flow_onboarding_init (Stage URL org88778bb0 in clientdata), flow_send_email (Test URL org0c17e98d in clientdata). Root cause: solution import copies flows from source environment without sanitizing hardcoded org URLs embedded in action parameters. The flows still work if the connector connections are correct, but any action that constructs a URL dynamically using the contaminated string will hit the wrong org. Watch for this anywhere a flow is imported rather than authored in place.",
+      "children": [],
+      "links": ["fl-025", "fl-026", "fl-027"],
+      "source": "reference_lessons_2026_04_16.md + docs/baseline-2026-04-16/flows.json environmentWarnings",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-045",
+      "label": "Connection References — Empty After Import",
+      "type": "trap",
+      "summary": "Solution import copies connectionreference records but without connectionid values — flows cannot activate",
+      "detail": "After solution import: check connectionreferences table for null connectionid values. Flows referencing these empty refs cannot activate. Fix options: 1) User opens flow in designer and fixes connections (designer prompts for them), or 2) swap the flow's connectionReferenceLogicalName to reference an existing ref that has a live connectionid (e.g., new_shared* refs created by the user's manual actions). Known empty refs in Prod: dcfg_dataverse_connection (null), dcfg_outlook_connection (null), dcfg_sharedcommondataserviceforapps_99581 (null), dcfg_sharedcommondataserviceforapps_b9fc9 (null), dcfg_sharedcommondataserviceforapps_e71ee (null), msdyn_Dataverse (null), new_sharedsendmail_102a5 (null), new_sharedwordonlinebusiness_5e289 (null).",
+      "children": [],
+      "links": ["fl-015", "fl-017"],
+      "source": "reference_engineering_journal.md §18 + docs/baseline-2026-04-16/connectionrefs.json",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-046",
+      "label": "Prod Connection Refs — Live Values",
+      "type": "proven",
+      "summary": "Prod connection refs with live connectionIds as of 2026-04-16 baseline",
+      "detail": "Live (non-null) in Prod: new_sharedcommondataserviceforapps_db3ce → connectionId: shared-commondataser-51983fbe-a353-41c1-977e-03e1930d0511 (Dataverse). new_sharedsharepointonline_4c81a → connectionId: shared-sharepointonl-07cb46d6-391b-43fe-8d3e-ba1dfb711e80 (SharePoint). new_sharedsendmail_f3a7a → connectionId: shared-sendmail-7360c110-2e02-4263-8591-1b590dfa6d60 (Mail). new_sharedwordonlinebusiness_b6207 → connectionId: shared-wordonlinebus-3e68d238-3042-4163-9de9-1a6cd6b80312 (Word Online). Also live: cua_agent_iRkq7.shared_commondataserviceforapps and cua_agent_iRkq7.shared_sharepointonline. dcfg_dataverse_portal → connectionId: 819c1bd5776f46ad92a1856ad9495a59 (Portal org).",
+      "children": [],
+      "links": ["fl-015", "fl-045"],
+      "source": "docs/baseline-2026-04-16/connectionrefs.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-047",
+      "label": "Expression: coalesce + null guards",
+      "type": "concept",
+      "summary": "Use coalesce() for null-safe field access; null guards prevent flow failures on missing lookups",
+      "detail": "In flow expressions, coalesce(triggerOutputs()?['body/dcfg_fieldname'], '') prevents null reference errors when optional fields are missing. For lookup fields: triggerOutputs()?['body/_dcfg_customer_id_value'] (note the underscore prefix and _value suffix for lookup GUIDs). For chained lookups, use Get Row actions rather than expression traversal. The DCFG DocGen v4 flow uses Check_Template_Id_Missing condition to guard against null template before downloading.",
+      "children": [],
+      "links": ["fl-021"],
+      "source": "reference_engineering_journal.md §5 + baseline flows.json (DCFG DocGen v4 actions)",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-048",
+      "label": "Expression: formatDateTime",
+      "type": "concept",
+      "summary": "Use formatDateTime() for consistent date formatting in filenames and SharePoint folder names",
+      "detail": "Pattern used in upload flows: formatDateTime(utcNow(), 'yyyy') for year-based folder names, formatDateTime(triggerOutputs()?['body/dcfg_requested_at'], 'yyyy-MM-dd') for date strings in filenames. SharePoint folder creation is idempotent — Create_Folder action succeeds even if folder already exists, so flows create Customer/Year/DocType folders on every run without pre-checking existence.",
+      "children": [],
+      "links": ["fl-022", "fl-023"],
+      "source": "baseline flows.json (flow_cert_upload, flow_proposal_upload actions)",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-049",
+      "label": "OpenApiConnection vs ApiConnection",
+      "type": "concept",
+      "summary": "Two incompatible action formats exist — Prod uses OpenApiConnection, Test uses ApiConnection",
+      "detail": "OpenApiConnection format (Prod): uses 'parameters' object with named keys and 'operationId' string. Example: { type: 'OpenApiConnection', inputs: { host: { connectionName: '...', operationId: 'GetItem' }, parameters: { ... } } }. ApiConnection format (Test/older): uses 'method', 'path', 'body', 'headers'. Example: { type: 'ApiConnection', inputs: { host: { api: { id: '...' }, connection: { name: '...' } }, method: 'get', path: '...' } }. Never attempt to cross-construct these formats. Copy the exact structure from the target environment.",
+      "children": [],
+      "links": ["fl-017", "fl-042"],
+      "source": "feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-050",
+      "label": "schemaVersion requirement",
+      "type": "trap",
+      "summary": "clientdata must include schemaVersion: '1.0.0.0' at top level — omitting it causes flow creation to fail",
+      "detail": "When POSTing or PATCHing flow clientdata to the Dataverse workflows table, the JSON must have schemaVersion: '1.0.0.0' as a top-level property of the clientdata object. Structure: { schemaVersion: '1.0.0.0', properties: { connectionReferences: {...}, definition: {...} } }. Without schemaVersion, the creation silently fails or produces a broken flow.",
+      "children": [],
+      "links": ["fl-011", "fl-016"],
+      "source": "feedback_flow_rebuild_pattern.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-051",
+      "label": "Audit Logging in Flows",
+      "type": "concept",
+      "summary": "Flows write to dcfg_audit_logs — Write_Audit action present in cert_upload and proposal_upload",
+      "detail": "The Write_Audit action (OpenApiConnection to Dataverse) appears in flow_cert_upload and flow_proposal_upload. This follows the project rule that Close/Delete/Restore operations must write to dcfg_audit_logs. File upload flows write an audit entry after successful SharePoint write. The DocGen v4 flow does not have a visible Write_Audit action (uses dcfg_document_requests update as the audit trail instead).",
+      "children": [],
+      "links": ["fl-022", "fl-023"],
+      "source": "docs/baseline-2026-04-16/flows.json + CLAUDE.md audit rules",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-052",
+      "label": "Open Question: request_type 100000003 gap",
+      "type": "open-question",
+      "summary": "Value 100000003 in dcfg_request_type is reserved for capital planning but has no subscriber",
+      "detail": "The dcfg_request_type enum has a sparse gap at 100000003. Per project memory, this is reserved for a capital planning docgen path that is on hold. No flow in Prod subscribes to this value. If a request is created with this type, it will sit at Pending indefinitely. Before building capital planning integration, a new flow subscriber must be created for this type.",
+      "children": [],
+      "links": ["fl-003", "fl-041"],
+      "source": "reference_lessons_2026_04_16.md + project_capital_planning_on_hold.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "fl-053",
+      "label": "Draft Flows — Not Active",
+      "type": "concept",
+      "summary": "12 draft flows in Prod — not triggered, serve as templates or future work",
+      "detail": "Draft flows (statecode=0): DCFG-Compute Metrics, DCFG-Error Reporter, DCFG-HTTP Bridge Query Active Portfolio, DCFG-SharePoint Write Cache, flow_cert_alert (nightly alternate), flow_cert_upload (duplicate), flow_cert_upload-Compliance Document Upload, flow_commit-Budget Commit (x2), flow_send_email-Onboarding Notification Email, flow_sensor_ingest, flow_template_validate. These are NOT active and do NOT process any requests. Do not reference them as live capabilities.",
+      "children": [],
+      "links": ["fl-020"],
+      "source": "docs/baseline-2026-04-16/flows.json",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    }
+  ]
+}

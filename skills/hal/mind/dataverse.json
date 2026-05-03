@@ -1,0 +1,876 @@
+{
+  "domain": "DATAVERSE",
+  "description": "Knowledge graph covering Dataverse patterns, traps, and proven techniques for the DCFG project",
+  "lastUpdated": "2026-04-18",
+  "nodes": [
+
+    {
+      "id": "dv-001",
+      "label": "Tables & Schema",
+      "type": "concept",
+      "summary": "Root category: entity sets, naming conventions, column gotchas",
+      "detail": "Covers entity set name correctness, column existence checks, tables that deviate from standard naming, and schema quick-reference facts.",
+      "children": ["dv-002", "dv-003", "dv-004", "dv-005", "dv-006", "dv-007", "dv-008"],
+      "links": [],
+      "source": "reference_engineering_journal.md §3, §9",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-002",
+      "label": "dcfg_properties NOT dcfg_propertys",
+      "type": "trap",
+      "summary": "Entity set for dcfg_property is dcfg_properties — standard English plural, not a naive append of 's'",
+      "detail": "Dataverse auto-pluralizes entity set names using English rules. dcfg_property → dcfg_properties. 26 files had dcfg_propertys (wrong) and were corrected 2026-03-18. Verified against live Dataverse metadata: EntitySetName = dcfg_properties, CollectionSchemaName = dcfg_properties. Always verify entity set names via EntityDefinitions(LogicalName='...')?$select=EntitySetName before writing code.",
+      "children": [],
+      "links": ["dv-040"],
+      "source": "feedback_properties_not_propertys.md + reference_engineering_journal.md §3",
+      "confidence": "verified",
+      "confirmations": 10,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-003",
+      "label": "Tables with no dcfg_name column",
+      "type": "trap",
+      "summary": "Several tables use non-standard name columns — querying dcfg_name fails silently or errors",
+      "detail": "dcfg_contract uses dcfg_client_name / dcfg_contractor_name. dcfg_vendor uses dcfg_display_name / dcfg_legal_name. dcfg_ap_cost_code uses dcfg_dcfg_cost_code / dcfg_description. Do not assume dcfg_name exists on every table.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §9",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-004",
+      "label": "Ghost columns (common mistakes)",
+      "type": "trap",
+      "summary": "Columns that are frequently assumed to exist but do not — will produce 400 errors",
+      "detail": "Known non-existent columns: dcfg_budget_total on dcfg_contract (use dcfg_fee or dcfg_contract_fee); dcfg_contract_value (does not exist anywhere); dcfg_amendment_number (use dcfg_amendment_sequence); dcfg_expiry_date on dcfg_msa (use dcfg_expiration_date); dcfg_budget on dcfg_program (use dcfg_budget_total); dcfg_contract_family on dcfg_vendor (family is on dcfg_customer).",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §9",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-005",
+      "label": "SchemaName casing determines LogicalName",
+      "type": "trap",
+      "summary": "Dataverse lowercases SchemaName verbatim — no word-boundary insertion. CamelCase collapses words together.",
+      "detail": "dcfg_CustomerVendor becomes dcfg_customervendor, not dcfg_customer_vendor. To get underscores in the LogicalName you must put underscores in the SchemaName: dcfg_Customer_Vendor → dcfg_customer_vendor. DCFG convention is underscores between words. Use dcfg_Active_Flag, dcfg_Assigned_Date, etc.",
+      "children": [],
+      "links": ["dv-041"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §1",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-006",
+      "label": "Virtual name columns auto-appear",
+      "type": "concept",
+      "summary": "Boolean and Lookup attributes automatically generate *name virtual columns — do not create or delete them manually",
+      "detail": "Creating dcfg_active_flag (Boolean) auto-creates dcfg_active_flagname (Virtual). Creating dcfg_customerid (Lookup) auto-creates dcfg_customeridname (String). They are always present. When listing attributes and wanting only real columns, filter out the *name suffix.",
+      "children": [],
+      "links": [],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §8",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-007",
+      "label": "Lookup columns via RelationshipDefinitions",
+      "type": "pattern",
+      "summary": "Lookup columns must be created through OneToManyRelationshipMetadata, NOT via direct Attributes POST",
+      "detail": "POST to EntityDefinitions(LogicalName='x')/Attributes with LookupAttributeMetadata either fails or creates an unlinked column. The correct path is POST /RelationshipDefinitions with @odata.type Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata, specifying ReferencedEntity, ReferencingEntity, and the embedded Lookup object. This creates the lookup AS PART OF the relationship.",
+      "children": [],
+      "links": ["dv-041"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §9",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-008",
+      "label": "Boolean columns require TrueOption/FalseOption OptionSet",
+      "type": "trap",
+      "summary": "BooleanAttributeMetadata requires an OptionSet with both TrueOption and FalseOption — omitting it causes create to fail",
+      "detail": "Must include OptionSet with @odata.type Microsoft.Dynamics.CRM.BooleanOptionSetMetadata, TrueOption (Value=1, Label=...) and FalseOption (Value=0, Label=...). DefaultValue must also be specified. Without this the API call fails.",
+      "children": [],
+      "links": ["dv-041"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §7",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-010",
+      "label": "API Patterns",
+      "type": "concept",
+      "summary": "Root category: OData, CRUD, metadata API, Web API site configuration",
+      "detail": "Covers Power Pages Web API configuration, OData $select discipline, POST return patterns, CSRF tokens, metadata operations, and rate limiting.",
+      "children": ["dv-011", "dv-012", "dv-013", "dv-014", "dv-015", "dv-016", "dv-017", "dv-018", "dv-019"],
+      "links": [],
+      "source": "reference_engineering_journal.md §4, §11",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-011",
+      "label": "Power Pages Web API site settings required",
+      "type": "pattern",
+      "summary": "Every table exposed via portal /_api/ needs two site settings: enabled=true and fields list",
+      "detail": "Webapi/{logical_name}/enabled = true and Webapi/{logical_name}/fields = * (or comma-separated list). Use the logical name (e.g. dcfg_contract), not the entity set name. Missing fields setting → error 'No fields defined for this entity.' Only custom dcfg_* tables are accessible — system tables like environmentvariabledefinitions and mspp_sitesettings return 400.",
+      "children": ["dv-012"],
+      "links": ["dv-030"],
+      "source": "reference_engineering_journal.md §4, §11",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-012",
+      "label": "Wildcard fields=* misses new columns",
+      "type": "trap",
+      "summary": "fields=* does NOT auto-include columns added after the site setting was written — produces 403 on new fields",
+      "detail": "The portal caches the field list at publish/cache-clear time. New Dataverse columns added after the site setting was written are not included in wildcard resolution. Error: 'Attribute not enabled for Web Api.' Fix: update Webapi/{table}/fields to explicitly list the new column, PATCH via powerpagecomponents (type=9), NOT mspp_sitesettings (virtual table rejects PATCH). Then clear portal cache. Consider using explicit field lists instead of * going forward.",
+      "children": [],
+      "links": ["dv-032", "dv-053"],
+      "source": "feedback_wildcard_site_settings.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-013",
+      "label": "CSRF token requirement",
+      "type": "pattern",
+      "summary": "All POST/PATCH/DELETE from Power Pages need __RequestVerificationToken header",
+      "detail": "Get the token from shell.getTokenDeferred(), or scrape from page HTML, or find in hidden input. Token can expire — invalidate and re-fetch on 401/403.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §4",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-014",
+      "label": "204 No Content on POST — extract GUID from header",
+      "type": "pattern",
+      "summary": "Power Pages returns 204 even with Prefer: return=representation. GUID is in OData-EntityId response header.",
+      "detail": "Extract record ID from the OData-EntityId response header — format is https://org.crm.dynamics.com/api/data/v9.2/entity_set(guid). Parse GUID with regex, then GET the created record back. portalApi.js apiPostReturn() handles this. Script proven in production.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §4",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-015",
+      "label": "Metadata cache lag — poll before next write",
+      "type": "trap",
+      "summary": "POST /EntityDefinitions returns 204 immediately but metadata cache may not be ready for 0-30 seconds",
+      "detail": "After creating an entity via POST /EntityDefinitions, the LazyDynamicMetadataCache may not yet contain the new entity. Subsequent writes that reference the new entity fail with 0x80041102 'Could not find an entity with specified entity logicalname'. Fix: poll GET /EntityDefinitions(LogicalName='...') at 2-second intervals until 200 returns, give up after 60s. Never use a hardcoded sleep.",
+      "children": [],
+      "links": ["dv-043"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §2",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-016",
+      "label": "EntityCustomization throttling — 429 on rapid metadata writes",
+      "type": "trap",
+      "summary": "Rapid consecutive metadata POST/DELETE against same entity triggers 429 throttle (0x80071151)",
+      "detail": "Error: 'Cannot start another [EntityCustomization] because there is a previous [EntityCustomization] running at this moment'. Triggered by rapid successive attribute creates/deletes against the same entity. Fix: retry-with-backoff, wait 15 seconds on 429, retry up to 5 times. Usually clears in 1-2 attempts.",
+      "children": [],
+      "links": [],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §3",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-017",
+      "label": "Labels are verbose objects not strings",
+      "type": "trap",
+      "summary": "Every DisplayName, Description, Label in metadata API requires a LocalizedLabels object, not a bare string",
+      "detail": "Shape: { '@odata.type': 'Microsoft.Dynamics.CRM.Label', LocalizedLabels: [ { '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: 'Display Name Here', LanguageCode: 1033 } ] }. Wrap in a Label() helper function for readability. Applies to DisplayName, DisplayCollectionName, Description, OptionSet.Options[].Label.",
+      "children": [],
+      "links": ["dv-043"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §6",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-018",
+      "label": "odataBind 3-arg spread bug (fixed 2026-03-18)",
+      "type": "dead-end",
+      "summary": "odataBind(entitySet, id) returned a string; spread callers using ...odataBind(field, table, id) got garbage object {0:'/',1:'d',...}",
+      "detail": "9 call sites used 3-arg spread pattern expecting an object. Spreading a string into an object gives {0:'/', 1:'d', ...} — silently corrupt payload. Every lookup in NewContractWizard and CustomerDetail was broken. Fix: overloaded the function — 2-arg returns string, 3-arg returns { ['field@odata.bind']: '/entitySet(id)' }. Lesson: if you see ...func() spread, the function MUST return an object not a string.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §10",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-019",
+      "label": "Delete-and-recreate safe on empty tables",
+      "type": "pattern",
+      "summary": "Dataverse doesn't support rename — delete and recreate empty entities to fix naming mistakes",
+      "detail": "DELETE /EntityDefinitions(LogicalName='xxx') removes entity entirely. Recreate with correct SchemaName. Only use while table has zero data. Individual attributes can also be deleted via DELETE /EntityDefinitions(LogicalName='x')/Attributes(LogicalName='y').",
+      "children": [],
+      "links": ["dv-005"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §5",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-020",
+      "label": "Solution Management",
+      "type": "concept",
+      "summary": "Root category: imports, exports, DCFGSystemTest, solution header, orphan cleanup",
+      "detail": "Covers solution name consistency, MSCRM.SolutionUniqueName header requirement, orphan powerpagesites from imports, and connection reference gaps after import.",
+      "children": ["dv-021", "dv-022", "dv-023", "dv-024", "dv-025"],
+      "links": [],
+      "source": "reference_engineering_journal.md §13, §18, §19; feedback_solution_name.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-021",
+      "label": "Solution name is DCFGSystemTest everywhere",
+      "type": "pattern",
+      "summary": "All environments (Test, Stage, Prod) use solution unique name DCFGSystemTest — not DCFGContractingSuite",
+      "detail": "Verified via API on Test and Stage 2026-03-20. Scripts that used DCFGContractingSuite got 404. Always use DCFGSystemTest as the SolutionUniqueName in AddSolutionComponent calls and MSCRM.SolutionUniqueName headers.",
+      "children": [],
+      "links": [],
+      "source": "feedback_solution_name.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-022",
+      "label": "MSCRM.SolutionUniqueName header on every metadata write",
+      "type": "pattern",
+      "summary": "Every metadata POST must carry the MSCRM.SolutionUniqueName request header or the component is created outside any solution",
+      "detail": "Without the header, new tables/columns/relationships are created outside any solution and cannot be exported to other environments. Header value: DCFGSystemTest. This is a request header, not a body field. Verify solution exists first via GET /solutions?$filter=uniquename eq 'DCFGSystemTest'.",
+      "children": [],
+      "links": ["dv-021"],
+      "source": "feedback_dataverse_metadata_api_gotchas.md §4",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-023",
+      "label": "Orphan powerpagesites after solution import",
+      "type": "trap",
+      "summary": "Solution import copies ALL powerpagesites records — creates orphans that cause pac pages to target the wrong site",
+      "detail": "Importing DCFGSystemTest from stage to prod copies all powerpagesites records. Prod ends up with multiple sites. pac pages upload-code-site --siteName matches the WRONG site when duplicates exist. The local manifest.yml locks to whichever site PAC first resolved. Fix: 1) Delete ALL orphan powerpagesites records; 2) Delete prod manifest .powerpages-site/.portalconfig/org{xxx}-manifest.yml; 3) Run pac pages download --webSiteId {correct-id} --modelVersion Enhanced; 4) Then deploy.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §13",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-024",
+      "label": "Connection references empty after import",
+      "type": "trap",
+      "summary": "Solution import copies connectionreferences records but WITHOUT connectionid — flows cannot activate",
+      "detail": "Error: 'connection references need connections created'. Fix options: 1) User opens flow in designer (designer prompts for connections); 2) Swap flow's connectionReferenceLogicalName to use existing refs that have connections (e.g. new_shared* refs from user's manual actions). After solution import, always check connectionreferences for empty connectionid values.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §18",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-025",
+      "label": "Prod environment setup order (proven)",
+      "type": "proven",
+      "summary": "Exact sequence for provisioning a fresh Prod environment — order matters",
+      "detail": "1) Import solution (creates tables, columns, relationships); 2) Delete orphan powerpagesites; 3) Create site settings (Webapi/*/enabled + fields, CodeSite/Enabled, auth settings); 4) Create web roles (DCFG_Admin with authenticatedusersrole=true); 5) Create table permissions + link to roles; 6) Seed dcfg_configs; 7) Add Entra ID redirect URI; 8) pac pages download --webSiteId {correct-id} to init manifest; 9) npm run build && pac pages upload-code-site; 10) Clear cache; 11) Seed reference data; 12) Set up flows.",
+      "children": [],
+      "links": ["dv-023", "dv-024", "dv-031", "dv-050"],
+      "source": "reference_engineering_journal.md §19",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-030",
+      "label": "Data Patterns",
+      "type": "concept",
+      "summary": "Root category: soft delete, active_flag, dcfg_configs, document request transaction pattern",
+      "detail": "Covers soft delete mandate, active flag filtering, dcfg_configs as the runtime config store, and the Dataverse-trigger flow pattern replacing HTTP triggers.",
+      "children": ["dv-031", "dv-032", "dv-033", "dv-034", "dv-035", "dv-036"],
+      "links": [],
+      "source": "feedback_soft_delete_only.md; reference_engineering_journal.md §5, §11",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-031",
+      "label": "Soft delete only — never hard delete from SPA",
+      "type": "pattern",
+      "summary": "Delete is always a soft delete: statecode=1 or dcfg_active_flag=false. Never call apiDelete (HTTP DELETE) from the SPA.",
+      "detail": "Every list/table UI that allows Create must show a Delete action per row. Delete sets statecode=1 (Inactive) or dcfg_active_flag=false or dcfg_is_active=false. Never HTTP DELETE. Filter lists to exclude inactive records by default: statecode eq 0 or dcfg_active_flag eq true. Record stays for audit trail and potential reactivation.",
+      "children": [],
+      "links": [],
+      "source": "feedback_soft_delete_only.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-032",
+      "label": "dcfg_configs as runtime config store",
+      "type": "pattern",
+      "summary": "All environment config lives in dcfg_configs table (key/value) — SPA calls loadConfig() at boot. No hardcoded URLs.",
+      "detail": "System tables like environmentvariabledefinitions are not accessible from Power Pages Web API (returns 400). Custom dcfg_configs is the DCFG solution. Flow URLs are eliminated entirely by the Dataverse trigger pattern — no URL config needed. Old approach of hardcoded FLOW_URLS map keyed by hostname is deprecated and removed.",
+      "children": [],
+      "links": ["dv-034"],
+      "source": "reference_engineering_journal.md §11",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-033",
+      "label": "dcfg_document_requests transaction pattern",
+      "type": "pattern",
+      "summary": "SPA writes to dcfg_document_requests via createDocumentRequest() — flows trigger on Dataverse row creation, not HTTP",
+      "detail": "Current architecture: SPA writes to dcfg_document_requests table via createDocumentRequest(). Flows trigger on Dataverse 'When a row is added'. Flow reads from request row lookups + dcfg_notes. Flow updates status: Pending→Processing→Complete/Failed. No flow URLs needed. Old HTTP trigger pattern is deprecated. Use createDocumentRequest() never callFlow().",
+      "children": [],
+      "links": ["dv-060"],
+      "source": "reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-034",
+      "label": "dcfg_request_type enum is sparse",
+      "type": "trap",
+      "summary": "Only specific dcfg_request_type values have flow subscribers — writing unsupported type silently succeeds but no flow runs",
+      "detail": "Active values subscribed by flows in Prod: 100000000, 100000002, 100000004, 100000005. Values 100000001 (Email) and 100000003 have no subscriber. Value 100000003 is reserved for capital planning (on hold). Writing a doc request with an unsubscribed type succeeds silently — the record saves but no flow picks it up. Guard UX against this illusion.",
+      "children": [],
+      "links": ["dv-033"],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-035",
+      "label": "Portal Web API only serves custom dcfg_* tables",
+      "type": "pattern",
+      "summary": "/_api/ endpoint in Power Pages only supports custom data tables — system and portal config tables return 400",
+      "detail": "environmentvariabledefinitions → 400. mspp_sitesettings → 400 (portal config table). Only dcfg_* custom tables are accessible. This is by design. For config, use dcfg_configs. For flow invocation, use dcfg_document_requests transaction pattern.",
+      "children": [],
+      "links": ["dv-032", "dv-033"],
+      "source": "reference_engineering_journal.md §11",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-036",
+      "label": "Cross-env URL contamination in Prod flows",
+      "type": "trap",
+      "summary": "3 Prod flows contain Test/Stage org URLs inside clientdata — leakage from solution import",
+      "detail": "Affected flows (as of 2026-04-16): cert_alert, onboarding_init, send_email. These reference Test/Stage org URLs inside Prod clientdata — solution-import leakage. Watch for this wherever a flow is imported rather than authored in-place. After any solution import, audit flow clientdata for non-Prod org URL references.",
+      "children": [],
+      "links": ["dv-023"],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-040",
+      "label": "Table Permissions",
+      "type": "concept",
+      "summary": "Root category: Enhanced Data Model table permission patterns, virtual table gotchas, role linking",
+      "detail": "Covers mspp_entitypermission virtual table, powerpagecomponent type=18, Append/AppendTo semantics, CRUD drift, role link N:N pattern, and the delete-destroys-all-links trap.",
+      "children": ["dv-041", "dv-042", "dv-043", "dv-044", "dv-045", "dv-046", "dv-047", "dv-048"],
+      "links": [],
+      "source": "reference_engineering_journal.md §1, §12, §20, §21",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-041",
+      "label": "PATCH mspp_entitypermission fails — use powerpagecomponent",
+      "type": "trap",
+      "summary": "Enhanced Data Model makes mspp_entitypermission a virtual table — PATCH silently rejects changes to permission flags",
+      "detail": "Error: 'The given key was not present in the dictionary' (0x80040224). mspp_entitypermission supports GET but not PATCH for flag updates. Fix: PATCH the underlying powerpagecomponent record (type=18). GET via powerpagecomponents?$filter=powerpagecomponenttype eq 18, match by name field (= entity logical name), parse content column (JSON, keys: append/appendto/create/read/write/delete — NO mspp_ prefix), then PATCH back with updated JSON string. Use Update-Record helper — raw Invoke-RestMethod fails encoding.",
+      "children": [],
+      "links": ["dv-044"],
+      "source": "reference_engineering_journal.md §1, §20",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-042",
+      "label": "Append and AppendTo — set BOTH on BOTH sides",
+      "type": "trap",
+      "summary": "Append=source, AppendTo=target — but Power Pages requires BOTH flags on BOTH sides of any relationship",
+      "detail": "Append = source table (when THIS table creates a record with @odata.bind to another). AppendTo = target table (when OTHER tables bind TO this table). Missing either → 403 on POST with lookup bindings. Example: creating a contract with dcfg_customer_id@odata.bind requires Append on dcfg_contract AND AppendTo on dcfg_customer. But Power Pages associate operations require BOTH flags on BOTH sides. Rule: set Append=true AND AppendTo=true on ALL dcfg_ tables. Don't be clever about directionality.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §1, §12",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-043",
+      "label": "Role links must be in powerpagecomponent content JSON",
+      "type": "trap",
+      "summary": "Creating N:N $ref links between permissions and roles is not enough — portal reads role assignments from powerpagecomponent content JSON, not the N:N table",
+      "detail": "Creating mspp_entitypermissions + $ref N:N links is NOT ENOUGH. The portal runtime reads role assignments from powerpagecomponents (type=18) content JSON field, specifically the adx_entitypermission_webrole array of role GUIDs. Without this array in content JSON, portal returns 403 even though Dataverse records exist. Fix: PATCH powerpagecomponents record's content field to include adx_entitypermission_webrole: [role-guid-1, role-guid-2, ...]. After PATCH + cache clear, portal returns 200. E2E validated via Playwright 2026-03-24.",
+      "children": [],
+      "links": ["dv-041", "dv-053"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-044",
+      "label": "Complete permission creation recipe",
+      "type": "proven",
+      "summary": "4-step E2E-proven recipe for creating a new table permission with role links",
+      "detail": "1) New-Record -setName 'mspp_entitypermissions' — creates the permission record (also auto-creates powerpagecomponent type=18); 2) PATCH powerpagecomponents({id}) content JSON — add adx_entitypermission_webrole array with role GUIDs; 3) Create site settings Webapi/{table}/enabled=true and Webapi/{table}/fields=*; 4) Clear portal cache. Verify via GET /_api/{entityset} — should return 200.",
+      "children": [],
+      "links": ["dv-043", "dv-011", "dv-053"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-045",
+      "label": "Deleting one permission unlinks ALL permissions",
+      "type": "trap",
+      "summary": "Deleting and recreating a single table permission causes ALL 28+ table permissions to lose their role links",
+      "detail": "The N:N relationships (mspp_entitypermission_webrole) are stored in a way that modifying the permission table affects all records. After deleting+recreating one permission, ALL permissions produced 403. Fix: after ANY permission change (create, delete, modify), re-run the full role-linking script for ALL permissions + clear portal cache. NEVER delete and recreate a single permission in isolation.",
+      "children": [],
+      "links": ["dv-043", "dv-046"],
+      "source": "reference_engineering_journal.md §21",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-046",
+      "label": "N:N navigation property returns 0 results — platform bug",
+      "type": "trap",
+      "summary": "mspp_entitypermission_webrole navigation property always returns 0 results — even for working permissions",
+      "detail": "Even existing working permissions (e.g. dcfg_contract) return 0 via navigation property query. This is a platform limitation, NOT a code bug. Working verification: query mspp_entitypermission_webroleset directly: GET /mspp_entitypermission_webroleset?$filter=mspp_entitypermissionid eq {guid}. Returns records with mspp_entitypermissionid, mspp_webroleid, mspp_entitypermission_webroleid.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-047",
+      "label": "CRUD drift between environments",
+      "type": "trap",
+      "summary": "Permissions fixed in one environment do not automatically propagate — must apply and verify on BOTH environments",
+      "detail": "_fix_role_assignments.ps1 fixed CRUD in Stage but some tables stayed R-only in Test (ap_cost_code, appliance_type, location_type, document_template, template_field). Always run permission fixes on BOTH environments and verify both. Keep a complete CRUD requirements list in the fix script, not just incremental patches.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §1",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-048",
+      "label": "Re-linking components destroys N:N permission-role links",
+      "type": "trap",
+      "summary": "PATCH powerpagesiteid on powerpagecomponents does NOT preserve N:N permission-role relationships",
+      "detail": "When re-linking powerpagecomponents from one site to another via powerpagesiteid@odata.bind, the N:N relationships (mspp_entitypermission_webrole) are not preserved. All 26 table permissions lost their role links after re-linking. Fix: after re-linking components to a new site, re-run the permission→role linking script (POST to mspp_entitypermission_webrole/$ref) + clear cache.",
+      "children": [],
+      "links": ["dv-043", "dv-045"],
+      "source": "reference_engineering_journal.md §14",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-050",
+      "label": "Tools & Scripts",
+      "type": "concept",
+      "summary": "Root category: proven PowerShell tools, Core.ps1, Dataverse Brain, scripts for environment ops",
+      "detail": "Covers Core.ps1 auth pattern, env-guard, proven script locations, and the Dataverse Brain MCP server.",
+      "children": ["dv-051", "dv-052", "dv-053", "dv-054", "dv-055", "dv-056", "dv-057"],
+      "links": [],
+      "source": "reference_accomplishments.md; reference_engineering_journal.md §7; reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-051",
+      "label": "Core.ps1 — canonical Dataverse auth",
+      "type": "proven",
+      "summary": "C:/DCFG/PowerApps-Samples/dataverse/webapi/PS/Core.ps1 — Connect $orgUrl populates $baseHeaders for all API calls",
+      "detail": "Pattern: dot-source Core.ps1, then Connect $orgUrl (must have trailing slash). This populates $baseHeaders. Use $baseHeaders in Invoke-RestMethod calls. Do NOT use Connect-CrmOnline (triggers GUI popup). Do NOT use az CLI (not installed). pac auth token does not exist in pac CLI v2.4.1. Only Core.ps1 path works reliably.",
+      "children": [],
+      "links": [],
+      "source": "reference_accomplishments.md; reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-052",
+      "label": "PowerShell: always write .ps1 file, never inline pwsh -Command",
+      "type": "pattern",
+      "summary": "bash eats $ in pwsh strings passed via -Command — always write .ps1 file and invoke with pwsh -File",
+      "detail": "Bash eats $ in single-quoted pwsh command strings when invoking pwsh -Command. This mangles $filter=... OData queries → 'The query parameter [REDACTED] is not supported'. Also mangles \\\\\\\\ → \\ producing invalid regex. Fix: write the pwsh to a .ps1 file, invoke with pwsh -NoProfile -File path.ps1. No quoting gymnastics needed.",
+      "children": [],
+      "links": [],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 4,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-053",
+      "label": "Portal cache clear after any metadata change",
+      "type": "pattern",
+      "summary": "Table permissions, site settings, web roles, etc. are NOT visible until cache is cleared",
+      "detail": "Clear via Power Pages admin center → Site Actions → Clear cache. Or programmatically via /_services/about/cache/clear. Required after: any table permission change, any site setting change, any web role change. Forgetting this causes permission/setting changes to appear to have no effect.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §6",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-054",
+      "label": "curl.exe is blocked — use Invoke-RestMethod",
+      "type": "trap",
+      "summary": "curl.exe is blocked by endpoint security on this machine — never attempt it. Always use Invoke-RestMethod in pwsh.",
+      "detail": "curl.exe is blocked by endpoint security. This is not recoverable. Always use Invoke-RestMethod inside pwsh. No workaround exists.",
+      "children": [],
+      "links": [],
+      "source": "reference_lessons_2026_04_16.md; reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-055",
+      "label": "Dataverse Brain MCP server",
+      "type": "proven",
+      "summary": "MCP server at C:/DCFG/tools/dcfg-mcp/server.py with 15+ tools for knowledge lookup, brain insights, and context warm-up",
+      "detail": "dcfg_knowledge table with 230+ rows in Prod. dcfg_brain_insight linked via dcfg_based_on_knowledge lookup. Tools: knowledge_get, knowledge_search, knowledge_upsert, brain_write, brain_warm_context. Supersedence chain via dcfg_superseded_by self-lookup, dcfg_superseded_on, dcfg_supersede_reason. Migration scripts at C:/DCFG/scratch/migrate-knowledge.ps1.",
+      "children": [],
+      "links": [],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-056",
+      "label": "Dataverse table creation proven",
+      "type": "proven",
+      "summary": "POST /EntityDefinitions proven for dcfg_knowledge; picklist via InsertOptionValue; relationship via RelationshipDefinitions",
+      "detail": "Table creation: POST /EntityDefinitions — proven for dcfg_knowledge. Picklist extension: POST /InsertOptionValue — proven for dcfg_domain + System option. Relationship creation: POST /RelationshipDefinitions — proven for self-lookup (dcfg_superseded_by) and cross-table lookup. Always use MSCRM.SolutionUniqueName header. Always poll for metadata cache propagation.",
+      "children": [],
+      "links": ["dv-015", "dv-022"],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-057",
+      "label": "UTC8.GetBytes body encoding",
+      "type": "pattern",
+      "summary": "Always use [System.Text.Encoding]::UTF8.GetBytes($body) for Invoke-RestMethod -Body parameter",
+      "detail": "Prevents encoding issues with special characters when POSTing or PATCHing via PowerShell Invoke-RestMethod. Without explicit UTF-8 encoding, special characters in JSON bodies can get mangled.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §7",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-060",
+      "label": "Traps",
+      "type": "concept",
+      "summary": "Root category: things that look right but fail at runtime",
+      "detail": "Cross-cutting traps not covered under the above categories: flow state issues, Word Online dynamic schema, web role assignment, SharePoint binary decode, and PowerShell Unicode.",
+      "children": ["dv-061", "dv-062", "dv-063", "dv-064", "dv-065", "dv-066", "dv-067"],
+      "links": [],
+      "source": "reference_engineering_journal.md §15-§17",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-061",
+      "label": "Flow ActiveUnpublished state blocks API update",
+      "type": "trap",
+      "summary": "Error 0x80040203 — flow edited in designer without saving blocks any API PATCH. Only user can fix via designer.",
+      "detail": "Error: 'unpublished active row' — someone edited the flow in the designer without saving. No API call clears this: not PublishAllXml, not RemoveActiveCustomizations, not any bypass header. Fix: user must open the flow in Power Automate designer and either Save or Discard changes. Before any programmatic flow update, confirm the flow is not in ActiveUnpublished state.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §16",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-062",
+      "label": "Word Online output is base64 — must decode before SharePoint",
+      "type": "trap",
+      "summary": "Word Online Populate action returns base64 in $content — writing raw body to SharePoint produces 4-byte corrupt file",
+      "detail": "@body('Populate_a_Microsoft_Word_template')?['body'] returns a JSON string, not binary. SharePoint Create File saves whatever body it receives. Fix: use @base64ToBinary(body('Populate_a_Microsoft_Word_template')?['$content']) to decode. Always use the $content property, not the body property.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §17",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-063",
+      "label": "Word Online template fields require designer — not pure API",
+      "type": "dead-end",
+      "summary": "Word Online field parameters use dynamic schema IDs (dynamicFileSchema/{contentControlId}), not content control tag names — requires designer for initial mapping",
+      "detail": "The Populate Word template action parameters are NOT named by content control tag. They use dynamicFileSchema/{contentControlId} where the ID is the w:id attribute from the .docx XML. API validates by calling GetFileSchema on the file at save time. Bypass headers do not skip this. The designer caches schema client-side and bypasses server-side validation. Path: user maps fields in designer → read back the proven format → replicate for similar templates.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §15",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-064",
+      "label": "Web role N:N assignment — no API path proven",
+      "type": "dead-end",
+      "summary": "4+ navigation property names attempted for web role→contact assignment — all errored. Workaround: authenticatedusersrole=true on web role.",
+      "detail": "Tried: mspp_webrole_contact, mspp_contact_webrole, powerpagecomponent_mspp_webrole_contact, and others. All returned errors or 'property not found'. Workaround: set mspp_authenticatedusersrole=true on DCFG_Admin web role so all authenticated portal users get admin permissions. Better fix (future): use Power Pages admin center UI to manually assign roles to contacts.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §2",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-065",
+      "label": "PowerShell Unicode in Write-Host causes parse errors",
+      "type": "trap",
+      "summary": "Box-drawing characters in Write-Host strings cause parse errors when piped through 2>&1 in bash",
+      "detail": "Characters like ═║╔╚ in Write-Host strings cause parse errors when piped through 2>&1 in bash. Use ASCII alternatives (=, -, |) in output strings. Comments with Unicode are fine.",
+      "children": [],
+      "links": ["dv-052"],
+      "source": "reference_engineering_journal.md §7",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-066",
+      "label": "flow_send_email is HTTP-triggered, not Dataverse subscriber",
+      "type": "concept",
+      "summary": "The email flow is HTTP-triggered and serves onboarding only — it does NOT subscribe to dcfg_document_requests",
+      "detail": "flow_send_email is HTTP-triggered. Schema: to, subject, body_html, sent_by, case_id, step_number. Serves onboarding workflow only. Do not assume 'email flow exists' means it listens to dcfg_document_requests. The dcfg_document_requests subscriber pattern is only for doc generation flows (request_type 100000000, 100000002, 100000004, 100000005).",
+      "children": [],
+      "links": ["dv-034", "dv-033"],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-067",
+      "label": "Power Automate Management API — avoid, use workflows table instead",
+      "type": "dead-end",
+      "summary": "19 scripts attempted before finding reliable flow deployment path — the Management API is inconsistent. Use Dataverse workflows table.",
+      "detail": "Power Automate Management connector API is inconsistent, requires different auth, often returns 403. What works: create/update flow definitions directly in the Dataverse workflows table via API. Rule: always use Dataverse workflows table for flow deployment. Do NOT add scripted flows to the manually-managed solution.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §5",
+      "confidence": "verified",
+      "confirmations": 3,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-070",
+      "label": "powerpagecomponent Type Reference",
+      "type": "concept",
+      "summary": "Type codes for powerpagecomponent records — required for any portal metadata operations",
+      "detail": "Type 1=Publishing State, 2=Web Page, 7=Content Snippet, 8=Web Template, 9=Site Setting, 11=Web Role, 15=Basic Form, 17=List, 18=Table Permission, 28=Column Permission Profile, 29=Column Permission, 33=Cloud Flow. Used for filtering in powerpagecomponents API queries.",
+      "children": [],
+      "links": ["dv-041", "dv-012", "dv-043"],
+      "source": "reference_engineering_journal.md §8",
+      "confidence": "verified",
+      "confirmations": 5,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-071",
+      "label": "Haiku sub-agents — Bash access unreliable for Dataverse tasks",
+      "type": "pattern",
+      "summary": "Haiku sub-agents do not reliably inherit Bash permission — run Dataverse queries from main agent via Bash tool",
+      "detail": "5/11 haiku agents errored with 'Bash access denied' mid-task in the 2026-04-16 session. Inconsistency is per-dispatch, not predictable. For pwsh → Dataverse API tasks, run in the main agent's Bash tool. OK to dispatch haiku subagents for local filesystem inventory (Read/Glob/Grep). The second-agent-unblocker pattern only worth it if the block is recoverable — if block is environmental (Bash denied), all haiku attempts fail equivalently.",
+      "children": [],
+      "links": [],
+      "source": "reference_lessons_2026_04_16.md",
+      "confidence": "observed",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-072",
+      "label": "Dataverse token cannot access SharePoint",
+      "type": "trap",
+      "summary": "A Dataverse bearer token returns 401 against SharePoint/Graph endpoints — need a separate Graph token",
+      "detail": "Confirmed 401 when using Dataverse token against SharePoint Graph API. Need separate MSAL device-code auth with scope https://graph.microsoft.com/.default. Script at C:/DCFG/tools/path-probe/graph-auth.py. Never assume one token covers both Dataverse and SharePoint.",
+      "children": [],
+      "links": [],
+      "source": "reference_accomplishments.md",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-073",
+      "label": "Orphan mspp_website records crash FetchSolutions",
+      "type": "trap",
+      "summary": "Multiple mspp_website records crash the FetchSolutions API call — delete orphans, keep only active site",
+      "detail": "If multiple mspp_website records exist in the environment, the FetchSolutions API call crashes. Fix: delete orphan records, keep only the active one. Related to solution import creating duplicates.",
+      "children": [],
+      "links": ["dv-023"],
+      "source": "reference_engineering_journal.md §6",
+      "confidence": "verified",
+      "confirmations": 1,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-074",
+      "label": "Entra ID redirect URIs — do not break existing",
+      "type": "pattern",
+      "summary": "DO NOT delete existing redirect URIs from Entra app registration when updating auth config",
+      "detail": "App registration: Decades Management System, client ID 327ac710-2d2a-4912-a5ee-9b7f51ee7a7b. Portal auth can break silently after Entra changes. Fix if broken: disable/re-enable external auth in Power Pages admin, redeploy SPA, clear cache.",
+      "children": [],
+      "links": [],
+      "source": "reference_engineering_journal.md §6",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    },
+
+    {
+      "id": "dv-075",
+      "label": "Clone/Template permission provisioning",
+      "type": "proven",
+      "summary": "Query existing permission + intersection records → JSON manifest → replay against new table. 100% success rate.",
+      "detail": "Get template permission + roles: GET /mspp_entitypermission_webroleset?$filter=mspp_entitypermissionid eq {templateId}. Serialize to manifest. Replay New-Record + $ref links + powerpagecomponent content PATCH against new table. Works reliably. Useful for provisioning new tables with same permission pattern as existing tables.",
+      "children": [],
+      "links": ["dv-044"],
+      "source": "reference_engineering_journal.md §20",
+      "confidence": "verified",
+      "confirmations": 2,
+      "lastReferenced": "2026-04-18"
+    }
+
+  ]
+}

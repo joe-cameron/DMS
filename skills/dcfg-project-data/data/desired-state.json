@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "updated": "2026-03-24",
+    "description": "DCFG project desired state — what the system should look like. Sourced from live test environment dump + corrections. Consumed by DevOps scripts and agents.",
+    "snapshotSource": "org0c17e98d.crm.dynamics.com (test)",
+    "principle": "If live state doesn't match this file, the live state is wrong."
+  },
+
+  "roles": {
+    "Administrators":      { "id": "b69bbf57-2186-4e72-94c3-55415bb48927", "system": true },
+    "Authenticated Users":  { "id": "ae785cc2-54bb-400e-b0be-b448ea923352", "system": true },
+    "Anonymous Users":      { "id": "3d05ee72-2d60-43ff-8cb3-e5d38b411858", "system": true },
+    "DCFG_Admin":           { "id": "32993d47-be1b-f111-8341-7ced8d709731", "system": false },
+    "DCFG_Manager":         { "id": "35993d47-be1b-f111-8341-7ced8d709731", "system": false },
+    "DCFG_Viewer":          { "id": "38993d47-be1b-f111-8341-7ced8d709731", "system": false }
+  },
+
+  "roleShortcuts": {
+    "allAuth": "ae785cc2-54bb-400e-b0be-b448ea923352",
+    "admin": "32993d47-be1b-f111-8341-7ced8d709731",
+    "manager": "35993d47-be1b-f111-8341-7ced8d709731",
+    "viewer": "38993d47-be1b-f111-8341-7ced8d709731"
+  },
+
+  "permissions": {
+    "_note": "Each permission defines the desired CRUD flags and which role GUIDs must be in the adx_entitypermission_webrole array of the powerpagecomponent content JSON. 'roles' is the portal-enforced truth — null means MISSING and should be fixed.",
+
+    "dcfg_contract":              { "id": "c961a44c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_contract_line":         { "id": "9b51874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_contract_attachment":   { "id": "46a20c27-e622-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_customer":              { "id": "9e51874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_msa":                   { "id": "a151874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_msa_rate":              { "id": "cc61a44c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_property":              { "id": "a651874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_property_detail":       { "id": "c2fc8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_vendor":                { "id": "86eeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_location_type":         { "id": "89eeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_location_document":     { "id": "00181555-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_document_template":     { "id": "8ceeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_template_field":        { "id": "8feeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": false, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_document_output":       { "id": "4e79ae5a-be1b-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_document_request":      { "id": "99719c12-2324-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_onboarding_case":       { "id": "d5fc8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_onboarding_checklist":  { "id": "06fd8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_program":               { "id": "1dfd8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_send_queue":            { "id": "0bd6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_audit_log":             { "id": "0fd6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_ap_cost_code":          { "id": "12d6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_config":                { "id": "030c4847-1824-f111-8341-7ced8d7092f6", "read": true, "write": false, "create": false, "delete": false, "append": false, "appendto": false, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_appliance":             { "id": "74a5a272-fc20-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_appliance_type":        { "id": "6c4dfe22-4221-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_appliance_photo":       { "id": "48b25c2a-4221-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_compliance_check":      { "id": "b3d77925-e622-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_compliance_rule":       { "id": "b7d77925-e622-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_brain_insight":         { "id": "cd6db7bc-fb20-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_equipment_benchmark":   { "id": "d26db7bc-fb20-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_agent_audit_log":       { "id": "96fa12cb-3f27-f111-8341-7ced8d709173", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_agent_config":          { "id": "82fa12d1-3f27-f111-8341-7ced8d709173", "read": true, "write": false, "create": false, "delete": false, "append": false, "appendto": false, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_agent_session_trace":   { "id": "d9447ecd-3f27-f111-8341-7ced8d709731", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] },
+    "dcfg_agent_diagnostic":      { "id": "dd447ecd-3f27-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000, "roles": ["ae785cc2-54bb-400e-b0be-b448ea923352"] }
+  },
+
+  "siteSettings": {
+    "_note": "Every table that the portal SPA accesses needs Webapi/{table}/enabled=true and Webapi/{table}/fields=* (or specific columns). Format: powerpagecomponent type=9, content={\"value\":\"...\"}.",
+    "pattern": {
+      "enabled": { "name": "Webapi/{table}/enabled", "content": "{\"value\":\"true\"}" },
+      "fields": { "name": "Webapi/{table}/fields", "content": "{\"value\":\"*\"}" }
+    },
+    "tables": [
+      "dcfg_contract", "dcfg_contract_line", "dcfg_contract_attachment", "dcfg_customer",
+      "dcfg_msa", "dcfg_msa_rate", "dcfg_property", "dcfg_property_detail",
+      "dcfg_vendor", "dcfg_location_type", "dcfg_location_document",
+      "dcfg_document_template", "dcfg_template_field", "dcfg_document_output",
+      "dcfg_document_request", "dcfg_onboarding_case", "dcfg_onboarding_checklist",
+      "dcfg_program", "dcfg_send_queue", "dcfg_audit_log", "dcfg_ap_cost_code",
+      "dcfg_config", "dcfg_appliance", "dcfg_appliance_type", "dcfg_appliance_photo",
+      "dcfg_compliance_check", "dcfg_compliance_rule",
+      "dcfg_brain_insight", "dcfg_equipment_benchmark",
+      "dcfg_agent_audit_log", "dcfg_agent_config", "dcfg_agent_session_trace", "dcfg_agent_diagnostic"
+    ]
+  },
+
+  "flows": {
+    "DCFG - SharePoint Write Cache":                  { "id": "1e2faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "dataverse" },
+    "DCFG - HTTP Bridge Query Active Portfolio":      { "id": "1f2faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "http" },
+    "DCFG - Compute Metrics":                         { "id": "202faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "scheduled" },
+    "flow_send_email":                                { "id": "212faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "dataverse" },
+    "DCFG - Error Reporter":                          { "id": "532faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "dataverse" },
+    "flow_cert_upload":                               { "id": "542faeef-7522-f111-8341-7ced8d709173", "expectedState": 1, "trigger": "dataverse" },
+    "flow_commit - Budget Commit on Signed/Received": { "id": "3c3d278d-7522-f111-8341-7ced8d709731", "expectedState": 1, "trigger": "dataverse" },
+    "flow_docgen - Document Generation Engine":       { "id": "3d3d278d-7522-f111-8341-7ced8d709731", "expectedState": 1, "trigger": "dataverse" },
+    "flow_template_validate - Template Upload Validation": { "id": "3e3d278d-7522-f111-8341-7ced8d709731", "expectedState": 1, "trigger": "sharepoint" },
+    "flow_cert_alert":                                { "id": "534249ee-7522-f111-8341-7ced8d709731", "expectedState": 1, "trigger": "scheduled" },
+    "flow_onboarding_init":                           { "id": "5e5ffeb9-c722-f111-8341-7ced8d709731", "expectedState": 1, "trigger": "dataverse" }
+  },
+
+  "spa": {
+    "root": "C:\\DCFG\\spa\\dcfg-shell",
+    "buildCmd": "npm run build",
+    "compiledPath": "dist",
+    "pacSiteId": "22947376-be10-4bda-a90f-32b855c43045",
+    "framework": "React 16 + Vite",
+    "routing": "HashRouter"
+  },
+
+  "driftDetection": {
+    "_note": "Tables where live state doesn't match desired state as of last dump (2026-03-24).",
+    "permissionsMissingRoles": [
+      "dcfg_document_request",
+      "dcfg_brain_insight",
+      "dcfg_equipment_benchmark",
+      "dcfg_appliance_photo (48b25c2a)",
+      "dcfg_agent_audit_log",
+      "dcfg_agent_config (both records)",
+      "dcfg_agent_session_trace",
+      "dcfg_agent_diagnostic"
+    ],
+    "duplicatePermissions": [
+      { "table": "dcfg_agent_config", "ids": ["82fa12d1-3f27-f111-8341-7ced8d709173", "86fa12d1-3f27-f111-8341-7ced8d709173"], "note": "Two permission records — one R-only, one RW. Should be consolidated." },
+      { "table": "dcfg_appliance_photo", "ids": ["d3c6402e-4221-f111-8341-7ced8d709173", "48b25c2a-4221-f111-8341-7ced8d709731"], "note": "Two permission records — both missing roles." }
+    ]
+  }
+}

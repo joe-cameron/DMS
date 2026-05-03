@@ -1,0 +1,35 @@
+{
+  "_meta": { "updated": "2026-03-30", "description": "Dataverse entity set names — verified against metadata API" },
+  "tables": {
+    "dcfg_contract": { "entitySet": "dcfg_contracts", "hasName": false, "displayCol": "dcfg_client_name" },
+    "dcfg_contract_line": { "entitySet": "dcfg_contract_lines", "hasName": false, "displayCol": "dcfg_description" },
+    "dcfg_customer": { "entitySet": "dcfg_customers", "hasName": true },
+    "dcfg_msa": { "entitySet": "dcfg_msas", "hasName": true },
+    "dcfg_msa_rate": { "entitySet": "dcfg_msa_rates", "hasName": true },
+    "dcfg_vendor": { "entitySet": "dcfg_vendors", "hasName": false, "displayCol": "dcfg_legal_name" },
+    "dcfg_property": { "entitySet": "dcfg_properties", "hasName": true, "note": "NOT dcfg_propertys — verified 2026-03-20" },
+    "dcfg_property_detail": { "entitySet": "dcfg_property_details", "hasName": true },
+    "dcfg_location_type": { "entitySet": "dcfg_location_types", "hasName": true },
+    "dcfg_location_document": { "entitySet": "dcfg_location_documents", "hasName": false },
+    "dcfg_ap_cost_code": { "entitySet": "dcfg_ap_cost_codes", "hasName": false, "displayCol": "dcfg_dcfg_cost_code" },
+    "dcfg_audit_log": { "entitySet": "dcfg_audit_logs", "hasName": false, "writeOnly": "CREATE only, never PATCH/DELETE" },
+    "dcfg_send_queue": { "entitySet": "dcfg_send_queues", "hasName": false },
+    "dcfg_program": { "entitySet": "dcfg_programs", "hasName": true },
+    "dcfg_document_template": { "entitySet": "dcfg_document_templates", "hasName": true },
+    "dcfg_document_output": { "entitySet": "dcfg_document_outputs", "hasName": true },
+    "dcfg_template_field": { "entitySet": "dcfg_template_fields", "hasName": true },
+    "dcfg_onboarding_case": { "entitySet": "dcfg_onboarding_cases", "hasName": false, "displayCol": "dcfg_case_label" },
+    "dcfg_onboarding_checklist": { "entitySet": "dcfg_onboarding_checklists", "hasName": false, "displayCol": "dcfg_step_name" },
+    "dcfg_appliance": { "entitySet": "dcfg_appliances", "hasName": true },
+    "dcfg_appliance_type": { "entitySet": "dcfg_appliance_types", "hasName": true },
+    "dcfg_config": { "entitySet": "dcfg_configs", "hasName": false, "displayCol": "dcfg_key" },
+    "dcfg_document_request": { "entitySet": "dcfg_document_requests", "hasName": true, "note": "Transaction table for flow triggers" },
+    "dcfg_blanket_workorder": { "entitySet": "dcfg_blanket_workorders", "hasName": true, "note": "Customer-specific blanket WO config — threshold, job number, effective year" },
+    "dcfg_customer_ap_mapping": { "entitySet": "dcfg_customer_ap_mappings", "hasName": true, "note": "Customer-specific AP code overrides per cost code" }
+  },
+  "portalMetadata": {
+    "powerpagesites": { "note": "Enhanced Data Model — website records" },
+    "powerpagecomponents": { "note": "EDM — site settings(9), web roles(11), web pages(2), table permissions(18)" },
+    "mspp_entitypermissions": { "note": "Table permissions — PATCH via powerpagecomponent content JSON, not directly" }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "identity": "DCFG-HAL-Automation",
+  "type": "service-principal",
+  "tenantId": "71ccf1ec-8b0a-4419-9a45-a617aa1a66d6",
+  "clientId": "58529ef1-0170-4fa0-81d9-187da60426f8",
+  "authMethod": "client_credentials",
+  "tokenEndpoint": "https://login.microsoftonline.com/71ccf1ec-8b0a-4419-9a45-a617aa1a66d6/oauth2/v2.0/token",
+  "environments": {
+    "test": {
+      "orgUrl": "https://org0c17e98d.crm.dynamics.com",
+      "appUserId": "770cb2bb-4b3b-f111-88b5-7ced8d709173",
+      "orgId": "3134bf46-bc15-f111-afbe-6045bd053d21",
+      "role": "System Administrator",
+      "verified": "2026-04-18"
+    },
+    "stage": {
+      "orgUrl": "https://org88778bb0.crm.dynamics.com",
+      "appUserId": "241905d2-4b3b-f111-88b5-7ced8d709430",
+      "orgId": "421f2750-e220-f111-afbe-6045bd00311f",
+      "role": "System Administrator",
+      "verified": "2026-04-18"
+    }
+  },
+  "note": "Client secret stored separately — never commit to repo. Use env var HAL_CLIENT_SECRET at runtime."
+}

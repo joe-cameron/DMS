@@ -1,0 +1,293 @@
+{
+  "_meta": {
+    "updated": "2026-03-31",
+    "description": "DCFG Dataverse tables — master reference. Entity sets, permissions, site settings, CRUD flags. Validated against live Test environment.",
+    "source": "org0c17e98d.crm.dynamics.com (test)",
+    "principle": "If live state doesn't match this file, the live state is wrong."
+  },
+
+  "websiteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+
+  "roles": {
+    "Administrators":      { "id": "b69bbf57-2186-4e72-94c3-55415bb48927", "system": true },
+    "Authenticated Users":  { "id": "ae785cc2-54bb-400e-b0be-b448ea923352", "system": true },
+    "Anonymous Users":      { "id": "3d05ee72-2d60-43ff-8cb3-e5d38b411858", "system": true },
+    "DCFG_Admin":           { "id": "32993d47-be1b-f111-8341-7ced8d709731", "system": false },
+    "DCFG_Manager":         { "id": "35993d47-be1b-f111-8341-7ced8d709731", "system": false },
+    "DCFG_Viewer":          { "id": "38993d47-be1b-f111-8341-7ced8d709731", "system": false }
+  },
+
+  "tables": {
+    "dcfg_contract": {
+      "entitySet": "dcfg_contracts",
+      "displayCol": "dcfg_client_name",
+      "permission": { "id": "c961a44c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "Core contract table. Status lifecycle: Draft→Generated→PendingApproval→Sent→SignedReceived→Closed. Also Void/Declined."
+    },
+    "dcfg_contract_line": {
+      "entitySet": "dcfg_contract_lines",
+      "displayCol": "dcfg_description",
+      "permission": { "id": "9b51874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "Exhibit A line items. Linked to contract + cost code."
+    },
+    "dcfg_contract_attachment": {
+      "entitySet": "dcfg_contract_attachments",
+      "permission": { "id": "46a20c27-e622-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": false, "fields": false },
+      "roles": ["Authenticated Users"],
+      "notes": "*** DRIFT: missing site settings (enabled + fields). Must fix before attachment features work via portal."
+    },
+    "dcfg_customer": {
+      "entitySet": "dcfg_customers",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "9e51874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_msa": {
+      "entitySet": "dcfg_msas",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "a151874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_msa_rate": {
+      "entitySet": "dcfg_msa_rates",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "cc61a44c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_property": {
+      "entitySet": "dcfg_properties",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "a651874d-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "Entity set is dcfg_properties — NOT dcfg_propertys."
+    },
+    "dcfg_property_detail": {
+      "entitySet": "dcfg_property_details",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "c2fc8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_vendor": {
+      "entitySet": "dcfg_vendors",
+      "displayCol": "dcfg_legal_name",
+      "permission": { "id": "86eeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_location_type": {
+      "entitySet": "dcfg_location_types",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "89eeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_location_document": {
+      "entitySet": "dcfg_location_documents",
+      "permission": { "id": "00181555-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_document_template": {
+      "entitySet": "dcfg_document_templates",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "8ceeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_template_field": {
+      "entitySet": "dcfg_template_fields",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "8feeee5c-be1b-f111-8341-7ced8d709173", "read": true, "write": false, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_document_output": {
+      "entitySet": "dcfg_document_outputs",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "4e79ae5a-be1b-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_document_request": {
+      "entitySet": "dcfg_document_requests",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "99719c12-2324-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "Transaction table for flow triggers. SPA writes here, flow reads."
+    },
+    "dcfg_onboarding_case": {
+      "entitySet": "dcfg_onboarding_cases",
+      "displayCol": "dcfg_case_label",
+      "permission": { "id": "d5fc8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_onboarding_checklist": {
+      "entitySet": "dcfg_onboarding_checklists",
+      "displayCol": "dcfg_step_name",
+      "permission": { "id": "06fd8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_program": {
+      "entitySet": "dcfg_programs",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "1dfd8653-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_send_queue": {
+      "entitySet": "dcfg_send_queues",
+      "permission": { "id": "0bd6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_audit_log": {
+      "entitySet": "dcfg_audit_logs",
+      "permission": { "id": "0fd6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "CREATE only — never PATCH or DELETE."
+    },
+    "dcfg_ap_cost_code": {
+      "entitySet": "dcfg_ap_cost_codes",
+      "displayCol": "dcfg_dcfg_cost_code",
+      "permission": { "id": "12d6a059-be1b-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": true, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_config": {
+      "entitySet": "dcfg_configs",
+      "displayCol": "dcfg_key",
+      "permission": { "id": "030c4847-1824-f111-8341-7ced8d7092f6", "read": true, "write": false, "create": false, "delete": false, "append": false, "appendto": false, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "READ-ONLY from portal. Key-value config loaded at SPA boot."
+    },
+    "dcfg_appliance": {
+      "entitySet": "dcfg_appliances",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "74a5a272-fc20-f111-8341-7ced8d7092f6", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_appliance_type": {
+      "entitySet": "dcfg_appliance_types",
+      "displayCol": "dcfg_name",
+      "permission": { "id": "6c4dfe22-4221-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_appliance_photo": {
+      "entitySet": "dcfg_appliance_photos",
+      "permission": { "id": "48b25c2a-4221-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_compliance_check": {
+      "entitySet": "dcfg_compliance_checks",
+      "permission": { "id": "b3d77925-e622-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_compliance_rule": {
+      "entitySet": "dcfg_compliance_rules",
+      "permission": { "id": "b7d77925-e622-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_brain_insight": {
+      "entitySet": "dcfg_brain_insights",
+      "permission": { "id": "cd6db7bc-fb20-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_equipment_benchmark": {
+      "entitySet": "dcfg_equipment_benchmarks",
+      "permission": { "id": "d26db7bc-fb20-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_agent_audit_log": {
+      "entitySet": "dcfg_agent_audit_logs",
+      "permission": { "id": "96fa12cb-3f27-f111-8341-7ced8d709173", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_agent_config": {
+      "entitySet": "dcfg_agent_configs",
+      "permission": { "id": "82fa12d1-3f27-f111-8341-7ced8d709173", "read": true, "write": false, "create": false, "delete": false, "append": false, "appendto": false, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"],
+      "notes": "READ-ONLY from portal."
+    },
+    "dcfg_agent_session_trace": {
+      "entitySet": "dcfg_agent_session_traces",
+      "permission": { "id": "d9447ecd-3f27-f111-8341-7ced8d709731", "read": true, "write": false, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_agent_diagnostic": {
+      "entitySet": "dcfg_agent_diagnostics",
+      "permission": { "id": "dd447ecd-3f27-f111-8341-7ced8d709731", "read": true, "write": true, "create": true, "delete": false, "append": true, "appendto": true, "scope": 756150000 },
+      "siteSettings": { "enabled": true, "fields": true },
+      "roles": ["Authenticated Users"]
+    },
+    "dcfg_blanket_workorder": {
+      "entitySet": "dcfg_blanket_workorders",
+      "displayCol": "dcfg_name",
+      "permission": null,
+      "siteSettings": { "enabled": false, "fields": false },
+      "roles": [],
+      "notes": "*** DRIFT: needs table permission + site settings created. Customer-specific blanket WO config."
+    },
+    "dcfg_customer_ap_mapping": {
+      "entitySet": "dcfg_customer_ap_mappings",
+      "displayCol": "dcfg_name",
+      "permission": null,
+      "siteSettings": { "enabled": false, "fields": false },
+      "roles": [],
+      "notes": "*** DRIFT: needs table permission + site settings created. Customer-specific AP code overrides."
+    }
+  },
+
+  "drift": {
+    "lastChecked": "2026-03-31",
+    "issues": [
+      {
+        "table": "dcfg_contract_attachment",
+        "issue": "Missing site settings (Webapi/dcfg_contract_attachment/enabled and /fields)",
+        "severity": "medium",
+        "impact": "Contract attachment upload via portal Web API will fail"
+      },
+      {
+        "table": "dcfg_blanket_workorder",
+        "issue": "Missing table permission AND site settings",
+        "severity": "high",
+        "impact": "Blanket WO features inaccessible from portal"
+      },
+      {
+        "table": "dcfg_customer_ap_mapping",
+        "issue": "Missing table permission AND site settings",
+        "severity": "high",
+        "impact": "Customer AP code override features inaccessible from portal"
+      }
+    ],
+    "resolved": [
+      "Web roles — all 6 present and correct (3 system + 3 custom)",
+      "33/35 required tables have both enabled+fields site settings",
+      "34 table permission records exist"
+    ]
+  }
+}

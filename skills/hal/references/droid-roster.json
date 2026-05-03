@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-18",
+  "droids": [
+    {
+      "id": "schema-droid",
+      "specialty": "Dataverse schema operations — tables, columns, relationships, seed data",
+      "skill": "dcfg-project-data",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "high-in-sandbox",
+      "reporting": "on-step-completion",
+      "blastRadius": "sandbox-write",
+      "mindMap": "dataverse"
+    },
+    {
+      "id": "portal-admin-droid",
+      "specialty": "Portal metadata — site settings, web roles, table permissions, N:N links",
+      "skill": "power-pages-content-ops",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "medium-in-sandbox",
+      "reporting": "on-step-completion",
+      "blastRadius": "sandbox-write",
+      "mindMap": "portal"
+    },
+    {
+      "id": "portal-spa-droid",
+      "specialty": "React/JS SPA build + pac pages deploy",
+      "skill": "dcfg-spa-reference",
+      "tier": 2,
+      "model": "sonnet",
+      "autonomy": "medium-builds-local",
+      "reporting": "on-task-completion",
+      "blastRadius": "local-build-sandbox-deploy",
+      "mindMap": "portal"
+    },
+    {
+      "id": "flows-droid",
+      "specialty": "Power Automate flow compilation from spec",
+      "skill": "power-automate-flow-design",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "high-when-spec-complete",
+      "reporting": "on-task-completion",
+      "blastRadius": "sandbox-write",
+      "mindMap": "flows"
+    },
+    {
+      "id": "auth-droid",
+      "specialty": "Authentication — session management, token refresh, identity health",
+      "skill": null,
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "high-within-configured-methods",
+      "reporting": "exception-only",
+      "blastRadius": "auth-state-only",
+      "mindMap": "auth"
+    },
+    {
+      "id": "scout-droid",
+      "specialty": "Pure read — answers 'what is currently in the environment'",
+      "skill": "dcfg-project-data",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "very-high-read-only",
+      "reporting": "on-task-completion",
+      "blastRadius": "read-only",
+      "mindMap": null
+    },
+    {
+      "id": "research-droid",
+      "specialty": "External research — web, forums, Microsoft Learn, Stack Overflow, GitHub",
+      "skill": null,
+      "tier": 2,
+      "model": "sonnet",
+      "autonomy": "high-read-only-external",
+      "reporting": "on-task-completion",
+      "blastRadius": "read-only-external",
+      "mindMap": null
+    },
+    {
+      "id": "judgment-droid",
+      "specialty": "Script-vs-manual decisions, classification, design trade-offs",
+      "skill": "script-vs-manual-judgment",
+      "tier": 1,
+      "model": "opus",
+      "autonomy": "reports-recommendation-only",
+      "reporting": "on-task-completion",
+      "blastRadius": "none",
+      "mindMap": null
+    },
+    {
+      "id": "refiner-droid",
+      "specialty": "Skill maintenance — mind map updates, resolution map, dead ends, changelog",
+      "skill": null,
+      "tier": 1,
+      "model": "opus",
+      "autonomy": "high-in-skill-files",
+      "reporting": "on-task-completion",
+      "blastRadius": "skill-files-only",
+      "mindMap": null
+    },
+    {
+      "id": "safety-droid",
+      "specialty": "Environment guards, blast radius assessment, escalation protocol",
+      "skill": "safety-controls",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "advisory-only",
+      "reporting": "on-step-completion",
+      "blastRadius": "none",
+      "mindMap": null
+    },
+    {
+      "id": "test-droid",
+      "specialty": "Playwright E2E tests, path probes, API validation",
+      "skill": "playwright-syntax-design",
+      "tier": 2,
+      "model": "sonnet",
+      "autonomy": "high-read-execute",
+      "reporting": "on-task-completion",
+      "blastRadius": "test-execution",
+      "mindMap": null
+    },
+    {
+      "id": "monitor-droid",
+      "specialty": "Nora monitoring cycles — audit logs, document requests, flow health",
+      "skill": "nora",
+      "tier": 2,
+      "model": "haiku",
+      "autonomy": "high-auto-fix-verified",
+      "reporting": "exception-only",
+      "blastRadius": "dcfg-brain-insights-write",
+      "mindMap": null
+    },
+    {
+      "id": "design-droid",
+      "specialty": "UX/UI design via impeccable suite — craft, audit, polish, animate",
+      "skill": "impeccable-impeccable",
+      "tier": 2,
+      "model": "sonnet",
+      "autonomy": "medium-local-only",
+      "reporting": "on-task-completion",
+      "blastRadius": "local-files-only",
+      "mindMap": null
+    }
+  ]
+}

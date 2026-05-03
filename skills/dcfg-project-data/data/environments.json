@@ -1,0 +1,103 @@
+{
+  "_meta": { "updated": "2026-03-24", "description": "DCFG environment configuration — AUTHORITATIVE. Three SPA Power Pages sites (test/stage/prod) + two work order portal envs. Portal URLs confirmed from Power Platform admin center 2026-03-24." },
+
+  "systems": {
+    "contractingSuite": {
+      "description": "DCFG Contracting Suite — React SPA on Power Pages",
+      "environments": ["test", "stage", "prod"],
+      "app": "dcfg-shell SPA (React 16, Vite, Power Pages)"
+    },
+    "workorderPortal": {
+      "description": "DCFG Work Order Portal — UpKeep integration",
+      "environments": ["portal", "demo"],
+      "app": "Power Pages portal with UpKeep flows"
+    }
+  },
+
+  "test": {
+    "system": "contractingSuite",
+    "siteName": "DCFG Contracting Suite",
+    "orgUrl": "https://org0c17e98d.crm.dynamics.com",
+    "apiBase": "https://org0c17e98d.crm.dynamics.com/api/data/v9.2",
+    "portalUrl": "https://dcfg.powerappsportals.com",
+    "appId": "0e23317b-cd29-4f44-95ba-8f55d09079f5",
+    "solutionName": "DCFGSystemTest",
+    "solutionVersion": "1.0.0.1",
+    "websiteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+    "cacheUrl": "https://dcfg.powerappsportals.com/_services/about?clearCache=true",
+    "appType": "Trial",
+    "trialExpiresIn": "75 days from 2026-03-24",
+    "siteVisibility": "Private",
+    "dataModel": "Enhanced",
+    "purpose": "Development and testing — free range for experimentation",
+    "pacIndex": 1
+  },
+  "stage": {
+    "system": "contractingSuite",
+    "siteName": "Contract - Staging",
+    "orgUrl": "https://org88778bb0.crm.dynamics.com",
+    "apiBase": "https://org88778bb0.crm.dynamics.com/api/data/v9.2",
+    "portalUrl": "https://holding.powerappsportals.com",
+    "appId": "f6e0586b-973a-46ce-994e-f3822c42647b",
+    "solutionName": "DCFGSystemTest",
+    "solutionVersion": "1.0.0.2",
+    "websiteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+    "cacheUrl": "https://holding.powerappsportals.com/_services/about?clearCache=true",
+    "appType": "Production",
+    "siteVisibility": "Public",
+    "dataModel": "Enhanced",
+    "purpose": "Staging — deploy after test validation",
+    "pacIndex": 2
+  },
+  "prod": {
+    "system": "contractingSuite",
+    "siteName": "Decades Management System",
+    "orgUrl": "https://org06f5de0b.crm.dynamics.com",
+    "apiBase": "https://org06f5de0b.crm.dynamics.com/api/data/v9.2",
+    "portalUrl": "https://dmms1.powerappsportals.com",
+    "appId": "e91aefad-9954-46a0-8356-edd90da42bc3",
+    "solutionName": "DCFGSystemTest",
+    "solutionVersion": "1.0.0.2",
+    "websiteId": "a150bd53-7fbc-423d-a1ad-dd653ab4c435",
+    "cacheUrl": "https://dmms1.powerappsportals.com/_services/about?clearCache=true",
+    "appType": "Production",
+    "siteVisibility": "Public",
+    "dataModel": "Enhanced",
+    "purpose": "Production — READ-ONLY, never modify without explicit operator approval",
+    "pacIndex": 3
+  },
+  "portal": {
+    "system": "workorderPortal",
+    "orgUrl": "https://dcgworkrequests.crm.dynamics.com",
+    "apiBase": "https://dcgworkrequests.crm.dynamics.com/api/data/v9.2",
+    "portalUrl": null,
+    "solutionName": null,
+    "websiteId": null,
+    "cacheUrl": null,
+    "purpose": "Work Order Portal TEST — DCGWorkRequests environment, UpKeep integration",
+    "environmentId": "2bf71a5c-0f8d-eac9-be5d-d054a5663903",
+    "pacIndex": null,
+    "notes": "Test environment for Portal/Demo work order system"
+  },
+  "demo": {
+    "system": "workorderPortal",
+    "orgUrl": "https://orgd621fdbd.crm.dynamics.com",
+    "apiBase": "https://orgd621fdbd.crm.dynamics.com/api/data/v9.2",
+    "portalUrl": null,
+    "solutionName": "DCFGSystemTest",
+    "solutionVersion": "1.0.0.0",
+    "websiteId": null,
+    "cacheUrl": null,
+    "purpose": "Work Order Portal demo — UpKeep integration, active target",
+    "pacIndex": 4,
+    "flows": ["Portal Create Work Request", "Portal Get Child Locations", "Portal Get Work Orders", "Portal Upload Files to Upkeep", "UpKeep Get Session Token", "UpKeep webhook receiver"]
+  },
+
+  "deploy": {
+    "spaRoot": "C:\\DCFG\\spa\\dcfg-shell",
+    "buildCmd": "npm run build",
+    "deployCmd": "pac pages upload-code-site --rootPath . --compiledPath dist",
+    "targets": "Test and Stage (Contracting Suite). Never deploy SPA to Prod/Portal/Demo.",
+    "postDeploy": "Clear cache on deployed environments, provide launch URLs"
+  }
+}
