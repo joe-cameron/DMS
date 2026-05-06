@@ -52,6 +52,13 @@ spa/dcfg-shell/dmstest---dmstest/
 spa/dcfg-shell/.powerpages-site/
 spa/dcfg-property-intake/.powerpages-site/
 
+# Secrets / auth state — never track
+*.token_test
+*auth-state*.json
+*.msal_cache*
+token.tmp
+permtest_e2e_state.json
+
 # Misc
 wip/
 extracted/
