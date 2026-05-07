@@ -105,8 +105,9 @@ try {
     } catch {}
 
     $orgUrl = $script:OrgUrl
+    $hbPidFile = Join-Path $sessionDir 'heartbeat.pid'
     try {
-        Start-Process pwsh -ArgumentList @(
+        $hbProc = Start-Process pwsh -ArgumentList @(
             '-NoProfile',
             '-NonInteractive',
             '-WindowStyle', 'Hidden',
@@ -114,7 +115,8 @@ try {
             '-SessionId', $sessionId,
             '-ParentPid', $parentPid,
             '-OrgUrl', $orgUrl
-        ) -WindowStyle Hidden -ErrorAction SilentlyContinue
+        ) -WindowStyle Hidden -PassThru -ErrorAction Stop
+        $hbProc.Id | Set-Content -Path $hbPidFile -Encoding UTF8 -Force
     } catch {
         Write-Warning "[session-start] Could not spawn heartbeat: $_" | Out-Null
     }

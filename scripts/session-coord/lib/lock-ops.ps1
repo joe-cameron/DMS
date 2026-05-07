@@ -95,9 +95,9 @@ function New-Lock {
         dcfg_status        = $script:LockStatus.Active
     }
     try {
-        $result = Invoke-DataversePost 'dcfg_session_locks' $body
+        Invoke-DataversePost 'dcfg_session_locks' $body | Out-Null
         Write-Verbose "[lock-ops] Lock acquired: $ResourceKey (session=$sessionId)"
-        return $result
+        return $true
     } catch {
         Write-Warning "[lock-ops] New-Lock failed for '$ResourceKey': $_"
         return $null
