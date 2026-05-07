@@ -127,9 +127,15 @@ function Get-WorkItemCount {
     param()
     if (-not $script:BaseUri) { Initialize-DataverseAuth }
     $filter = 'dcfg_active_flag eq true and dcfg_phase ne 100000004'
+    # Note: Dataverse requires $count=true without $top=0. Use $select on primary key only for efficiency.
     try {
-        $result = Invoke-DataverseGet "dcfg_session_work_items?`$filter=$filter&`$count=true&`$top=0"
-        return $result.'@odata.count'
+        $result = Invoke-DataverseGet "dcfg_session_work_items?`$filter=$filter&`$count=true&`$select=dcfg_session_work_itemid"
+        # @odata.count is returned when $count=true is specified
+        if ($null -ne $result.'@odata.count') {
+            return [int]$result.'@odata.count'
+        }
+        # Fallback: count the value array
+        return if ($result.value) { $result.value.Count } else { 0 }
     } catch {
         Write-Warning "[session-ops] Get-WorkItemCount failed: $_"
         return 0
@@ -147,22 +153,31 @@ function New-SessionLogEntry {
         [Parameter(Mandatory)][string]$SessionId
     )
     if (-not $script:BaseUri) { Initialize-DataverseAuth }
-    $now  = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
-    $body = @{
+    $now      = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss.fffZ')
+    $bodyHash = @{
         dcfg_session_id = $SessionId
         dcfg_started_at = $now
     }
+    $jsonBody  = $bodyHash | ConvertTo-Json -Depth 5 -Compress
+    $bodyBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonBody)
+    $uri       = "$($script:BaseUri)/dcfg_session_logs"
+
+    # Use Prefer: return=representation so Dataverse echoes back the full entity
+    $headers              = Get-DataverseHeaders
+    $headers['Prefer']    = 'return=representation'
+    $headers['OData-MaxVersion'] = '4.0'
+
     try {
-        $result = Invoke-DataversePost 'dcfg_session_logs' $body
-        # POST to Dataverse returns the full entity; extract primary key
+        $result = Invoke-RestMethod -Uri $uri -Method POST -Headers $headers -Body $bodyBytes -ErrorAction Stop
         if ($result -and $result.dcfg_session_logid) {
             return $result.dcfg_session_logid
         }
-        # Fallback: look for OData entity id in the response headers (not available here)
         Write-Warning "[session-ops] New-SessionLogEntry: POST succeeded but no ID in response."
         return $null
     } catch {
-        Write-Warning "[session-ops] New-SessionLogEntry failed: $_"
+        $status = $_.Exception.Response.StatusCode.value__
+        $errBody = $_.ErrorDetails.Message
+        Write-Warning "[session-ops] New-SessionLogEntry failed (HTTP $status): $_`nBody: $errBody"
         return $null
     }
 }
