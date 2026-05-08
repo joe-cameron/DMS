@@ -101,6 +101,48 @@ async function submitContract(page: Page, label: string): Promise<boolean> {
   }
 }
 
+/** Open the document link and screenshot as proof */
+async function openAndScreenshotDoc(page: Page, label: string): Promise<void> {
+  // Find any Open/View document link
+  const docLink = page.locator(
+    '[data-testid="link-view-document"] a, a[data-testid="link-view-document"], ' +
+    '[data-testid="doc-live-link"], [data-testid="msa-open-doc"], ' +
+    'a[data-testid="cc-doc-link"]'
+  ).first();
+
+  // If no explicit link, try any link with sharepoint in href
+  const spLink = page.locator('a[href*="sharepoint"]').first();
+  const link = docLink.or(spLink);
+
+  if (!await link.isVisible({ timeout: 10_000 }).catch(() => false)) {
+    console.log(`  [${label}] No document link found — skipping proof screenshot`);
+    return;
+  }
+
+  const href = await link.getAttribute('href').catch(() => null);
+  if (!href) {
+    console.log(`  [${label}] Document link has no href`);
+    return;
+  }
+
+  console.log(`  [${label}] Opening document: ${href.substring(0, 100)}`);
+  const [newTab] = await Promise.all([
+    page.context().waitForEvent('page', { timeout: 30_000 }).catch(() => null),
+    link.click(),
+  ]);
+
+  if (newTab) {
+    await newTab.waitForLoadState('domcontentloaded', { timeout: 20_000 }).catch(() => {});
+    await newTab.waitForTimeout(3000);
+    await newTab.screenshot({ path: `./test-results/${RUN_TAG}-PROOF-${label}.png`, fullPage: false });
+    console.log(`  [${label}] Document proof screenshot saved`);
+    await newTab.close().catch(() => {});
+    await page.bringToFront();
+  } else {
+    console.log(`  [${label}] Document opened in same tab or blocked`);
+  }
+}
+
 /** Record result — no assertions here, all checks in SUMMARY to prevent serial abort */
 function recordResult(result: DocResult) {
   if (result.submitted && !result.generated) result.generated = true;
@@ -193,6 +235,7 @@ for (const [i, pkg] of msaPackages.entries()) {
       console.log(`  [${label}] Create clicked`);
 
       result.generated = await waitForDocCreated(page, label);
+      if (result.generated) await openAndScreenshotDoc(page, label);
       result.submitted = await submitMsa(page, label);
     } catch (e) {
       console.log(`  [${label}] ERROR: ${(e as Error).message}`);
@@ -220,10 +263,30 @@ async function ccSelectCustomer(page: Page, search: string, label: string) {
   console.log(`  [${label}] Customer selected (${search})`);
 }
 
-/** Shared: pick first vendor in drawer */
+/** Shared: fill WO number via the chip */
+async function ccFillWoNumber(page: Page, label: string) {
+  const chip = page.getByTestId('cc-chip-wo-number');
+  if (await chip.isVisible({ timeout: 5000 }).catch(() => false)) {
+    await chip.click();
+    await observe(page);
+  }
+  const woInput = page.getByTestId('cc-wo-number');
+  await expect(woInput).toBeVisible({ timeout: 5000 });
+  // Generate a unique 6-char WO number: YY + 4 digits from timestamp
+  const woNum = `26${Date.now().toString().slice(-4)}`;
+  await woInput.fill(woNum);
+  const doneBtn = page.getByTestId('cc-btn-wo-done');
+  if (await doneBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await doneBtn.click();
+    await observe(page);
+  }
+  console.log(`  [${label}] WO# filled: ${woNum}`);
+}
+
+/** Shared: pick first vendor in drawer, then close the drawer */
 async function ccPickVendor(page: Page, label: string) {
-  const chip = page.locator('button', { hasText: /Vendor/ }).first();
-  if (await chip.isVisible({ timeout: 3000 }).catch(() => false)) {
+  const chip = page.getByTestId('cc-chip-vendor');
+  if (await chip.isVisible({ timeout: 5000 }).catch(() => false)) {
     await chip.click();
     await page.waitForTimeout(2000);
     const row = page.locator('[data-testid^="cc-vendor-row-"]').first();
@@ -231,29 +294,47 @@ async function ccPickVendor(page: Page, label: string) {
       await row.click();
       await observe(page);
       console.log(`  [${label}] Vendor selected`);
+      // Close the drawer via its close button
+      const closeBtn = page.getByTestId('cc-btn-close-drawer');
+      if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await closeBtn.click();
+        await observe(page);
+      }
+      console.log(`  [${label}] Vendor drawer closed`);
     }
   }
 }
 
-/** Shared: pick first location in drawer */
+/** Shared: pick first location in drawer, then close the drawer */
 async function ccPickLocation(page: Page, label: string) {
-  const chip = page.locator('button', { hasText: /Location/ }).first();
+  const chip = page.getByTestId('cc-chip-location');
+  const addBtn = page.getByTestId('cc-btn-add-location');
+  // Try chip first, fall back to add-location button
   if (await chip.isVisible({ timeout: 3000 }).catch(() => false)) {
     await chip.click();
-    await page.waitForTimeout(2000);
-    const row = page.locator('[data-testid^="cc-location-row-"]').first();
-    if (await row.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await row.click();
+  } else if (await addBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await addBtn.click();
+  }
+  await page.waitForTimeout(2000);
+  const row = page.locator('[data-testid^="cc-location-row-"]').first();
+  if (await row.isVisible({ timeout: 5000 }).catch(() => false)) {
+    await row.click();
+    await observe(page);
+    console.log(`  [${label}] Location selected`);
+    // Close the drawer via its close button
+    const closeBtn = page.getByTestId('cc-btn-close-drawer');
+    if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await closeBtn.click();
       await observe(page);
-      console.log(`  [${label}] Location selected`);
     }
+    console.log(`  [${label}] Location drawer closed`);
   }
 }
 
-/** Shared: fill signers */
+/** Shared: fill signers via the chip */
 async function ccFillSigners(page: Page, label: string) {
-  const chip = page.locator('button', { hasText: /Signers/ }).first();
-  if (await chip.isVisible({ timeout: 3000 }).catch(() => false)) {
+  const chip = page.getByTestId('cc-chip-signers');
+  if (await chip.isVisible({ timeout: 5000 }).catch(() => false)) {
     await chip.click();
     await observe(page);
   }
@@ -287,29 +368,29 @@ async function ccAddLineItem(page: Page, index: number, desc: string, amount: st
   await observe(page);
 }
 
-/** Shared: validate Create button is enabled, click it, wait for doc.
+/** Shared: validate generate button is enabled, click it, wait for doc.
  *  Returns: 'created' | 'skipped' | 'failed' */
-async function ccClickCreate(page: Page, label: string, buttonText: string): Promise<'created' | 'skipped' | 'failed'> {
-  const btn = page.locator(`button:has-text("${buttonText}")`);
+async function ccClickCreate(page: Page, label: string): Promise<'created' | 'skipped' | 'failed'> {
+  const btn = page.getByTestId('cc-btn-generate');
 
   // Check if button exists
   const exists = await btn.isVisible({ timeout: 5_000 }).catch(() => false);
   if (!exists) {
-    console.log(`  [${label}] SKIP: "${buttonText}" button not found — no template available`);
+    console.log(`  [${label}] SKIP: cc-btn-generate not found — no template available`);
     return 'skipped';
   }
 
   // Check if button is enabled (disabled = missing required fields or no template)
   const disabled = await btn.isDisabled().catch(() => true);
   if (disabled) {
-    console.log(`  [${label}] SKIP: "${buttonText}" button is disabled — missing requirements`);
-    const sidebar = await page.locator('[class*="summary"], [data-testid*="summary"]').first().innerText().catch(() => '');
-    if (sidebar) console.log(`  [${label}] Sidebar: ${sidebar.substring(0, 200)}`);
+    console.log(`  [${label}] SKIP: cc-btn-generate is disabled — missing requirements`);
+    // Screenshot the current state to see what's missing
+    await page.screenshot({ path: `./test-results/${RUN_TAG}-${label}-disabled.png`, fullPage: true }).catch(() => {});
     return 'skipped';
   }
 
   await btn.click();
-  console.log(`  [${label}] "${buttonText}" clicked`);
+  console.log(`  [${label}] Generate clicked`);
   const created = await waitForDocCreated(page, label);
   return created ? 'created' : 'failed';
 }
@@ -340,14 +421,16 @@ for (const [i, wo] of bancroftWoTypes.entries()) {
       await observe(page);
       console.log(`  [${label}] Template "${wo.tplText}" selected`);
 
+      await ccFillWoNumber(page, label);
       await ccPickVendor(page, label);
       await ccPickLocation(page, label);
       await ccFillSigners(page, label);
       await ccAddLineItem(page, 0, `${RUN_TAG}-${wo.label}-ITEM`, wo.amount);
 
-      const createStatus = await ccClickCreate(page, label, 'Create Work Order');
+      const createStatus = await ccClickCreate(page, label);
       result.skipped = createStatus === 'skipped';
       result.generated = createStatus === 'created';
+      if (result.generated) await openAndScreenshotDoc(page, label);
       if (result.generated) result.submitted = await submitContract(page, label);
     } catch (e) {
       console.log(`  [${label}] ERROR: ${(e as Error).message}`);
@@ -388,17 +471,28 @@ test('07 Ban-Amendment: Generate + Submit', async ({ page }) => {
       console.log(`  [${label}] Parent contract selected`);
     }
 
+    // Amendments inherit WO# from parent — no ccFillWoNumber
     await ccPickVendor(page, label);
     await ccPickLocation(page, label);
     await ccFillSigners(page, label);
     await ccAddLineItem(page, 0, `${RUN_TAG}-AMD-ITEM`, '2500.00');
 
-    // Button text may be "Create Work Order" or "Create Amendment"
-    const createBtn = page.locator('button:has-text("Create")').last();
-    const btnText = await createBtn.innerText().catch(() => 'Create Work Order');
-    const createStatus = await ccClickCreate(page, label, btnText.trim());
+    // Fill amendment-specific required fields
+    const svcDesc = page.getByTestId('cc-amendment-service-desc');
+    if (await svcDesc.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await svcDesc.fill('Extended HVAC maintenance scope — additional units');
+      console.log(`  [${label}] Service description filled`);
+    }
+    const schedDesc = page.getByTestId('cc-amendment-schedule');
+    if (await schedDesc.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await schedDesc.fill('Mon-Fri 7:00 AM - 5:00 PM');
+      console.log(`  [${label}] Schedule filled`);
+    }
+
+    const createStatus = await ccClickCreate(page, label);
     result.skipped = createStatus === 'skipped';
     result.generated = createStatus === 'created';
+    if (result.generated) await openAndScreenshotDoc(page, label);
     if (result.generated) result.submitted = await submitContract(page, label);
   } catch (e) {
     console.log(`  [${label}] ERROR: ${(e as Error).message}`);
@@ -421,14 +515,20 @@ test('08 Ban-VA: Generate + Submit', async ({ page }) => {
     await page.goto(`${BASE}/#/contracts/new?type=msa`);
     await page.waitForLoadState('networkidle');
 
-    await ccSelectCustomer(page, 'Ban', label);
-    // VA has NO template buttons — straight to form
+    // VA shows "Which agreement type?" — pick Bancroft family via testid
+    const bancroftCard = page.locator('[data-testid^="cc-va-family-"]', { hasText: /Bancroft/i });
+    await expect(bancroftCard).toBeVisible({ timeout: 10_000 });
+    await bancroftCard.click();
+    await page.waitForTimeout(3000);
+    console.log(`  [${label}] Agreement type "Bancroft" selected`);
+
     await ccPickVendor(page, label);
     await ccFillSigners(page, label);
 
-    const createStatus = await ccClickCreate(page, label, 'Create Vendor Agreement');
+    const createStatus = await ccClickCreate(page, label);
     result.skipped = createStatus === 'skipped';
     result.generated = createStatus === 'created';
+    if (result.generated) await openAndScreenshotDoc(page, label);
     if (result.generated) result.submitted = await submitContract(page, label);
   } catch (e) {
     console.log(`  [${label}] ERROR: ${(e as Error).message}`);
@@ -455,17 +555,33 @@ test('09 Dec-WO: Generate + Submit', async ({ page }) => {
     await page.goto(`${BASE}/#/contracts/new?type=wo`);
     await page.waitForLoadState('networkidle');
 
-    // Penn = Decades customer — no template buttons, straight to Work Details
     await ccSelectCustomer(page, 'Penn', label);
-    console.log(`  [${label}] Decades customer — no template selection`);
 
+    // Decades customers have template buttons (WO + Amendment)
+    const tplBtn = page.locator('[data-testid^="cc-tpl-btn-"]').first();
+    if (await tplBtn.isVisible({ timeout: 10_000 }).catch(() => false)) {
+      // Pick the WO template (not the Amendment)
+      const woBtn = page.locator('[data-testid^="cc-tpl-btn-"]', { hasText: /Work.?Order|Decades/i }).first();
+      if (await woBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await woBtn.click();
+      } else {
+        await tplBtn.click(); // fallback: first template
+      }
+      await observe(page);
+      console.log(`  [${label}] Decades WO template selected`);
+    }
+
+    await ccFillWoNumber(page, label);
     await ccPickVendor(page, label);
     await ccPickLocation(page, label);
     await ccFillSigners(page, label);
     await ccAddLineItem(page, 0, `${RUN_TAG}-DEC-WO-ITEM`, '3500.00');
 
-    result.generated = await ccClickCreate(page, label, 'Create Work Order');
-    result.submitted = await submitContract(page, label);
+    const createStatus = await ccClickCreate(page, label);
+    result.skipped = createStatus === 'skipped';
+    result.generated = createStatus === 'created';
+    if (result.generated) await openAndScreenshotDoc(page, label);
+    if (result.generated) result.submitted = await submitContract(page, label);
   } catch (e) {
     console.log(`  [${label}] ERROR: ${(e as Error).message}`);
     await page.screenshot({ path: `./test-results/${RUN_TAG}-${label}-error.png`, fullPage: true }).catch(() => {});
@@ -476,9 +592,75 @@ test('09 Dec-WO: Generate + Submit', async ({ page }) => {
   recordResult(result);
 });
 
-// ─── 10: Decades Vendor Agreement ────────────────────────────
+// ─── 10: Decades Amendment ───────────────────────────────────
 
-test('10 Dec-VA: Generate + Submit', async ({ page }) => {
+test('10 Dec-Amendment: Generate + Submit', async ({ page }) => {
+  const label = 'Dec-Amendment';
+  console.log(`\n=== ${label} ===`);
+  const result: DocResult = { type: label, generated: false, submitted: false, skipped: false, screenshot: '' };
+
+  try {
+    await page.goto(`${BASE}/#/contracts/new?type=wo`);
+    await page.waitForLoadState('networkidle');
+
+    await ccSelectCustomer(page, 'Penn', label);
+
+    // Select the Amendment template button (2nd button)
+    const tplBtns = page.locator('[data-testid^="cc-tpl-btn-"]');
+    await expect(tplBtns.first()).toBeVisible({ timeout: 10_000 });
+    const count = await tplBtns.count();
+    if (count >= 2) {
+      await tplBtns.nth(1).click();
+    } else {
+      await tplBtns.first().click();
+    }
+    await observe(page);
+    console.log(`  [${label}] Decades Amendment template selected`);
+
+    // Select parent contract
+    const parentSelect = page.getByTestId('cc-parent-contract');
+    if (await parentSelect.isVisible({ timeout: 5000 }).catch(() => false)) {
+      await parentSelect.selectOption({ index: 1 });
+      await observe(page);
+      console.log(`  [${label}] Parent contract selected`);
+    }
+
+    // Amendments inherit WO# from parent — no ccFillWoNumber
+    await ccPickVendor(page, label);
+    await ccPickLocation(page, label);
+    await ccFillSigners(page, label);
+    await ccAddLineItem(page, 0, `${RUN_TAG}-DEC-AMD-ITEM`, '2800.00');
+
+    // Fill amendment-specific required fields
+    const svcDesc = page.getByTestId('cc-amendment-service-desc');
+    if (await svcDesc.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await svcDesc.fill('Additional landscaping maintenance scope');
+      console.log(`  [${label}] Service description filled`);
+    }
+    const schedDesc = page.getByTestId('cc-amendment-schedule');
+    if (await schedDesc.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await schedDesc.fill('Mon-Fri 8:00 AM - 4:00 PM');
+      console.log(`  [${label}] Schedule filled`);
+    }
+
+    const createStatus = await ccClickCreate(page, label);
+    result.skipped = createStatus === 'skipped';
+    result.generated = createStatus === 'created';
+    if (result.generated) await openAndScreenshotDoc(page, label);
+    if (result.generated) result.submitted = await submitContract(page, label);
+  } catch (e) {
+    console.log(`  [${label}] ERROR: ${(e as Error).message}`);
+    await page.screenshot({ path: `./test-results/${RUN_TAG}-${label}-error.png`, fullPage: true }).catch(() => {});
+  }
+
+  result.screenshot = `./test-results/${RUN_TAG}-${label}.png`;
+  await page.screenshot({ path: result.screenshot, fullPage: true }).catch(() => {});
+  recordResult(result);
+});
+
+// ─── 11: Decades Vendor Agreement ────────────────────────────
+
+test('11 Dec-VA: Generate + Submit', async ({ page }) => {
   const label = 'Dec-VA';
   console.log(`\n=== ${label} ===`);
   const result: DocResult = { type: label, generated: false, submitted: false, skipped: false, screenshot: '' };
@@ -487,16 +669,30 @@ test('10 Dec-VA: Generate + Submit', async ({ page }) => {
     await page.goto(`${BASE}/#/contracts/new?type=msa`);
     await page.waitForLoadState('networkidle');
 
-    // Penn = Decades customer — no template buttons, straight to form
-    await ccSelectCustomer(page, 'Penn', label);
-    console.log(`  [${label}] Decades customer — no template selection`);
+    // VA shows "Which agreement type?" — pick Decades family via testid
+    const decadesCard = page.locator('[data-testid^="cc-va-family-"]', { hasText: /Decades/i });
+    await expect(decadesCard).toBeVisible({ timeout: 10_000 });
+    await decadesCard.click();
+    await page.waitForTimeout(3000);
+    console.log(`  [${label}] Agreement type "Decades" selected`);
+
+    // After clicking Decades, need to pick a customer
+    const custInput = page.getByTestId('cc-customer-search');
+    if (await custInput.isVisible({ timeout: 5000 }).catch(() => false)) {
+      await custInput.pressSequentially('Penn', { delay: 120 });
+      await page.waitForTimeout(3000);
+      await page.locator('[data-testid^="cc-btn-customer-"]').first().click();
+      await page.waitForTimeout(3000);
+      console.log(`  [${label}] Customer selected (Penn)`);
+    }
 
     await ccPickVendor(page, label);
     await ccFillSigners(page, label);
 
-    const createStatus = await ccClickCreate(page, label, 'Create Vendor Agreement');
+    const createStatus = await ccClickCreate(page, label);
     result.skipped = createStatus === 'skipped';
     result.generated = createStatus === 'created';
+    if (result.generated) await openAndScreenshotDoc(page, label);
     if (result.generated) result.submitted = await submitContract(page, label);
   } catch (e) {
     console.log(`  [${label}] ERROR: ${(e as Error).message}`);
@@ -512,7 +708,7 @@ test('10 Dec-VA: Generate + Submit', async ({ page }) => {
 // VERIFICATION: Send Queue
 // ═══════════════════════════════════════════════════════════════
 
-test('11 VERIFY: Send Queue contains submitted documents', async ({ page }) => {
+test('12 VERIFY: Send Queue contains submitted documents', async ({ page }) => {
   const label = 'VERIFY-SendQueue';
   console.log(`\n=== ${label} ===`);
 
@@ -537,7 +733,7 @@ test('11 VERIFY: Send Queue contains submitted documents', async ({ page }) => {
 // SUMMARY
 // ═══════════════════════════════════════════════════════════════
 
-test('12 SUMMARY: Print results', async ({}) => {
+test('13 SUMMARY: Print results', async ({}) => {
   console.log(`\n${'='.repeat(60)}`);
   console.log(`  RESULTS — RUN ${RUN_TAG}`);
   console.log(`${'='.repeat(60)}`);
@@ -562,7 +758,7 @@ test('12 SUMMARY: Print results', async ({}) => {
   console.log(`  ALL SUBMITTED: ${allSub ? 'PASS' : 'FAIL'}`);
   console.log(`${'='.repeat(60)}\n`);
 
-  expect(results.length, 'Expected 10 document types').toBe(10);
+  expect(results.length, 'Expected 11 document types').toBe(11);
   if (skipped.length > 0) {
     console.log(`  WARNING: ${skipped.length} doc types skipped — templates missing in Prod`);
     for (const s of skipped) console.log(`    - ${s.type}`);

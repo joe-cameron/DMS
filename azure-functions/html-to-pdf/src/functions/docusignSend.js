@@ -179,6 +179,11 @@ async function createEnvelope(docuSignToken, fileBuffer, body) {
   const emailSubject = subject || `Signature Required - ${documentName}`;
   const emailBlurb = message || 'Please review and sign the attached document.';
 
+  // Anchor configuration per signer — caller specifies which anchors to use
+  // Defaults: signerA = Customer pattern, signerB = Vendor pattern
+  const anchorsA = body.anchorsA || { signature: '\\Customer_Signature\\', dateSigned: '\\Customer_DateSigned\\' };
+  const anchorsB = body.anchorsB || { signature: '\\Vendor_Signature\\', dateSigned: '\\Vendor_DateSigned\\' };
+
   const envelopeDefinition = {
     emailSubject,
     emailBlurb,
@@ -200,7 +205,21 @@ async function createEnvelope(docuSignToken, fileBuffer, body) {
           routingOrder: '1',
           tabs: {
             signHereTabs: [
-              { documentId: '1', pageNumber: '1', xPosition: '100', yPosition: '700' },
+              {
+                anchorString: anchorsA.signature,
+                anchorUnits: 'pixels',
+                anchorXOffset: '0',
+                anchorYOffset: '-5',
+              },
+            ],
+            dateSignedTabs: [
+              {
+                anchorString: anchorsA.dateSigned,
+                anchorUnits: 'pixels',
+                anchorXOffset: '0',
+                anchorYOffset: '0',
+                fontSize: 'Size10',
+              },
             ],
           },
         },
@@ -211,7 +230,21 @@ async function createEnvelope(docuSignToken, fileBuffer, body) {
           routingOrder: isParallel ? '1' : '2',
           tabs: {
             signHereTabs: [
-              { documentId: '1', pageNumber: '1', xPosition: '300', yPosition: '700' },
+              {
+                anchorString: anchorsB.signature,
+                anchorUnits: 'pixels',
+                anchorXOffset: '0',
+                anchorYOffset: '-5',
+              },
+            ],
+            dateSignedTabs: [
+              {
+                anchorString: anchorsB.dateSigned,
+                anchorUnits: 'pixels',
+                anchorXOffset: '0',
+                anchorYOffset: '0',
+                fontSize: 'Size10',
+              },
             ],
           },
         },
