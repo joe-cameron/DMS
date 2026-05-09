@@ -1,15 +1,10 @@
-"""Align extracted frames to SRT caption cues."""
+"""Align extracted frames to SRT caption cues for a single video id."""
 import json
 import re
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SRT = HERE / "input" / "video.en.srt"
-SCENES = HERE / "output" / "scenes.txt"
-FRAMES_DIR = HERE / "frames"
-OUT_JSON = HERE / "output" / "transcript.json"
-OUT_MD = HERE / "output" / "aligned.md"
-
 TS_RE = re.compile(
     r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*"
     r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})"
@@ -40,7 +35,6 @@ def parse_srt(path):
             block = []
         else:
             block.append(line)
-    # YouTube auto-caps repeat content across cues; dedupe consecutive identical text.
     deduped = []
     for c in cues:
         if deduped and deduped[-1]["text"] == c["text"]:
@@ -56,7 +50,6 @@ def find_cue_for_time(t, cues):
             return c
     if not cues:
         return None
-    # Nearest cue by start time.
     return min(cues, key=lambda c: abs(c["start"] - t))
 
 
@@ -67,12 +60,18 @@ def fmt_ts(t):
     return f"{h:02d}:{m:02d}:{s:06.3f}"
 
 
-def main():
-    cues = parse_srt(SRT)
-    OUT_JSON.write_text(json.dumps(cues, indent=2))
+def main(video_id):
+    srt = HERE / "input" / video_id / "video.en.srt"
+    scenes = HERE / "output" / video_id / "scenes.txt"
+    frames_dir = HERE / "frames" / video_id
+    out_json = HERE / "output" / video_id / "transcript.json"
+    out_md = HERE / "output" / video_id / "aligned.md"
 
-    scene_times = [float(t) for t in SCENES.read_text().split() if t.strip()]
-    frames = sorted(FRAMES_DIR.glob("*.jpg"))
+    cues = parse_srt(srt)
+    out_json.write_text(json.dumps(cues, indent=2))
+
+    scene_times = [float(t) for t in scenes.read_text().split() if t.strip()]
+    frames = sorted(frames_dir.glob("*.jpg"))
 
     rows = []
     for frame_path, t in zip(frames, scene_times):
@@ -85,20 +84,22 @@ def main():
             "cue_end": cue["end"] if cue else None,
         })
 
-    md = ["# Video transcript with aligned frames", ""]
-    md.append(f"- Source: `input/video.mp4`")
+    md = [f"# Video `{video_id}` - transcript with aligned frames", ""]
+    md.append(f"- Source: `input/{video_id}/video.mp4`")
     md.append(f"- Cues: {len(cues)}  Frames: {len(frames)}")
     md.append("")
     for r in rows:
         md.append(f"## {fmt_ts(r['t'])}  -  `{r['frame']}`")
         md.append("")
-        md.append(f"![{r['frame']}](../frames/{r['frame']})")
+        md.append(f"![{r['frame']}](../../frames/{video_id}/{r['frame']})")
         md.append("")
         md.append(f"> {r['caption']}" if r["caption"] else "> _(no caption at this time)_")
         md.append("")
-    OUT_MD.write_text("\n".join(md))
-    print(f"    wrote {OUT_MD} ({len(rows)} aligned frames, {len(cues)} cues)")
+    out_md.write_text("\n".join(md))
+    print(f"    [{video_id}] wrote {out_md} ({len(rows)} aligned frames, {len(cues)} cues)")
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 2:
+        sys.exit("usage: align.py <video_id>")
+    main(sys.argv[1])
