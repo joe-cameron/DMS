@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DocuSign Template — Anchor Placement Document</title>
+<style>
+  body { font-family: 'Times New Roman', serif; font-size: 12pt; margin: 1in; line-height: 1.6; }
+  h1 { font-size: 16pt; text-align: center; margin-bottom: 24pt; }
+  h2 { font-size: 13pt; margin-top: 24pt; border-bottom: 1px solid #ccc; padding-bottom: 4pt; }
+  .sig-block { margin-top: 36pt; display: flex; justify-content: space-between; }
+  .sig-col { width: 45%; }
+  .sig-line { border-bottom: 1px solid #000; height: 30pt; margin-top: 8pt; position: relative; }
+  .sig-label { font-size: 10pt; color: #666; margin-top: 2pt; }
+  /* Anchor text: white 1pt — invisible in printed doc, detected by DocuSign */
+  .anchor { color: white; font-size: 1pt; line-height: 1; }
+  .note { background: #fffde7; border: 1px solid #f9a825; padding: 12pt; margin: 18pt 0; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<h1>CONTRACT DOCUMENT</h1>
+<p><em>This is a template document for creating a DocuSign template. Upload this to DocuSign, then configure the recipient roles and anchor-based tab placement in the DocuSign template designer.</em></p>
+
+<div class="note">
+<strong>Instructions:</strong>
+<ol>
+<li>Open this file in Microsoft Word and Save As .docx</li>
+<li>Upload the .docx to DocuSign &gt; Templates &gt; New Template</li>
+<li>Define 5 recipient roles: Financial Reviewer (CC), Vendor (Signer), Company President (Signer), Client Signer (Signer), Filing Recipient (CC)</li>
+<li>DocuSign will detect the white anchor text below and let you assign tabs to each anchor</li>
+<li>Map each anchor to the correct recipient role</li>
+<li>Save the template and copy the Template ID to System Admin &gt; dcfg_docusign_template_id</li>
+</ol>
+</div>
+
+<h2>PARTIES</h2>
+<p><strong>Owner/Client:</strong> [Customer Name]</p>
+<p><strong>Contractor/Vendor:</strong> [Vendor Name]</p>
+<p><strong>Management Company:</strong> Decades Construction &amp; Facilities Group</p>
+
+<h2>SCOPE OF WORK</h2>
+<p>[Scope description placeholder]</p>
+
+<h2>TERMS AND CONDITIONS</h2>
+<p>[Terms placeholder]</p>
+
+<h2>COMPENSATION</h2>
+<p>[Fee schedule placeholder]</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SIGNATURE BLOCKS WITH DOCUSIGN ANCHORS             -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<h2>SIGNATURES</h2>
+<p>IN WITNESS WHEREOF, the parties have executed this Agreement as of the date last signed below.</p>
+
+<div class="sig-block">
+  <!-- VENDOR / CONTRACTOR SIGNATURE -->
+  <div class="sig-col">
+    <p><strong>CONTRACTOR</strong></p>
+    <p>[Vendor Legal Name]</p>
+    <div class="sig-line">
+      <span class="anchor">\Vendor_Signature\</span>
+    </div>
+    <div class="sig-label">Signature</div>
+    <p style="margin-top: 12pt;">Printed Name: ____________________</p>
+    <p>Title: ____________________</p>
+    <p>Date: <span class="anchor">\Vendor_DateSigned\</span> ____________________</p>
+  </div>
+
+  <!-- CUSTOMER / OWNER SIGNATURE -->
+  <div class="sig-col">
+    <p><strong>OWNER</strong></p>
+    <p>[Customer Name]</p>
+    <div class="sig-line">
+      <span class="anchor">\Customer_Signature\</span>
+    </div>
+    <div class="sig-label">Signature</div>
+    <p style="margin-top: 12pt;">Printed Name: ____________________</p>
+    <p>Title: ____________________</p>
+    <p>Date: <span class="anchor">\Customer_DateSigned\</span> ____________________</p>
+  </div>
+</div>
+
+<div style="margin-top: 36pt;">
+  <!-- DECADES / COMPANY PRESIDENT SIGNATURE -->
+  <p><strong>MANAGEMENT COMPANY</strong></p>
+  <p>Decades Construction &amp; Facilities Group</p>
+  <div class="sig-line" style="width: 45%;">
+    <span class="anchor">\Decades_Signature\</span>
+  </div>
+  <div class="sig-label">Signature</div>
+  <p style="margin-top: 12pt;">Printed Name: ____________________</p>
+  <p>Title: ____________________</p>
+  <p>Date: <span class="anchor">\Decades_DateSigned\</span> ____________________</p>
+</div>
+
+<div class="note" style="margin-top: 36pt;">
+<strong>Anchor Reference:</strong><br>
+These are the 6 anchor strings embedded in this document (white 1pt text, invisible when printed):
+<table style="margin-top: 8pt; font-size: 10pt; border-collapse: collapse;">
+<tr><th style="text-align:left; padding: 2pt 12pt 2pt 0;">Anchor</th><th style="text-align:left; padding: 2pt 12pt;">Role</th><th style="text-align:left;">Tab Type</th></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Vendor_Signature\</td><td style="padding: 2pt 12pt;">Vendor (Signer)</td><td>Sign Here</td></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Vendor_DateSigned\</td><td style="padding: 2pt 12pt;">Vendor (Signer)</td><td>Date Signed</td></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Customer_Signature\</td><td style="padding: 2pt 12pt;">Client Signer</td><td>Sign Here</td></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Customer_DateSigned\</td><td style="padding: 2pt 12pt;">Client Signer</td><td>Date Signed</td></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Decades_Signature\</td><td style="padding: 2pt 12pt;">Company President (Signer)</td><td>Sign Here</td></tr>
+<tr><td style="padding: 2pt 12pt 2pt 0; font-family: monospace;">\Decades_DateSigned\</td><td style="padding: 2pt 12pt;">Company President (Signer)</td><td>Date Signed</td></tr>
+</table>
+</div>
+
+</body>
+</html>

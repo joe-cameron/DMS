@@ -165,6 +165,9 @@ async function downloadFromSharePoint(documentUrl, graphToken, context) {
 }
 
 // ─── Create DocuSign envelope ───
+// Supports 2 signers with anchor-based tabs + optional CC recipients.
+// Anchor mapping: caller passes anchorsA/anchorsB matching the signer roles.
+// CC recipients (reviewer, filing, client AP) are included only when both name and email are provided.
 async function createEnvelope(docuSignToken, fileBuffer, body) {
   const {
     documentName,
@@ -179,10 +182,24 @@ async function createEnvelope(docuSignToken, fileBuffer, body) {
   const emailSubject = subject || `Signature Required - ${documentName}`;
   const emailBlurb = message || 'Please review and sign the attached document.';
 
-  // Anchor configuration per signer — caller specifies which anchors to use
-  // Defaults: signerA = Customer pattern, signerB = Vendor pattern
-  const anchorsA = body.anchorsA || { signature: '\\Customer_Signature\\', dateSigned: '\\Customer_DateSigned\\' };
-  const anchorsB = body.anchorsB || { signature: '\\Vendor_Signature\\', dateSigned: '\\Vendor_DateSigned\\' };
+  // Anchor configuration per signer — caller MUST pass these to match the document's embedded anchors
+  const anchorsA = body.anchorsA || { signature: '\\Vendor_Signature\\', dateSigned: '\\Vendor_DateSigned\\' };
+  const anchorsB = body.anchorsB || { signature: '\\Customer_Signature\\', dateSigned: '\\Customer_DateSigned\\' };
+
+  // Build CC recipients array — only include recipients with both name and email
+  const carbonCopies = [];
+  let ccId = 10; // start recipientIds at 10 to avoid collision with signers
+  const ccList = body.carbonCopies || [];
+  for (const cc of ccList) {
+    if (cc.email && cc.name) {
+      carbonCopies.push({
+        email: cc.email,
+        name: cc.name,
+        recipientId: String(ccId++),
+        routingOrder: String(cc.routingOrder || 99),
+      });
+    }
+  }
 
   const envelopeDefinition = {
     emailSubject,
@@ -249,6 +266,7 @@ async function createEnvelope(docuSignToken, fileBuffer, body) {
           },
         },
       ],
+      ...(carbonCopies.length > 0 ? { carbonCopies } : {}),
     },
   };
 
