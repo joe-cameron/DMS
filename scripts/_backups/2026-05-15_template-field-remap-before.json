@@ -810,5 +810,491 @@
     "source_text": "___________________________",
     "id": "aec8cbc7-b337-f111-88b4-000d3a308e39",
     "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "3e4943c4-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "70d29ad0-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "f4ef04c0-8733-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "f7be7244-8833-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "3efec2bb-1535-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "Main Contract Date",
+    "new_path": "dcfg_msa_date",
+    "id": "8c46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "851a0a1e-c43d-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "57e36510-a937-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "84c2b912-aa37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "adc8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "facef28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "5ba44ee4-9b3d-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "60dd52ea-c13d-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "a01be17d-6e45-f111-88b4-000d3a31a3cc",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "d7daf446-6645-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "adad7b2c-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "d0a47fd0-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "58e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "MSA Date",
+    "new_path": "dcfg_msa_date",
+    "id": "5bfd0a74-4c4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_msa.createdon"
+  },
+  {
+    "source_text": "__________",
+    "new_path": "dcfg_msa_number",
+    "id": "3acf9034-3a38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "__________",
+    "new_path": "dcfg_msa_number",
+    "id": "87453d43-3b38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "__________",
+    "new_path": "dcfg_msa_number",
+    "id": "591b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "MSA Number",
+    "new_path": "dcfg_msa_number",
+    "id": "b9c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "MSA Number",
+    "new_path": "dcfg_msa_number",
+    "id": "086fdcf0-6c42-f111-88b4-000d3a31ac1d",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "MSA Number",
+    "new_path": "dcfg_msa_number",
+    "id": "ee8e6225-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_msa.dcfg_name"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "b11421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "55a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "Customer Street",
+    "new_path": "dcfg_billing_address",
+    "id": "9c46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "9c71757c-6b37-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "90661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "d2117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "24949884-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "caa0fb2d-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "CustomerStreetAddress",
+    "new_path": "dcfg_billing_address",
+    "id": "ec70c5b9-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_address"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "ab1421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "53a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "Customer City",
+    "new_path": "dcfg_billing_city",
+    "id": "9546ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "9371757c-6b37-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "8f661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "b7117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "27949884-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "c4a0fb2d-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "City",
+    "new_path": "dcfg_billing_city",
+    "id": "e870c5b9-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_city"
+  },
+  {
+    "source_text": "State",
+    "new_path": "dcfg_billing_state",
+    "id": "a61421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "State",
+    "new_path": "dcfg_billing_state",
+    "id": "56a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "Customer State",
+    "new_path": "dcfg_billing_state",
+    "id": "a046ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "State",
+    "new_path": "dcfg_billing_state",
+    "id": "9471757c-6b37-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "State",
+    "new_path": "dcfg_billing_state",
+    "id": "9a661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "State",
+    "new_path": "dcfg_billing_state",
+    "id": "bf117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_state"
+  },
+  {
+    "source_text": "Zipcode",
+    "new_path": "dcfg_billing_zip",
+    "id": "aa1421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "source_text": "Zipcode",
+    "new_path": "dcfg_billing_zip",
+    "id": "54a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "source_text": "Zipcode",
+    "new_path": "dcfg_billing_zip",
+    "id": "9d71757c-6b37-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "source_text": "Zipcode",
+    "new_path": "dcfg_billing_zip",
+    "id": "91661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "source_text": "Zipcode",
+    "new_path": "dcfg_billing_zip",
+    "id": "c0117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_billing_zip"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "931421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "a71421a0-5f37-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "50a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "51a0c7a7-6637-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Client Name",
+    "new_path": "dcfg_client_name",
+    "id": "9e46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Printed Name",
+    "new_path": "dcfg_client_name",
+    "id": "a346ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Client Name",
+    "new_path": "dcfg_client_name",
+    "id": "52adde97-bf3c-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "9071757c-6b37-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "a460777e-6b37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "93661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "a0661630-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "b6117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "c1117378-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "19949884-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "1e949884-6d37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "bfa0fb2d-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "PCDI – Princeton Child Development Institute",
+    "new_path": "dcfg_client_name",
+    "id": "cba0fb2d-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "dd70c5b9-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "PCDI – Princeton Child Development Institute",
+    "new_path": "dcfg_client_name",
+    "id": "e070c5b9-a737-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "71461577-0a43-f111-88b4-000d3a31a0bf",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Legal Name",
+    "new_path": "dcfg_client_name",
+    "id": "9a99197d-0a43-f111-88b4-000d3a31a0bf",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "d5daf446-6645-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Printed Name",
+    "new_path": "dcfg_client_name",
+    "id": "c437869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Client Name",
+    "new_path": "dcfg_client_name",
+    "id": "ca37869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Name",
+    "new_path": "dcfg_client_name",
+    "id": "5afd0a74-4c4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Customer Printed Name",
+    "new_path": "dcfg_client_name",
+    "id": "5136b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_customer.dcfg_name"
+  },
+  {
+    "source_text": "Client Name",
+    "new_path": "dcfg_client_name",
+    "id": "6636b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_customer.dcfg_name"
   }
 ]

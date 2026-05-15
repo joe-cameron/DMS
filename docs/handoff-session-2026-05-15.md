@@ -173,7 +173,8 @@ Output .docx files: `scratch/e2e-WO24168-output.docx`, `scratch/e2e-WO26010-outp
 ## Open Items
 
 - **Template update (Joseph):** Add "Contract Fee" content control to WO/Amendment templates where written-out fee text should appear. Field mapping rows already created in Dataverse. Existing "Contract Value Dollars ($X.XX)" stays for numeric display.
-- **Phase 2-4 plan:** `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md` — schema gaps (MSA/billing flat fields), vendor MSA tracking (20 columns), composer save gaps, address formatting.
+- **Phase 2 deploy pending:** Schema + remap done (6 columns created, 81 fields remapped, composer updated). Next session: `npm run build` + deploy Stage + Prod + clear cache.
+- **Phase 3-4 plan:** `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md` — vendor MSA tracking (20 columns), composer VA→slot wiring, DocuSign poll status, address formatting.
 - **SendQueue Pending not showing:** Fix 1 now live — check browser console on Prod for `[SendQueue]` errors to get actual failure reason.
 - **Clear portal cache** on Stage + Prod for `dcfg_work_hours` site setting change to take effect.
 
