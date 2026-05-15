@@ -127,19 +127,64 @@ pac auth restored to [2] Test after deploy. Clear portal cache on both environme
 
 ---
 
+---
+
+## Phase 1 — Template Field Remap (Completed)
+
+Remapped 116 `dcfg_template_fields` rows in Dataverse from vendor/contact lookup paths to flat contract fields. This aligns with the **contract record as source of truth** principle — users override values in the composer, flat fields capture the override, documents must match.
+
+| Old Path (lookup) | New Path (flat) | Rows |
+|---|---|---|
+| `dcfg_vendor.dcfg_legal_name` | `dcfg_contractor_legal_name` | 31 |
+| `dcfg_vendor.dcfg_phone` | `dcfg_contractor_phone` | 11 |
+| `dcfg_vendor.dcfg_email` | `dcfg_contractor_email` | 8 |
+| `dcfg_vendor.dcfg_address` | `dcfg_contractor_address` | 6 |
+| `dcfg_vendor.dcfg_primary_contact` | `dcfg_customer_site_contact` | 2 |
+| `dcfg_vendor.dcfg_signer_name` | `dcfg_signer_printed` | 17 |
+| `dcfg_vendor.dcfg_signer_title` | `dcfg_signer_title` | 22 |
+| `dcfg_vendor_contact.fullname` | `dcfg_signer_printed` | 9 |
+| `dcfg_vendor_contact.jobtitle` | `dcfg_signer_title` | 10 |
+
+Before-state saved: `scripts/_backups/2026-05-15_template-field-remap-before.json`
+
+Also: added `dcfg_work_hours` to `Webapi/dcfg_contract/fields` site setting (was missing). 14 "Contract Fee" field mapping rows created for all WO/Amendment templates.
+
+### E2E OOXML Verification (WO24168 + WO26010)
+
+Ran full resolution + OOXML injection against both contracts. All remapped fields verified in output XML:
+
+| Field | WO24168 Value | WO26010 Value | In OOXML |
+|---|---|---|---|
+| Vendor Legal Name | Lady Bug Pest Services | GARRATT-CALLAHAN COMPANY | OK |
+| Contractor Printed Name | Zoe Buckridee | Andrew Thomas | OK |
+| Contractor Title | Commercial Accounts Specialist | Territory Manager | OK |
+| Customer Contact Name | Sarah Mitchell | Sarah Mitchell | OK |
+| Customer Title | Director of Operations | Director of Operations | OK |
+| Contract Value ($) | $10,350.00 | $35,804.00 | OK |
+| WO Number | WO24168 | WO26010 | OK |
+| Today's Date | 05/15/2026 | 05/15/2026 | OK |
+
+"Contract Fee" (written format) shows 0 injection hits — expected, templates don't have the content control yet.
+
+Output .docx files: `scratch/e2e-WO24168-output.docx`, `scratch/e2e-WO26010-output.docx`
+
+---
+
 ## Open Items
 
-- **Template update (Joseph):** Add new "Contract Fee" content control + field mapping to each of the 7 WO/Amendment templates where written-out fee text should appear. Existing "Contract Value Dollars ($X.XX)" placeholders stay for numeric display. Code is safe to deploy independently.
-- **WO24168 data state (confirmed):** 3 line items — 2 inactive ghosts ($0 "P", $1 "Pest Control Services"), 1 active ($10,350 "Pest Control Services"). Same ghost-row pattern as WO26010. Fix 3 filters them correctly.
+- **Template update (Joseph):** Add "Contract Fee" content control to WO/Amendment templates where written-out fee text should appear. Field mapping rows already created in Dataverse. Existing "Contract Value Dollars ($X.XX)" stays for numeric display.
+- **Phase 2-4 plan:** `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md` — schema gaps (MSA/billing flat fields), vendor MSA tracking (20 columns), composer save gaps, address formatting.
 - **SendQueue Pending not showing:** Fix 1 now live — check browser console on Prod for `[SendQueue]` errors to get actual failure reason.
+- **Clear portal cache** on Stage + Prod for `dcfg_work_hours` site setting change to take effect.
 
 ## Verification Plan (add to e2e)
 
 After deploy, verify each fix:
-- **Fix 1:** Open SendQueue in browser DevTools console. Look for `[SendQueue]` prefixed errors if Pending tab is empty. If errors appear, they reveal the actual API failure.
-- **Fix 2:** Open a WO contract in composer, add a line item, save. Wait 12+ seconds (two auto-save cycles). Query `dcfg_contract_lines` for that contract — row count should remain stable, not grow each cycle.
+- **Fix 1:** Open SendQueue in browser DevTools console. Look for `[SendQueue]` prefixed errors if Pending tab is empty.
+- **Fix 2:** Open a WO contract in composer, add a line item, save. Wait 12+ seconds (two auto-save cycles). Query `dcfg_contract_lines` — row count should remain stable.
 - **Fix 3:** Open ContractDetail for WO26010. Should show 1 active line item at $35,804, not 10 rows.
-- **Fix 4:** Generate a Work Order document. Open the .docx and find the fee sentence. Should read "the liquidated sum of Ten Thousand Three Hundred Fifty Dollars ($10,350.00) inclusive..." — no nested parens, words capitalized, numeric in parens.
+- **Fix 4:** Generate a Work Order document. Check fee sentence for written format (once content control is added to template).
+- **Phase 1 remap:** Generate any WO — vendor name, signer, contact, phone, email, address should populate from flat contract fields.
 
 ## Files Changed This Session
 
@@ -151,3 +196,7 @@ After deploy, verify each fix:
 | `spa/dcfg-shell/src/portalApi.js` | Fix 2: createContractLine returns ID |
 | `spa/dcfg-shell/src/lib/contractDocGen.js` | Fix 4: numberToWords + fmtCurrencyWritten |
 | `docs/handoff-session-2026-05-15.md` | This file |
+| `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md` | Phase 1-4 plan |
+| Dataverse `dcfg_template_fields` | 116 rows remapped + 14 Contract Fee rows created |
+| Dataverse `Webapi/dcfg_contract/fields` | Added dcfg_work_hours |
+| `scripts/_backups/2026-05-15_template-field-remap-before.json` | Rollback state |

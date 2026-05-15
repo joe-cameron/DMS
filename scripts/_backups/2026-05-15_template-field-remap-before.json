@@ -1,0 +1,814 @@
+[
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "source_text": "Vendor’s Legal Name",
+    "id": "42cf9034-3a38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "f5433d43-3b38-f111-88b4-000d3a308009",
+    "source_text": "Vendor’s Legal Name",
+    "id": "92453d43-3b38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "314943c4-8533-f111-88b3-000d3a30860b",
+    "source_text": "VENDOR NAME",
+    "id": "444943c4-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "source_text": "VENDOR NAME",
+    "id": "73d29ad0-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "source_text": "Vendor’s Legal Name",
+    "id": "5e1b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "f8ef04c0-8733-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "fcbe7244-8833-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Name",
+    "id": "8b46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Vendor's Legal Name",
+    "id": "5c61e59d-bf3c-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Legal Name",
+    "id": "7c1a0a1e-c43d-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "source_text": "VENDOR NAME",
+    "id": "8453e9b5-1535-f111-88b3-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Name",
+    "id": "76353694-bf3c-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor’s Legal Name",
+    "id": "bbc387c3-5f3e-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "5de36510-a937-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "53c2b912-aa37-f111-88b4-000d3a308e39",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "7cc2b912-aa37-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "VENDOR NAME",
+    "id": "a6c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "VENDOR NAME",
+    "id": "05cff28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Legal Name",
+    "id": "55a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "a21be17d-6e45-f111-88b4-000d3a31a3cc",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Legal Name",
+    "id": "5a77d85e-1543-f111-88b4-000d3a31a40b",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor’s Legal Name",
+    "id": "126fdcf0-6c42-f111-88b4-000d3a31ac1d",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "c56e5e99-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Legal Name",
+    "id": "5c00b49f-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "ad30c1b1-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Legal Name",
+    "id": "1331c1b1-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "f9eec2bd-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Legal Name",
+    "id": "33efc2bd-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "5f62fabb-6245-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Legal Name",
+    "id": "028ff7c1-6245-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "VENDOR NAME",
+    "id": "acad7b2c-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "LEGAL VENDOR NAME",
+    "id": "cba47fd0-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor’s Legal Name",
+    "id": "ef8e6225-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Name",
+    "id": "b537869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Legal Name",
+    "id": "49e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_legal_name",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Name",
+    "id": "5b36b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_legal_name"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "_DISABLED_VendorPhone_Amd",
+    "id": "9b46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Phone",
+    "id": "58adde97-bf3c-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Phone",
+    "id": "861a0a1e-c43d-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "Tele#,",
+    "id": "a2c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "Tele#,",
+    "id": "a8c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "Tele#",
+    "id": "fecef28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "Tele#",
+    "id": "00cff28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Phone",
+    "id": "314a879b-bf3c-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Phone",
+    "id": "66a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "Decades Site Phone",
+    "id": "991be17d-6e45-f111-88b4-000d3a31a3cc",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_phone",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Phone",
+    "id": "4ae72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_phone"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Email",
+    "id": "b76f9f9e-bf3c-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Email",
+    "id": "8f46ac5e-0538-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Vendor Email",
+    "id": "801a0a1e-c43d-f111-88b4-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Email",
+    "id": "ac1b319a-bf3c-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "email address (Vendor)",
+    "id": "acc8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "email address (Vendor)",
+    "id": "fdcef28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "011743de-9b3d-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Email",
+    "id": "56a44ee4-9b3d-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_email",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Email",
+    "id": "53e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_email"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "314943c4-8533-f111-88b3-000d3a30860b",
+    "source_text": "Vendor Street Address",
+    "id": "464943c4-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "source_text": "Vendor Street Address",
+    "id": "74d29ad0-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "source_text": "_______________________________________________________",
+    "id": "651b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "source_text": "Vendor Street Address",
+    "id": "b355b6b9-1535-f111-88b3-000d3a308bc8",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Street Address",
+    "id": "a7c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_contractor_address",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Street Address",
+    "id": "f5cef28d-b437-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor.dcfg_address"
+  },
+  {
+    "new_path": "dcfg_customer_site_contact",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Vendor Contact",
+    "id": "541c319a-bf3c-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_primary_contact"
+  },
+  {
+    "new_path": "dcfg_customer_site_contact",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Contact",
+    "id": "dbe56b98-bf3c-f111-88b4-000d3a308bc8",
+    "old_path": "dcfg_vendor.dcfg_primary_contact"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Printed Name",
+    "id": "ba6f9f9e-bf3c-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Signer Name",
+    "id": "155b5be9-c13d-f111-88b4-000d3a308bc8",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Printed Name",
+    "id": "8f1be17d-6e45-f111-88b4-000d3a31a3cc",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Signer Name",
+    "id": "146fdcf0-6c42-f111-88b4-000d3a31ac1d",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "c56e5e99-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "5a00b49f-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "ad30c1b1-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "1431c1b1-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "f9eec2bd-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "39efc2bd-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "5f62fabb-6245-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "fe8ef7c1-6245-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "dbdaf446-6645-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Printed Name",
+    "id": "afad7b2c-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Printed Name",
+    "id": "d7a47fd0-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Contractor Printed Name",
+    "id": "f28e6225-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Printed Name",
+    "id": "d337869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "50e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "51e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Name",
+    "id": "67fd0a74-4c4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Printed Name",
+    "id": "5c36b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_name"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "2738ed8c-6a3c-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Title",
+    "id": "bc6f9f9e-bf3c-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "bd3d2a8b-6a3c-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Signer Title",
+    "id": "7abc58e5-c13d-f111-88b4-000d3a3086f2",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Title",
+    "id": "931be17d-6e45-f111-88b4-000d3a31a3cc",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Vendor Signer Title",
+    "id": "136fdcf0-6c42-f111-88b4-000d3a31ac1d",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Contractor Title",
+    "id": "156fdcf0-6c42-f111-88b4-000d3a31ac1d",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "c56e5e99-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "5e00b49f-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "ad30c1b1-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "1831c1b1-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "f9eec2bd-6145-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "31efc2bd-6145-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "5f62fabb-6245-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "008ff7c1-6245-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Contractor Title",
+    "id": "dddaf446-6645-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "dedaf446-6645-f111-88b4-000d3a31ae5a",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "c9cef28d-b437-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Title",
+    "id": "abad7b2c-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "29e36510-a937-f111-88b4-000d3a308e39",
+    "source_text": "Contractor Title",
+    "id": "dba47fd0-9348-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Contractor Title",
+    "id": "f48e6225-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "b5c387c3-5f3e-f111-88b4-000d3a3086f2",
+    "source_text": "Contractor Title",
+    "id": "f58e6225-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Title",
+    "id": "c937869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "8546ac5e-0538-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Title",
+    "id": "cf37869e-9448-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "66e72e6f-e04a-f111-bec6-7ced8d6f9545",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Vendor Signer Title",
+    "id": "65fd0a74-4c4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "14a5af40-6645-f111-88b4-000d3a31ae5a",
+    "source_text": "Contractor Title",
+    "id": "68fd0a74-4c4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Title",
+    "id": "5a36b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "701a0a1e-c43d-f111-88b4-000d3a30860b",
+    "source_text": "Contractor Title",
+    "id": "6536b3b8-4d4a-f111-bec6-7ced8d6f99e8",
+    "old_path": "dcfg_vendor.dcfg_signer_title"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "source_text": "___________________",
+    "id": "3bcf9034-3a38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "314943c4-8533-f111-88b3-000d3a30860b",
+    "source_text": "___________________",
+    "id": "5b4943c4-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "source_text": "___________________",
+    "id": "8cd29ad0-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "source_text": "___________________",
+    "id": "601b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "source_text": "___________________",
+    "id": "19f004c0-8733-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "source_text": "___________________",
+    "id": "0dbf7244-8833-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "source_text": "___________________",
+    "id": "b455b6b9-1535-f111-88b3-000d3a308bc8",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "Contact Name,",
+    "id": "b4c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_printed",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "___________________",
+    "id": "b6c8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor_contact.fullname"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "source_text": "Contractor Title",
+    "id": "38cf9034-3a38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "d2ce9034-3a38-f111-88b4-000d3a308009",
+    "source_text": "___________________________",
+    "id": "44cf9034-3a38-f111-88b4-000d3a308009",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "314943c4-8533-f111-88b3-000d3a30860b",
+    "source_text": "___________________________",
+    "id": "624943c4-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "5bd29ad0-8533-f111-88b3-000d3a30860b",
+    "source_text": "___________________________",
+    "id": "8ed29ad0-8533-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "source_text": "___________________________",
+    "id": "621b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "541b60ac-8633-f111-88b3-000d3a30860b",
+    "source_text": "Contractor Title",
+    "id": "6b1b60ac-8633-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "e5ef04c0-8733-f111-88b3-000d3a30860b",
+    "source_text": "___________________________",
+    "id": "1df004c0-8733-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "ebbe7244-8833-f111-88b3-000d3a30860b",
+    "source_text": "___________________________",
+    "id": "10bf7244-8833-f111-88b3-000d3a30860b",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "636b5db5-1535-f111-88b3-000d3a308c23",
+    "source_text": "___________________________",
+    "id": "21eb34b8-1535-f111-88b3-000d3a308e39",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  },
+  {
+    "new_path": "dcfg_signer_title",
+    "template_id": "7dc8cbc7-b337-f111-88b4-000d3a308e39",
+    "source_text": "___________________________",
+    "id": "aec8cbc7-b337-f111-88b4-000d3a308e39",
+    "old_path": "dcfg_vendor_contact.jobtitle"
+  }
+]
