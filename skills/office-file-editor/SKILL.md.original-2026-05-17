@@ -1,0 +1,142 @@
+---
+name: office-file-editor
+description: |
+  Surgically edit Microsoft Office files (.docx, .xlsx, .pptx) via OOXML — find/replace
+  text across an entire document, update specific xlsx cells, inspect file structure,
+  restore from backup. Use when Joe asks to "update the resume", "fix [fact] in
+  Portfolio_Addendum", "set status of [company] to [value] in Target_Companies",
+  "what's in this docx", or any other in-place edit of an Office file. Trigger phrases:
+  "update docx", "edit xlsx", "fix the resume", "patch the Office file", "change [text]
+  in [filename]", "set cell X to Y", "what does the resume say about Z".
+---
+
+# Office File Editor
+
+A discipline for editing .docx / .xlsx / .pptx files in place without breaking them. The thesis: **OOXML is just zip + XML; Office files break loudly when zip metadata or part order is wrong, so editing must be backup-first, scope-narrow, and verify-last.**
+
+## Hard rules
+
+1. **Backup-first, always.** Every write produces `<file>.bak.<timestamp>` before the edit. The script refuses to write if backup creation fails. See `references/safe-edit-patterns.md`.
+2. **Refuse if target not found.** If the find string doesn't exist in the file, don't write — surface to user. Silent no-ops are worse than failures.
+3. **Detect run-split text.** Word splits text across `<w:r>` runs whenever formatting changes. "ReadyDocx" might be one run or might be `<w:r>Ready</w:r><w:r>Docx</w:r>`. Raw zipfile replace fails on split text. Always check first; fall back to python-docx if split. See `references/run-splitting.md`.
+4. **Verify post-edit.** Re-open the modified file and count occurrences of the new string. Report old-count and new-count. If new-count is wrong, restore from backup and surface to user.
+5. **Use the right tool per format.** xlsx cell edits → openpyxl. pptx slide edits → python-pptx. docx single-part fact corrections → raw zipfile (faster, more transparent). docx split-run edits → python-docx. Don't blend.
+6. **Never edit binary parts.** Images, embedded objects, fonts. Text edits target XML parts only.
+7. **Preserve zip structure.** Order, compression method, and zip-level attributes matter. Use the script's write helper, never construct zips manually for Office files.
+
+## Workflow
+
+### Step 0 — Read learnings
+
+Read `learnings.md`. Past failure patterns (formats that broke on rewrite, surprising run-split cases, file-type quirks) live here. Append a structured entry whenever a new pattern surfaces.
+
+### Step 1 — Identify the file type
+
+Extension determines the tooling:
+- `.docx` → Word — text in `word/document.xml`, headers/footers, etc.
+- `.xlsx` → Excel — strings in `xl/sharedStrings.xml`, cells in `xl/worksheets/sheet*.xml`
+- `.pptx` → PowerPoint — text in `ppt/slides/slide*.xml`, speaker notes in `ppt/notesSlides/`
+- Anything else (.doc, .xls, .ppt — old binary formats) → out of scope; user must convert to modern format first
+
+### Step 2 — Inspect before editing
+
+```
+python office_edit.py inspect <file>
+```
+
+Lists all XML parts in the file. Reports which parts contain text. Helps you find where your target string actually lives (it might be in a header you weren't expecting).
+
+For find-only (no edits):
+```
+python office_edit.py find <file> "ReadyDocx"
+```
+
+Reports: total occurrences, which XML parts they're in, whether each occurrence is in a single run or split across runs.
+
+### Step 3 — Pre-edit decision
+
+After `find`, decide:
+- **All in single runs** → safe to use raw zipfile replace (fast, no formatting risk)
+- **Some split across runs** → must use python-docx fallback (slower, but handles the split correctly)
+- **Not found at all** → don't edit; the string doesn't exist
+
+The script picks the path automatically when you run `replace`. The `find` output is for your own situational awareness.
+
+### Step 4 — Edit (with auto-backup)
+
+For text replacement:
+```
+python office_edit.py replace <file> "old text" "new text"
+```
+
+For bulk replacement from a JSON map:
+```
+python office_edit.py replace-map <file> path/to/changes.json
+```
+
+Where `changes.json` is `{"old1": "new1", "old2": "new2"}`. Order is preserved.
+
+For specific xlsx cell updates:
+```
+python office_edit.py cell <file.xlsx> "Sheet1!L42" "Contacted"
+```
+
+The script always writes a backup first to `<file>.bak.<timestamp>`.
+
+### Step 5 — Verify
+
+After every edit, the script automatically re-opens the file and reports:
+```
+Pre-edit count of "old text": 3
+Post-edit count of "old text": 0
+Post-edit count of "new text": 3
+```
+
+If counts don't match expectations, the script restores the backup and exits non-zero.
+
+### Step 6 — Cleanup
+
+After confirming the edit landed correctly:
+- Backups are kept by default (you can manually delete `*.bak.*` files when you're sure)
+- To restore the latest backup: `python office_edit.py restore <file>`
+
+### Step 7 — Self-check, then learnings
+
+Before exiting:
+- [ ] Backup file exists at `<file>.bak.<timestamp>`
+- [ ] Pre-edit and post-edit verification counts make sense
+- [ ] Opening the file in Office shows no corruption warnings
+- [ ] If anything broke, append a structured entry to `learnings.md`
+
+## CLI reference
+
+```
+python office_edit.py inspect <file>                       # list parts + summary
+python office_edit.py find <file> <pattern>                # locate text + run-split status
+python office_edit.py replace <file> <old> <new>           # one find/replace
+python office_edit.py replace-map <file> <map.json>        # bulk find/replace
+python office_edit.py cell <file.xlsx> <sheet>!<cell> <v>  # set xlsx cell value
+python office_edit.py restore <file>                       # restore latest backup
+python office_edit.py backup <file>                        # explicit backup (no edit)
+```
+
+All commands accept `--dry-run` to preview without writing.
+
+## When NOT to use this skill
+
+- **Image / chart / formula edits** — the script handles text only. For visual changes, edit in Word/Excel directly and save.
+- **Style / formatting changes** — out of scope. Use Word/Excel.
+- **New document creation** — use python-docx / openpyxl / python-pptx directly with a template; this skill is for editing existing files.
+- **Old binary formats (.doc, .xls, .ppt)** — convert to modern format first; OOXML doesn't apply.
+- **Office files with macros (.docm, .xlsm)** — script can edit them but DO NOT modify the macro VBA — edits to vbaProject.bin will corrupt the file. Restrict edits to text parts only.
+
+## Provenance
+
+This skill draws on:
+- The OOXML standard (ECMA-376 / ISO/IEC 29500)
+- python-docx by Steve Canny (handles run-splitting properly)
+- openpyxl by Eric Gazoni (xlsx cell-level access)
+- python-pptx by Steve Canny (slide-level access)
+- Joe's prior production experience with V4 OOXML injection via jszip in the DCFG DocGen Azure Function
+
+All references in `references/`.

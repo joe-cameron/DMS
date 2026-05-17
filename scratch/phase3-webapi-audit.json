@@ -1,0 +1,86 @@
+[
+  {
+    "fields": "dcfg_contractid,dcfg_contract_number,dcfg_status,dcfg_contract_family,dcfg_contract_type,dcfg_contract_fee,dcfg_client_name,dcfg_contractor_name,dcfg_contractor_legal_name,dcfg_company,dcfg_contractor_address,dcfg_contractor_phone,dcfg_contractor_email,dcfg_payment_process,dcfg_signer_printed,dcfg_signer_title,dcfg_owner_contact,dcfg_owner_title,dcfg_owner_email,dcfg_owner_street,dcfg_owner_city,dcfg_owner_state,dcfg_amendment_sequence,dcfg_contract_date,dcfg_start_date,dcfg_end_date,dcfg_generated_date,dcfg_sent_date,dcfg_signed_date,dcfg_document_url,dcfg_notes,dcfg_void_reason,dcfg_declined_reason,dcfg_description_of_work,dcfg_is_budgeted,dcfg_po_number,dcfg_sage_job_number,dcfg_active_flag,dcfg_billing_frequency,dcfg_blanket_number,dcfg_created_by_email,dcfg_wizard_step,dcfg_service_location_description,dcfg_current_amount,dcfg_approved_amount,dcfg_change_amount,dcfg_current_properties_included,_dcfg_customer_id_value,_dcfg_vendor_id_value,_dcfg_property_id_value,_dcfg_program_id_value,_dcfg_msa_id_value,dcfg_customer_id,dcfg_vendor_id,dcfg_property_id,dcfg_program_id,dcfg_msa_id,createdon,modifiedon,statecode,statuscode,dcfg_parent_contract_id,_dcfg_parent_contract_id_value,dcfg_service_description,dcfg_schedule_description,dcfg_envelope_id,dcfg_description_of_service,dcfg_fiscal_year,dcfg_work_start_date,dcfg_work_completed_date,dcfg_original_amount,dcfg_prev_changes_amount,dcfg_decades_site_contact,dcfg_decades_site_phone,dcfg_decades_site_email,dcfg_customer_site_contact,dcfg_customer_site_phone,dcfg_customer_site_email,dcfg_work_hours,dcfg_msa_number,dcfg_msa_date,dcfg_billing_address,dcfg_billing_city,dcfg_billing_state,dcfg_billing_zip",
+    "enabled": true,
+    "table": "dcfg_contract",
+    "fields_count": 85
+  },
+  {
+    "fields": "_dcfg_contract_id_value,_dcfg_cost_code_id_value,createdon,dcfg_active_flag,dcfg_amount,dcfg_ap_mapping_status,dcfg_contract_id,dcfg_contract_idname,dcfg_contract_lineid,dcfg_cost_code,dcfg_cost_code_id,dcfg_cost_code_idname,dcfg_customer_ap_code,dcfg_description,dcfg_item_number,dcfg_qty,dcfg_sort_order,dcfg_unit_rate,modifiedon,statecode,statuscode,dcfg_property_id,_dcfg_property_id_value",
+    "enabled": true,
+    "table": "dcfg_contract_line",
+    "fields_count": 23
+  },
+  {
+    "fields": "*,dcfg_ap_email",
+    "enabled": true,
+    "table": "dcfg_customer",
+    "fields_count": 2
+  },
+  {
+    "fields": "address1_line1,address1_city,address1_stateorprovince,address1_postalcode,address1_composite,createdon,dcfg_active_flag,dcfg_address,dcfg_address_line2,dcfg_city,dcfg_cle_status,dcfg_contact_name,dcfg_display_name,dcfg_email,dcfg_insurance_coverage_types,dcfg_insurance_expiration_date,dcfg_insurance_file_url,dcfg_insurance_gl_expiration,dcfg_insurance_policy_number,dcfg_insurance_provider,dcfg_latitude,dcfg_legal_name,dcfg_longitude,dcfg_msa_date,dcfg_net_terms,dcfg_notes,dcfg_payment_process,dcfg_payment_terms,dcfg_phone,dcfg_primary_contact,dcfg_signer_name,dcfg_signer_phone,dcfg_signer_title,dcfg_state,dcfg_trade,dcfg_vendorid,dcfg_zip,modifiedon,statecode,statuscode,dcfg_msa_file_url,dcfg_w9_file_url,dcfg_msa_upload_date,dcfg_w9_upload_date,dcfg_coi_upload_date,dcfg_insurance_effective_date",
+    "enabled": true,
+    "table": "dcfg_vendor",
+    "fields_count": 46
+  },
+  {
+    "fields": "_dcfg_customer_id_value,_dcfg_vendor_id_value,createdon,dcfg_budget_committed,dcfg_budget_remaining,dcfg_budget_total,dcfg_contract_family,dcfg_created_by_email,dcfg_customer_idname,dcfg_declined_reason,dcfg_document_url,dcfg_effective_date,dcfg_exhibit_type,dcfg_expiration_date,dcfg_generated_date,dcfg_location_count,dcfg_location_list,dcfg_monthly_rate,dcfg_msaid,dcfg_name,dcfg_notes,dcfg_onboarding_rate,dcfg_pricing_alternative,dcfg_sent_date,dcfg_service_fee_pct,dcfg_signed_by_staff,dcfg_signed_date,dcfg_status,dcfg_total_monthly,dcfg_total_onboarding,dcfg_vendor_idname,dcfg_void_reason,dcfg_wizard_step,modifiedon,statecode,statuscode,dcfg_customer_id,dcfg_vendor_id",
+    "enabled": true,
+    "table": "dcfg_msa",
+    "fields_count": 38
+  },
+  {
+    "fields": "dcfg_propertyid,dcfg_name,dcfg_address,dcfg_city,dcfg_state,dcfg_zip,dcfg_latitude,dcfg_longitude,dcfg_upkeep_location_id,_dcfg_customer_id_value,dcfg_active_flag,dcfg_unit_count,dcfg_inspection_hours,_dcfg_parent_location_id_value,dcfg_contact_person,dcfg_contact_title,dcfg_contact_email,dcfg_contact_phone,dcfg_is_no_charge,dcfg_notes,_dcfg_location_type_id_value,dcfg_location_type_id",
+    "enabled": true,
+    "table": "dcfg_property",
+    "fields_count": 22
+  },
+  {
+    "fields": "*",
+    "enabled": true,
+    "table": "dcfg_document_template",
+    "fields_count": 1
+  },
+  {
+    "fields": "_dcfg_section_id_value,_dcfg_template_id_value,createdon,dcfg_choice_options,dcfg_column_position,dcfg_composite_parts,dcfg_dataverse_path,dcfg_display_label,dcfg_field_category,dcfg_field_categoryname,dcfg_field_name,dcfg_field_order,dcfg_field_type,dcfg_field_typename,dcfg_highlight_color,dcfg_highlight_colorname,dcfg_is_composite,dcfg_is_compositename,dcfg_is_mapped,dcfg_is_mappedname,dcfg_is_repeated,dcfg_is_repeatedname,dcfg_is_required,dcfg_is_requiredname,dcfg_merge_field_name,dcfg_paragraph_template,dcfg_repeat_group_key,dcfg_row_position,dcfg_section_idname,dcfg_source_column,dcfg_source_entity,dcfg_source_text,dcfg_system_source_column,dcfg_system_source_table,dcfg_template_fieldid,dcfg_template_idname,dcfg_user_label,dcfg_width,dcfg_widthname,modifiedon,statecode,statuscode,dcfg_template_id",
+    "enabled": true,
+    "table": "dcfg_template_field",
+    "fields_count": 43
+  },
+  {
+    "fields": "createdon,dcfg_active,dcfg_configid,dcfg_key,dcfg_value,modifiedon,statecode,statuscode",
+    "enabled": true,
+    "table": "dcfg_config",
+    "fields_count": 8
+  },
+  {
+    "fields": "",
+    "enabled": false,
+    "table": "dcfg_cost_code",
+    "fields_count": 0
+  },
+  {
+    "fields": "",
+    "enabled": false,
+    "table": "dcfg_trade_type",
+    "fields_count": 0
+  },
+  {
+    "fields": "_dcfg_contract_id_value,_dcfg_customer_id_value,_dcfg_msa_id_value,createdon,dcfg_added_to_queue_date,dcfg_contract_idname,dcfg_customer_idname,dcfg_docusign_envelope_id,dcfg_envelope_proof_url,dcfg_msa_idname,dcfg_notes,dcfg_package_id,dcfg_queue_status,dcfg_send_queueid,dcfg_sent_by,dcfg_sent_date,modifiedon,statecode,statuscode,dcfg_contract_id,dcfg_customer_id,dcfg_msa_id",
+    "enabled": true,
+    "table": "dcfg_send_queue",
+    "fields_count": 22
+  },
+  {
+    "fields": "_dcfg_contract_id_value,_dcfg_customer_id_value,_dcfg_msa_id_value,_dcfg_template_id_value,createdon,dcfg_completed_at,dcfg_contract_idname,dcfg_customer_idname,dcfg_document_requestid,dcfg_error_message,dcfg_missing_field_count,dcfg_msa_idname,dcfg_name,dcfg_notes,dcfg_output_file_url,dcfg_request_type,dcfg_requested_at,dcfg_requested_by,dcfg_status,dcfg_template_idname,modifiedon,statecode,statuscode,dcfg_contract_id,dcfg_template_id,dcfg_customer_id,dcfg_msa_id,dcfg_payload",
+    "enabled": true,
+    "table": "dcfg_document_request",
+    "fields_count": 28
+  },
+  {
+    "fields": "createdon,dcfg_action_type,dcfg_action_typename,dcfg_audit_logid,dcfg_new_value,dcfg_old_value,dcfg_performed_at,dcfg_performed_by,dcfg_reason,dcfg_related_contract_id,dcfg_target_record_id,dcfg_target_table,modifiedon,statecode,statuscode",
+    "enabled": true,
+    "table": "dcfg_audit_log",
+    "fields_count": 15
+  }
+]

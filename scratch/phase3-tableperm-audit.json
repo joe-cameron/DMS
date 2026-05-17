@@ -1,0 +1,358 @@
+[
+  {
+    "table": "dcfg_contract",
+    "crud": "CRUD",
+    "name": "dcfg_contract",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_contract",
+    "crud": "CRUD",
+    "name": "dcfg_contract",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_contract_line",
+    "crud": "CRUD",
+    "name": "dcfg_contract_line",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_contract_line",
+    "crud": "CRUD",
+    "name": "dcfg_contract_line",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "R",
+    "name": "Customer",
+    "scope": "Global",
+    "appendTo": false,
+    "append": false,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "CRUD",
+    "name": "dcfg_customer",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "CRUD",
+    "name": "dcfg_customer",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "R",
+    "name": "dcfg_customer",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "CRUD",
+    "name": "dcfg_customer",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "CRUD",
+    "name": "dcfg_customer",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_customer",
+    "crud": "R",
+    "name": "Customer",
+    "scope": "Global",
+    "appendTo": false,
+    "append": false,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_vendor",
+    "crud": "CRUD",
+    "name": "dcfg_vendor",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_vendor",
+    "crud": "CRUD",
+    "name": "dcfg_vendor",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_vendor",
+    "crud": "CRUD",
+    "name": "dcfg_vendor",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_vendor",
+    "crud": "CRUD",
+    "name": "dcfg_vendor",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_msa",
+    "crud": "CRUD",
+    "name": "dcfg_msa",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_msa",
+    "crud": "CRUD",
+    "name": "dcfg_msa",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "R",
+    "name": "dcfg_property",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "CRUD",
+    "name": "dcfg_property",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "CRUD",
+    "name": "dcfg_property",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "CRUD",
+    "name": "dcfg_property",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "CRUD",
+    "name": "dcfg_property",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "R",
+    "name": "Property",
+    "scope": "Global",
+    "appendTo": false,
+    "append": false,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_property",
+    "crud": "R",
+    "name": "DCFG Property",
+    "scope": "Global",
+    "appendTo": false,
+    "append": false,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_document_template",
+    "crud": "CRUD",
+    "name": "dcfg_document_template",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_document_template",
+    "crud": "CRUD",
+    "name": "dcfg_document_template",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_template_field",
+    "crud": "CRUD",
+    "name": "dcfg_template_field",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_template_field",
+    "crud": "CRUD",
+    "name": "dcfg_template_field",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_config",
+    "crud": "CRUD",
+    "name": "dcfg_config",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_config",
+    "crud": "R",
+    "name": "dcfg_config",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_config",
+    "crud": "CRU",
+    "name": "dcfg_config",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_cost_code",
+    "status": "MISSING",
+    "permissions": []
+  },
+  {
+    "table": "dcfg_trade_type",
+    "crud": "R",
+    "name": "dcfg_trade_type",
+    "scope": "Global",
+    "appendTo": false,
+    "append": false,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_send_queue",
+    "crud": "CRUD",
+    "name": "dcfg_send_queue",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_send_queue",
+    "crud": "CRUD",
+    "name": "dcfg_send_queue",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_document_request",
+    "crud": "CRUD",
+    "name": "dcfg_document_request",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_document_request",
+    "crud": "CRUD",
+    "name": "dcfg_document_request",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_audit_log",
+    "crud": "CR",
+    "name": "dcfg_audit_log",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  },
+  {
+    "table": "dcfg_audit_log",
+    "crud": "C",
+    "name": "dcfg_audit_log",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "WARN"
+  },
+  {
+    "table": "dcfg_audit_log",
+    "crud": "CRUD",
+    "name": "dcfg_audit_log",
+    "scope": "Global",
+    "appendTo": true,
+    "append": true,
+    "status": "PASS"
+  }
+]

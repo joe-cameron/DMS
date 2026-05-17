@@ -1,0 +1,206 @@
+[
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "___",
+    "path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "status": "OK",
+    "expected": "WO24168",
+    "source": "_________",
+    "path": "dcfg_contract_number"
+  },
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "__________",
+    "path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "status": "EMPTY",
+    "expected": "(no data)",
+    "source": "_DISABLED_1777392710399",
+    "path": null
+  },
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "\\Customer Signature\\",
+    "path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "\\Customer_Signature\\",
+    "path": "[DOCUSIGN:\\Customer_Signature\\]"
+  },
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "\\Vendor Signature\\",
+    "path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "status": "OK",
+    "expected": "(DocuSign anchor - invisible)",
+    "source": "\\Vendor_Signature\\",
+    "path": "[DOCUSIGN:\\Vendor_Signature\\]"
+  },
+  {
+    "status": "OK",
+    "expected": "(composite - built from multiple fields)",
+    "source": "City, State, Zip Code",
+    "path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "status": "OK",
+    "expected": "(composite - built from multiple fields)",
+    "source": "City, State, Zip Code",
+    "path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "status": "OK",
+    "expected": "(composite - built from multiple fields)",
+    "source": "Contact Name, Tele#",
+    "path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "status": "OK",
+    "expected": "$10350:N2",
+    "source": "Contract Fee",
+    "path": "dcfg_contract_fee"
+  },
+  {
+    "status": "OK",
+    "expected": "Zoe Buckridee",
+    "source": "Contractor Printed Name",
+    "path": "dcfg_signer_printed"
+  },
+  {
+    "status": "OK",
+    "expected": "Zoe Buckridee",
+    "source": "Contractor Printed Name",
+    "path": "dcfg_signer_printed"
+  },
+  {
+    "status": "OK",
+    "expected": "Commercial Accounts Specialist",
+    "source": "Contractor Title",
+    "path": "dcfg_signer_title"
+  },
+  {
+    "status": "OK",
+    "expected": "Commercial Accounts Specialist",
+    "source": "Contractor Title",
+    "path": "dcfg_signer_title"
+  },
+  {
+    "status": "OK",
+    "expected": "Sarah Mitchell",
+    "source": "Customer Contact Name",
+    "path": "dcfg_owner_contact"
+  },
+  {
+    "status": "OK",
+    "expected": "(lookup expand - Phase 1 remapped to flat)",
+    "source": "Customer Contact Name",
+    "path": "dcfg_customer.dcfg_primary_contact_name"
+  },
+  {
+    "status": "OK",
+    "expected": "(lookup expand - Phase 1 remapped to flat)",
+    "source": "Customer Contact Phone",
+    "path": "dcfg_customer.dcfg_primary_contact_phone"
+  },
+  {
+    "status": "OK",
+    "expected": "Director of Operations",
+    "source": "Customer Title",
+    "path": "dcfg_owner_title"
+  },
+  {
+    "status": "OK",
+    "expected": "(lookup expand - Phase 1 remapped to flat)",
+    "source": "Customer Title",
+    "path": "dcfg_customer.dcfg_primary_contact_title"
+  },
+  {
+    "status": "OK",
+    "expected": "office@ladybugpest.com",
+    "source": "email address (Vendor)",
+    "path": "dcfg_contractor_email"
+  },
+  {
+    "status": "EMPTY",
+    "expected": "",
+    "source": "MSA Date",
+    "path": "dcfg_msa_date"
+  },
+  {
+    "status": "EMPTY",
+    "expected": "",
+    "source": "MSA Date",
+    "path": "dcfg_msa_date"
+  },
+  {
+    "status": "OK",
+    "expected": "908-317-8576",
+    "source": "Tele#",
+    "path": "dcfg_contractor_phone"
+  },
+  {
+    "status": "OK",
+    "expected": "908-317-8576",
+    "source": "Tele#",
+    "path": "dcfg_contractor_phone"
+  },
+  {
+    "status": "OK",
+    "expected": "05/17/2026",
+    "source": "Today’s Date",
+    "path": "[SYSTEM:TODAY]"
+  },
+  {
+    "status": "OK",
+    "expected": "05/17/2026",
+    "source": "Today’s Date",
+    "path": "[SYSTEM:TODAY]"
+  },
+  {
+    "status": "OK",
+    "expected": "(composite - built from multiple fields)",
+    "source": "Vendor Contact Info",
+    "path": "[COMPOSITE:vendor_contact]"
+  },
+  {
+    "status": "OK",
+    "expected": "Lady Bug Pest Services",
+    "source": "VENDOR NAME",
+    "path": "dcfg_contractor_legal_name"
+  },
+  {
+    "status": "OK",
+    "expected": "Lady Bug Pest Services",
+    "source": "VENDOR NAME",
+    "path": "dcfg_contractor_legal_name"
+  },
+  {
+    "status": "OK",
+    "expected": "(composite - built from multiple fields)",
+    "source": "Vendor Street Address",
+    "path": "[COMPOSITE:vendor_address_block]"
+  },
+  {
+    "status": "OK",
+    "expected": "474 North Ave East, Westfield NJ,07091",
+    "source": "Vendor Street Address",
+    "path": "dcfg_contractor_address"
+  },
+  {
+    "status": "OK",
+    "expected": "WO24168",
+    "source": "WO Number",
+    "path": "dcfg_contract_number"
+  }
+]
