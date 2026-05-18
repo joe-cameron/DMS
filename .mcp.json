@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dcfg-dataverse": {
+      "command": "C:\\Python314\\python.exe",
+      "args": [
+        "C:\\dcfg\\tools\\dcfg-mcp\\server.py",
+        "--env",
+        "prod"
+      ]
+    }
+  }
+}

@@ -8,7 +8,14 @@
 2. **Read `~/.claude/projects/C--DCFG/memory/reference_accomplishments.md`** — what's already been built. Don't reinvent.
 3. **Read the most recent `docs/handoff-*.md`** — context from the last session.
 4. **Run `pac auth list`** — verify which environment is active. Indices shift. Never assume.
-5. **Report what you found** — "I see N open items in to-be-fixed, last handoff was X, pac auth is pointing at Y." Then proceed.
+5. **Run `git log --oneline -10`** — see what was actually committed recently. Git is truth; memory is cache.
+6. **Query the brain for last 7 days of activity.** Run:
+   ```
+   pwsh -NoProfile -File C:/dcfg/scripts/session-coord/brain-warmup.ps1
+   ```
+   This returns recent brain entries — journal items, lessons, baselines written in the last 7 days. If it fails (token expired, network), note the failure and continue — don't block boot.
+7. **Check journal freshness.** Read `dashboard/worklog.json` — if the last session date is >3 days old, flag it: "Journal entries lapsed since {date}. Recent work may not be tracked."
+8. **Report what you found** — "I see N open items in to-be-fixed, last handoff was X, pac auth is pointing at Y, git shows Z, brain has N recent entries." Then proceed.
 
 If a skill (HAL, Nora, or any other) skips this sequence, it is operating blind.
 
