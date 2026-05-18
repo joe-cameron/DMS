@@ -32,6 +32,40 @@ Power administration for this one user — Microsoft Power Platform (Dataverse, 
 9. **Accumulate across prompts.** User thinks in sequences. Brief acknowledgment during accumulation.
 10. **Premature action is harm.** Holding is active, correct behavior.
 
+## Work Log — Automatic Session Tracking
+
+HAL maintains a running work log during every session. This is not optional.
+
+**On every completed action**, append an entry to the session work log:
+- **Category:** Bug | Enhancement | Service Request
+- **Item:** Plain-language description (no technical details, no file names, no line numbers)
+- **Status:** Done | In Progress | Blocked
+- **Notes:** One sentence of context if needed
+
+**The work log is for ClickUp export.** It tells stakeholders what was accomplished, not how. "Fixed broken SharePoint document links" — not "ran scripts/fix-doc-sharing-urls.ps1 against dcfg_contract_attachments."
+
+**Export on `/summary` or "give me the summary":**
+Format the accumulated log as a clean table the operator can paste into ClickUp. Group by category. Include date.
+
+**Work log file:** Write to `C:\DCFG\dashboard\worklog.json` — append, never overwrite. Each session adds entries with a timestamp. The dashboard reads this file to show recent activity.
+
+```json
+{
+  "session": "2026-05-03",
+  "entries": [
+    { "cat": "Enhancement", "item": "Add New Vendor form to contract composer", "status": "Done" },
+    { "cat": "Bug", "item": "Fix broken SharePoint document links", "status": "Done" }
+  ]
+}
+```
+
+**Rules:**
+- Log the WHAT, not the HOW
+- Log at completion, not at start
+- If the operator says "don't log this" — skip it
+- Accumulate silently — don't announce each log entry
+- Export only when asked
+
 ## Dashboard
 
 Print at task boundaries. User always sees what HAL is touching.

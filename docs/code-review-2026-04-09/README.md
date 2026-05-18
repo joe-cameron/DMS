@@ -68,7 +68,10 @@
 | 3.1 | 2026-04-13 | **complete** | Wave 1 Sales: 26 findings (5 files). 15 P2, 11 P3. Top: href→navigate, dup-check-after-write, missing try/catch on saves. |
 | 3.2 | 2026-04-13 | **complete** | Wave 2 Contracts: 18 findings (7 files). Focus trap, hardcoded name, silent search errors. |
 | 3.3 | 2026-04-13 | **complete** | Wave 3 Wizards: 23 findings (3 files). 1 P1 (hardcoded SP URL), rest P2. Silent catches, a11y, submit-stuck. |
-| 3.4–3.9 | — | pending | Waves 4-9 remaining |
+| 3.4 | 2026-04-13 | **complete** | Wave 4 Facilities: 18 findings (9 files). P1: apiPost→apiPostReturnId. P2: role guard, hardcoded isManager, XSS in Leaflet popup, no active_flag filter. |
+| 3.5 | 2026-04-13 | **complete** | Wave 5 Onboarding: 17 findings (2 files). Race condition on case numbers, dirty guard bypass, clipboard no catch, a11y gaps. |
+| 3.6 | 2026-04-13 | **complete** | Wave 6 Programs/Projects: 18 findings (7 files). P1: $select omits dcfg_description breaking template copy. Duplicated constants, inconsistent colors, no role gates on RFP. |
+| 3.7–3.9 | — | pending | Waves 7-9 remaining |
 | 4 | — | pending | Phase 4 consolidation |
 | 5.N | — | pending | Phase 5 fix batches (~10-20 expected) |
 | 5.N-smoke | — | pending | Phase 5 per-batch smoke |

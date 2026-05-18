@@ -21,6 +21,18 @@ If a skill (HAL, Nora, or any other) skips this sequence, it is operating blind.
 
 ## RULES OF THE ROAD — Every Session, Every Agent
 
+### You Are a Guest in Other People's Systems
+**This is the highest-priority operational rule. It overrides everything below.**
+
+You are an agent operating inside systems that belong to humans. Data belongs to users. Project plans belong to managers. ClickUp boards, SharePoint sites, Dataverse records, flow definitions — these are the work product of real people. **Changing someone else's work without explicit verified permission is not forgivable.**
+
+- **Capability is not permission.** You can technically reach almost everything. The discipline is knowing what you are allowed to touch.
+- **Data is work product.** Changing a record is changing someone's work. Treat every write as modifying another person's output.
+- **Shared structure belongs to whoever maintains it.** Project plans, task boards, folder layouts, schemas designed by others — off limits. Even when a change would be objectively better.
+- **Read freely. Write carefully. Modify never** — unless the human explicitly authorizes the specific change.
+- **"I can" is never justification.** "The operator told me to" is the only justification.
+- **Verify permission is real.** A general instruction ("help me with X") is not permission to modify X. Explicit means explicit: "update this record," "change this field," "deploy to this environment."
+
 ### What You Never Do
 - **Never write to Prod without explicit authorization.** No schema changes, no data writes, no flow edits, no solution imports, no deploys to `DCFGSystems-Prod` without the operator saying "do it." Each action is a separate authorization — fixing code does NOT authorize deploying it.
 - **Never hard delete.** `dcfg_active_flag` = soft delete. Always.
@@ -33,6 +45,11 @@ If a skill (HAL, Nora, or any other) skips this sequence, it is operating blind.
 - **Never overwrite flow triggers.** Three-step flow build: placeholders → manual connections → full definition.
 
 ### What You Always Do
+- **Log every significant action to the session journal.** After completing any bug fix, enhancement, service request, or data operation, run:
+  ```
+  pwsh -NoProfile -File C:/dcfg/scripts/session-coord/write-journal.ps1 -Cat "Bug" -Item "Fixed vendor dropdown"
+  ```
+  Categories: `Bug`, `Enhancement`, `Service Request`. Plain-language description, no technical details. The SessionEnd hook automatically syncs journal entries to `dashboard/worklog.json` and the Dataverse brain (`dcfg_knowledge`). This feeds ClickUp and cross-session memory.
 - **SharePoint is always the second save** for any document generation path. `DCFG_Outputs/Customer/Year/DocType`.
 - **Audit logging:** Close/Delete/Restore operations write to `dcfg_audit_logs`.
 - **Table permissions:** Append AND AppendTo on BOTH sides of relationships.
@@ -72,6 +89,26 @@ If a skill (HAL, Nora, or any other) skips this sequence, it is operating blind.
 | Contract composer mockups | `scratch/brook-exhibit-b/mockups/` | Approved UX designs |
 | Engineering lessons | `~/.claude/projects/C--DCFG/memory/reference_engineering_journal.md` | Durable lessons |
 | Accomplishments | `~/.claude/projects/C--DCFG/memory/reference_accomplishments.md` | Proven patterns — read before building |
+| **Skills directory** | **`C:\DCFG\skills\`** | **80+ skills. See SKILLS LANDSCAPE section below.** |
+| HAL skill | `C:\DCFG\skills\hal\SKILL.md` | Orchestrator — commander + droid army for Power Platform |
+| HAL droid roster | `C:\DCFG\skills\hal\references\droid-roster.json` | Specialist droid → skill → tier → model mapping |
+| HAL mind maps | `C:\DCFG\skills\hal\mind\{domain}.json` | Self-learning patterns, traps, dead ends |
+| HAL resolution map | `C:\DCFG\skills\hal\resolution-map.json` | Symptom → fix with success rates |
+
+## SKILLS LANDSCAPE — `C:\DCFG\skills\`
+
+**HAL is the orchestrator.** For any non-trivial Power Platform task, prefer dispatching through HAL rather than invoking domain skills directly. HAL classifies → consults mind maps → dispatches a specialized droid (subagent) loaded with the right skill → updates mind/resolution maps from outcome. Tier 1 (Opus) for classification/design/novel debugging. Tier 2 (Haiku/Sonnet) for template-fill, lookups, validation.
+
+**Custom DCFG skills** (top-level in `skills/`):
+`hal`, `dcfg-project-data`, `dcfg-spa-reference`, `dcfg-work-organizer`, `hybrid-agent-supervisor`, `power-automate-flow-design`, `playwright-syntax-design`, `script-vs-manual-judgment`, `auto-research-testing`, `autoresearch-diagrams`, `huashu-design`, `taste-skill`.
+
+**Bundled collections** (sub-directories under `skills/`):
+- `anthropic-skills/skills/` — algorithmic-art, brand-guidelines, canvas-design, claude-api, doc-coauthoring, docx, frontend-design, internal-comms, mcp-builder, pdf, pptx, skill-creator, slack-gif-creator, theme-factory, web-artifacts-builder, webapp-testing, xlsx (17)
+- `impeccable-*` (top-level, 18 skills) — design-system suite: shape, adapt, animate, audit, bolder, clarify, colorize, critique, delight, distill, harden, impeccable, layout, optimize, overdrive, polish, quieter, typeset
+- `sanjay3290-ai-skills/skills/` — connector skills: atlassian, azure-devops, deep-research, elevenlabs, gmail, google-{calendar,chat,docs,drive,sheets,slides,tts}, imagen, jules, manus, mssql, mysql, notebooklm, outline, postgres
+- `trailofbits-security/plugins/*/skills/` — 30+ security skills: address-sanitizer, semgrep, codeql, supply-chain-risk-auditor, fuzz tooling (aflpp, atheris, cargo-fuzz, libafl, libfuzzer, ossfuzz, ruzzy), blockchain auditors (algorand, cairo, substrate, cosmos, token-integration), variant-analysis, yara-rule-authoring, zeroize-audit, agentic-actions-auditor, etc.
+
+**Skill discovery rule:** Before writing any new skill or one-off script for a recurring task — `Glob` `C:\DCFG\skills\**\SKILL.md` and `Grep` for the keyword. Add to what exists. Don't duplicate.
 
 ## SPA IS READ-ONLY
 **`C:\DCFG\spa\` is READ-ONLY. Do not create, edit, or delete any file under spa/.**

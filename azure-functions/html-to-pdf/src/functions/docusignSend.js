@@ -328,7 +328,7 @@ app.http('docusign-send', {
 
     // ── Validate required fields ──
     const missing = [];
-    if (!body.documentUrl) missing.push('documentUrl');
+    if (!body.documentUrl && !body.fileBase64) missing.push('documentUrl or fileBase64');
     if (!body.signerA?.email) missing.push('signerA.email');
     if (!body.signerA?.name) missing.push('signerA.name');
     if (!body.signerB?.email) missing.push('signerB.email');
@@ -342,11 +342,17 @@ app.http('docusign-send', {
     }
 
     try {
-      // ── Step 1: Download document from SharePoint ──
-      context.log(`[DocuSign] Downloading: ${body.documentUrl}`);
-      const graphToken = await getGraphToken();
-      const fileBuffer = await downloadFromSharePoint(body.documentUrl, graphToken, context);
-      context.log(`[DocuSign] Downloaded ${fileBuffer.length} bytes`);
+      // ── Step 1: Get document bytes (direct upload or SharePoint download) ──
+      let fileBuffer;
+      if (body.fileBase64) {
+        fileBuffer = Buffer.from(body.fileBase64, 'base64');
+        context.log(`[DocuSign] Using uploaded file: ${body.documentName} (${fileBuffer.length} bytes)`);
+      } else {
+        context.log(`[DocuSign] Downloading: ${body.documentUrl}`);
+        const graphToken = await getGraphToken();
+        fileBuffer = await downloadFromSharePoint(body.documentUrl, graphToken, context);
+        context.log(`[DocuSign] Downloaded ${fileBuffer.length} bytes`);
+      }
 
       // ── Step 2: Get DocuSign token ──
       const docuSignToken = await getDocuSignToken();

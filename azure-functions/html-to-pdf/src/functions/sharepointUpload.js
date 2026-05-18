@@ -20,17 +20,27 @@
  * POST /api/sharepoint-upload
  * Body (JSON):
  *   {
+ *     // Primary field names (task spec):
+ *     "fileContent": "<base64 encoded file>",   // alias: file_base64
+ *     "fileName": "file.docx",                  // alias: filename
+ *     "folderPath": "Customer/2026/MSA",         // alias: folder_path
+ *     "siteUrl": "https://tenant.sharepoint.com/sites/MySite",  // optional override
+ *
+ *     // Legacy field names (also accepted):
  *     "file_base64": "<base64 encoded file>",
- *     "customer_name": "Bancroft",
+ *     "filename": "file.docx",
+ *     "folder_path": "Customer/2026/MSA",
+ *     "customer_name": "Bancroft",   // used to build folder_path if folderPath absent
  *     "year": 2026,
  *     "doc_type": "Essential",
- *     "filename": "Bancroft - Essential - 2026-04-18.docx"
+ *     "library": "DCFG_Outputs"      // document library name, default: DCFG_Outputs
  *   }
  *
  * Response (JSON):
  *   {
  *     "success": true,
  *     "url": "https://...sharepoint.com/.../filename.docx",
+ *     "webUrl": "https://...sharepoint.com/.../filename.docx?web=1",
  *     "method": "graph-chunked|graph-simple|sharepoint-rest",
  *     "verified": true,
  *     "timing_ms": 1234,
@@ -44,14 +54,25 @@ let graphFailCount = 0;
 let graphCircuitOpenUntil = 0;
 
 // ─── Config from env ───
-function getConfig() {
-  return {
+// siteUrlOverride: optional caller-supplied "https://tenant.sharepoint.com/sites/MySite"
+function getConfig(siteUrlOverride) {
+  const cfg = {
     tenantId:     process.env.SP_TENANT_ID,
     clientId:     process.env.SP_CLIENT_ID,
     clientSecret: process.env.SP_CLIENT_SECRET,
     siteHost:     process.env.SP_SITE_HOST || 'decadesconstructiongroup.sharepoint.com',
     sitePath:     process.env.SP_SITE_PATH || '/sites/DCFGContractingSuite',
   };
+  if (siteUrlOverride) {
+    try {
+      const u = new URL(siteUrlOverride);
+      cfg.siteHost = u.hostname;
+      cfg.sitePath = u.pathname.replace(/\/$/, '') || '/';
+    } catch (_) {
+      // ignore malformed override — fall back to env defaults
+    }
+  }
+  return cfg;
 }
 
 // ─── Token acquisition (client_credentials grant) ───
@@ -347,24 +368,32 @@ app.http('sharepoint-upload', {
 
     try {
       const body = await request.json();
-      const { file_base64, customer_name, year, doc_type, filename, library, folder_path } = body;
 
-      if (!file_base64 || !filename) {
-        return { status: 400, jsonBody: { success: false, error: 'Missing file_base64 or filename' }, headers: corsHeaders };
+      // Accept both task-spec names (fileContent/fileName/folderPath) and legacy names
+      const file_base64   = body.fileContent  || body.file_base64;
+      const filename      = body.fileName     || body.filename;
+      const folder_path   = body.folderPath   || body.folder_path;
+      const { customer_name, year, doc_type, library, siteUrl: siteUrlOverride } = body;
+
+      const missing = [];
+      if (!file_base64) missing.push('fileContent (or file_base64)');
+      if (!filename)    missing.push('fileName (or filename)');
+      if (missing.length > 0) {
+        return { status: 400, jsonBody: { success: false, error: `Missing required fields: ${missing.join(', ')}` }, headers: corsHeaders };
       }
 
-      const config = getConfig();
+      const config = getConfig(siteUrlOverride);
       if (!config.tenantId || !config.clientId || !config.clientSecret) {
         return { status: 500, jsonBody: { success: false, error: 'Server config missing SP_TENANT_ID, SP_CLIENT_ID, or SP_CLIENT_SECRET' }, headers: corsHeaders };
       }
 
       const buffer = Buffer.from(file_base64, 'base64');
-      // Use explicit folder_path if provided, otherwise construct from customer/year/doc_type
+      // Use explicit folderPath/folder_path if provided, otherwise construct from customer/year/doc_type
       const targetLibrary = library || 'DCFG_Outputs';
-      const folderPath = folder_path || `${customer_name || 'Unassigned'}/${year || new Date().getFullYear()}/${doc_type || 'Document'}`;
-      const fileUrl = `https://${config.siteHost}${config.sitePath}/${targetLibrary}/${folderPath}/${filename}`;
+      const resolvedFolderPath = folder_path || `${customer_name || 'Unassigned'}/${year || new Date().getFullYear()}/${doc_type || 'Document'}`;
+      const fileUrl = `https://${config.siteHost}${config.sitePath}/${targetLibrary}/${resolvedFolderPath}/${filename}`;
 
-      context.log(`[SP Upload] Starting: ${filename} (${buffer.length} bytes) → ${folderPath}`);
+      context.log(`[SP Upload] Starting: ${filename} (${buffer.length} bytes) → ${resolvedFolderPath}`);
 
       let success = false;
       let method = null;
@@ -384,8 +413,8 @@ app.http('sharepoint-upload', {
           graphToken = await retry(() => getGraphToken(config));
           const resolved = await resolveSiteAndDrive(graphToken, config, targetLibrary);
           driveId = resolved.driveId;
-          await ensureFolderPath(graphToken, driveId, folderPath);
-          await retry(() => uploadGraphChunked(graphToken, driveId, folderPath, filename, buffer));
+          await ensureFolderPath(graphToken, driveId, resolvedFolderPath);
+          await retry(() => uploadGraphChunked(graphToken, driveId, resolvedFolderPath, filename, buffer));
           success = true;
           method = 'graph-chunked';
           graphFailCount = 0; // reset circuit
@@ -407,8 +436,8 @@ app.http('sharepoint-upload', {
             const resolved = await resolveSiteAndDrive(graphToken, config, targetLibrary);
             driveId = resolved.driveId;
           }
-          await ensureFolderPath(graphToken, driveId, folderPath);
-          await retry(() => uploadGraphSimple(graphToken, driveId, folderPath, filename, buffer));
+          await ensureFolderPath(graphToken, driveId, resolvedFolderPath);
+          await retry(() => uploadGraphSimple(graphToken, driveId, resolvedFolderPath, filename, buffer));
           success = true;
           method = 'graph-simple';
           graphFailCount = 0;
@@ -431,7 +460,7 @@ app.http('sharepoint-upload', {
       if (!success) {
         const lt0 = Date.now();
         try {
-          await retry(() => uploadSharePointRest(config, folderPath, filename, buffer));
+          await retry(() => uploadSharePointRest(config, resolvedFolderPath, filename, buffer));
           success = true;
           method = 'sharepoint-rest';
           attempts.push({ layer: 3, method: 'sharepoint-rest', status: 'success', ms: Date.now() - lt0 });
@@ -457,16 +486,18 @@ app.http('sharepoint-upload', {
 
       // ── Verify file exists (read-back) ──
       let verified = false;
+      let graphWebUrl = null;
       try {
         if (!graphToken) graphToken = await getGraphToken(config);
         if (!driveId) {
           const resolved = await resolveSiteAndDrive(graphToken, config, targetLibrary);
           driveId = resolved.driveId;
         }
-        const verifyResult = await verifyFileExists(graphToken, driveId, folderPath, filename);
+        const verifyResult = await verifyFileExists(graphToken, driveId, resolvedFolderPath, filename);
         verified = verifyResult.verified;
         if (verified) {
-          context.log(`[SP Upload] VERIFIED: ${verifyResult.webUrl} (${verifyResult.size} bytes)`);
+          graphWebUrl = verifyResult.webUrl || null;
+          context.log(`[SP Upload] VERIFIED: ${graphWebUrl} (${verifyResult.size} bytes)`);
         } else {
           context.log(`[SP Upload] Verify FAILED: status ${verifyResult.status}`);
         }
@@ -475,11 +506,18 @@ app.http('sharepoint-upload', {
         // Upload succeeded but verify failed — still return success with verified=false
       }
 
+      // webUrl: prefer the Graph-returned URL (authoritative), fall back to constructed URL.
+      // Append ?web=1 so the link opens in the browser viewer rather than triggering download.
+      const webUrl = graphWebUrl
+        ? (graphWebUrl.includes('?') ? graphWebUrl + '&web=1' : graphWebUrl + '?web=1')
+        : fileUrl + '?web=1';
+
       return {
         status: 200,
         jsonBody: {
           success: true,
           url: fileUrl,
+          webUrl,
           method,
           verified,
           timing_ms: Date.now() - t0,

@@ -23,3 +23,8 @@ Last cleaned: 2026-05-12.
 ## Trades Reference Data
 38. **Admin management card for trades** — `dcfg_trade_type` table built, SPA wired (2026-05-11). Still needed: Admin screen card to add/edit/deactivate trades.
 
+## Data Gaps (found 2026-05-15 Prod E2E)
+39. **Contracts list empty** — Smart List shows no rows. May be a query/filter issue or data timing.
+40. **Locations TYPE column all dashes** — `dcfg_location_type` not set on any Bancroft location. Needs bulk assignment or default.
+41. **PCDI missing primary contact** — Customer record shows "-" for primary contact.
+

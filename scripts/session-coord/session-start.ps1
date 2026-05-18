@@ -37,6 +37,12 @@ try {
     }
 
     # -----------------------------------------------------------------------
+    # 2b. Clear session journal (fresh for this session)
+    # -----------------------------------------------------------------------
+    $journalFile = Join-Path $sessionDir 'journal.jsonl'
+    if (Test-Path $journalFile) { Remove-Item $journalFile -Force }
+
+    # -----------------------------------------------------------------------
     # 3. Capture git state
     # -----------------------------------------------------------------------
     $gitBranch = ''

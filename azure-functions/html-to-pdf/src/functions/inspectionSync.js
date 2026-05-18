@@ -19,6 +19,52 @@ const { app } = require('@azure/functions');
 
 const UPKEEP_API = 'https://api.onupkeep.com/api/v2';
 
+// ── WO Category Mapping ─────────────────────────────
+// Maps UpKeep category strings to Dataverse picklist values
+const CATEGORY_MAP = {
+  'Inspection': 100000000,
+  'Inspections': 100000000,
+  'Preventative': 100000001,
+  'Punchlist': 100000002,
+  'Painting - Punch List': 100000002,
+  'Painting - Punchlist': 100000002,
+  'Plumbing': 100000003,
+  'Plumbing - General': 100000003,
+  'Plumbing - Specialty': 100000003,
+  'Painting': 100000004,
+  'Painting - Program Request': 100000004,
+  'Urgent Paint Requests': 100000004,
+  'Electrical': 100000005,
+  'HVAC': 100000006,
+  'HVAC - Heat': 100000006,
+  'HVAC - A/C': 100000006,
+  'General Maintenance': 100000007,
+  'Safety': 100000008,
+  'Move Requests': 100000009,
+};
+const CATEGORY_OTHER = 100000009;
+
+// Inspection and Preventative are the same work type for scheduling purposes
+const INSPECTION_CATEGORIES = [100000000, 100000001];
+
+function mapCategory(upkeepCategory, title) {
+    if (upkeepCategory && CATEGORY_MAP[upkeepCategory] !== undefined) {
+        return CATEGORY_MAP[upkeepCategory];
+    }
+    // Fallback: detect from title
+    var t = (title || '').toLowerCase();
+    if (/insp/.test(t)) return 100000000;
+    if (/prevent/.test(t)) return 100000001;
+    if (/punch/.test(t)) return 100000002;
+    if (/plumb/.test(t)) return 100000003;
+    if (/paint/.test(t)) return 100000004;
+    if (/electr/.test(t)) return 100000005;
+    if (/hvac|heat|cool|air/.test(t)) return 100000006;
+    if (/safe|fire|extinguish|alarm|strobe/.test(t)) return 100000008;
+    if (/move|tenant|vacat/.test(t)) return 100000009;
+    return CATEGORY_OTHER;
+}
+
 // ── UpKeep Auth ──────────────────────────────────────
 async function getUpKeepToken(email, password) {
     const resp = await fetch(UPKEEP_API + '/auth', {
@@ -55,8 +101,8 @@ async function getDataverseToken(tenantId, clientId, clientSecret, dvUrl) {
     return data.access_token;
 }
 
-// ── Pull UpKeep Inspection WOs ───────────────────────
-async function pullUpKeepInspections(sessionToken) {
+// ── Pull ALL UpKeep Work Orders ──────────────────────
+async function pullUpKeepWorkOrders(sessionToken) {
     const headers = { 'Session-Token': sessionToken };
     var allWOs = [];
     var page = 0;
@@ -65,15 +111,14 @@ async function pullUpKeepInspections(sessionToken) {
     while (hasMore) {
         const resp = await fetch(UPKEEP_API + '/work-orders?limit=200&offset=' + (page * 200), { headers });
         const data = await resp.json();
-        const inspections = (data.results || []).filter(function(w) {
-            // Only sync WOs with "insp" in the title — category alone is too loose
-            // (UpKeep marks "Apartment checks", "Water temperatures" as category "Inspection")
-            return w.title && w.title.match(/insp/i);
+        // Sync all work orders — no category filter
+        var results = (data.results || []).filter(function(w) {
+            return w.title || w.category; // must have at least a title or category
         });
-        allWOs = allWOs.concat(inspections);
+        allWOs = allWOs.concat(results);
         hasMore = data.results && data.results.length === 200;
         page++;
-        if (page > 25) break;
+        if (page > 50) break; // safety cap at 10,000 WOs per account
     }
     return allWOs;
 }
@@ -114,10 +159,9 @@ async function upsertWOs(wos, sourceName, byWoId, dvHeaders, dvToken, apiBase, l
         var newDate = wo.dueDate || null;
 
         // Extract assigned user name from UpKeep WO
-        var assignedTo = '';
-        if (wo.assignedToUser) {
-            assignedTo = typeof wo.assignedToUser === 'string' ? wo.assignedToUser : (wo.assignedToUser.name || wo.assignedToUser.email || '');
-        }
+        // assignedToUsername = email (e.g. "ehadley@decades-cg.com")
+        // assignedToUser = UpKeep user ID string (not useful for display)
+        var assignedTo = wo.assignedToUsername || '';
 
         if (ex) {
             var dateChanged = newDate && ex.dcfg_scheduled_date && !ex.dcfg_scheduled_date.startsWith(newDate.split('T')[0]);
@@ -148,11 +192,13 @@ async function upsertWOs(wos, sourceName, byWoId, dvHeaders, dvToken, apiBase, l
                 stats.errors++;
             }
         } else {
+            var woCat = mapCategory(wo.category, wo.title);
             var createBody = {
-                dcfg_name: (wo.title || 'Inspection ' + wo.id).substring(0, 200),
+                dcfg_name: (wo.title || wo.category || 'WO ' + wo.id).substring(0, 200),
                 dcfg_upkeep_wo_id: wo.id,
                 dcfg_upkeep_source: sourceName,
                 dcfg_visit_status: newStatus,
+                dcfg_wo_category: woCat,
                 dcfg_active_flag: true,
                 dcfg_is_first_inspection: false,
                 dcfg_assigned_to: assignedTo || '',
@@ -248,9 +294,9 @@ async function syncInspections(context) {
 
         try {
             var ukToken = await getUpKeepToken(acct.email, acct.password);
-            var wos = await pullUpKeepInspections(ukToken);
+            var wos = await pullUpKeepWorkOrders(ukToken);
             stats.checked += wos.length;
-            log('[inspection-sync]   ' + acct.name + ': ' + wos.length + ' inspection WOs');
+            log('[inspection-sync]   ' + acct.name + ': ' + wos.length + ' work orders (all categories)');
 
             await upsertWOs(wos, acct.name, byWoId, dvHeaders, dvToken, apiBase, log, stats);
         } catch (e) {

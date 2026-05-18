@@ -1,0 +1,528 @@
+{
+  "generatedAt": "2026-04-10T14:55:02.117Z",
+  "methodology": "Matched apiPost/apiPostReturn/apiPostReturnId/apiPatch call sites with their target tables (via EntitySets map from src/portalApi.js) and body bind columns, cross-referenced against Prod explicit fields lists from bind-coverage-sweep.json",
+  "explicitTablesCount": 43,
+  "scannedFileCount": 70,
+  "totalCallBindPairs": 66,
+  "alreadyFixed": [
+    {
+      "table": "dcfg_document_template",
+      "column": "dcfg_customer_id",
+      "fixedIn": "Gate 0a batch 1 (2026-04-09)"
+    },
+    {
+      "table": "dcfg_blanket_workorder",
+      "column": "dcfg_customer_id",
+      "fixedIn": "Gate 0a batch 1 (2026-04-09)"
+    },
+    {
+      "table": "dcfg_customer_ap_mapping",
+      "columns": [
+        "dcfg_customer_id",
+        "dcfg_cost_code_id"
+      ],
+      "fixedIn": "Gate 0a batch 1 (2026-04-09)"
+    },
+    {
+      "table": "dcfg_msa",
+      "columns": [
+        "dcfg_customer_id",
+        "dcfg_vendor_id"
+      ],
+      "fixedIn": "Hotfix 2026-04-10"
+    }
+  ],
+  "alreadyFixedConfirmedInSource": [
+    {
+      "targetTable": "dcfg_msa",
+      "bindColumn": "dcfg_vendor_id",
+      "callSiteCount": 2
+    }
+  ],
+  "gaps": [
+    {
+      "targetTable": "dcfg_appliance",
+      "bindColumn": "dcfg_property_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/LocationManager.jsx",
+          "line": 557,
+          "snippet": "await apiPatch(`/${EntitySets.appliances}(${id})`, body);"
+        },
+        {
+          "file": "src/LocationManager.jsx",
+          "line": 582,
+          "snippet": "const created = await apiPostReturn(`/${EntitySets.appliances}`, body);"
+        },
+        {
+          "file": "src/screens/LocationDetail.jsx",
+          "line": 513,
+          "snippet": "await apiPost(`/${EntitySets.appliances}`, body);"
+        },
+        {
+          "file": "src/screens/LocationDetail.jsx",
+          "line": 518,
+          "snippet": "await apiPatch(`/${EntitySets.appliances}(${data.dcfg_applianceid})`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_appliance/fields explicit list does not contain 'dcfg_property_id' (has '_dcfg_property_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_property_id' to Webapi/dcfg_appliance/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_contract",
+      "bindColumn": "dcfg_parent_contract_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 361,
+          "snippet": "const newId = await apiPostReturnId(`/${EntitySets.contracts}`, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 359,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 517,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 524,
+          "snippet": "const created = await createContract(payload);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_contract/fields explicit list does not contain 'dcfg_parent_contract_id' (has '_dcfg_parent_contract_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_parent_contract_id' to Webapi/dcfg_contract/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_contract",
+      "bindColumn": "dcfg_customer_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 361,
+          "snippet": "const newId = await apiPostReturnId(`/${EntitySets.contracts}`, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 359,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 517,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 524,
+          "snippet": "const created = await createContract(payload);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_contract/fields explicit list does not contain 'dcfg_customer_id' (has '_dcfg_customer_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_customer_id' to Webapi/dcfg_contract/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_contract",
+      "bindColumn": "dcfg_property_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 361,
+          "snippet": "const newId = await apiPostReturnId(`/${EntitySets.contracts}`, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 359,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 517,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 524,
+          "snippet": "const created = await createContract(payload);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_contract/fields explicit list does not contain 'dcfg_property_id' (has '_dcfg_property_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_property_id' to Webapi/dcfg_contract/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_contract",
+      "bindColumn": "dcfg_vendor_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 361,
+          "snippet": "const newId = await apiPostReturnId(`/${EntitySets.contracts}`, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 359,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 517,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 524,
+          "snippet": "const created = await createContract(payload);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_contract/fields explicit list does not contain 'dcfg_vendor_id' (has '_dcfg_vendor_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_vendor_id' to Webapi/dcfg_contract/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_contract",
+      "bindColumn": "dcfg_program_id",
+      "uniqueCallCount": 4,
+      "callSites": [
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 361,
+          "snippet": "const newId = await apiPostReturnId(`/${EntitySets.contracts}`, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 359,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 517,
+          "snippet": "await updateContract(draftId, payload);"
+        },
+        {
+          "file": "src/NewContractWizard.jsx",
+          "line": 524,
+          "snippet": "const created = await createContract(payload);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_contract/fields explicit list does not contain 'dcfg_program_id' (has '_dcfg_program_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_program_id' to Webapi/dcfg_contract/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_appliance",
+      "bindColumn": "dcfg_appliance_type_id",
+      "uniqueCallCount": 3,
+      "callSites": [
+        {
+          "file": "src/LocationManager.jsx",
+          "line": 582,
+          "snippet": "const created = await apiPostReturn(`/${EntitySets.appliances}`, body);"
+        },
+        {
+          "file": "src/screens/LocationDetail.jsx",
+          "line": 513,
+          "snippet": "await apiPost(`/${EntitySets.appliances}`, body);"
+        },
+        {
+          "file": "src/screens/LocationDetail.jsx",
+          "line": 518,
+          "snippet": "await apiPatch(`/${EntitySets.appliances}(${data.dcfg_applianceid})`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_appliance/fields explicit list does not contain 'dcfg_appliance_type_id' (has '_dcfg_appliance_type_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_appliance_type_id' to Webapi/dcfg_appliance/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_project_line_item",
+      "bindColumn": "dcfg_project_id",
+      "uniqueCallCount": 3,
+      "callSites": [
+        {
+          "file": "src/screens/ProjectDetail.jsx",
+          "line": 191,
+          "snippet": "await createProjectLine(body);"
+        },
+        {
+          "file": "src/screens/ProjectDetail.jsx",
+          "line": 195,
+          "snippet": "await updateProjectLine(lineId, body);"
+        },
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 200,
+          "snippet": "await Promise.all(tplLines.map(line => apiPostReturnId(`/${EntitySets.projectLineItems}`, {"
+        }
+      ],
+      "evidence": "Webapi/dcfg_project_line_item/fields explicit list does not contain 'dcfg_project_id' (has '_dcfg_project_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_project_id' to Webapi/dcfg_project_line_item/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_property_detail",
+      "bindColumn": "dcfg_property_id",
+      "uniqueCallCount": 2,
+      "callSites": [
+        {
+          "file": "src/LocationManager.jsx",
+          "line": 523,
+          "snippet": "await apiPost(`/${EntitySets.propertyDetails}`, body);"
+        },
+        {
+          "file": "src/screens/LocationDetail.jsx",
+          "line": 172,
+          "snippet": "await apiPost(`/${EntitySets.propertyDetails}`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_property_detail/fields explicit list does not contain 'dcfg_property_id' (has '_dcfg_property_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_property_id' to Webapi/dcfg_property_detail/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_property",
+      "bindColumn": "dcfg_customer_id",
+      "uniqueCallCount": 2,
+      "callSites": [
+        {
+          "file": "src/NewProposalWizard.jsx",
+          "line": 257,
+          "snippet": "const newId=await apiPostReturnId(`/${EntitySets.properties}`,body);"
+        },
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 161,
+          "snippet": "const locId = await apiPostReturnId(`/${EntitySets.properties}`, {"
+        }
+      ],
+      "evidence": "Webapi/dcfg_property/fields explicit list does not contain 'dcfg_customer_id' (has '_dcfg_customer_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_customer_id' to Webapi/dcfg_property/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_msa_rate",
+      "bindColumn": "dcfg_msa_id",
+      "uniqueCallCount": 2,
+      "callSites": [
+        {
+          "file": "src/NewProposalWizard.jsx",
+          "line": 460,
+          "snippet": "return apiPost(`/${EntitySets.msaRates}`,{"
+        },
+        {
+          "file": "src/NewProposalWizard.jsx",
+          "line": 474,
+          "snippet": "return apiPost(`/${EntitySets.msaRates}`,{"
+        }
+      ],
+      "evidence": "Webapi/dcfg_msa_rate/fields explicit list does not contain 'dcfg_msa_id' (has '_dcfg_msa_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_msa_id' to Webapi/dcfg_msa_rate/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_msa_rate",
+      "bindColumn": "dcfg_location_type_id",
+      "uniqueCallCount": 2,
+      "callSites": [
+        {
+          "file": "src/NewProposalWizard.jsx",
+          "line": 460,
+          "snippet": "return apiPost(`/${EntitySets.msaRates}`,{"
+        },
+        {
+          "file": "src/NewProposalWizard.jsx",
+          "line": 474,
+          "snippet": "return apiPost(`/${EntitySets.msaRates}`,{"
+        }
+      ],
+      "evidence": "Webapi/dcfg_msa_rate/fields explicit list does not contain 'dcfg_location_type_id' (has '_dcfg_location_type_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_location_type_id' to Webapi/dcfg_msa_rate/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_onboarding_checklist",
+      "bindColumn": "dcfg_case_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/portalApi.js",
+          "line": 627,
+          "snippet": "await apiPost(`/${EntitySets.onboardingChecks}`, {"
+        }
+      ],
+      "evidence": "Webapi/dcfg_onboarding_checklist/fields explicit list does not contain 'dcfg_case_id' (has '_dcfg_case_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_case_id' to Webapi/dcfg_onboarding_checklist/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_document_request",
+      "bindColumn": "dcfg_contract_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/portalApi.js",
+          "line": 755,
+          "snippet": "return apiPostReturn(`/${EntitySets.documentRequests}`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_document_request/fields explicit list does not contain 'dcfg_contract_id' (has '_dcfg_contract_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_contract_id' to Webapi/dcfg_document_request/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_document_request",
+      "bindColumn": "dcfg_template_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/portalApi.js",
+          "line": 755,
+          "snippet": "return apiPostReturn(`/${EntitySets.documentRequests}`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_document_request/fields explicit list does not contain 'dcfg_template_id' (has '_dcfg_template_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_template_id' to Webapi/dcfg_document_request/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_document_request",
+      "bindColumn": "dcfg_customer_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/portalApi.js",
+          "line": 755,
+          "snippet": "return apiPostReturn(`/${EntitySets.documentRequests}`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_document_request/fields explicit list does not contain 'dcfg_customer_id' (has '_dcfg_customer_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_customer_id' to Webapi/dcfg_document_request/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_document_request",
+      "bindColumn": "dcfg_msa_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/portalApi.js",
+          "line": 755,
+          "snippet": "return apiPostReturn(`/${EntitySets.documentRequests}`, body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_document_request/fields explicit list does not contain 'dcfg_msa_id' (has '_dcfg_msa_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_msa_id' to Webapi/dcfg_document_request/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_onboarding_case",
+      "bindColumn": "dcfg_customer_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/Onboarding.jsx",
+          "line": 127,
+          "snippet": "const newCase = await apiPostReturn(`/${EntitySets.onboardingCases}`, {"
+        }
+      ],
+      "evidence": "Webapi/dcfg_onboarding_case/fields explicit list does not contain 'dcfg_customer_id' (has '_dcfg_customer_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_customer_id' to Webapi/dcfg_onboarding_case/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_project",
+      "bindColumn": "dcfg_customer_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 191,
+          "snippet": "const result = await createProject(body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_project/fields explicit list does not contain 'dcfg_customer_id' (has '_dcfg_customer_id_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_customer_id' to Webapi/dcfg_project/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_project",
+      "bindColumn": "dcfg_propertyid",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 191,
+          "snippet": "const result = await createProject(body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_project/fields explicit list does not contain 'dcfg_propertyid' (has '_dcfg_propertyid_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_propertyid' to Webapi/dcfg_project/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_project",
+      "bindColumn": "dcfg_portfolioid",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 191,
+          "snippet": "const result = await createProject(body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_project/fields explicit list does not contain 'dcfg_portfolioid' (has '_dcfg_portfolioid_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_portfolioid' to Webapi/dcfg_project/fields on Prod"
+    },
+    {
+      "targetTable": "dcfg_project",
+      "bindColumn": "dcfg_originatingtemplateid",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/ProjectList.jsx",
+          "line": 191,
+          "snippet": "const result = await createProject(body);"
+        }
+      ],
+      "evidence": "Webapi/dcfg_project/fields explicit list does not contain 'dcfg_originatingtemplateid' (has '_dcfg_originatingtemplateid_value' projection only: true)",
+      "recommendedFix": "Append 'dcfg_originatingtemplateid' to Webapi/dcfg_project/fields on Prod"
+    }
+  ],
+  "spaCodeBugs": [
+    {
+      "targetTable": "dcfg_compliance_check",
+      "bindColumn": "dcfg_contract_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/CompliancePanel.jsx",
+          "line": 195,
+          "snippet": "await apiPost(`/${EntitySets.complianceChecks}`, {"
+        }
+      ],
+      "evidence": "Target table has NEITHER 'dcfg_contract_id' NOR '_dcfg_contract_id_value' — the lookup column does not exist under this logical name. SPA is writing to a column that doesn't exist on the table.",
+      "recommendedFix": "Investigate actual lookup column name on the table and fix the SPA source (do NOT add to Webapi/fields — that will not resolve it)."
+    },
+    {
+      "targetTable": "dcfg_compliance_check",
+      "bindColumn": "dcfg_rule_id",
+      "uniqueCallCount": 1,
+      "callSites": [
+        {
+          "file": "src/screens/CompliancePanel.jsx",
+          "line": 195,
+          "snippet": "await apiPost(`/${EntitySets.complianceChecks}`, {"
+        }
+      ],
+      "evidence": "Target table has NEITHER 'dcfg_rule_id' NOR '_dcfg_rule_id_value' — the lookup column does not exist under this logical name. SPA is writing to a column that doesn't exist on the table.",
+      "recommendedFix": "Investigate actual lookup column name on the table and fix the SPA source (do NOT add to Webapi/fields — that will not resolve it)."
+    }
+  ],
+  "ambiguous": [
+    {
+      "file": "src/screens/UserRolesTab.jsx",
+      "line": 258,
+      "fn": "apiPostReturnId",
+      "snippet": "contactId = await apiPostReturnId('/contacts', {",
+      "reason": "Cannot parse URL: /contacts"
+    },
+    {
+      "file": "src/SensorBanner.jsx",
+      "line": 117,
+      "fn": "apiPatch",
+      "snippet": "await apiPatch(",
+      "reason": "Cannot parse URL: /${EntitySets.sensorReadings || 'dcfg_sensor_readings'}(${readingId})"
+    }
+  ]
+}

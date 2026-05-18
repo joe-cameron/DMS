@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "CR-2026-04-09-1115",
+    "file": "src/screens/ProgramList.jsx",
+    "line": 67,
+    "category": "accessibility",
+    "categoryNumber": 4,
+    "severity": "P3",
+    "tier": "batch",
+    "phase": "phase-3",
+    "agent": "phase-3-wave-6-programs",
+    "status": "open",
+    "title": "ProgramList table rows use onClick for navigation but lack keyboard accessibility",
+    "detail": "Line 67: clickable rows lack tabIndex and onKeyDown for keyboard-only navigation. Cross-cutting finding across all Programs & Projects screens.",
+    "evidence": "ProgramList.jsx:67.",
+    "recommendedFix": "Add tabIndex={0} and onKeyDown handler for Enter/Space.",
+    "relatedFindings": [],
+    "foundAt": "2026-04-13T12:00:00Z",
+    "approvedAt": null,
+    "approvedIn": null,
+    "fixedAt": null,
+    "fixCommit": null,
+    "verifiedAt": null
+  }
+]
