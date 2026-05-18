@@ -132,10 +132,35 @@ All 14 tables audited on Prod for webapi site settings + table permissions.
 | Vendor Street Address | 474 North Ave East, Westfield NJ,07091 | Yes | PASS |
 | WO Number | WO24168 | Yes | PASS |
 | Today's Date | 05/17/2026 | Yes | PASS |
-| Contract Fee (written) | Ten Thousand Three Hundred Fifty Dollars ($10,350.00) | SDT present, not injected | KNOWN GAP |
-| DocuSign anchors | Customer_Signature, Vendor_Signature | Yes | PASS |
+| Contract Fee (written) | Ten Thousand Three Hundred Fifty Dollars ($10,350.00) | Yes (via SDT) | PASS |
+| Contract Fee (numeric) | $10,350.00 | Yes (in written format) | PASS |
+| Vendor Contact composite | Zoe Buckridee, 908-317-8576, office@ladybugpest.com | Yes | PASS |
+| Address composite (city) | Westfield | Yes | PASS |
+| DocuSign anchors | Customer_Signature, Vendor_Signature | Already in template | PASS |
+| VENDOR NAME placeholder removed | — | Gone | PASS |
+| Contract Fee placeholder removed | — | Gone (SDT injected) | PASS |
 
-**11/12 fields PASS.** Contract Fee SDT gap is expected — see Open Items.
+**18/18 fields PASS** after SDT injection fix + composite flat-field fix.
+
+### E2E Fix Deploys (applied same session)
+
+Strict validation revealed 2 code bugs that were fixed and deployed:
+
+**Fix A — `ooxmlInject.js`: SDT injection pass**
+- Added pass after yellow-highlight scalar injection
+- Matches `<w:sdt>` elements by `<w:tag>` value (sourceText normalized to snake_case)
+- Replaces `<w:sdtContent>` while preserving `<w:sdtPr>`
+- Closes Contract Fee written-format gap
+
+**Fix B — `contractDocGen.js`: flat-field composites**
+- Updated 4 composite definitions from vendor/customer lookup paths to flat contract fields:
+  - `vendor_contact`: `dcfg_signer_printed`, `dcfg_contractor_phone`, `dcfg_contractor_email`
+  - `vendor_address_block`: `dcfg_contractor_address`, `dcfg_billing_city/state/zip`
+  - `vendor_signer_contact`: same as vendor_contact
+  - `customer_billing_address`: `dcfg_billing_address/city/state/zip`
+- Aligns with contract-record-as-source-of-truth principle
+
+**Deploy:** SPA commit `8fca2fe` on `joe-cameron/dcfg-shell main`. Deployed to Stage (920s) + Prod (1044s).
 
 ### Formatting
 - 0 high-severity findings in output document
@@ -149,22 +174,33 @@ All 14 tables audited on Prod for webapi site settings + table permissions.
 
 1. **Upload corrected templates to Dataverse** — Templates in `Templates/corrected/` have WRAP fixes + Contract Fee SDTs but haven't been uploaded to production. Need to replace file column on each `dcfg_document_template` record.
 
-2. **Add SDT awareness to `ooxmlInject.js`** — Current code only matches yellow-highlighted `<w:r>` elements. Needs to also search `<w:sdt>` elements by `<w:tag>` value, then replace `<w:sdtContent>` while preserving `<w:sdtPr>`. This would close the Contract Fee written-format gap. Requires SPA edit permission.
-
-3. **Phase 3-4 of field alignment** — Per `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md`:
+2. **Phase 3-4 of field alignment** — Per `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md`:
    - Phase 3: 20 vendor MSA columns (5 slots x number/date/customer/status), VA composer -> slot wiring, DocuSign poll status update
    - Phase 4: Address formatting (State,Zip -> State Zip)
 
-4. **Clear portal cache after template upload** — Once corrected templates are uploaded, clear cache on both environments.
+3. **Clear portal cache after template upload** — Once corrected templates are uploaded, clear cache on both environments.
 
-5. **Phase 5 of plan (data-testid coverage)** — Not started. ContractComposer already at 98% coverage. MsaComposer at 85%. Minor gaps only.
+4. **Phase 5 of plan (data-testid coverage)** — Not started. ContractComposer already at 98% coverage. MsaComposer at 85%. Minor gaps only.
+
+5. **"Contact Name, Tele#" template split** — Yellow highlight on comma between "Contact Name," and "Tele#" is missing in BWO template, breaking the run group. Individual fields still inject correctly. Low priority — fix by re-highlighting the comma in Word.
 
 ---
+
+## Deploys This Session
+
+| Deploy | Environment | Duration | What |
+|--------|-------------|----------|------|
+| 1 | Stage | 746s | Phase 2 field alignment |
+| 2 | Prod | 626s | Phase 2 field alignment |
+| 3 | Stage | 920s | E2E fixes (SDT injection + flat composites) |
+| 4 | Prod | 1044s | E2E fixes (SDT injection + flat composites) |
 
 ## Files Changed This Session
 
 | File | Change |
 |------|--------|
+| `spa/dcfg-shell/src/lib/ooxmlInject.js` | Added SDT injection pass (matches by `<w:tag>`) |
+| `spa/dcfg-shell/src/lib/contractDocGen.js` | Fixed 4 composite definitions to use flat contract fields |
 | `skills/office-file-editor/SKILL.md` | Rewritten as controller with 2D review workflow |
 | `skills/office-file-editor/office_edit.py` | Enhanced: 18 commands (was 7), SDT ops, formatting, review |
 | `skills/office-file-editor/references/*.md` | 7 new OOXML reference docs |
@@ -179,4 +215,4 @@ All 14 tables audited on Prod for webapi site settings + table permissions.
 | `docs/handoff-session-2026-05-17.md` | This file |
 | Dataverse (Prod) | `Webapi/dcfg_trade_type/enabled` + `fields` site settings created |
 | Dataverse (Stage) | Same trade_type settings + 6 Phase 2 columns + contract fields setting updated |
-| Stage + Prod SPA | Deployed (Phase 2 field alignment code) |
+| Stage + Prod SPA | 4 deploys (Phase 2 alignment + E2E fixes) |
