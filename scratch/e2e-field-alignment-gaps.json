@@ -1,0 +1,131 @@
+{
+  "Exhibit-A---Automated.docx": {
+    "yellow_count": 15,
+    "dv_field_count": 24,
+    "matched": 15,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "____",
+      "______",
+      "WO Number",
+      "Vendor Date Signed",
+      "Customer Date Signed",
+      "Decades Handler Info",
+      "Contract Fee",
+      "Today's Date",
+      "Vendor Contact Info"
+    ]
+  },
+  "Exhibit-A---Variable.docx": {
+    "yellow_count": 15,
+    "dv_field_count": 63,
+    "matched": 15,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "_____",
+      "Today\u00e2\u20ac\u2122s Date",
+      "___",
+      "End Date",
+      "WO Number",
+      "Contract Fee",
+      "Start Date",
+      "Vendor Contact Info",
+      "Decades Site Email",
+      "Decades Site Phone",
+      "Decades Site Contact",
+      "Vendor Address Block",
+      "Customer Date Signed",
+      "Vendor_DateSigned",
+      "Decades Handler Info"
+    ]
+  },
+  "Work-Order-Amendment.docx": {
+    "yellow_count": 20,
+    "dv_field_count": 54,
+    "matched": 20,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "Customer City",
+      "Customer Street",
+      "Owner/Decades Title",
+      "Customer State",
+      "Owner/Decades Printed Name",
+      "Vendor Contact Info",
+      "Service Location Description",
+      "End Date",
+      "Start Date",
+      "Hour of Operations",
+      "Customer Date Signed",
+      "Vendor_DateSigned",
+      "Contract Fee"
+    ]
+  },
+  "Decades-Workorder.docx": {
+    "yellow_count": 15,
+    "dv_field_count": 37,
+    "matched": 15,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "Customer Name",
+      "Decades Date Signed",
+      "\\Decades Signature\\",
+      "Vendor Date Signed",
+      "Contract Fee",
+      "Contractor Title",
+      "\\Vendor Signature\\",
+      "Today\u00e2\u20ac\u2122s Date",
+      "Decades Signature",
+      "Vendor Signature"
+    ]
+  },
+  "Bancroft-Vendor-Agreement.docx": {
+    "yellow_count": 11,
+    "dv_field_count": 27,
+    "matched": 9,
+    "unmatched_yellow": [
+      "_\\Customer_Signature\\_",
+      "_\\Vendor_Signature\\_"
+    ],
+    "unmapped_dv": [
+      "Today\u00e2\u20ac\u2122s Date",
+      "Vendor\u00e2\u20ac\u2122s Legal Name",
+      "Contractor Title",
+      "Customer Title",
+      "Contractor Printed Name",
+      "Customer Date Signed"
+    ]
+  },
+  "Decades-Vendor-Agreement.docx": {
+    "yellow_count": 11,
+    "dv_field_count": 19,
+    "matched": 11,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "Owner/Decades Printed Name",
+      "\\Decades_Signature\\",
+      "Decades Title",
+      "Owner/Decades Title",
+      "\\Contractor_Signature\\",
+      "Decades Printed Name"
+    ]
+  },
+  "Blanket-Work-Order.docx": {
+    "yellow_count": 13,
+    "dv_field_count": 34,
+    "matched": 13,
+    "unmatched_yellow": [],
+    "unmapped_dv": [
+      "Today\u00e2\u20ac\u2122s Date",
+      "__________",
+      "___",
+      "WO Number",
+      "Customer Contact Phone",
+      "\\Vendor_Signature\\",
+      "\\Customer Signature\\",
+      "\\Vendor Signature\\",
+      "\\Customer_Signature\\",
+      "Vendor Contact Info",
+      "Contract Fee"
+    ]
+  }
+}

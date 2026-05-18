@@ -1,0 +1,25 @@
+{
+  "file": "Templates\\corrected\\Decades-Workorder.docx",
+  "geometry": {
+    "page_w": 12240,
+    "page_h": 15840,
+    "margin_l": 1440,
+    "margin_r": 1440,
+    "margin_t": 540,
+    "margin_b": 630,
+    "text_w": 9360,
+    "text_h": 14670,
+    "text_w_inches": 6.5
+  },
+  "tables": [],
+  "element_count": 32,
+  "findings": [
+    {
+      "id": "R01",
+      "category": "JUST-MIXED",
+      "severity": "low",
+      "message": "Body text has mixed justification: {'both': 2, 'left': 9}. Majority is \"left\". Outlier paragraphs: [6, 7].",
+      "fix": null
+    }
+  ]
+}

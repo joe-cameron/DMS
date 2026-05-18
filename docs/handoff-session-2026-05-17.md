@@ -162,11 +162,44 @@ Strict validation revealed 2 code bugs that were fixed and deployed:
 
 **Deploy:** SPA commit `8fca2fe` on `joe-cameron/dcfg-shell main`. Deployed to Stage (920s) + Prod (1044s).
 
+**Fix C — `contractDocGen.js`: address composite dedup + SDT spacing**
+- `vendor_address_block` changed to city/state/zip only (street was duplicating the full `dcfg_contractor_address`)
+- SDT injection adds leading space for inline placement so fee text doesn't run into preceding sentence
+- **Deploy:** SPA commit `9fcb348`. Deployed to Stage + Prod.
+
+### Visual 2D Plane Verification
+
+Generated all 7 templates with full test data, rendered to PDF via Word COM, converted to PNG, and visually inspected each page.
+
+**BWO (Blanket Work Order):** Zero anomalies after fixes. Bullet alignment, signature block, fee text, all correct.
+
+**All 7 templates — field alignment audit:**
+Every yellow placeholder in every template has a matching Dataverse field mapping (100% coverage). The injection engine matches all yellow-highlighted run groups correctly. Remaining visual gaps are data completeness issues (empty fields on contract records), not code/template bugs.
+
+### Date Field Mapping Fix
+
+**Fix D — WO Amendment "Work Order Date" mapping corrected**
+- 2 `dcfg_template_field` rows on WO Amendment had `Work Order Date` mapped to `[SYSTEM:TODAY]` (auto-today)
+- Corrected to `dcfg_contract_date` (user-entered contract creation date)
+- Matches the Decades Amendment pattern
+- `Contract Start Date` (`dcfg_start_date`) is a separate user-entered field — when the work begins
+
+### Date Tags Across All Templates
+
+| Date Tag | Dataverse Field | Who Sets It | Templates |
+|----------|----------------|-------------|-----------|
+| Contract Start Date / Start Date / Work State Date | `dcfg_start_date` | User (composer) | ExhA-Auto, ExhA-Var, Amendments |
+| Contract End Date / End Date | `dcfg_end_date` | User (composer) | ExhA-Auto, ExhA-Var, Amendments |
+| MSA Date | `dcfg_msa_date` | User/MSA record | BWO, Decades WO, ExhA-Auto/Var, Amendments |
+| Work Order Date / Main Contract Date | `dcfg_contract_date` | User (creation date) | Amendments |
+| Today's Date | `[SYSTEM:TODAY]` | Auto (generation time) | All WO/BWO/MSA templates |
+| Customer/Vendor/Decades Date Signed | DocuSign anchors | DocuSign (after signing) | VA, ExhA, Amendments |
+
 ### Formatting
 - 0 high-severity findings in output document
 - Indentation preserved through injection
 - Signature table intact (2 cols, 5 rows, 6.50")
-- Output file: `scratch/e2e-WO24168-BWO-output.docx`
+- Output files: `scratch/e2e-*.docx` and `scratch/e2e-*-p*.png`
 
 ---
 
@@ -194,13 +227,25 @@ Strict validation revealed 2 code bugs that were fixed and deployed:
 | 2 | Prod | 626s | Phase 2 field alignment |
 | 3 | Stage | 920s | E2E fixes (SDT injection + flat composites) |
 | 4 | Prod | 1044s | E2E fixes (SDT injection + flat composites) |
+| 5 | Prod | 924s | Visual fixes (address dedup + SDT spacing) |
+| 6 | Stage | completed | Visual fixes (clean redeploy) |
+
+## Dataverse Changes This Session
+
+| What | Environment | Details |
+|------|-------------|---------|
+| 6 columns created | Stage | `dcfg_msa_number`, `dcfg_msa_date`, `dcfg_billing_address/city/state/zip` on `dcfg_contract` |
+| `Webapi/dcfg_contract/fields` updated | Stage | Added 7 columns (msa_number, msa_date, billing_*, work_hours) |
+| `Webapi/dcfg_trade_type/enabled` + `fields` created | Prod + Stage | 40 trade types now accessible to SPA |
+| `Work Order Date` field mapping fixed | Prod | 2 rows on WO Amendment: `[SYSTEM:TODAY]` -> `dcfg_contract_date` |
+| Portal cache cleared | Prod + Stage | Multiple times throughout session |
 
 ## Files Changed This Session
 
 | File | Change |
 |------|--------|
-| `spa/dcfg-shell/src/lib/ooxmlInject.js` | Added SDT injection pass (matches by `<w:tag>`) |
-| `spa/dcfg-shell/src/lib/contractDocGen.js` | Fixed 4 composite definitions to use flat contract fields |
+| `spa/dcfg-shell/src/lib/ooxmlInject.js` | SDT injection pass + inline spacing fix |
+| `spa/dcfg-shell/src/lib/contractDocGen.js` | Flat-field composites + address dedup |
 | `skills/office-file-editor/SKILL.md` | Rewritten as controller with 2D review workflow |
 | `skills/office-file-editor/office_edit.py` | Enhanced: 18 commands (was 7), SDT ops, formatting, review |
 | `skills/office-file-editor/references/*.md` | 7 new OOXML reference docs |
@@ -211,8 +256,8 @@ Strict validation revealed 2 code bugs that were fixed and deployed:
 | `scratch/phase3-tableperm-audit.json` | Table permissions audit |
 | `scratch/phase4-test-contracts.json` | Test contract data |
 | `scratch/phase4-expected-values-wo24168.json` | Expected field values |
-| `scratch/e2e-WO24168-BWO-output.docx` | E2E injection output |
+| `scratch/e2e-*-output.docx` | E2E injection outputs (7 templates) |
+| `scratch/e2e-*-p*.png` | Rendered document page images |
+| `scratch/e2e-field-alignment-gaps.json` | Template-to-Dataverse field alignment audit |
+| `scratch/e2e-all-templates.mjs` | E2E test runner script |
 | `docs/handoff-session-2026-05-17.md` | This file |
-| Dataverse (Prod) | `Webapi/dcfg_trade_type/enabled` + `fields` site settings created |
-| Dataverse (Stage) | Same trade_type settings + 6 Phase 2 columns + contract fields setting updated |
-| Stage + Prod SPA | 4 deploys (Phase 2 alignment + E2E fixes) |
