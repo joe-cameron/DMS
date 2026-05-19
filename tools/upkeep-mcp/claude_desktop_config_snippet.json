@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "upkeep": {
+      "command": "python",
+      "args": ["C:\\DCFG\\tools\\upkeep-mcp\\server.py"],
+      "env": {
+        "UPKEEP_EMAIL": "REPLACE_WITH_BANCROFT_EMAIL",
+        "UPKEEP_PASSWORD": "REPLACE_WITH_BANCROFT_PASSWORD",
+        "UPKEEP_EMAIL_2": "REPLACE_WITH_MULTISITE_EMAIL",
+        "UPKEEP_PASSWORD_2": "REPLACE_WITH_MULTISITE_PASSWORD"
+      }
+    }
+  }
+}
