@@ -4,7 +4,7 @@
 `code-review-2026-04-09`
 
 ## Summary
-DocuSign developer account configured and validated. Built table-driven 8-step signing workflow editor in Admin. Fixed code review Phase 1 runtime/logic bugs. Updated template tag reference page to match actual production templates. Prepared 7 templates with corrected yellow tags for re-upload.
+DocuSign developer account configured and validated. Built table-driven 8-step signing workflow editor in Admin. Fixed code review Phase 1 runtime/logic bugs. Updated template tag reference page to match actual production templates. Prepared 7 templates with corrected yellow tags for re-upload. Built UpKeep read-only MCP for Claude Desktop/Teams with installer. Rotated Azure Function key and removed hardcoded secrets from source. Added PostToolUse hook for automatic session journaling.
 
 ---
 
@@ -144,6 +144,57 @@ Deployed to Stage + Prod.
 
 ---
 
+## UpKeep MCP — Built for Claude Desktop/Teams
+
+Read-only MCP server at `tools/upkeep-mcp/server.py`. 8 tools across 2 UpKeep accounts:
+
+| Tool | Description |
+|------|-------------|
+| `list_work_orders` | Query WOs with filters (status, category, location, date) |
+| `get_work_order` | Full details for a single WO |
+| `list_locations` | All locations in an account |
+| `get_location` | Full details for a single location |
+| `list_users` | All technicians and admins |
+| `list_assets` | Equipment/assets by location |
+| `get_wo_counts_by_status` | Dashboard summary by status |
+| `list_preventive_maintenance` | Recurring PM schedules |
+
+**Accounts:** `bancroft` (single customer) and `multisite` (PennReach, J-ADD, Arc Mercer, PCDI, Newgrange).
+
+**Installer:** `tools/upkeep-mcp/install.ps1` — one-click setup for team members. Prompts for credentials at install time (not stored in script). Copies server.py to `%LOCALAPPDATA%\dcfg-upkeep-mcp\`, adds to Claude Desktop config, tests auth.
+
+**Install email template:** `scratch/upkeep-mcp-install-email.html` — ready to send to team.
+
+Both accounts validated — Bancroft and Multi-site auth + WO queries confirmed working.
+
+---
+
+## Security — Azure Function Key Rotated
+
+- Old key (`nn-eCIr...`) rotated via `az functionapp keys set`
+- `dcfg_docusign_function_url` updated on Prod with new key
+- `nora/nora-monitor-prod.ps1` changed to read key from `$env:DCFG_AZURE_FN_KEY` or fetch via `az CLI` at runtime — no hardcoded secrets in source
+- Old key is permanently invalid
+
+---
+
+## Session Journaling Hook — Configured
+
+PostToolUse hook added to `.claude/settings.local.json`. Fires after every Bash command and auto-logs to `scratch/session-journal.md`:
+
+| Tag | Triggers on |
+|-----|------------|
+| `DEPLOY` | `pac pages upload` or `func azure functionapp publish` |
+| `COMMIT` | `git commit` |
+| `PUSH` | `git push` |
+| `DATAVERSE` | `Invoke-RestMethod` with Patch/Post |
+| `AUTH` | `pac auth select` |
+| `AZURE` | `az functionapp` commands |
+
+Requires session restart to activate. Memory rule saved at `feedback_realtime_memory_logging.md`.
+
+---
+
 ## Deploys This Session
 
 | Deploy | Environment | Duration | What |
@@ -153,6 +204,7 @@ Deployed to Stage + Prod.
 | 3 | Azure Function | 146s | Dynamic recipients + path fix + URL fallback |
 | 4 | Stage | 681s | Code review Phase 1 fixes |
 | 5 | Prod | 737s | Code review Phase 1 fixes |
+| 6 | Azure Function | 146s | Code review fixes (path encoding, URL fallback) |
 
 ## Dataverse Changes
 
@@ -160,19 +212,23 @@ Deployed to Stage + Prod.
 |------|-------------|
 | 6 `dcfg_docusign_workflow_*` config rows created | Prod |
 | 6 DocuSign env vars updated (new dev account) | Azure Function App |
+| `dcfg_docusign_function_url` updated with rotated key | Prod |
+| Azure Function default key rotated | Azure Function App |
 
 ## Git
 
 | Repo | Commit | Branch |
 |------|--------|--------|
 | dcfg-shell (SPA) | `9cc871e` | `main` |
-| DMS (root) | `9cd5320` | `code-review-2026-04-09` |
+| DMS (root) | `e623c97` | `code-review-2026-04-09` |
+| Key rotation | `d2b4058` | `code-review-2026-04-09` |
+| Handoff + code review fixes | `08784cc` | `code-review-2026-04-09` |
 | Earlier commit | `8f6e482` | `code-review-2026-04-09` (template fixes, azure functions, docs) |
 
 ## Open Items
 
 1. **Upload corrected templates to Dataverse** — 7 templates in `Templates/for-reupload/` ready after user reviews formatting in Word.
 2. **Code review Phase 2-5** — Dead code deletion, comment cleanup, customer names, auth dedup. See `docs/code-review-2026-05-18.md`.
-3. **Rotate Azure Function key** — Key exposed in `nora/nora-monitor-prod.ps1:431`, allowed via GitHub push protection bypass. Should be rotated.
-4. **DocuSign production migration** — Current config points to `demo.docusign.net`. When ready for production, update 2 env vars: `DOCUSIGN_BASE_URL` → `https://na4.docusign.net/restapi`, `DOCUSIGN_OAUTH_BASE` → `https://account.docusign.com`.
-5. **Phase 3-4 field alignment** — MSA columns, VA composer wiring, address formatting. Per `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md`.
+3. **DocuSign production migration** — Current config points to `demo.docusign.net`. When ready for production, update 2 env vars: `DOCUSIGN_BASE_URL` → `https://na4.docusign.net/restapi`, `DOCUSIGN_OAUTH_BASE` → `https://account.docusign.com`.
+4. **Phase 3-4 field alignment** — MSA columns, VA composer wiring, address formatting. Per `docs/superpowers/plans/2026-05-15-docgen-field-alignment.md`.
+5. **Distribute UpKeep MCP to team** — Send `scratch/upkeep-mcp-install-email.html` with `install.ps1` + `server.py` attached. Provide credentials separately.
