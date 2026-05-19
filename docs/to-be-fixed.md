@@ -28,3 +28,6 @@ Last cleaned: 2026-05-12.
 40. **Locations TYPE column all dashes** — `dcfg_location_type` not set on any Bancroft location. Needs bulk assignment or default.
 41. **PCDI missing primary contact** — Customer record shows "-" for primary contact.
 
+## DocuSign Signing Workflow (found 2026-05-19)
+42. **Workflow key doesn't distinguish TPA vs Direct** — `DocuSignModal.jsx:94` builds key from `dcfg_contract_type` only (3 values: WO/Amendment/VA). But TPA needs 6 steps, Direct needs 4. Key should be `dcfg_docusign_workflow_{family}_{type}` to differentiate. `SigningWorkflowEditor.jsx` CONTRACT_TYPES array contains invented values (100000005, 100000006, 100000007) that don't exist in the `dcfg_contract_type` picklist. **Important: TPA workflows are per-customer** — each TPA customer (Bancroft today, others in future) may have unique signers/approvers in their DocuSign flow. The key or config must support customer-specific TPA workflows, not just one global TPA workflow. Needs: redesign key format, editor dropdown, and Prod configs.
+
