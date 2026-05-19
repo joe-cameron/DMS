@@ -241,7 +241,8 @@ async function syncInspections(context) {
     var stats = { checked: 0, created: 0, updated: 0, unchanged: 0, errors: 0 };
 
     // Dataverse auth
-    var dvUrl = process.env.DATAVERSE_URL || 'https://org06f5de0b.api.crm.dynamics.com';
+    var dvUrl = process.env.DATAVERSE_URL;
+    if (!dvUrl) throw new Error('DATAVERSE_URL env var is not set');
     var dvTenant = process.env.DATAVERSE_TENANT_ID;
     var dvClientId = process.env.DATAVERSE_CLIENT_ID;
     var dvClientSecret = process.env.DATAVERSE_CLIENT_SECRET;

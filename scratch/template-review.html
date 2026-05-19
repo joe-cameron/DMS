@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DCFG Template Review — For Re-Upload</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #1a1a2e; padding: 32px; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { color: #64748b; font-size: 14px; margin-bottom: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .card {
+    background: #fff; border-radius: 10px; padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08); border-left: 4px solid #3b82f6;
+    transition: box-shadow .15s;
+  }
+  .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+  .card.done { border-left-color: #22c55e; opacity: .7; }
+  .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .card .meta { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
+  .card .fields { font-size: 13px; color: #475569; margin-bottom: 14px; line-height: 1.5; }
+  .card .fields strong { color: #1e293b; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    text-decoration: none; cursor: pointer; border: none; transition: background .15s;
+  }
+  .btn-open { background: #3b82f6; color: #fff; }
+  .btn-open:hover { background: #2563eb; }
+  .btn-pdf { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+  .btn-pdf:hover { background: #e2e8f0; }
+  .btn-done { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .btn-done:hover { background: #bbf7d0; }
+  .check { display: none; }
+  .card.done .check { display: inline; }
+  .status { margin-top: 28px; padding: 16px 20px; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .status h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .status .count { font-size: 28px; font-weight: 700; color: #3b82f6; }
+  .status .of { font-size: 14px; color: #94a3b8; }
+  .notes { margin-top: 20px; padding: 16px 20px; background: #fffbeb; border-radius: 10px; border-left: 4px solid #f59e0b; }
+  .notes h3 { font-size: 14px; font-weight: 600; color: #92400e; margin-bottom: 6px; }
+  .notes ul { font-size: 13px; color: #78350f; padding-left: 18px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<h1>DCFG Template Review — For Re-Upload</h1>
+<p class="subtitle">Original production templates with yellow field markers. Open in Word, fix formatting, mark done.</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="status">
+  <h3>Progress</h3>
+  <span class="count" id="doneCount">0</span><span class="of"> / <span id="totalCount">7</span> templates reviewed</span>
+</div>
+
+<div class="notes">
+  <h3>What to check in each template</h3>
+  <ul>
+    <li>Numbered bullet wrap alignment — continuation text should not push left of the bullet</li>
+    <li>Yellow highlighted placeholders are intact and readable</li>
+    <li>Signature table structure (2 columns, proper alignment)</li>
+    <li>Section breaks and page breaks in correct positions</li>
+    <li>Font consistency (Times New Roman body, no random font switches)</li>
+    <li>After fixing — save and close, then mark done here</li>
+  </ul>
+</div>
+
+<script>
+const FOLDER = 'C:/DCFG/Templates/for-reupload/';
+const PDF_FOLDER = 'C:/DCFG/scratch/';
+
+const templates = [
+  {
+    id: 'bwo', name: 'Blanket Work Order', file: 'Blanket-Work-Order.docx',
+    pdf: 'orig-01-BWO.pdf', fields: 12,
+    notes: '1 page. Yellow placeholders for vendor name, contact info, WO number, dates, fee.'
+  },
+  {
+    id: 'exha-auto', name: 'Exhibit A — Automated', file: 'Exhibit-A---Automated.docx',
+    pdf: 'orig-02-ExhA-Auto.pdf', fields: 15,
+    notes: '3 pages. Numbered sections 1–8. Vendor info, dates, fee, contact composites.'
+  },
+  {
+    id: 'exha-var', name: 'Exhibit A — Variable', file: 'Exhibit-A---Variable.docx',
+    pdf: 'orig-03-ExhA-Var.pdf', fields: 15,
+    notes: '3 pages. Same structure as Automated but variable billing terms.'
+  },
+  {
+    id: 'wo-amend', name: 'Work Order Amendment', file: 'Work-Order-Amendment.docx',
+    pdf: 'orig-04-WO-Amend.pdf', fields: 18,
+    notes: '3 pages. Amendment number, dates, client/vendor info, service description, fee.'
+  },
+  {
+    id: 'decades-wo', name: 'Decades Work Order', file: 'Decades-Workorder.docx',
+    pdf: 'orig-05-Decades-WO.pdf', fields: 14,
+    notes: '1 page. Decades-family WO. Vendor info, DocuSign anchors, fee, dates.'
+  },
+  {
+    id: 'bancroft-va', name: 'Bancroft Vendor Agreement', file: 'Bancroft-Vendor-Agreement.docx',
+    pdf: 'orig-06-Bancroft-VA.pdf', fields: 7,
+    notes: '9 pages. Full MSA-style agreement. Vendor name, dates, DocuSign anchors.'
+  },
+  {
+    id: 'decades-va', name: 'Decades Vendor Agreement', file: 'Decades-Vendor-Agreement.docx',
+    pdf: 'orig-07-Decades-VA.pdf', fields: 11,
+    notes: '3 pages. Decades-family VA. Day/Month/Year tokens, DocuSign anchors, vendor info.'
+  },
+];
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('dcfg-tpl-review') || '{}'); } catch { return {}; }
+}
+function saveState(s) { localStorage.setItem('dcfg-tpl-review', JSON.stringify(s)); }
+
+function render() {
+  const state = loadState();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  let done = 0;
+
+  templates.forEach(t => {
+    const isDone = !!state[t.id];
+    if (isDone) done++;
+
+    const card = document.createElement('div');
+    card.className = 'card' + (isDone ? ' done' : '');
+    card.innerHTML = `
+      <h2><span class="check">&#10003; </span>${t.name}</h2>
+      <div class="meta">${t.file} &middot; ${t.fields} fields injected</div>
+      <div class="fields">${t.notes}</div>
+      <div class="actions">
+        <a class="btn btn-open" href="file:///${FOLDER}${t.file}" onclick="openFile('${FOLDER}${t.file}'); return false;">Open in Word</a>
+        <a class="btn btn-pdf" href="file:///${PDF_FOLDER}${t.pdf}" onclick="openFile('${PDF_FOLDER}${t.pdf}'); return false;">View PDF</a>
+        <button class="btn btn-done" onclick="toggleDone('${t.id}')">${isDone ? 'Undo' : 'Mark Done'}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById('doneCount').textContent = done;
+}
+
+function openFile(path) {
+  // file:// links don't always work from browsers — copy path to clipboard as fallback
+  const winPath = path.replace(/\//g, '\\');
+  navigator.clipboard.writeText(winPath).then(() => {
+    // Try opening via file protocol
+    window.open('file:///' + path);
+  });
+}
+
+function toggleDone(id) {
+  const state = loadState();
+  state[id] = !state[id];
+  saveState(state);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

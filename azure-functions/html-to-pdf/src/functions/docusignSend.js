@@ -2,7 +2,7 @@
  * docusignSend.js — DocuSign envelope creation via JWT grant
  *
  * Downloads a document from SharePoint via Graph API, creates a DocuSign
- * envelope with two signers, and sends immediately.
+ * envelope with a dynamic recipient list, and sends immediately.
  *
  * Env vars required:
  *   DOCUSIGN_INTEGRATION_KEY      — DocuSign app integration key
@@ -14,16 +14,31 @@
  *   SP_TENANT_ID, SP_CLIENT_ID, SP_CLIENT_SECRET, SP_SITE_HOST, SP_SITE_PATH
  *
  * POST /api/docusign-send
- * Body (JSON):
+ * Body (JSON) — new format (recipients array):
  *   {
  *     "documentUrl": "https://...sharepoint.com/.../file.docx",
  *     "documentName": "Display Name",
- *     "signerA": { "email": "...", "name": "..." },
- *     "signerB": { "email": "...", "name": "..." },
- *     "signingOrder": "parallel" | "sequential",
+ *     "recipients": [
+ *       { "email": "...", "name": "...", "role": "signer", "routingOrder": 1,
+ *         "anchorSign": "\\Vendor_Signature\\", "anchorDate": "\\Vendor_DateSigned\\" },
+ *       { "email": "...", "name": "...", "role": "approver", "routingOrder": 2,
+ *         "anchorApprove": "\\Vendor_Signature\\", "approveLabel": "Approve" },
+ *       { "email": "...", "name": "...", "role": "cc", "routingOrder": 99 }
+ *     ],
  *     "message": "Optional message",
  *     "subject": "Optional subject",
  *     "queueId": "audit-id"
+ *   }
+ *
+ * Body (JSON) — legacy format (still supported):
+ *   {
+ *     "documentUrl": "...", "documentName": "...",
+ *     "signerA": { "email": "...", "name": "..." },
+ *     "signerB": { "email": "...", "name": "..." },
+ *     "signingOrder": "parallel" | "sequential",
+ *     "anchorsA": { "signature": "...", "dateSigned": "..." },
+ *     "anchorsB": { "signature": "...", "dateSigned": "..." },
+ *     "carbonCopies": [{ "email": "...", "name": "...", "routingOrder": 99 }]
  *   }
  *
  * Response (200): { envelopeId: "...", status: "sent" }
@@ -164,108 +179,116 @@ async function downloadFromSharePoint(documentUrl, graphToken, context) {
   return Buffer.from(arrayBuffer);
 }
 
-// ─── Create DocuSign envelope ───
-// Supports 2 signers with anchor-based tabs + optional CC recipients.
-// Anchor mapping: caller passes anchorsA/anchorsB matching the signer roles.
-// CC recipients (reviewer, filing, client AP) are included only when both name and email are provided.
-async function createEnvelope(docuSignToken, fileBuffer, body) {
-  const {
-    documentName,
-    signerA,
-    signerB,
-    signingOrder,
-    message,
-    subject,
-  } = body;
-
-  const isParallel = signingOrder === 'parallel';
-  const emailSubject = subject || `Signature Required - ${documentName}`;
-  const emailBlurb = message || 'Please review and sign the attached document.';
-
-  // Anchor configuration per signer — caller MUST pass these to match the document's embedded anchors
+// ─── Normalize legacy (signerA/signerB) format to recipients array ───
+function normalizeLegacyToRecipients(body) {
   const anchorsA = body.anchorsA || { signature: '\\Vendor_Signature\\', dateSigned: '\\Vendor_DateSigned\\' };
   const anchorsB = body.anchorsB || { signature: '\\Customer_Signature\\', dateSigned: '\\Customer_DateSigned\\' };
+  const isParallel = body.signingOrder === 'parallel';
 
-  // Build CC recipients array — only include recipients with both name and email
-  const carbonCopies = [];
-  let ccId = 10; // start recipientIds at 10 to avoid collision with signers
+  const recipients = [
+    {
+      email: body.signerA.email, name: body.signerA.name,
+      role: 'signer', routingOrder: 1,
+      anchorSign: anchorsA.signature, anchorDate: anchorsA.dateSigned,
+    },
+    {
+      email: body.signerB.email, name: body.signerB.name,
+      role: 'signer', routingOrder: isParallel ? 1 : 2,
+      anchorSign: anchorsB.signature, anchorDate: anchorsB.dateSigned,
+    },
+  ];
+
   const ccList = body.carbonCopies || [];
   for (const cc of ccList) {
     if (cc.email && cc.name) {
-      carbonCopies.push({
-        email: cc.email,
-        name: cc.name,
-        recipientId: String(ccId++),
-        routingOrder: String(cc.routingOrder || 99),
-      });
+      recipients.push({ email: cc.email, name: cc.name, role: 'cc', routingOrder: cc.routingOrder || 99 });
     }
+  }
+
+  return recipients;
+}
+
+// ─── Create DocuSign envelope ───
+// Accepts a dynamic recipients array. Each recipient has:
+//   role: "signer" | "approver" | "cc"
+//   routingOrder: number (controls sequence)
+//   anchorSign / anchorDate: anchor strings for signers
+//   anchorApprove / approveLabel: anchor string + button text for approvers
+async function createEnvelope(docuSignToken, fileBuffer, body) {
+  const { documentName, message, subject } = body;
+
+  const emailSubject = subject || `Signature Required - ${documentName}`;
+  const emailBlurb = message || 'Please review and sign the attached document.';
+
+  // Use new recipients array or convert from legacy format
+  const recipientList = body.recipients || normalizeLegacyToRecipients(body);
+
+  // Build DocuSign recipient objects
+  const signers = [];
+  const carbonCopies = [];
+  let recipientId = 1;
+
+  for (const r of recipientList) {
+    if (!r.email || !r.name) continue;
+    const id = String(recipientId++);
+    const order = String(r.routingOrder || 1);
+
+    if (r.role === 'signer') {
+      const tabs = {};
+      if (r.anchorSign) {
+        tabs.signHereTabs = [{
+          anchorString: r.anchorSign,
+          anchorUnits: 'pixels',
+          anchorXOffset: String(r.signXOffset || 0),
+          anchorYOffset: String(r.signYOffset || -5),
+        }];
+      }
+      if (r.anchorDate) {
+        tabs.dateSignedTabs = [{
+          anchorString: r.anchorDate,
+          anchorUnits: 'pixels',
+          anchorXOffset: String(r.dateXOffset || 0),
+          anchorYOffset: String(r.dateYOffset || 0),
+          fontSize: 'Size10',
+        }];
+      }
+      signers.push({ email: r.email, name: r.name, recipientId: id, routingOrder: order, tabs });
+
+    } else if (r.role === 'approver') {
+      // Approvers are signers with approveTabs instead of signHereTabs
+      const tabs = {};
+      if (r.anchorApprove) {
+        tabs.approveTabs = [{
+          anchorString: r.anchorApprove,
+          anchorUnits: 'pixels',
+          anchorXOffset: String(r.approveXOffset || 200),
+          anchorYOffset: String(r.approveYOffset || -5),
+          buttonText: r.approveLabel || 'Approve',
+        }];
+      }
+      signers.push({ email: r.email, name: r.name, recipientId: id, routingOrder: order, tabs });
+
+    } else if (r.role === 'cc') {
+      carbonCopies.push({ email: r.email, name: r.name, recipientId: id, routingOrder: order });
+    }
+  }
+
+  if (signers.length === 0) {
+    throw new Error('No signers in recipients list');
   }
 
   const envelopeDefinition = {
     emailSubject,
     emailBlurb,
     status: 'sent',
-    documents: [
-      {
-        documentBase64: fileBuffer.toString('base64'),
-        name: documentName,
-        fileExtension: documentName.split('.').pop() || 'docx',
-        documentId: '1',
-      },
-    ],
+    documents: [{
+      documentBase64: fileBuffer.toString('base64'),
+      name: documentName,
+      fileExtension: documentName.split('.').pop() || 'docx',
+      documentId: '1',
+    }],
     recipients: {
-      signers: [
-        {
-          email: signerA.email,
-          name: signerA.name,
-          recipientId: '1',
-          routingOrder: '1',
-          tabs: {
-            signHereTabs: [
-              {
-                anchorString: anchorsA.signature,
-                anchorUnits: 'pixels',
-                anchorXOffset: '0',
-                anchorYOffset: '-5',
-              },
-            ],
-            dateSignedTabs: [
-              {
-                anchorString: anchorsA.dateSigned,
-                anchorUnits: 'pixels',
-                anchorXOffset: '0',
-                anchorYOffset: '0',
-                fontSize: 'Size10',
-              },
-            ],
-          },
-        },
-        {
-          email: signerB.email,
-          name: signerB.name,
-          recipientId: '2',
-          routingOrder: isParallel ? '1' : '2',
-          tabs: {
-            signHereTabs: [
-              {
-                anchorString: anchorsB.signature,
-                anchorUnits: 'pixels',
-                anchorXOffset: '0',
-                anchorYOffset: '-5',
-              },
-            ],
-            dateSignedTabs: [
-              {
-                anchorString: anchorsB.dateSigned,
-                anchorUnits: 'pixels',
-                anchorXOffset: '0',
-                anchorYOffset: '0',
-                fontSize: 'Size10',
-              },
-            ],
-          },
-        },
-      ],
+      signers,
       ...(carbonCopies.length > 0 ? { carbonCopies } : {}),
     },
   };
@@ -329,10 +352,11 @@ app.http('docusign-send', {
     // ── Validate required fields ──
     const missing = [];
     if (!body.documentUrl && !body.fileBase64) missing.push('documentUrl or fileBase64');
-    if (!body.signerA?.email) missing.push('signerA.email');
-    if (!body.signerA?.name) missing.push('signerA.name');
-    if (!body.signerB?.email) missing.push('signerB.email');
-    if (!body.signerB?.name) missing.push('signerB.name');
+    const hasRecipients = Array.isArray(body.recipients) && body.recipients.length > 0;
+    const hasLegacy = body.signerA?.email && body.signerB?.email;
+    if (!hasRecipients && !hasLegacy) {
+      missing.push('recipients array or signerA/signerB');
+    }
     if (missing.length > 0) {
       return {
         status: 400,
@@ -370,7 +394,7 @@ app.http('docusign-send', {
     } catch (err) {
       // Log full request body (excluding potential large doc content) + error
       const safeBody = { ...body };
-      delete safeBody.file_base64; // safety — not expected but just in case
+      delete safeBody.fileBase64; // strip large base64 payload from error logs
       context.log(`[DocuSign] FAILED: ${err.message}`);
       context.log(`[DocuSign] Request: ${JSON.stringify(safeBody)}`);
 

@@ -165,7 +165,7 @@ async function resolveSiteAndDrive(token, config, libraryName) {
 async function ensureFolderPath(token, driveId, folderPath) {
   // Try to get the folder first
   const checkResp = await fetch(
-    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${encodeURIComponent(folderPath)}`,
+    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${folderPath.split('/').map(encodeURIComponent).join('/')}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (checkResp.ok) return; // folder exists
@@ -176,7 +176,7 @@ async function ensureFolderPath(token, driveId, folderPath) {
   for (const seg of segments) {
     const parentPath = currentPath || 'root';
     const parentUrl = currentPath
-      ? `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${encodeURIComponent(currentPath)}:/children`
+      ? `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${currentPath.split('/').map(encodeURIComponent).join('/')}:/children`
       : `https://graph.microsoft.com/v1.0/drives/${driveId}/root/children`;
 
     const createResp = await fetch(parentUrl, {
@@ -204,7 +204,7 @@ async function ensureFolderPath(token, driveId, folderPath) {
 async function uploadGraphChunked(token, driveId, folderPath, filename, buffer) {
   const itemPath = `${folderPath}/${filename}`;
   const sessionResp = await fetch(
-    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${encodeURIComponent(itemPath)}:/createUploadSession`,
+    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${itemPath.split('/').map(encodeURIComponent).join('/')}:/createUploadSession`,
     {
       method: 'POST',
       headers: {
@@ -259,7 +259,7 @@ async function uploadGraphChunked(token, driveId, folderPath, filename, buffer) 
 async function uploadGraphSimple(token, driveId, folderPath, filename, buffer) {
   const itemPath = `${folderPath}/${filename}`;
   const resp = await fetch(
-    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${encodeURIComponent(itemPath)}:/content`,
+    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${itemPath.split('/').map(encodeURIComponent).join('/')}:/content`,
     {
       method: 'PUT',
       headers: {
@@ -334,7 +334,7 @@ async function uploadSharePointRest(config, folderPath, filename, buffer) {
 async function verifyFileExists(token, driveId, folderPath, filename) {
   const itemPath = `${folderPath}/${filename}`;
   const resp = await fetch(
-    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${encodeURIComponent(itemPath)}?$select=id,name,size,webUrl`,
+    `https://graph.microsoft.com/v1.0/drives/${driveId}/root:/${itemPath.split('/').map(encodeURIComponent).join('/')}?$select=id,name,size,webUrl`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!resp.ok) return { verified: false, status: resp.status };
