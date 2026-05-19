@@ -428,7 +428,8 @@ try {
 Write-Host ''
 Write-Host '  [6] Azure Function Health' -ForegroundColor Yellow
 $azFnUrl = 'https://dcfg-html-to-pdf-d9bwchakhgduf4gc.eastus-01.azurewebsites.net/api/html-to-pdf'
-$azFnKey = 'nn-eCIrXFRVqFAyqtM4zZ5BWjA7h1L6Wu3vdhE3a5epBAzFuT8W61g=='
+$azFnKey = $env:DCFG_AZURE_FN_KEY
+if (-not $azFnKey) { $azFnKey = (az functionapp keys list --name dcfg-html-to-pdf --resource-group dcfg-docgen --query "functionKeys.default" -o tsv 2>$null) }
 try {
     # Send minimal probe — empty body triggers validation error (not 5xx) if function is alive
     $fnStart = Get-Date
